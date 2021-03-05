@@ -22,7 +22,7 @@ import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.junit.AfterClass;
@@ -43,7 +43,7 @@ public class TestCloudEdgeDeploymentScenario {
 		scenario.stop();
 	}
 
-	private IAASRegistryService getRegistry() {
+	private IAASRegistry getRegistry() {
 		return new AASRegistryProxy(CloudEdgeDeploymentScenario.registryPath);
 	}
 

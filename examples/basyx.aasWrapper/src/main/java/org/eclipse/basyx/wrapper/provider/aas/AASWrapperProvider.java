@@ -15,7 +15,7 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
@@ -59,7 +59,7 @@ public class AASWrapperProvider implements IWrapperProvider {
 	}
 
 	@Override
-	public void initialize(IPropertyWrapperService wrapperService, IAASRegistryService registry,
+	public void initialize(IPropertyWrapperService wrapperService, IAASRegistry registry,
 			Collection<PropertyConfiguration> configs) {
 		logger.info("Initializing provider '" + this.getClass().getSimpleName() + "' on path " + this.getProviderPath());
 
@@ -90,7 +90,7 @@ public class AASWrapperProvider implements IWrapperProvider {
 		return descriptor;
 	}
 
-	private static void registerAAS(IAASRegistryService registry, AASDescriptor descriptor) {
+	private static void registerAAS(IAASRegistry registry, AASDescriptor descriptor) {
 		// Quick & dirty, try to register until registry is up
 		for (int i = 0; i < 10; i++) {
 			try {

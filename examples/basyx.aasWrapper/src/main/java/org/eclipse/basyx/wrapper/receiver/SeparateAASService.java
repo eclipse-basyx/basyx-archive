@@ -19,7 +19,7 @@ import java.util.Set;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
@@ -45,7 +45,7 @@ public class SeparateAASService implements IPropertyWrapperService {
 	private static final Logger logger = LoggerFactory.getLogger(SeparateAASService.class);
 
 	// Registry
-	protected IAASRegistryService registry;
+	protected IAASRegistry registry;
 
 	// Property configurations
 	protected Map<String, String> aasIds = new HashMap<>();
@@ -62,7 +62,7 @@ public class SeparateAASService implements IPropertyWrapperService {
 	protected Map<String, Thread> threads = new HashMap<>();
 	protected List<IWrapperListener> listeners = new ArrayList<>();
 
-	public SeparateAASService(IAASRegistryService registry, Collection<PropertyConfiguration> configs) {
+	public SeparateAASService(IAASRegistry registry, Collection<PropertyConfiguration> configs) {
 		this.registry = registry;
 		configs.forEach(this::addPropertyConfig);
 	}

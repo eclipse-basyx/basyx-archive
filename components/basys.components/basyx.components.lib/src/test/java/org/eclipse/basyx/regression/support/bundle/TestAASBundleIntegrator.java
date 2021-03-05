@@ -25,7 +25,7 @@ import org.eclipse.basyx.aas.aggregator.proxy.AASAggregatorProxy;
 import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
@@ -127,7 +127,7 @@ public class TestAASBundleIntegrator {
 	 */
 	@Test
 	public void testIntegrationOfNonexistingAASAndSMWithRegistry() {
-		IAASRegistryService registry = new InMemoryRegistry();
+		IAASRegistry registry = new InMemoryRegistry();
 		provider = new AASAggregatorProvider(new AASAggregator(registry));
 		aggregator = new AASAggregatorProxy(new VABElementProxy("/shells", provider));
 

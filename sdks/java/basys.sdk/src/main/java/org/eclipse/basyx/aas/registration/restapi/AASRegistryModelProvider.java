@@ -17,7 +17,7 @@ import java.util.Map;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
@@ -35,12 +35,12 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  */
 public class AASRegistryModelProvider implements IModelProvider {
 
-	IAASRegistryService registry;
+	IAASRegistry registry;
 
 	public static final String PREFIX = "api/v1/registry";
 	public static final String SUBMODELS = "submodels";
 
-	public AASRegistryModelProvider(IAASRegistryService registry) {
+	public AASRegistryModelProvider(IAASRegistry registry) {
 		this.registry = registry;
 	}
 

@@ -17,7 +17,7 @@ import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShe
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubmodel;
@@ -40,7 +40,7 @@ import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
  */
 public class ConnectedAssetAdministrationShellManager implements IAssetAdministrationShellManager {
 
-	protected IAASRegistryService aasDirectory;
+	protected IAASRegistry aasDirectory;
 	protected IConnectorProvider connectorProvider;
 	protected ModelProxyFactory proxyFactory;
 
@@ -49,7 +49,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	 * 
 	 * @param directory
 	 */
-	public ConnectedAssetAdministrationShellManager(IAASRegistryService directory) {
+	public ConnectedAssetAdministrationShellManager(IAASRegistry directory) {
 		this(directory, new HTTPConnectorProvider());
 	}
 
@@ -57,7 +57,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	 * @param networkDirectoryService
 	 * @param providerProvider
 	 */
-	public ConnectedAssetAdministrationShellManager(IAASRegistryService directory,
+	public ConnectedAssetAdministrationShellManager(IAASRegistry directory,
 			IConnectorProvider provider) {
 		this.aasDirectory = directory;
 		this.connectorProvider = provider;

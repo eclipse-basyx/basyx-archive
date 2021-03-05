@@ -9,7 +9,7 @@
  ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.extensions.aas.directory.tagged.proxy;
 
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.extensions.aas.directory.tagged.api.IAASTaggedDirectory;
 import org.eclipse.basyx.extensions.aas.directory.tagged.proxy.TaggedDirectoryProxy;
 import org.eclipse.basyx.extensions.aas.directory.tagged.restapi.TaggedDirectoryProvider;
@@ -23,7 +23,7 @@ public class TestProxyTaggedDirectory extends TestTaggedDirectorySuite {
 	}
 
 	@Override
-	protected IAASRegistryService getRegistryService() {
+	protected IAASRegistry getRegistryService() {
 		return getDirectory();
 	}
 

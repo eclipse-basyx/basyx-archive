@@ -11,7 +11,7 @@ package org.eclipse.basyx.wrapper.provider;
 
 import java.util.Collection;
 
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.wrapper.receiver.IPropertyWrapperService;
 import org.eclipse.basyx.wrapper.receiver.configuration.PropertyConfiguration;
 
@@ -43,6 +43,6 @@ public interface IWrapperProvider extends HTTPModelProvider {
 	 * @param proxyService
 	 * @param registry
 	 */
-	public void initialize(IPropertyWrapperService proxyService, IAASRegistryService registry,
+	public void initialize(IPropertyWrapperService proxyService, IAASRegistry registry,
 			Collection<PropertyConfiguration> configs);
 }

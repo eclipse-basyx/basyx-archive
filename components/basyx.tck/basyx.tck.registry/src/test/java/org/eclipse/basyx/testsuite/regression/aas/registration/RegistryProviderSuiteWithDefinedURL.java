@@ -9,7 +9,7 @@
  ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.aas.registration;
 
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 
 /**
@@ -23,7 +23,7 @@ public class RegistryProviderSuiteWithDefinedURL extends TestRegistryProviderSui
 	public static String url;// for example: "http://localhost:4999/";
 
 	@Override
-	protected IAASRegistryService getRegistryService() {
+	protected IAASRegistry getRegistryService() {
 		return new AASRegistryProxy(url);
 	}
 

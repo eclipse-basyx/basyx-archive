@@ -14,7 +14,7 @@ import java.util.List;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Implements a generic AAS registry that makes use of a given handler.
  */
-public class AASRegistry implements IAASRegistryService {
+public class AASRegistry implements IAASRegistry {
 	private static Logger logger = LoggerFactory.getLogger(AASRegistry.class);
 	protected IRegistryHandler handler;
 	

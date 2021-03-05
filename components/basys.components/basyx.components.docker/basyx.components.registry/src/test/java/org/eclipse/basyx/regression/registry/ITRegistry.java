@@ -9,7 +9,7 @@
  ******************************************************************************/
 package org.eclipse.basyx.regression.registry;
 
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxDockerConfiguration;
@@ -42,7 +42,7 @@ public class ITRegistry extends TestRegistryProviderSuite {
 	}
 
 	@Override
-	protected IAASRegistryService getRegistryService() {
+	protected IAASRegistry getRegistryService() {
 		return new AASRegistryProxy(registryUrl);
 	}
 }

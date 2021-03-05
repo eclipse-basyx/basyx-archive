@@ -18,7 +18,7 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.extensions.aas.registration.mqtt.MqttAASRegistryService;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
@@ -68,7 +68,7 @@ public class TestMqttAASRegistryService {
 		mqttBroker.startServer(classPathConfig);
 
 		// Create underlying registry service
-		IAASRegistryService registryService = new InMemoryRegistry();
+		IAASRegistry registryService = new InMemoryRegistry();
 		
 		eventAPI = new MqttAASRegistryService(registryService, "tcp://localhost:1884", "testClient");
 	}

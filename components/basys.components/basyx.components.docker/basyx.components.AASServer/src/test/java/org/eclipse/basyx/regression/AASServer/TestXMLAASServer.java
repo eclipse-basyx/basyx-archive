@@ -15,7 +15,7 @@ import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.components.aas.AASServerComponent;
 import org.eclipse.basyx.components.aas.configuration.AASServerBackend;
@@ -50,7 +50,7 @@ public class TestXMLAASServer {
 	protected static String smEndpoint;
 
 	// Registry and AAS component
-	protected static IAASRegistryService registry;
+	protected static IAASRegistry registry;
 	protected static AASServerComponent component;
 	protected static ConnectedAssetAdministrationShellManager manager;
 

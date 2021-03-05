@@ -10,7 +10,7 @@
 package org.eclipse.basyx.components.configuration.builder;
 
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.configuration.CFGBaSyxProtocolType;
 import org.eclipse.basyx.components.configuration.ConfigurableComponent;
@@ -67,7 +67,7 @@ public class BaSyxServiceConfigurationBuilder<T extends BaSyxServiceConfiguratio
 	/**
 	 * Create registry instance based on configuration
 	 */
-	public IAASRegistryService getRegistry() {
+	public IAASRegistry getRegistry() {
 		// Create and return registry
 		return new AASRegistryProxy(registryURL);
 	}

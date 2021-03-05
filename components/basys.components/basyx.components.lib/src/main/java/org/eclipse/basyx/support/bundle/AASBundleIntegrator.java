@@ -14,7 +14,7 @@ import java.util.Collection;
 import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
@@ -102,7 +102,7 @@ public class AASBundleIntegrator {
 	 * @param aasAggregatorPath
 	 *            the aggregator path, e.g. <i>http://localhost:4000/shells</i>
 	 */
-	public static void register(IAASRegistryService registry, Collection<AASBundle> bundles, String aasAggregatorPath) {
+	public static void register(IAASRegistry registry, Collection<AASBundle> bundles, String aasAggregatorPath) {
 		bundles.stream().map(b -> AASBundleDescriptorFactory.createAASDescriptor(b, aasAggregatorPath)).forEach(registry::register);
 	}
 	
@@ -112,7 +112,7 @@ public class AASBundleIntegrator {
 	 * @param registry the registry to deregister from
 	 * @param bundles the AASBundles to be deregistred
 	 */
-	public static void deregister(IAASRegistryService registry, Collection<AASBundle> bundles) {
+	public static void deregister(IAASRegistry registry, Collection<AASBundle> bundles) {
 		if(registry != null && bundles != null) {
 			for(AASBundle bundle: bundles) {
 				IAssetAdministrationShell aas = bundle.getAAS();

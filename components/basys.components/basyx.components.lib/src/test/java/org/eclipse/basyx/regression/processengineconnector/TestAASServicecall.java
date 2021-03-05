@@ -19,7 +19,7 @@ import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
@@ -97,7 +97,7 @@ public class TestAASServicecall {
 		provider.setAssetAdministrationShell(new AASModelProvider(aas));
 		
 		// Create registry for aas
-		IAASRegistryService registry = new InMemoryRegistry();
+		IAASRegistry registry = new InMemoryRegistry();
 		
 		// Create aas descriptor
 		IIdentifier id = new Identifier(IdentifierType.CUSTOM, AAS_ID);

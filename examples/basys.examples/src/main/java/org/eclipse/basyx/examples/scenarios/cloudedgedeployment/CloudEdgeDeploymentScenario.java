@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.IComponent;
 import org.eclipse.basyx.components.aas.AASServerComponent;
@@ -48,7 +48,7 @@ public class CloudEdgeDeploymentScenario {
 	/**
 	 * The registry used in the manager
 	 */
-	private IAASRegistryService registry;
+	private IAASRegistry registry;
 	public static String registryPath = "http://localhost:8080/registry";
 	
 	/**

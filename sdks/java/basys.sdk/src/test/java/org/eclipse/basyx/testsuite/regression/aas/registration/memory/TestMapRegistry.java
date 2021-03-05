@@ -9,7 +9,7 @@
  ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.aas.registration.memory;
 
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.aas.registration.memory.MapRegistryHandler;
 import org.eclipse.basyx.testsuite.regression.aas.registration.TestRegistryProviderSuite;
@@ -24,7 +24,7 @@ import org.eclipse.basyx.testsuite.regression.aas.registration.TestRegistryProvi
 public class TestMapRegistry extends TestRegistryProviderSuite {
 
 	@Override
-	protected IAASRegistryService getRegistryService() {
+	protected IAASRegistry getRegistryService() {
 		return new InMemoryRegistry();
 	}
 }

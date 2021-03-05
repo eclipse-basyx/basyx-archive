@@ -15,7 +15,7 @@ import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
@@ -31,7 +31,7 @@ import org.junit.Test;
  *
  */
 public abstract class AASServerSuite {
-	protected IAASRegistryService aasRegistry;
+	protected IAASRegistry aasRegistry;
 	protected ConnectedAssetAdministrationShellManager manager;
 
 	protected String aasId = "testId";

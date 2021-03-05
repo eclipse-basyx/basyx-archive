@@ -15,7 +15,7 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
@@ -67,7 +67,7 @@ public class AASExecutable {
 	}
 
 	private static void registerAAS(AASDescriptor descriptor, String registryEndpoint) throws InterruptedException {
-		IAASRegistryService registry = new AASRegistryProxy(registryEndpoint);
+		IAASRegistry registry = new AASRegistryProxy(registryEndpoint);
 		// Quick & dirty, try to register until registry is up
 		for (int i = 0; i < 10; i++) {
 			try {

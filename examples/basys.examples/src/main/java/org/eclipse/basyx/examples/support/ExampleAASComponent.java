@@ -9,7 +9,7 @@
  ******************************************************************************/
 package org.eclipse.basyx.examples.support;
 
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.components.aas.AASServerComponent;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 
@@ -25,13 +25,13 @@ public class ExampleAASComponent {
 	
 	private int port;
 	
-	private IAASRegistryService registry;
+	private IAASRegistry registry;
 	
 	// Hold a reference to the server to be able to shut it down
 	private AASServerComponent aasServer = null;
 	
 	
-	public ExampleAASComponent(int port, IAASRegistryService registry) {
+	public ExampleAASComponent(int port, IAASRegistry registry) {
 		this.port = port;
 		this.registry = registry;
 	}

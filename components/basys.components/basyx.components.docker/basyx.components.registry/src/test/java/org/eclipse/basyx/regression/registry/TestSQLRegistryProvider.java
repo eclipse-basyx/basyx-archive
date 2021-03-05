@@ -10,7 +10,7 @@
 package org.eclipse.basyx.regression.registry;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.components.configuration.BaSyxSQLConfiguration;
 import org.eclipse.basyx.components.registry.sql.SQLRegistry;
 import org.eclipse.basyx.testsuite.regression.aas.registration.TestRegistryProviderSuite;
@@ -54,7 +54,7 @@ public class TestSQLRegistryProvider extends TestRegistryProviderSuite {
 	}
 
 	@Override
-	protected IAASRegistryService getRegistryService() {
+	protected IAASRegistry getRegistryService() {
 		BaSyxSQLConfiguration sqlConfig = new BaSyxSQLConfiguration();
 		sqlConfig.loadFromResource("sql.properties");
 		return new SQLRegistry(sqlConfig);
@@ -68,7 +68,7 @@ public class TestSQLRegistryProvider extends TestRegistryProviderSuite {
 		// Create new SQLRegistry with same configuration
 		BaSyxSQLConfiguration sqlConfig = new BaSyxSQLConfiguration();
 		sqlConfig.loadFromResource("sql.properties");
-		IAASRegistryService registry = new SQLRegistry(sqlConfig);
+		IAASRegistry registry = new SQLRegistry(sqlConfig);
 		
 		// Try to "overwrite" data
 		AASDescriptor aasDesc2 = new AASDescriptor(aasIdShort2, aasId2, asset2, aasEndpoint2);

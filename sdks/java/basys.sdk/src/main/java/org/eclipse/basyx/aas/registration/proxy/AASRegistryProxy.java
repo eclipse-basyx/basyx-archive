@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.restapi.AASRegistryModelProvider;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  * @author kuhn, schnicke
  *
  */
-public class AASRegistryProxy extends VABRegistryProxy implements IAASRegistryService {
+public class AASRegistryProxy extends VABRegistryProxy implements IAASRegistry {
 	
 	private static Logger logger = LoggerFactory.getLogger(AASRegistryProxy.class);
 

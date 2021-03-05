@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.configuration.BaSyxConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
@@ -62,7 +62,7 @@ public class AASWrapperExecutable {
 		loadConfigs("wrapper.properties");
 
 		logger.info("Creating proxy for " + propertyConfigs.size() + " properties...");
-		IAASRegistryService registry = new AASRegistryProxy(registryAddress);
+		IAASRegistry registry = new AASRegistryProxy(registryAddress);
 		IPropertyWrapperService connector = new SeparateAASService(registry, propertyConfigs.values());
 
 		logger.info("Creating " + activeProviders.size() + " providers...");

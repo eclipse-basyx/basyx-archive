@@ -11,7 +11,7 @@ package org.eclipse.basyx.extensions.aas.directory.tagged.api;
 
 import java.util.Set;
 
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 
 /**
  * A tagged directory is a registry that allows to register AAS and associate
@@ -20,7 +20,7 @@ import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
  * @author schnicke
  *
  */
-public interface IAASTaggedDirectory extends IAASRegistryService {
+public interface IAASTaggedDirectory extends IAASRegistry {
 	public void register(TaggedAASDescriptor descriptor);
 
 	/**

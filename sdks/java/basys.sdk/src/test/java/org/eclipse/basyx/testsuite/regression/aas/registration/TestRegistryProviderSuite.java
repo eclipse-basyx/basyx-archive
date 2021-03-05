@@ -21,7 +21,7 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
@@ -41,7 +41,7 @@ import org.junit.Test;
  */
 public abstract class TestRegistryProviderSuite {
 	// The registry proxy that is used to access the sql servlet
-	protected final IAASRegistryService proxy = getRegistryService();
+	protected final IAASRegistry proxy = getRegistryService();
 
 	// Ids, shortIds and endpoints for registered AAS and submodel
 	protected IIdentifier aasId1 = new ModelUrn("urn:de.FHG:devices.es.iese/test:aas:1.0:1:registryAAS#001");
@@ -62,7 +62,7 @@ public abstract class TestRegistryProviderSuite {
 	 * Getter for the tested registry provider. Tests for actual registry provider
 	 * have to realize this method.
 	 */
-	protected abstract IAASRegistryService getRegistryService();
+	protected abstract IAASRegistry getRegistryService();
 
 	/**
 	 * Before each test, clean entries are created in the registry using a proxy

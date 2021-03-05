@@ -27,7 +27,7 @@ import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShe
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
 public abstract class AASXSuite {
 	private static Logger logger = LoggerFactory.getLogger(AASXSuite.class);
 
-	protected IAASRegistryService aasRegistry;
+	protected IAASRegistry aasRegistry;
 
 	protected static final String aasShortId = "Festo_3S7PM0CP4BD";
 	protected static final ModelUrn aasId = new ModelUrn("smart.festo.com/demo/aas/1/1/454576463545648365874");

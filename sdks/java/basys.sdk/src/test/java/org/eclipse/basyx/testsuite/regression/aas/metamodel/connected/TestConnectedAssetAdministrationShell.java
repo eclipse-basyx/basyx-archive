@@ -18,7 +18,7 @@ import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShe
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
@@ -54,7 +54,7 @@ public class TestConnectedAssetAdministrationShell extends AssetAdministrationSh
 		provider.addSubmodel(new SubmodelProvider(Submodel.createAsFacade(TypeDestroyer.destroyType(sm))));
 
 		// Create AAS registry
-		IAASRegistryService registry = new InMemoryRegistry();
+		IAASRegistry registry = new InMemoryRegistry();
 		// Create AAS Descriptor
 		AASDescriptor aasDescriptor = new AASDescriptor(AASID, "/aas");
 		// Create Submodel Descriptor

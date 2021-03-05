@@ -25,7 +25,7 @@ import org.eclipse.basyx.aas.aggregator.AASAggregator;
 import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
 import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.aas.restapi.api.IAASAPIFactory;
 import org.eclipse.basyx.aas.restapi.vab.VABAASAPIFactory;
@@ -67,7 +67,7 @@ public class AASServerComponent implements IComponent {
 
 	// The server with the servlet that will be created
 	private BaSyxHTTPServer server;
-	private IAASRegistryService registry;
+	private IAASRegistry registry;
 
 	// Configurations
 	private BaSyxContextConfiguration contextConfig;
@@ -127,7 +127,7 @@ public class AASServerComponent implements IComponent {
 	 * 
 	 * @param registry
 	 */
-	public void setRegistry(IAASRegistryService registry) {
+	public void setRegistry(IAASRegistry registry) {
 		this.registry = registry;
 	}
 

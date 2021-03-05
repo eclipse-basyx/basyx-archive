@@ -13,7 +13,7 @@ import java.util.List;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.extensions.shared.mqtt.MqttEventService;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
  * @author haque
  *
  */
-public class MqttAASRegistryService extends MqttEventService implements IAASRegistryService {
+public class MqttAASRegistryService extends MqttEventService implements IAASRegistry {
 	private static Logger logger = LoggerFactory.getLogger(MqttAASRegistryService.class);
 
 	// List of topics
@@ -40,7 +40,7 @@ public class MqttAASRegistryService extends MqttEventService implements IAASRegi
 	public static final String TOPIC_DELETESUBMODEL = "BaSyxRegistry_deletedSubmodel";
 
 	// The underlying AASRegistryService
-	protected IAASRegistryService observedRegistryService;
+	protected IAASRegistry observedRegistryService;
 	
 	/**
 	 * Constructor for adding this MQTT extension on top of an AASRegistryService
@@ -50,7 +50,7 @@ public class MqttAASRegistryService extends MqttEventService implements IAASRegi
 	 * @param clientId unique client identifier
 	 * @throws MqttException
 	 */
-	public MqttAASRegistryService(IAASRegistryService observedRegistryService, String serverEndpoint, String clientId) throws MqttException {
+	public MqttAASRegistryService(IAASRegistry observedRegistryService, String serverEndpoint, String clientId) throws MqttException {
 		super(serverEndpoint, clientId);
 		logger.info("Create new MQTT AAS Registry Service for endpoint " + serverEndpoint);
 		this.observedRegistryService = observedRegistryService;
@@ -66,7 +66,7 @@ public class MqttAASRegistryService extends MqttEventService implements IAASRegi
 	 * @param pw password for authentication with broker
 	 * @throws MqttException
 	 */
-	public MqttAASRegistryService(IAASRegistryService observedRegistryService, String serverEndpoint, String clientId, String user, char[] pw)
+	public MqttAASRegistryService(IAASRegistry observedRegistryService, String serverEndpoint, String clientId, String user, char[] pw)
 			throws MqttException {
 		super(serverEndpoint, clientId, user, pw);
 		logger.info("Create new MQTT AAS Registry Service for endpoint " + serverEndpoint);
@@ -80,7 +80,7 @@ public class MqttAASRegistryService extends MqttEventService implements IAASRegi
 	 * @param client already configured client
 	 * @throws MqttException
 	 */
-	public MqttAASRegistryService(IAASRegistryService observedRegistryService, MqttClient client) throws MqttException {
+	public MqttAASRegistryService(IAASRegistry observedRegistryService, MqttClient client) throws MqttException {
 		super(client);
 		logger.info("Create new MQTT AAS Registry Service for endpoint " + client.getServerURI());
 		this.observedRegistryService = observedRegistryService;

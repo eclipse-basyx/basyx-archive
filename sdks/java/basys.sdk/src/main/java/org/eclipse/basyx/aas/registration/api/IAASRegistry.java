@@ -25,7 +25,7 @@ import org.eclipse.basyx.vab.exception.provider.ProviderException;
  * @author kuhn
  *
  */
-public interface IAASRegistryService {
+public interface IAASRegistry {
 	
 	/**
 	 * Register AAS descriptor in registry, delete old registration 

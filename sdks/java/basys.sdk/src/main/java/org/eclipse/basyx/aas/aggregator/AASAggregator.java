@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
 import org.eclipse.basyx.aas.restapi.api.IAASAPI;
@@ -41,7 +41,7 @@ public class AASAggregator implements IAASAggregator {
 
 	protected Map<String, MultiSubmodelProvider> aasProviderMap = new HashMap<>();
 
-	protected IAASRegistryService registry;
+	protected IAASRegistry registry;
 
 	/**
 	 * Store AAS API Provider. By default, uses the VAB API Provider
@@ -75,7 +75,7 @@ public class AASAggregator implements IAASAggregator {
 	 * 
 	 * @param registry
 	 */
-	public AASAggregator(IAASRegistryService registry) {
+	public AASAggregator(IAASRegistry registry) {
 		this.registry = registry;
 		this.aasApiProvider = new VABAASAPIFactory();
 		this.smApiProvider = new VABSubmodelAPIFactory();
@@ -86,7 +86,7 @@ public class AASAggregator implements IAASAggregator {
 	 * resolve requests for remote submodels. Additionally takes custom API providers;
 	 */
 	public AASAggregator(IAASAPIFactory aasApiProvider, ISubmodelAPIFactory smApiProvider,
-			IAASRegistryService registry) {
+			IAASRegistry registry) {
 		this.registry = registry;
 		this.aasApiProvider = aasApiProvider;
 		this.smApiProvider = smApiProvider;

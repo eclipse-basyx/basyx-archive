@@ -23,7 +23,7 @@ import org.eclipse.basyx.aas.aggregator.AASAggregator;
 import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
 import org.eclipse.basyx.aas.restapi.api.IAASAPI;
@@ -74,7 +74,7 @@ public class MongoDBAASAggregator implements IAASAggregator {
 	protected String aasCollection;
 	protected String smCollection;
 
-	private IAASRegistryService registry;
+	private IAASRegistry registry;
 
 	/**
 	 * Store AAS API Provider. By default, uses the MongoDB API Provider
@@ -96,7 +96,7 @@ public class MongoDBAASAggregator implements IAASAggregator {
 		init();
 	}
 
-	public void setRegistry(IAASRegistryService registry) {
+	public void setRegistry(IAASRegistry registry) {
 		this.registry = registry;
 	}
 

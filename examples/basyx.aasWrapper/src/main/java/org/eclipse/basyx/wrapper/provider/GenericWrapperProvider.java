@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.wrapper.receiver.IPropertyWrapperService;
@@ -36,7 +36,7 @@ public class GenericWrapperProvider implements IWrapperProvider {
 	protected Set<String> passiveProperties = new HashSet<>();
 
 	@Override
-	public void initialize(IPropertyWrapperService wrapperService, IAASRegistryService registry,
+	public void initialize(IPropertyWrapperService wrapperService, IAASRegistry registry,
 			Collection<PropertyConfiguration> configs) {
 		logger.info(
 				"Initializing provider '" + this.getClass().getSimpleName() + "' on path " + this.getProviderPath());

@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.restapi.api.IAASAPI;
 import org.eclipse.basyx.aas.restapi.api.IAASAPIFactory;
 import org.eclipse.basyx.aas.restapi.vab.VABAASAPIFactory;
@@ -113,7 +113,7 @@ public class MultiSubmodelProvider implements IModelProvider {
 	/**
 	 * Store AAS Registry
 	 */
-	protected IAASRegistryService registry = null;
+	protected IAASRegistry registry = null;
 	
 	/**
 	 * Store HTTP Connector
@@ -174,7 +174,7 @@ public class MultiSubmodelProvider implements IModelProvider {
 	 * @param registry
 	 * @param provider
 	 */
-	public MultiSubmodelProvider(IAASRegistryService registry, IConnectorProvider provider) {
+	public MultiSubmodelProvider(IAASRegistry registry, IConnectorProvider provider) {
 		this();
 		this.registry = registry;
 		this.connectorProvider = provider;
@@ -183,7 +183,7 @@ public class MultiSubmodelProvider implements IModelProvider {
 	/**
 	 * Constructor that accepts a registry, a connection provider and API providers
 	 */
-	public MultiSubmodelProvider(AASModelProvider contentProvider, IAASRegistryService registry,
+	public MultiSubmodelProvider(AASModelProvider contentProvider, IAASRegistry registry,
 			IConnectorProvider connectorProvider, ISubmodelAPIFactory smApiProvider, IAASAPIFactory aasApiProvider) {
 		this(contentProvider, aasApiProvider, smApiProvider);
 		this.registry = registry;
@@ -197,7 +197,7 @@ public class MultiSubmodelProvider implements IModelProvider {
 	 * @param registry
 	 * @param provider
 	 */
-	public MultiSubmodelProvider(AASModelProvider contentProvider, IAASRegistryService registry, HTTPConnectorProvider provider) {
+	public MultiSubmodelProvider(AASModelProvider contentProvider, IAASRegistry registry, HTTPConnectorProvider provider) {
 		this(contentProvider);
 		this.registry = registry;
 		this.connectorProvider = provider;
