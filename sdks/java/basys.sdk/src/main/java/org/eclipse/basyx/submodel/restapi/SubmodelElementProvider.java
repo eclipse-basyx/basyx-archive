@@ -49,7 +49,7 @@ public class SubmodelElementProvider implements IModelProvider {
 	 */
 	@SuppressWarnings("unchecked")
 	public static IModelProvider getElementProvider(IModelProvider proxy) {
-		Map<String, Object> elementMap = (Map<String, Object>) proxy.getModelPropertyValue("");
+		Map<String, Object> elementMap = (Map<String, Object>) proxy.getValue("");
 		if(Operation.isOperation(elementMap)) {
 			return new OperationProvider(proxy);
 		} else if (SubmodelElementCollection.isSubmodelElementCollection(elementMap)) {
@@ -63,7 +63,7 @@ public class SubmodelElementProvider implements IModelProvider {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object getModelPropertyValue(String path) throws ProviderException {
+	public Object getValue(String path) throws ProviderException {
 		path = VABPathTools.stripSlashes(path);
 
 		if (path.equals(MultiSubmodelElementProvider.VALUE)) {
@@ -71,10 +71,10 @@ public class SubmodelElementProvider implements IModelProvider {
 			// return value
 			
 			if(specializedProvider) {
-				return proxy.getModelPropertyValue(path);
+				return proxy.getValue(path);
 			}
 			
-			Map<String, Object> elementMap = (Map<String, Object>) proxy.getModelPropertyValue("");
+			Map<String, Object> elementMap = (Map<String, Object>) proxy.getValue("");
 			
 			ISubmodelElement element = SubmodelElementFacadeFactory.createSubmodelElement(elementMap);
 			
@@ -86,13 +86,13 @@ public class SubmodelElementProvider implements IModelProvider {
 			}
 		} else {
 			// Path has more Elements -> pass it to Provider below
-			return proxy.getModelPropertyValue(path);
+			return proxy.getValue(path);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
+	public void setValue(String path, Object newValue) throws ProviderException {
 		path = VABPathTools.stripSlashes(path);
 		
 		if(!path.endsWith(MultiSubmodelElementProvider.VALUE)) {
@@ -101,7 +101,7 @@ public class SubmodelElementProvider implements IModelProvider {
 		
 		if (!specializedProvider && path.equals(MultiSubmodelElementProvider.VALUE)) {
 			// Path is only "value" and no specialized Provider has to be used -> update the Element of this Provider
-			Map<String, Object> elementMap = (Map<String, Object>) proxy.getModelPropertyValue("");
+			Map<String, Object> elementMap = (Map<String, Object>) proxy.getValue("");
 			
 			ISubmodelElement element = SubmodelElementFacadeFactory.createSubmodelElement(elementMap);
 			
@@ -111,11 +111,11 @@ public class SubmodelElementProvider implements IModelProvider {
 				throw new MalformedRequestException("The given Value was not valid for Element '" + path + "'");
 			}
 			
-			proxy.setModelPropertyValue("", element);
+			proxy.setValue("", element);
 			
 		} else {
 			// Path has more Elements -> pass it to Provider below
-			proxy.setModelPropertyValue(path, newValue);
+			proxy.setValue(path, newValue);
 		}
 	}
 

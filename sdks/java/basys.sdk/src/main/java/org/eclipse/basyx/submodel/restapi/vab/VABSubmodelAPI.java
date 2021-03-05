@@ -66,7 +66,7 @@ public class VABSubmodelAPI implements ISubmodelAPI {
 	@Override
 	public ISubmodel getSubmodel() {
 		// For access on the container property root, return the whole model
-		Map<String, Object> map = (Map<String, Object>) modelProvider.getModelPropertyValue("");
+		Map<String, Object> map = (Map<String, Object>) modelProvider.getValue("");
 
 		// Only return a copy of the Submodel
 		Map<String, Object> smCopy = new HashMap<>();
@@ -99,24 +99,24 @@ public class VABSubmodelAPI implements ISubmodelAPI {
 	@Override
 	public Collection<ISubmodelElement> getSubmodelElements() {
 		Collection<Map<String, Object>> elements = (Collection<Map<String, Object>>) getElementProvider()
-				.getModelPropertyValue(MultiSubmodelElementProvider.ELEMENTS);
+				.getValue(MultiSubmodelElementProvider.ELEMENTS);
 		return elements.stream().map(SubmodelElement::createAsFacade).collect(Collectors.toList());
 	}
 
 	@Override
 	public void updateSubmodelElement(String idShortPath, Object newValue) {
-		getElementProvider().setModelPropertyValue(buildValuePathForProperty(idShortPath), newValue);
+		getElementProvider().setValue(buildValuePathForProperty(idShortPath), newValue);
 	}
 
 	@Override
 	public Object getSubmodelElementValue(String idShortPath) {
-		return getElementProvider().getModelPropertyValue(buildValuePathForProperty(idShortPath));
+		return getElementProvider().getValue(buildValuePathForProperty(idShortPath));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public ISubmodelElement getSubmodelElement(String idShortPath) {
-		return SubmodelElement.createAsFacade((Map<String, Object>) getElementProvider().getModelPropertyValue(MultiSubmodelElementProvider.ELEMENTS + "/" + idShortPath));
+		return SubmodelElement.createAsFacade((Map<String, Object>) getElementProvider().getValue(MultiSubmodelElementProvider.ELEMENTS + "/" + idShortPath));
 	}
 
 	@Override
@@ -137,7 +137,7 @@ public class VABSubmodelAPI implements ISubmodelAPI {
 	
 	@Override
 	public Object getOperationResult(String idShortPath, String requestId) {
-		return getElementProvider().getModelPropertyValue(MultiSubmodelElementProvider.ELEMENTS + "/" + idShortPath + "/" + OperationProvider.INVOCATION_LIST + "/" + requestId);
+		return getElementProvider().getValue(MultiSubmodelElementProvider.ELEMENTS + "/" + idShortPath + "/" + OperationProvider.INVOCATION_LIST + "/" + requestId);
 	}
 
 

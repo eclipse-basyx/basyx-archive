@@ -46,7 +46,7 @@ public class Exceptions {
 
 		// Non-existing parent element
 		try {
-			connVABElement.getModelPropertyValue("unknown/x");
+			connVABElement.getValue("unknown/x");
 			fail();
 		} catch (ResourceNotFoundException e) {
 			Result result = new Result(e);

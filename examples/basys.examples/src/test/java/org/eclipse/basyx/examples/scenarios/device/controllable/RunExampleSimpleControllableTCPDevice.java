@@ -105,7 +105,7 @@ public class RunExampleSimpleControllableTCPDevice extends BaSyxExampleScenario 
 
 		
 		// Change device operation mode
-		toControlComponent.setModelPropertyValue(VABPathTools.concatenatePaths(ControlComponent.STATUS, ControlComponent.OP_MODE), "RegularMilling");
+		toControlComponent.setValue(VABPathTools.concatenatePaths(ControlComponent.STATUS, ControlComponent.OP_MODE), "RegularMilling");
 		// - Validate device operation mode
 		waitfor(() -> ((ControllableTCPDeviceMockup) context.getRunnable("Device")).getOpMode().equals("RegularMilling"));
 
@@ -114,7 +114,7 @@ public class RunExampleSimpleControllableTCPDevice extends BaSyxExampleScenario 
 
 		
 		// Start device service
-		toControlComponent.setModelPropertyValue("cmd", "start");
+		toControlComponent.setValue("cmd", "start");
 		// - Application waits for status change
 		waitfor( () -> ((ReceiveDeviceDashboardStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("EXECUTE") );
 		// - Validate device status
@@ -130,7 +130,7 @@ public class RunExampleSimpleControllableTCPDevice extends BaSyxExampleScenario 
 
 
 		// Reset device to enable subsequent service calls
-		toControlComponent.setModelPropertyValue("cmd", "reset");
+		toControlComponent.setValue("cmd", "reset");
 		// - Application waits for status change
 		waitfor( () -> ((ReceiveDeviceDashboardStatusApplication) context.getRunnable("Application")).getDeviceStatus().equals("RESETTING") );
 		// - Validate device status

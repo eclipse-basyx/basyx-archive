@@ -48,7 +48,7 @@ public class MultiSubmodelElementProvider implements IModelProvider {
 	 */
 	@SuppressWarnings("unchecked")
 	protected Collection<Map<String, Object>> getElementsList() {
-		Object elements = modelProvider.getModelPropertyValue("");
+		Object elements = modelProvider.getValue("");
 		Map<String, Map<String, Object>> all = (Map<String, Map<String, Object>>) elements;
 
 		// Feed all ELements through their Providers, in case someting needs to be done to them (e.g. smElemCollections)
@@ -72,14 +72,14 @@ public class MultiSubmodelElementProvider implements IModelProvider {
 
 		if (qualifier.equals(ELEMENTS)) {
 			String subPath = VABPathTools.buildPath(pathElements, 2);
-			return new SubmodelElementProvider(elementProxy).getModelPropertyValue(subPath);
+			return new SubmodelElementProvider(elementProxy).getValue(subPath);
 		} else {
 			throw new MalformedRequestException("Given path '" + path + "' does not start with /submodelElements");
 		}
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) throws ProviderException {
+	public Object getValue(String path) throws ProviderException {
 		String[] pathElements = VABPathTools.splitPath(path);
 		String qualifier = pathElements[0];
 		
@@ -98,7 +98,7 @@ public class MultiSubmodelElementProvider implements IModelProvider {
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
+	public void setValue(String path, Object newValue) throws ProviderException {
 		String[] pathElements = VABPathTools.splitPath(path);
 		String qualifier = pathElements[0];
 		if (pathElements.length < 2 || !qualifier.equals(ELEMENTS)) {
@@ -109,7 +109,7 @@ public class MultiSubmodelElementProvider implements IModelProvider {
 		IModelProvider elementProxy = getElementProxy(pathElements);
 		String subPath = VABPathTools.buildPath(pathElements, 2);
 		
-		new SubmodelElementProvider(elementProxy).setModelPropertyValue(subPath, newValue);
+		new SubmodelElementProvider(elementProxy).setValue(subPath, newValue);
 	}
 
 	@Override

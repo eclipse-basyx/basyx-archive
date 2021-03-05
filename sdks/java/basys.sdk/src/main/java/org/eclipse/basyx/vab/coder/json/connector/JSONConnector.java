@@ -91,11 +91,11 @@ public class JSONConnector implements IModelProvider {
 	
 
 	@Override
-	public Object getModelPropertyValue(String path) throws ProviderException {
+	public Object getValue(String path) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 
 		// Get element from server
-		String message = provider.getModelPropertyValue(path);
+		String message = provider.getValue(path);
 
 		// De-serialize and verify
 		try {
@@ -112,13 +112,13 @@ public class JSONConnector implements IModelProvider {
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
+	public void setValue(String path, Object newValue) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 
 		// Serialize value Object
 		String jsonString = serializer.serialize(newValue);
 
-		String message = provider.setModelPropertyValue(path, jsonString);
+		String message = provider.setValue(path, jsonString);
 
 		// De-serialize and verify
 		metaProtocolHandler.deserialize(message);

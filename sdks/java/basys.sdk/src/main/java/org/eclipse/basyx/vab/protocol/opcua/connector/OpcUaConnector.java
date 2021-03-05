@@ -54,7 +54,7 @@ public class OpcUaConnector implements IModelProvider {
      * @throws Exception
      */
     @Override
-    public String getModelPropertyValue(String servicePath) {
+    public String getValue(String servicePath) {
         try {
             clientRunner = new BaSyxOpcUaClientRunner(address);
             clientRunner.run();
@@ -65,7 +65,7 @@ public class OpcUaConnector implements IModelProvider {
     }
 
     @Override
-	public void setModelPropertyValue(String servicePath, Object newValue) throws ProviderException {
+	public void setValue(String servicePath, Object newValue) throws ProviderException {
         try {
             clientRunner = new BaSyxOpcUaClientRunner(address);
             clientRunner.run();

@@ -127,7 +127,7 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testGetAllSubmodels() {
-		Collection<Map<String, Object>> collection = (Collection<Map<String, Object>>) provider.getModelPropertyValue("/aas/submodels");
+		Collection<Map<String, Object>> collection = (Collection<Map<String, Object>>) provider.getValue("/aas/submodels");
 		Collection<String> smIdShorts = collection.stream().map(m -> Submodel.createAsFacade(m)).map(sm -> sm.getIdShort()).collect(Collectors.toList());
 		assertTrue(smIdShorts.contains(REMOTESMIDSHORT));
 		assertTrue(smIdShorts.contains(LOCALSMIDSHORT));
@@ -148,7 +148,7 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 		
 		// Try to request all Submodels from the server
 		try {
-			provider.getModelPropertyValue("/aas/submodels");
+			provider.getValue("/aas/submodels");
 			fail();
 		} catch (ResourceNotFoundException e) {
 		}
@@ -164,7 +164,7 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 	public void testSetModelPropertyValue() throws Exception {
 		int newVal = 0;
 		String path = VABPathTools.concatenatePaths(REMOTEPATH, Submodel.SUBMODELELEMENT, SimpleAASSubmodel.INTPROPIDSHORT, Property.VALUE);
-		provider.setModelPropertyValue(path, newVal);
+		provider.setValue(path, newVal);
 
 		Submodel sm = getRemoteSubmodel();
 		assertEquals(newVal, sm.getProperties().get(SimpleAASSubmodel.INTPROPIDSHORT).getValue());
@@ -182,7 +182,7 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 		String testPropIdShort = "testProperty";
 		p.setIdShort(testPropIdShort);
 
-		provider.setModelPropertyValue(REMOTEPATH + "/submodelElements/" + testPropIdShort, p);
+		provider.setValue(REMOTEPATH + "/submodelElements/" + testPropIdShort, p);
 
 		assertTrue(getRemoteSubmodel().getProperties().containsKey(testPropIdShort));
 	}
@@ -214,7 +214,7 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 
 	@SuppressWarnings("unchecked")
 	private Submodel getRemoteSubmodel() {
-		return Submodel.createAsFacade((Map<String, Object>) provider.getModelPropertyValue(REMOTEPATH));
+		return Submodel.createAsFacade((Map<String, Object>) provider.getValue(REMOTEPATH));
 	}
 
 	@After

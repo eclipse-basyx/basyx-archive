@@ -30,17 +30,17 @@ public class TestVABXmlProviderFactory {
 
 		Map<String, String> map;
 
-		assertEquals(provider.getModelPropertyValue("tags/name/"), TestXmlParser.SOME_NAME);
-		assertEquals(provider.getModelPropertyValue("tags/value/"), TestXmlParser.VALUEV);
-		assertEquals(provider.getModelPropertyValue("tags/nestedTags/attrnt"), TestXmlParser.ATTRNT_1_VAL);
-		Iterator<Object> iterator = ((Collection) provider.getModelPropertyValue("tags/nestedTags/nestedTag/"))
+		assertEquals(provider.getValue("tags/name/"), TestXmlParser.SOME_NAME);
+		assertEquals(provider.getValue("tags/value/"), TestXmlParser.VALUEV);
+		assertEquals(provider.getValue("tags/nestedTags/attrnt"), TestXmlParser.ATTRNT_1_VAL);
+		Iterator<Object> iterator = ((Collection) provider.getValue("tags/nestedTags/nestedTag/"))
 				.iterator();
 		assertEquals(TestXmlParser.NESTED_TAG_1, iterator.next());
 		assertEquals(TestXmlParser.NESTED_TAG_2, iterator.next());
 		assertEquals(TestXmlParser.NESTED_TAG_3, iterator.next());
 
 		iterator = ((Collection) provider
-				.getModelPropertyValue("tags/deeplyNestedTagParent/deeplyNestedTagsChild/deeplyNestedTagsLeaf/"))
+				.getValue("tags/deeplyNestedTagParent/deeplyNestedTagsChild/deeplyNestedTagsLeaf/"))
 						.iterator();
 		map = (Map<String, String>) (iterator.next());
 		assertEquals(map.get(TestXmlParser.TEXT), TestXmlParser.DN_TEXT_1);
@@ -50,7 +50,7 @@ public class TestVABXmlProviderFactory {
 		assertEquals(map.get(TestXmlParser.TEXT), TestXmlParser.DN_TEXT_2);
 		assertEquals(map.get(TestXmlParser.ATTRDN), TestXmlParser.ATTR_2_VAL);
 
-		iterator = ((Collection) provider.getModelPropertyValue("tags/someTag/")).iterator();
+		iterator = ((Collection) provider.getValue("tags/someTag/")).iterator();
 		assertEquals(TestXmlParser.SOME_TEXT_1, iterator.next());
 		assertEquals(TestXmlParser.SOME_TEXT_2, iterator.next());
 		assertEquals(TestXmlParser.SOME_TEXT_3, iterator.next());

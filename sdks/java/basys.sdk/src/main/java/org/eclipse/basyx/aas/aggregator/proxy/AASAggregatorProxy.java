@@ -65,7 +65,7 @@ public class AASAggregatorProxy implements IAASAggregator {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<IAssetAdministrationShell> getAASList() {
-		Collection<Map<String, Object>> collection = (Collection<Map<String, Object>>) provider.getModelPropertyValue("");
+		Collection<Map<String, Object>> collection = (Collection<Map<String, Object>>) provider.getValue("");
 		logger.debug("Getting all AAS");
 		return collection.stream().map(m -> AssetAdministrationShell.createAsFacade(m)).map(aas -> getConnectedAAS(aas.getIdentification(), aas)).collect(Collectors.toList());
 	}
@@ -79,7 +79,7 @@ public class AASAggregatorProxy implements IAASAggregator {
 	@SuppressWarnings("unchecked")
 	private ConnectedAssetAdministrationShell getConnectedAAS(IIdentifier aasId) {
 		VABElementProxy proxy = getAASProxy(aasId);
-		Map<String, Object> map = (Map<String, Object>) proxy.getModelPropertyValue("");
+		Map<String, Object> map = (Map<String, Object>) proxy.getValue("");
 		AssetAdministrationShell aas = AssetAdministrationShell.createAsFacade(map);
 		return new ConnectedAssetAdministrationShell(proxy, aas);
 	}
@@ -98,13 +98,13 @@ public class AASAggregatorProxy implements IAASAggregator {
 
 	@Override
 	public void createAAS(AssetAdministrationShell aas) {
-		provider.setModelPropertyValue(getEncodedIdentifier(aas.getIdentification()), aas);
+		provider.setValue(getEncodedIdentifier(aas.getIdentification()), aas);
 		logger.info("AAS with Id " + aas.getIdentification().getId() + " created");
 	}
 
 	@Override
 	public void updateAAS(AssetAdministrationShell aas) {
-		provider.setModelPropertyValue(getEncodedIdentifier(aas.getIdentification()), aas);
+		provider.setValue(getEncodedIdentifier(aas.getIdentification()), aas);
 		logger.info("AAS with Id " + aas.getIdentification().getId() + " updated");
 	}
 

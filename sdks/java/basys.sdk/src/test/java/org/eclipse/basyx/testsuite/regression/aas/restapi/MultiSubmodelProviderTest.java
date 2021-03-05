@@ -88,7 +88,7 @@ public class MultiSubmodelProviderTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void getTest() {
-		AssetAdministrationShell aas = AssetAdministrationShell.createAsFacade((Map<String, Object>) proxy.getModelPropertyValue("/aas"));
+		AssetAdministrationShell aas = AssetAdministrationShell.createAsFacade((Map<String, Object>) proxy.getValue("/aas"));
 		assertEquals(AASIDSHORT, aas.getIdShort());
 
 		getTestRunner("SimpleAASSubmodel");
@@ -98,7 +98,7 @@ public class MultiSubmodelProviderTest {
 	public void createDeleteSubmodelTest() {
 		Submodel sm = new SimpleAASSubmodel("TestSM");
 		sm.setIdentification(IdentifierType.CUSTOM, "TestId");
-		proxy.setModelPropertyValue("/aas/submodels/" + sm.getIdShort(), sm);
+		proxy.setValue("/aas/submodels/" + sm.getIdShort(), sm);
 
 		getTestRunner("TestSM");
 
@@ -115,7 +115,7 @@ public class MultiSubmodelProviderTest {
 		assertFalse(shell.getSubmodelReferences().contains(sm.getReference()));
 
 		try {
-			proxy.getModelPropertyValue("/aas/submodels/TestSM");
+			proxy.getValue("/aas/submodels/TestSM");
 			fail();
 		} catch (ProviderException e) {
 			// Expected
@@ -125,11 +125,11 @@ public class MultiSubmodelProviderTest {
 	private void getTestRunner(String smId) {
 		// Get property value
 		Integer value = (Integer) proxy
-				.getModelPropertyValue("/aas/submodels/" + smId + "/" + SubmodelProvider.SUBMODEL + "/" + MultiSubmodelElementProvider.ELEMENTS + "/integerProperty/value");
+				.getValue("/aas/submodels/" + smId + "/" + SubmodelProvider.SUBMODEL + "/" + MultiSubmodelElementProvider.ELEMENTS + "/integerProperty/value");
 		assertEquals(123, value.intValue());
 
 		// Get property value with /submodel suffix
-		value = (Integer) proxy.getModelPropertyValue("/aas/submodels/" + smId + "/" + SubmodelProvider.SUBMODEL + "/" + MultiSubmodelElementProvider.ELEMENTS + "/integerProperty/value");
+		value = (Integer) proxy.getValue("/aas/submodels/" + smId + "/" + SubmodelProvider.SUBMODEL + "/" + MultiSubmodelElementProvider.ELEMENTS + "/integerProperty/value");
 		assertEquals(123, value.intValue());
 	}
 }

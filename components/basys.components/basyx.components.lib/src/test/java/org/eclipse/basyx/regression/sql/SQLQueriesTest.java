@@ -58,19 +58,19 @@ public class SQLQueriesTest {
 
 		
 		// Get sub model
-		Object value0A = connSubmodel.getModelPropertyValue("/aas/submodels/SQLTestSubmodel");
+		Object value0A = connSubmodel.getValue("/aas/submodels/SQLTestSubmodel");
 
 		
 		// Get properties
-		Object value0B = connSubmodel.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/dataElements");
+		Object value0B = connSubmodel.getValue("/aas/submodels/SQLTestSubmodel/dataElements");
 
 		
 		// Get property value
 		Object value1 = connSubmodel
-				.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames/value");
+				.getValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames/value");
 
 		// Get property value with meta data
-		Object value1a = connSubmodel.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames");
+		Object value1a = connSubmodel.getValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames");
 
 		
 		// Create a new property
@@ -85,9 +85,9 @@ public class SQLQueriesTest {
 		
 		// Get property value again
 		Object value2 = connSubmodel
-				.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames/value");
+				.getValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames/value");
 
-		Object value2a = connSubmodel.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames");
+		Object value2a = connSubmodel.getValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames");
 
 		
 		// Update property value
@@ -97,12 +97,12 @@ public class SQLQueriesTest {
 			updatedTableLine.put("sensorname", "VS_0004");
 			updatedTableLine.put("sensorid", "033542");
 		// - Update table line
-		connSubmodel.setModelPropertyValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames/value",
+		connSubmodel.setValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames/value",
 				updatedTableLine);
 
 		// Get property value again
 		Object value3 = connSubmodel
-				.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames/value");
+				.getValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames/value");
 
 		
 		// Delete property with ID 033542
@@ -114,12 +114,12 @@ public class SQLQueriesTest {
 		
 		// Get property value again
 		Object value4 = connSubmodel
-				.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames/value");
+				.getValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames/value");
 
 		
 		
 		// Get property meta data value
 		Object value5 = connSubmodel
-				.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames/category");
+				.getValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames/category");
 	}
 }

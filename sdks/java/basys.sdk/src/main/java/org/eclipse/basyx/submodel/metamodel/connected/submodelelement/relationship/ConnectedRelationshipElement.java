@@ -38,7 +38,7 @@ public class ConnectedRelationshipElement extends ConnectedSubmodelElement imple
 	@SuppressWarnings("unchecked")
 	@Override
 	public RelationshipElementValue getValue() {
-		Object obj = getProxy().getModelPropertyValue(Property.VALUE);
+		Object obj = getProxy().getValue(Property.VALUE);
 
 		return RelationshipElementValue.createAsFacade((Map<String, Object>) obj);
 	}

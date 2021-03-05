@@ -102,7 +102,7 @@ public class TestMongoDBSubmodelProvider extends SubmodelProviderTest {
 	public void testReadSubmodelElements() {
 		VABElementProxy submodel = getConnectionManager().connectToVABElement(submodelAddr);
 		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) submodel
-				.getModelPropertyValue("/submodel/submodelElements");
+				.getValue("/submodel/submodelElements");
 		assertEquals(4, set.size());
 	}
 

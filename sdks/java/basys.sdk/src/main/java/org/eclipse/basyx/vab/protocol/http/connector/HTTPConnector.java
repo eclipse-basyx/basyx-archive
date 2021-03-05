@@ -52,7 +52,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	 * @return the requested object
 	 */
 	@Override
-	public String getModelPropertyValue(String servicePath) {
+	public String getValue(String servicePath) {
 		return httpGet(servicePath);
 	}
 
@@ -82,7 +82,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	 *            should be an IElement of type Property, Operation or Event
 	 */
 	@Override
-	public String setModelPropertyValue(String servicePath, String newValue) throws ProviderException {
+	public String setValue(String servicePath, String newValue) throws ProviderException {
 
 		return httpPut(servicePath, newValue);
 	}

@@ -31,7 +31,7 @@ public class ConnectedBlob extends ConnectedDataElement implements IBlob {
 
 	@Override
 	public String getValue() {
-		Object connectedValue = getProxy().getModelPropertyValue(Property.VALUE);
+		Object connectedValue = getProxy().getValue(Property.VALUE);
 		if (connectedValue instanceof String) {
 			return (String) connectedValue;
 		} else {

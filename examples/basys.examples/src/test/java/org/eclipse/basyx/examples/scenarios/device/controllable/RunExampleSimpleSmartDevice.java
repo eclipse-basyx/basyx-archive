@@ -98,7 +98,7 @@ public class RunExampleSimpleSmartDevice extends BaSyxExampleScenario {
 		
 		
 		// Change device operation mode
-		toControlComponent.setModelPropertyValue(VABPathTools.concatenatePaths(ControlComponent.STATUS, ControlComponent.OP_MODE), "RegularMilling");
+		toControlComponent.setValue(VABPathTools.concatenatePaths(ControlComponent.STATUS, ControlComponent.OP_MODE), "RegularMilling");
 		// - Validate device control component operation mode
 		waitfor( () -> ((SmartBaSyxTCPDeviceMockup) context.getRunnable("Device")).getControlComponent().getOperationMode().equals("RegularMilling") );
 
@@ -107,7 +107,7 @@ public class RunExampleSimpleSmartDevice extends BaSyxExampleScenario {
 
 
 		// Start device service
-		toControlComponent.setModelPropertyValue("cmd", "start");
+		toControlComponent.setValue("cmd", "start");
 		// - Validate control component status
 		waitfor( () -> ((SmartBaSyxTCPDeviceMockup) context.getRunnable("Device")).getControlComponent().getExecutionState().equals(ExecutionState.EXECUTE.getValue()) );
 		// - Indicate service end
@@ -117,7 +117,7 @@ public class RunExampleSimpleSmartDevice extends BaSyxExampleScenario {
 
 		
 		// Reset device to enable subsequent service calls
-		toControlComponent.setModelPropertyValue("cmd", "reset");
+		toControlComponent.setValue("cmd", "reset");
 		// - Device finishes reset and moves to idle state
 		((SmartBaSyxTCPDeviceMockup) context.getRunnable("Device")).resetCompleted();
 		

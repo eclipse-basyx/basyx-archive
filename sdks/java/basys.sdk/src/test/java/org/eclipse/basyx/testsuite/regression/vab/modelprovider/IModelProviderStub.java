@@ -18,14 +18,14 @@ public class IModelProviderStub implements IModelProvider {
 	private Object value;
 
 	@Override
-	public Object getModelPropertyValue(String path) {
+	public Object getValue(String path) {
 		value = null;
 		this.path = path;
 		return null;
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
+	public void setValue(String path, Object newValue) throws ProviderException {
 		value = newValue;
 		this.path = path;
 	}

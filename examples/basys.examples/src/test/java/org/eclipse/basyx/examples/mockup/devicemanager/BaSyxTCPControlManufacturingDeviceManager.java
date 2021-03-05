@@ -132,10 +132,10 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		
 		// Push the AAS and submodels to the server
 		// - Transfer device AAS to server
-		aasServerConnection.setModelPropertyValue(VABPathTools.append(AASAggregatorProvider.PREFIX, VABPathTools.encodePathElement(aas.getIdentification().getId())), aas);
+		aasServerConnection.setValue(VABPathTools.append(AASAggregatorProvider.PREFIX, VABPathTools.encodePathElement(aas.getIdentification().getId())), aas);
 		// - Transfer device sub model to server
 		aasPath = AASAggregatorProvider.PREFIX + "/" + VABPathTools.encodePathElement(aas.getIdentification().getId()) + "/aas";
-		aasServerConnection.setModelPropertyValue(VABPathTools.concatenatePaths(aasPath, "submodels", statusSM.getIdShort()), statusSM);
+		aasServerConnection.setValue(VABPathTools.concatenatePaths(aasPath, "submodels", statusSM.getIdShort()), statusSM);
 		
 		// Register URNs of control component VAB object
 		addShortcut("ControlComponent", new ModelUrn("urn:de.FHG:devices.es.iese:controlComponentSM:1.0:3:x-509#001"));
@@ -193,15 +193,15 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		// Check what was being received. This check is performed based on a prefix that he device has to provide);
 		// - Update of device status
 		if (hasPrefix(rxStr, "status:"))
-			aasServerConnection.setModelPropertyValue(aasPath + "/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/status/value", removePrefix(rxStr, "status"));
+			aasServerConnection.setValue(aasPath + "/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/status/value", removePrefix(rxStr, "status"));
 		// - Device indicates service invocation
 		if (hasPrefix(rxStr, "invocation:")) {
 			// Start of process
 			if (hasPrefix(rxStr, "invocation:start")) {
 				// Read and increment invocation counter
-				HashMap<String, Object> property = (HashMap<String, Object>) aasServerConnection.getModelPropertyValue(aasPath + "/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/invocations");
+				HashMap<String, Object> property = (HashMap<String, Object>) aasServerConnection.getValue(aasPath + "/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/invocations");
 				int invocations = (int) property.get("value");
-				aasServerConnection.setModelPropertyValue(aasPath + "/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/invocations/value", ++invocations);
+				aasServerConnection.setValue(aasPath + "/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/invocations/value", ++invocations);
 			}
 			
 			// End of process

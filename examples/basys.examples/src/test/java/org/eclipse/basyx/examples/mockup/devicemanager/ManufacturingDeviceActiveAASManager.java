@@ -67,7 +67,7 @@ public class ManufacturingDeviceActiveAASManager extends ManufacturingDeviceMana
 
 
 		// Transfer device sub model to server
-		aasServerConnection.setModelPropertyValue("/" + AASAggregatorProvider.PREFIX + "/" + lookupURN("AAS").getEncodedURN() + "/aas/submodels/" + supplySM.getIdShort(), supplySM);
+		aasServerConnection.setValue("/" + AASAggregatorProvider.PREFIX + "/" + lookupURN("AAS").getEncodedURN() + "/aas/submodels/" + supplySM.getIdShort(), supplySM);
 	}
 
 

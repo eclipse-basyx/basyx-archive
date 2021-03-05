@@ -44,14 +44,14 @@ public class OperationProvider implements IModelProvider {
 
 	public OperationProvider(IModelProvider modelProvider) {
 		this.modelProvider = modelProvider;
-		operationId = getIdShort(modelProvider.getModelPropertyValue(""));
+		operationId = getIdShort(modelProvider.getValue(""));
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) throws ProviderException {
+	public Object getValue(String path) throws ProviderException {
 		String[] splitted = VABPathTools.splitPath(path);
 		if (path.isEmpty()) {
-			return modelProvider.getModelPropertyValue("");
+			return modelProvider.getValue("");
 		} else if (splitted[0].equals(INVOCATION_LIST) && splitted.length == 2) {
 			String requestId = splitted[1];
 			return AsyncOperationHandler.retrieveResult(requestId, operationId);
@@ -62,7 +62,7 @@ public class OperationProvider implements IModelProvider {
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
+	public void setValue(String path, Object newValue) throws ProviderException {
 		throw new MalformedRequestException("Set not allowed at path '" + path + "'");
 	}
 
@@ -104,7 +104,7 @@ public class OperationProvider implements IModelProvider {
 		}
 
 		// Invoke /invokable instead of an Operation property if existent
-		Object childElement = modelProvider.getModelPropertyValue(path);
+		Object childElement = modelProvider.getValue(path);
 		if (Operation.isOperation(childElement)) {
 			path = VABPathTools.concatenatePaths(path, Operation.INVOKABLE);
 		}
@@ -174,7 +174,7 @@ public class OperationProvider implements IModelProvider {
 	 */
 	@SuppressWarnings("unchecked")
 	private Collection<IOperationVariable> copyOutputVariables() {
-		Map<String, Object> operationMap = (Map<String, Object>) getModelPropertyValue("");
+		Map<String, Object> operationMap = (Map<String, Object>) getValue("");
 		Operation op = Operation.createAsFacade(operationMap);
 		Collection<IOperationVariable> outputs = op.getOutputVariables();
 		Collection<IOperationVariable> outCopy = new ArrayList<>();

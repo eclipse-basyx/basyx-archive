@@ -45,7 +45,7 @@ public class ConnectedElement implements IElement {
 	 */
 	@SuppressWarnings("unchecked")
 	public VABModelMap<Object> getElemLive() {
-		VABModelMap<Object> map = new VABModelMap<>((Map<String, Object>) getProxy().getModelPropertyValue(""));
+		VABModelMap<Object> map = new VABModelMap<>((Map<String, Object>) getProxy().getValue(""));
 		// update cache
 		cached = map;
 		return map;

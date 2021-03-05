@@ -179,7 +179,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 
 		try {
 			// Get requested value from provider backend
-			Object value = providerBackend.getModelPropertyValue(path);
+			Object value = providerBackend.getValue(path);
 
 			// Serialize as json string - any messages?
 			String jsonString = serializer.serialize(value);
@@ -209,7 +209,7 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 			Object parameter = extractParameter(path, serializedJSONValue, outputStream);
 
 			// Set the value of the element
-			providerBackend.setModelPropertyValue(path, parameter);
+			providerBackend.setValue(path, parameter);
 
 			// Send response
 			outputStream.write("".getBytes(StandardCharsets.UTF_8));

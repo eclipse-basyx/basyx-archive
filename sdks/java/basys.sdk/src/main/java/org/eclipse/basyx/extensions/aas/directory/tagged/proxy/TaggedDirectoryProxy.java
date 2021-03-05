@@ -62,7 +62,7 @@ public class TaggedDirectoryProxy extends AASRegistryProxy implements IAASTagged
 
 	@SuppressWarnings("unchecked")
 	private Set<TaggedAASDescriptor> performTagRequest(String tagList) {
-		Collection<Map<String, Object>> desc = (Collection<Map<String, Object>>) taggedProvider.getModelPropertyValue(TaggedDirectoryProvider.API_ACCESS + tagList);
+		Collection<Map<String, Object>> desc = (Collection<Map<String, Object>>) taggedProvider.getValue(TaggedDirectoryProvider.API_ACCESS + tagList);
 		return desc.stream().map(m -> TaggedAASDescriptor.createAsFacade(m)).collect(Collectors.toSet());
 	}
 

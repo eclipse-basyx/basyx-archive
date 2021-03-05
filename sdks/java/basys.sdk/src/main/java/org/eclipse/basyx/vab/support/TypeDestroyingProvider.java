@@ -28,13 +28,13 @@ public class TypeDestroyingProvider implements IModelProvider {
 	}
 	
 	@Override
-	public Object getModelPropertyValue(String path) throws ProviderException {
-		return TypeDestroyer.handle(provider.getModelPropertyValue(path));
+	public Object getValue(String path) throws ProviderException {
+		return TypeDestroyer.handle(provider.getValue(path));
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
-		provider.setModelPropertyValue(path, newValue);
+	public void setValue(String path, Object newValue) throws ProviderException {
+		provider.setValue(path, newValue);
 	}
 
 	@Override

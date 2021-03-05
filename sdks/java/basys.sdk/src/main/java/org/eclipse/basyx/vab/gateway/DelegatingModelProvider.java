@@ -32,13 +32,13 @@ public class DelegatingModelProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) throws ProviderException {
-		return getProvider(path).getModelPropertyValue("");
+	public Object getValue(String path) throws ProviderException {
+		return getProvider(path).getValue("");
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
-		getProvider(path).setModelPropertyValue("", newValue);
+	public void setValue(String path, Object newValue) throws ProviderException {
+		getProvider(path).setValue("", newValue);
 	}
 
 	@Override

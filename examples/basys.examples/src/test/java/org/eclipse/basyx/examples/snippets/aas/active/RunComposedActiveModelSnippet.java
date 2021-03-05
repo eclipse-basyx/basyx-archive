@@ -55,8 +55,8 @@ public class RunComposedActiveModelSnippet {
 
 		// Runs a task group with a single task (1x per second)
 		VABModelTaskGroup printerGroup = activeModel.runTask(1000, model -> {
-			logger.debug("Current count: " + model.getModelPropertyValue("/count"));
-			logger.debug("Current average: " + model.getModelPropertyValue("/average"));
+			logger.debug("Current count: " + model.getValue("/count"));
+			logger.debug("Current average: " + model.getValue("/average"));
 		});
 
 		// Adds an additional task to the existing task group

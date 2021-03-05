@@ -28,7 +28,7 @@ public interface IBaSyxConnector {
 	 * @return Property value. Object type is assumed to be [Integer | ... |
 	 *         Collection]
 	 */
-	public String getModelPropertyValue(String path) throws ProviderException;
+	public String getValue(String path) throws ProviderException;
 
 	/**
 	 * Sets or overrides existing property, operation or event.
@@ -38,7 +38,7 @@ public interface IBaSyxConnector {
 	 * @param newValue
 	 *            Updated value
 	 */
-	public String setModelPropertyValue(String path, String newValue) throws ProviderException;
+	public String setValue(String path, String newValue) throws ProviderException;
 
 	/**
 	 * Create a new property, operation, event submodel or aas under the given path

@@ -26,7 +26,7 @@ public interface IModelProvider {
 	 *            Path to the requested value
 	 * @return Object type is assumed to be [Integer | ... | Collection]
 	 */
-	public Object getModelPropertyValue(String path) throws ProviderException;
+	public Object getValue(String path) throws ProviderException;
 
 	/**
 	 * Sets or overrides existing value in a given path
@@ -36,7 +36,7 @@ public interface IModelProvider {
 	 * @param newValue
 	 *            Updated value
 	 */
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException;
+	public void setValue(String path, Object newValue) throws ProviderException;
 
 	/**
 	 * Create a new value under the given path

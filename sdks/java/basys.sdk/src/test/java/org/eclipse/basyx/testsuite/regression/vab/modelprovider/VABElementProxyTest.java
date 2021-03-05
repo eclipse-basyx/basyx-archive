@@ -45,6 +45,6 @@ public class VABElementProxyTest {
 		// Connect to element <i>a/b</i>
 		VABElementProxy bProxy = proxy.getDeepProxy("a/b");
 
-		assertEquals(0, bProxy.getModelPropertyValue("c"));
+		assertEquals(0, bProxy.getValue("c"));
 	}
 }

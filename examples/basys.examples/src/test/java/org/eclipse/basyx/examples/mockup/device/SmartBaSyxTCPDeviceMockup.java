@@ -97,9 +97,9 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		super.onServiceInvocation();
 		// Implement the device invocation counter - read and increment invocation counter
 		Map<String, Object> property = (Map<String, Object>) aasServerConnection
-				.getModelPropertyValue(aasPath + "/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/invocations");
+				.getValue(aasPath + "/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/invocations");
 		int invocations = (int) property.get("value");
-		aasServerConnection.setModelPropertyValue(aasPath + "/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/invocations/value", ++invocations);
+		aasServerConnection.setValue(aasPath + "/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/invocations/value", ++invocations);
 	}
 
 	
@@ -112,7 +112,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		super.onChangedExecutionState(newExecutionState);
 		
 		// Update property "properties/status" in external AAS
-		aasServerConnection.setModelPropertyValue(aasPath + "/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/status/value",
+		aasServerConnection.setValue(aasPath + "/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/status/value",
 				newExecutionState.getValue());
 	}
 
@@ -139,7 +139,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		aas.setIdentification(lookupURN("AAS"));
 
 		// - Transfer device AAS to server
-		aasServerConnection.setModelPropertyValue(VABPathTools.append(AASAggregatorProvider.PREFIX, VABPathTools.encodePathElement(aas.getIdentification().getId())), aas);
+		aasServerConnection.setValue(VABPathTools.append(AASAggregatorProvider.PREFIX, VABPathTools.encodePathElement(aas.getIdentification().getId())), aas);
 
 		aasPath = VABPathTools.concatenatePaths(AASAggregatorProvider.PREFIX, lookupURN("AAS").getEncodedURN(), "aas");
 
@@ -159,7 +159,7 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		invocationsProp.setIdShort("invocations");
 		statusSM.addSubmodelElement(invocationsProp);
 		// - Transfer device sub model to server
-		aasServerConnection.setModelPropertyValue(aasPath + "/submodels/" + statusSM.getIdShort(), statusSM);
+		aasServerConnection.setValue(aasPath + "/submodels/" + statusSM.getIdShort(), statusSM);
 
 		
 		// Register control component as local sub model

@@ -79,7 +79,7 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	@SuppressWarnings("unchecked")
 	@Override
 	public ISubmodelElement getSubmodelElement(String id) {
-		Map<String, Object> node =(Map<String, Object>) getProxy().getModelPropertyValue(id);
+		Map<String, Object> node =(Map<String, Object>) getProxy().getValue(id);
 		ISubmodelElement element = ConnectedSubmodelElementFactory.getConnectedSubmodelElement(getProxy(), "", id, node);
 		return element;			
 	}
@@ -106,12 +106,12 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 			// Convert "value" in SubmodelElementCollection from Map to Collection
 			if (element instanceof SubmodelElementCollection) {
 				Map<String, Object> converted = SubmodelElementMapCollectionConverter.smElementToMap((Map<String, Object>) element);
-				getProxy().setModelPropertyValue(element.getIdShort(), converted);
+				getProxy().setValue(element.getIdShort(), converted);
 				return;
 			}
 		}
 		
-		getProxy().setModelPropertyValue(element.getIdShort(), element);
+		getProxy().setValue(element.getIdShort(), element);
 	}
 
 	@Override

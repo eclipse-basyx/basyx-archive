@@ -46,7 +46,7 @@ public class ConnectedProperty extends ConnectedDataElement implements IProperty
 
 	@SuppressWarnings("unchecked")
 	protected <T> T retrieveObject() {
-		return (T) getProxy().getModelPropertyValue(Property.VALUE);
+		return (T) getProxy().getValue(Property.VALUE);
 	}
 	
 	@Override
@@ -66,7 +66,7 @@ public class ConnectedProperty extends ConnectedDataElement implements IProperty
 	
 	@Override
 	public void setValue(Object value) {
-		getProxy().setModelPropertyValue(Property.VALUE, ValueTypeHelper.prepareForSerialization(value));
+		getProxy().setValue(Property.VALUE, ValueTypeHelper.prepareForSerialization(value));
 	}
 
 	@Override

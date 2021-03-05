@@ -57,7 +57,7 @@ public class AASModelProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) throws ProviderException {
+	public Object getValue(String path) throws ProviderException {
 		path = preparePath(path);
 		if (path.isEmpty()) {
 			return aasApi.getAAS();
@@ -67,7 +67,7 @@ public class AASModelProvider implements IModelProvider {
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
+	public void setValue(String path, Object newValue) throws ProviderException {
 		throw new MalformedRequestException("For an AAS, Set is not supported");
 	}
 

@@ -136,7 +136,7 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 		aas.setIdShort("DeviceIDShort");
 		aas.setIdentification(lookupURN("AAS"));
 		// - Transfer device AAS to server
-		aasServerConnection.setModelPropertyValue(VABPathTools.concatenatePaths(AASAggregatorProvider.PREFIX, VABPathTools.encodePathElement(aas.getIdentification().getId())), aas);
+		aasServerConnection.setValue(VABPathTools.concatenatePaths(AASAggregatorProvider.PREFIX, VABPathTools.encodePathElement(aas.getIdentification().getId())), aas);
 
 	
 		// The device also brings a sub model structure with an own ID that is being pushed on the server
@@ -155,7 +155,7 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 		invocationsProp.setIdShort("invocations");
 		statusSM.addSubmodelElement(invocationsProp);
 		// - Transfer device sub model to server
-		aasServerConnection.setModelPropertyValue(AASAggregatorProvider.PREFIX + "/" + VABPathTools.encodePathElement(lookupURN("AAS").getId()) + "/aas/submodels/" + statusSM.getIdShort(), statusSM);
+		aasServerConnection.setValue(AASAggregatorProvider.PREFIX + "/" + VABPathTools.encodePathElement(lookupURN("AAS").getId()) + "/aas/submodels/" + statusSM.getIdShort(), statusSM);
 	}
 
 
@@ -182,15 +182,15 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 		// Check what was being received. This check is performed based on a prefix that he device has to provide);
 		// - Update of device status
 		if (hasPrefix(rxStr, "status:"))
-			aasServerConnection.setModelPropertyValue(aasPath + "/aas/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/status/value", removePrefix(rxStr, "status"));
+			aasServerConnection.setValue(aasPath + "/aas/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/status/value", removePrefix(rxStr, "status"));
 		// - Device indicates service invocation
 		if (hasPrefix(rxStr, "invocation:")) {
 			// Start of process
 			if (hasPrefix(rxStr, "invocation:start")) {
 				// Read and increment invocation counter
-				HashMap<String, Object> property = (HashMap<String, Object>) aasServerConnection.getModelPropertyValue(aasPath + "/aas/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/invocations");
+				HashMap<String, Object> property = (HashMap<String, Object>) aasServerConnection.getValue(aasPath + "/aas/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/invocations");
 				int invocations = (int) property.get("value");
-				aasServerConnection.setModelPropertyValue(aasPath + "/aas/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/invocations/value", ++invocations);
+				aasServerConnection.setValue(aasPath + "/aas/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/invocations/value", ++invocations);
 			} 
 			// End of process
 			if (hasPrefix(rxStr, "invocation:end")) {

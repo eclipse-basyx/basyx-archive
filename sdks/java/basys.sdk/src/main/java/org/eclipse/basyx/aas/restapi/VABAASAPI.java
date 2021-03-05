@@ -49,7 +49,7 @@ public class VABAASAPI implements IAASAPI {
 	@Override
 	public IAssetAdministrationShell getAAS() {
 		// For access on the container property root, return the whole model
-		Map<String, Object> map = (Map<String, Object>) provider.getModelPropertyValue("");
+		Map<String, Object> map = (Map<String, Object>) provider.getValue("");
 		return AssetAdministrationShell.createAsFacade(map);
 	}
 
@@ -61,7 +61,7 @@ public class VABAASAPI implements IAASAPI {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void removeSubmodel(String id) {
-		Collection<Map<String, Object>> smReferences = (Collection<Map<String, Object>>) provider.getModelPropertyValue(AssetAdministrationShell.SUBMODELS);
+		Collection<Map<String, Object>> smReferences = (Collection<Map<String, Object>>) provider.getValue(AssetAdministrationShell.SUBMODELS);
 		// Reference to submodel could be either by idShort (=> local) or directly via
 		// its identifier
 		for (Iterator<Map<String, Object>> iterator = smReferences.iterator(); iterator.hasNext();) {

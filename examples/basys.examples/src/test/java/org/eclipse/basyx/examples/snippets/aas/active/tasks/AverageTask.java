@@ -32,14 +32,14 @@ public class AverageTask implements VABModelTask {
 
 	@Override
 	public void execute(IModelProvider model) throws Exception {
-		double nextValue = (double) model.getModelPropertyValue(sourcePath);
+		double nextValue = (double) model.getValue(sourcePath);
 		double average = lastAverage;
 		if ( average == 0 ) {
 			average = nextValue;
 		} else {
 			average = average * (1 - factor) + nextValue * factor;
 		}
-		model.setModelPropertyValue(targetPath, average);
+		model.setValue(targetPath, average);
 		lastAverage = average;
 	}
 }

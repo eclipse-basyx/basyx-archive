@@ -140,7 +140,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, ISubmodel> getSubmodels() {
-		Collection<Map<String, Object>> submodelCollection = (Collection<Map<String, Object>>) getProxy().getModelPropertyValue(AssetAdministrationShell.SUBMODELS);
+		Collection<Map<String, Object>> submodelCollection = (Collection<Map<String, Object>>) getProxy().getValue(AssetAdministrationShell.SUBMODELS);
 
 		Map<String, ISubmodel> ret = new HashMap<>();
 
@@ -158,7 +158,7 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 		subModel.setParent(getReference());
 		Map<String, Object> convertedMap = SubmodelElementMapCollectionConverter.smToMap(subModel);
 		String accessPath = VABPathTools.concatenatePaths(AssetAdministrationShell.SUBMODELS, subModel.getIdShort());
-		getProxy().setModelPropertyValue(accessPath, convertedMap);
+		getProxy().setValue(accessPath, convertedMap);
 	}
 
 	@Override

@@ -95,16 +95,16 @@ public class CRUDOperations {
 		connSubmodel1.createValue("properties/prop2", "myStr");
 		
 		// Read property values
-		int    prop1Val = (int)    connSubmodel1.getModelPropertyValue("properties/prop1");
-		String prop2Val = (String) connSubmodel1.getModelPropertyValue("properties/prop2");
+		int    prop1Val = (int)    connSubmodel1.getValue("properties/prop1");
+		String prop2Val = (String) connSubmodel1.getValue("properties/prop2");
 		
 		// Update property values
-		connSubmodel1.setModelPropertyValue("properties/prop1", 8);
-		connSubmodel1.setModelPropertyValue("properties/prop2", "stillMine");
+		connSubmodel1.setValue("properties/prop1", 8);
+		connSubmodel1.setValue("properties/prop2", "stillMine");
 		
 		// Read property values again
-		int    prop1Val_2 = (int)    connSubmodel1.getModelPropertyValue("properties/prop1");
-		String prop2Val_2 = (String) connSubmodel1.getModelPropertyValue("properties/prop2");
+		int    prop1Val_2 = (int)    connSubmodel1.getValue("properties/prop1");
+		String prop2Val_2 = (String) connSubmodel1.getValue("properties/prop2");
 
 		// Delete property values
 		connSubmodel1.deleteValue("properties/prop1");
@@ -112,11 +112,11 @@ public class CRUDOperations {
 		
 		// Read property values again
 		try {
-			connSubmodel1.getModelPropertyValue("properties/prop1");
+			connSubmodel1.getValue("properties/prop1");
 			fail();
 		} catch (ResourceNotFoundException e) {}
 		try {
-			connSubmodel1.getModelPropertyValue("properties/prop2");
+			connSubmodel1.getValue("properties/prop2");
 			fail();
 		} catch (ResourceNotFoundException e) {}
 

@@ -93,7 +93,7 @@ public class AASAggregatorProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) throws ProviderException {
+	public Object getValue(String path) throws ProviderException {
 		path = stripPrefix(path);
 
 		if (path.isEmpty()) { // Return all AAS if path is empty
@@ -108,13 +108,13 @@ public class AASAggregatorProvider implements IModelProvider {
 				String id = VABPathTools.decodePathElement(splitted[0]);
 				String restPath = VABPathTools.skipEntries(path, 1);
 				IIdentifier identifier = new Identifier(IdentifierType.CUSTOM, id);
-				return aggregator.getAASProvider(identifier).getModelPropertyValue(restPath);
+				return aggregator.getAASProvider(identifier).getValue(restPath);
 			}
 		}
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
+	public void setValue(String path, Object newValue) throws ProviderException {
 		path = stripPrefix(path);
 
 		if (!path.isEmpty()) { // Overwriting existing entry
@@ -139,7 +139,7 @@ public class AASAggregatorProvider implements IModelProvider {
 				String id = VABPathTools.decodePathElement(VABPathTools.getEntry(path, 0));
 				String restPath = VABPathTools.skipEntries(path, 1);
 				IIdentifier identifier = new Identifier(IdentifierType.CUSTOM, id);
-				aggregator.getAASProvider(identifier).setModelPropertyValue(restPath, newValue);
+				aggregator.getAASProvider(identifier).setValue(restPath, newValue);
 			}
 		} else {
 			throw new MalformedRequestException("Set with empty path is not supported by aggregator");

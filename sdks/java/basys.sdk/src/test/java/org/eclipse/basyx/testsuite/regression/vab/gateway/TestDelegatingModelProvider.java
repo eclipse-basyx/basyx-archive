@@ -50,7 +50,7 @@ public class TestDelegatingModelProvider {
 		});
 
 		// Get a value based on path
-		provider.getModelPropertyValue(basyx + "//" + rest);
+		provider.getValue(basyx + "//" + rest);
 
 		// Assert that correct address was given to IConnectorProvider
 		assertEquals(address, basyx);

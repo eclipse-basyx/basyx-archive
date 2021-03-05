@@ -59,17 +59,17 @@ public class VABLambdaProviderClass {
 		IModelProvider provider = new VABLambdaProvider(rootElement);
 
 		// Static and dynamic properties are resolved to their primitive object value
-		assertEquals("myStaticString", provider.getModelPropertyValue("/static"));
-		assertEquals("myDynamicString", provider.getModelPropertyValue("/dynamic"));
+		assertEquals("myStaticString", provider.getValue("/static"));
+		assertEquals("myDynamicString", provider.getValue("/dynamic"));
 
 		// Now each time the dynamic property is read, it resolves its value through the given get operation
 		// - modify the source of the dynamic property
 		dynamicString = "newValue";
 		// - resolve the property
-		assertEquals("newValue", provider.getModelPropertyValue("/dynamic"));
+		assertEquals("newValue", provider.getValue("/dynamic"));
 
 		// The custom setter of the dynamic property in this example only allows string types...
-		provider.setModelPropertyValue("/dynamic", true);
-		assertEquals("newValue", provider.getModelPropertyValue("/dynamic"));
+		provider.setValue("/dynamic", true);
+		assertEquals("newValue", provider.getValue("/dynamic"));
 	}
 }

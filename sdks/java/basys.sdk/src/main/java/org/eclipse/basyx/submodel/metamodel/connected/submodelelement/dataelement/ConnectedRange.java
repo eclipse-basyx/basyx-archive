@@ -85,6 +85,6 @@ public class ConnectedRange extends ConnectedDataElement implements IRange {
 			);
 				
 		
-		getProxy().setModelPropertyValue(MultiSubmodelElementProvider.VALUE, prepared);
+		getProxy().setValue(MultiSubmodelElementProvider.VALUE, prepared);
 	}
 }

@@ -74,14 +74,14 @@ public class AASBundleIntegrator {
 			IModelProvider provider = aggregator.getAASProvider(aas.getIdentification());
 			for (ISubmodel sm : bundle.getSubmodels()) {
 				try {
-					provider.getModelPropertyValue("/aas/submodels/" + sm.getIdShort());
+					provider.getValue("/aas/submodels/" + sm.getIdShort());
 					// If no ResourceNotFoundException occurs, SM exists on server
 					// -> no further action required
 				} catch (ResourceNotFoundException e) {
 					// AAS does not exist and needs to be pushed to the server
 					// Check if ISubmodel is a concrete Submodel
 					if (sm instanceof Submodel) {
-						provider.setModelPropertyValue("/aas/submodels/" + sm.getIdShort(), sm);
+						provider.setValue("/aas/submodels/" + sm.getIdShort(), sm);
 						objectUploaded = true;
 					} else {
 						throw new RuntimeException("sm Objects in bundles need to be instance of 'Submodel'");

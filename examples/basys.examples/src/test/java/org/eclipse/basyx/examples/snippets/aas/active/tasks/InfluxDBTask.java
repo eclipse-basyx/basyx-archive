@@ -48,7 +48,7 @@ public class InfluxDBTask implements VABModelTask {
 	@Override
 	public void execute(IModelProvider model) throws Exception {
 		try {
-			Object value = model.getModelPropertyValue(modelPath);
+			Object value = model.getValue(modelPath);
 			String result = value == null ? "null" : value.toString();
 			writeData(result);
 		} catch (Exception e) {

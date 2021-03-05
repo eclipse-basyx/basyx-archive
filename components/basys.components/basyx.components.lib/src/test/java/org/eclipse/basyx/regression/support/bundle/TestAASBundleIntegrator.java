@@ -145,7 +145,7 @@ public class TestAASBundleIntegrator {
 		IModelProvider provider = aggregator.getAASProvider(new Identifier(IdentifierType.CUSTOM, AAS_ID));
 		
 		Submodel sm = SubmodelElementMapCollectionConverter.mapToSM(
-				(Map<String, Object>) provider.getModelPropertyValue("/aas/submodels/" + SM_ID));
+				(Map<String, Object>) provider.getValue("/aas/submodels/" + SM_ID));
 		
 		assertEquals(SM_ID, sm.getIdentification().getId());
 	}
@@ -155,7 +155,7 @@ public class TestAASBundleIntegrator {
 	}
 	
 	private void pushSubmodel(Submodel sm, IIdentifier aasIdentifier) {
-		provider.setModelPropertyValue("/" + AASAggregatorProvider.PREFIX + "/" + aasIdentifier.getId() + "/aas/submodels/" + sm.getIdShort(), sm);
+		provider.setValue("/" + AASAggregatorProvider.PREFIX + "/" + aasIdentifier.getId() + "/aas/submodels/" + sm.getIdShort(), sm);
 	}
 	
 	private AASBundle getTestBundle() {

@@ -135,11 +135,11 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubmodel {
 			if (element instanceof SubmodelElementCollection) {
 				Map<String, Object> converted = SubmodelElementMapCollectionConverter.smElementToMap((Map<String, Object>) element);
 				
-				getProxy().setModelPropertyValue(path, converted);
+				getProxy().setValue(path, converted);
 				return;
 			}
 		}
-		getProxy().setModelPropertyValue(path, element);
+		getProxy().setValue(path, element);
 	}
 
 	@Override
@@ -163,7 +163,7 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubmodel {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> getValues() {
-		return (Map<String, Object>) getProxy().getModelPropertyValue(SubmodelProvider.VALUES);
+		return (Map<String, Object>) getProxy().getValue(SubmodelProvider.VALUES);
 	}
 
 	@Override
@@ -190,7 +190,7 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubmodel {
 	@SuppressWarnings("unchecked")
 	@Override
 	public ISubmodelElement getSubmodelElement(String id) {
-		Map<String, Object> node =(Map<String, Object>) getProxy().getModelPropertyValue(VABPathTools.concatenatePaths(MultiSubmodelElementProvider.ELEMENTS, id));
+		Map<String, Object> node =(Map<String, Object>) getProxy().getValue(VABPathTools.concatenatePaths(MultiSubmodelElementProvider.ELEMENTS, id));
 		ISubmodelElement element = ConnectedSubmodelElementFactory.getConnectedSubmodelElement(getProxy(), MultiSubmodelElementProvider.ELEMENTS, id, node);
 		return element;		
 	}

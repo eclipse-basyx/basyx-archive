@@ -103,7 +103,7 @@ public abstract class ConnectedSubmodelElement extends ConnectedElement implemen
 	
 	@Override
 	public void setValue(Object value) {
-		getProxy().setModelPropertyValue(MultiSubmodelElementProvider.VALUE, value);
+		getProxy().setValue(MultiSubmodelElementProvider.VALUE, value);
 	}
 
 	@Override

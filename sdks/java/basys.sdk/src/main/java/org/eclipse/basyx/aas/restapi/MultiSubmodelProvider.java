@@ -214,12 +214,12 @@ public class MultiSubmodelProvider implements IModelProvider {
 	public void setAssetAdministrationShell(AASModelProvider modelContentProvider) {
 		// Add model provider
 		aas_provider = modelContentProvider;
-		aasId = AssetAdministrationShell.createAsFacade((Map<String, Object>) modelContentProvider.getModelPropertyValue("")).getIdentification();
+		aasId = AssetAdministrationShell.createAsFacade((Map<String, Object>) modelContentProvider.getValue("")).getIdentification();
 	}
 
 	@SuppressWarnings("unchecked")
 	public void addSubmodel(SubmodelProvider modelContentProvider) {
-		Submodel sm = Submodel.createAsFacade((Map<String, Object>) modelContentProvider.getModelPropertyValue("/"));
+		Submodel sm = Submodel.createAsFacade((Map<String, Object>) modelContentProvider.getValue("/"));
 		submodel_providers.put(sm.getIdShort(), modelContentProvider);
 
 		// Adds a new submodel to the registered AAS
@@ -241,13 +241,13 @@ public class MultiSubmodelProvider implements IModelProvider {
 	 * Get the value of an element
 	 */
 	@Override
-	public Object getModelPropertyValue(String path) throws ProviderException {
+	public Object getValue(String path) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 		path = VABPathTools.stripSlashes(path);
 		String[] pathElements = VABPathTools.splitPath(path);
 		if (pathElements.length > 0 && pathElements[0].equals("aas")) {
 			if (pathElements.length == 1) {
-				return aas_provider.getModelPropertyValue("");
+				return aas_provider.getValue("");
 			}
 			if (pathElements[1].equals(AssetAdministrationShell.SUBMODELS)) {
 				if (pathElements.length == 2) {
@@ -261,11 +261,11 @@ public class MultiSubmodelProvider implements IModelProvider {
 					}
 					
 					// - Retrieve submodel or property value
-					return provider.getModelPropertyValue(VABPathTools.buildPath(pathElements, 4));
+					return provider.getValue(VABPathTools.buildPath(pathElements, 4));
 				}
 			} else {
 				// Handle access to AAS
-				return aas_provider.getModelPropertyValue(VABPathTools.buildPath(pathElements, 1));
+				return aas_provider.getValue(VABPathTools.buildPath(pathElements, 1));
 			}
 		} else {
 			return new MalformedRequestException("The request " + path + " is not allowed for this endpoint");
@@ -284,7 +284,7 @@ public class MultiSubmodelProvider implements IModelProvider {
 		// Make a list and return all local submodels
 		Collection<Submodel> submodels = new HashSet<>();
 		for (IModelProvider submodel : submodel_providers.values()) {
-			submodels.add(Submodel.createAsFacade((Map<String, Object>) submodel.getModelPropertyValue("")));
+			submodels.add(Submodel.createAsFacade((Map<String, Object>) submodel.getValue("")));
 		}
 
 		// Check for remote submodels
@@ -322,7 +322,7 @@ public class MultiSubmodelProvider implements IModelProvider {
 				}
 				
 				List<Submodel> remoteSms = missingEndpoints.stream().map(endpoint -> connectorProvider.getConnector(endpoint)).
-						map(p -> (Map<String, Object>) p.getModelPropertyValue("")).map(m -> Submodel.createAsFacade(m)).collect(Collectors.toList());
+						map(p -> (Map<String, Object>) p.getValue("")).map(m -> Submodel.createAsFacade(m)).collect(Collectors.toList());
 				submodels.addAll(remoteSms);
 			}
 		}
@@ -334,7 +334,7 @@ public class MultiSubmodelProvider implements IModelProvider {
 	 * Change a model property value
 	 */
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
+	public void setValue(String path, Object newValue) throws ProviderException {
  		VABPathTools.checkPathForNull(path);
 		path = VABPathTools.stripSlashes(path);
 		// Split path
@@ -356,7 +356,7 @@ public class MultiSubmodelProvider implements IModelProvider {
 				// Get a model provider for the submodel in the registry
 				provider = getModelProvider(pathElements[2]);
 			}
-			provider.setModelPropertyValue(propertyPath, newValue);
+			provider.setValue(propertyPath, newValue);
 		} catch (ResourceNotFoundException e) {
 			createSubmodel(newValue);
 		}
@@ -403,7 +403,7 @@ public class MultiSubmodelProvider implements IModelProvider {
 
 			// Delete submodel reference from aas
 			// TODO: This is a hack until the API is further clarified
-			Submodel sm = Submodel.createAsFacade((Map<String, Object>) submodel_providers.get(smIdShort).getModelPropertyValue("/"));
+			Submodel sm = Submodel.createAsFacade((Map<String, Object>) submodel_providers.get(smIdShort).getValue("/"));
 			aas_provider.deleteValue("aas/submodels/" + sm.getIdentification().getId());
 
 			// Remove submodel provider

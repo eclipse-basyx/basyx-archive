@@ -64,7 +64,7 @@ public class VABRegistryProxy implements IVABRegistryService {
 	 */
 	@Override
 	public String lookup(String id) {
-		Object response = provider.getModelPropertyValue(id);
+		Object response = provider.getValue(id);
 		
 		if (response instanceof String) {
 			return (String) response;

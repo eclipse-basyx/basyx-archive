@@ -67,7 +67,7 @@ public class ConnectedSubmodelElementFactory {
 			String collectionPath, String elementPath) {
 		// Query the whole list of elements
 		Collection<Map<String, Object>> mapElemList = (Collection<Map<String, Object>>) rootProxy
-				.getModelPropertyValue(collectionPath);
+				.getValue(collectionPath);
 		// Get the type and idShort for each element and create the corresponding connected variant
 		Map<String, ISubmodelElement> ret = new HashMap<>();
 		for (Map<String, Object> node : mapElemList) {
@@ -91,7 +91,7 @@ public class ConnectedSubmodelElementFactory {
 			String collectionPath, String elementPath) {
 		// Query the whole list of elements
 		Collection<Map<String, Object>> mapElemList = (Collection<Map<String, Object>>) rootProxy
-				.getModelPropertyValue(collectionPath);
+				.getValue(collectionPath);
 		// Get the type and idShort for each element and create the corresponding connected variant
 		Collection<ISubmodelElement> ret = new ArrayList<>();
 		for (Map<String, Object> node : mapElemList) {
@@ -154,7 +154,7 @@ public class ConnectedSubmodelElementFactory {
 			String elementPath) {
 		// Query the whole list of elements
 		Collection<Map<String, Object>> mapElemList = (Collection<Map<String, Object>>) rootProxy
-				.getModelPropertyValue(collectionPath);
+				.getValue(collectionPath);
 
 		// Get the type and idShort for each operation and create the corresponding connected variant
 		Map<String, IOperation> ret = new HashMap<>();
@@ -182,7 +182,7 @@ public class ConnectedSubmodelElementFactory {
 			String elementPath) {
 		// Query the whole list of elements
 		Collection<Map<String, Object>> mapElemList = (Collection<Map<String, Object>>) rootProxy
-				.getModelPropertyValue(collectionPath);
+				.getValue(collectionPath);
 
 		// Get the type and idShort for each operation and create the corresponding connected variant
 		Map<String, IDataElement> ret = new HashMap<>();
@@ -219,7 +219,7 @@ public class ConnectedSubmodelElementFactory {
 	public static Map<String, IProperty> getProperties(VABElementProxy rootProxy, String collectionPath,
 			String elementPath) {
 		// Query the whole list of elements
-		Collection<Map<String, Object>> mapElemList = (Collection<Map<String, Object>>) rootProxy.getModelPropertyValue(collectionPath);
+		Collection<Map<String, Object>> mapElemList = (Collection<Map<String, Object>>) rootProxy.getValue(collectionPath);
 
 		// Get the type and idShort for each operation and create the corresponding
 		// connected variant

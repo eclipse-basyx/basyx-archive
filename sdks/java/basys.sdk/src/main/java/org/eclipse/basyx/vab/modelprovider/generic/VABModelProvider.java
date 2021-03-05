@@ -39,13 +39,13 @@ public class VABModelProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) {
+	public Object getValue(String path) {
 		Object element = getTargetElement(path);
 		return handler.postprocessObject(element);
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) {
+	public void setValue(String path, Object newValue) {
 		VABPathTools.checkPathForNull(path);
 		if (VABPathTools.isEmptyPath(path)) {
 			// Empty path => parent element == null => replace root, if it exists
@@ -111,7 +111,7 @@ public class VABModelProvider implements IModelProvider {
 		
 		path = VABPathTools.stripInvokeFromPath(path);
 		
-		Object childElement = getModelPropertyValue(path);
+		Object childElement = getValue(path);
 
 		// Invoke operation for function interfaces
 		if (childElement instanceof Function<?, ?>) {

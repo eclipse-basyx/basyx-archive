@@ -179,7 +179,7 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 		// FIXME: Convert internal data structure of ISubmodelElement
 		Map<String, Object> elementMap = (Map<String, Object>) element;
 		IModelProvider elementProvider = new SubmodelElementProvider(new VABMapProvider(elementMap));
-		Object elementVABObj = elementProvider.getModelPropertyValue("");
+		Object elementVABObj = elementProvider.getValue("");
 		return SubmodelElement.createAsFacade((Map<String, Object>) elementVABObj);
 	}
 
@@ -234,7 +234,7 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 		// Unwrap value
 		newValue = unwrapParameter(newValue);
 		// Get and update property value
-		getElementProvider(sm, idShort).setModelPropertyValue(Property.VALUE, newValue);
+		getElementProvider(sm, idShort).setValue(Property.VALUE, newValue);
 		// Replace db entry
 		Query hasId = query(where(SMIDPATH).is(smId));
 		mongoOps.findAndReplace(hasId, sm, collection);
@@ -250,7 +250,7 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 		// Update value
 		IModelProvider mapProvider = new VABMapProvider((Map<String, Object>) element);
 		IModelProvider elemProvider = SubmodelElementProvider.getElementProvider(mapProvider);
-		elemProvider.setModelPropertyValue(Property.VALUE, newValue);
+		elemProvider.setValue(Property.VALUE, newValue);
 
 		// Replace db entry
 		Query hasId = query(where(SMIDPATH).is(smId));
@@ -259,14 +259,14 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 
 	private Object getTopLevelSubmodelElementValue(String idShort) {
 		Submodel sm = (Submodel) getSubmodel();
-		return getElementProvider(sm, idShort).getModelPropertyValue("/value");
+		return getElementProvider(sm, idShort).getValue("/value");
 	}
 
 	@SuppressWarnings("unchecked")
 	private Object getNestedSubmodelElementValue(List<String> idShorts) {
 		ISubmodelElement lastElement = getNestedSubmodelElement(idShorts);
 		IModelProvider mapProvider = new VABMapProvider((Map<String, Object>) lastElement);
-		return SubmodelElementProvider.getElementProvider(mapProvider).getModelPropertyValue("/value");
+		return SubmodelElementProvider.getElementProvider(mapProvider).getValue("/value");
 	}
 
 	@SuppressWarnings("unchecked")

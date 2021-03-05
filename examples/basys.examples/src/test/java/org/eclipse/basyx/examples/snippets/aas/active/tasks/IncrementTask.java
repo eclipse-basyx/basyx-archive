@@ -27,7 +27,7 @@ public class IncrementTask implements VABModelTask {
 
 	@Override
 	public void execute(IModelProvider model) throws Exception {
-		int current = (int) model.getModelPropertyValue(path);
-		model.setModelPropertyValue(path, current + 1);
+		int current = (int) model.getValue(path);
+		model.setValue(path, current + 1);
 	}
 }

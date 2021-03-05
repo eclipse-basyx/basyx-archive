@@ -43,13 +43,13 @@ public class VABRegistryModelProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) throws ProviderException {
+	public Object getValue(String path) throws ProviderException {
 		path = VABPathTools.stripSlashes(path);
 		return directory.lookup(path);
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
+	public void setValue(String path, Object newValue) throws ProviderException {
 		throw new RuntimeException("Set not supported by VAB Directory");
 	}
 

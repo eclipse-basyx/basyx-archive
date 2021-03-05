@@ -40,7 +40,7 @@ public class TestCollectionProperty {
 		connVABElement.createValue("/structure/list/", 12);
 	
 		// Test reading whole lists
-		Collection<Object> collection = (Collection<Object>) connVABElement.getModelPropertyValue("/structure/list/");
+		Collection<Object> collection = (Collection<Object>) connVABElement.getValue("/structure/list/");
 		Iterator<Object> iterator = collection.iterator();
 		assertEquals(5, iterator.next());
 		assertEquals(12, iterator.next());
@@ -48,7 +48,7 @@ public class TestCollectionProperty {
 
 		// Test invalid list access - single list elements cannot be accessed directly
 		try {
-			connVABElement.getModelPropertyValue("/structure/list/0");
+			connVABElement.getValue("/structure/list/0");
 			fail();
 		} catch (ResourceNotFoundException e) {}
 	
@@ -63,17 +63,17 @@ public class TestCollectionProperty {
 		VABElementProxy connVABElement = connManager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
 	
 		// Read original collection
-		Collection<Object> original = (Collection<Object>) connVABElement.getModelPropertyValue("/structure/list/");
+		Collection<Object> original = (Collection<Object>) connVABElement.getValue("/structure/list/");
 	
 		// Replace complete value of the collection property
 		Collection<Object> replacement = new ArrayList<>();
 		replacement.add(100);
 		replacement.add(200);
 		replacement.add(300);
-		connVABElement.setModelPropertyValue("/structure/list/", replacement);
+		connVABElement.setValue("/structure/list/", replacement);
 	
 		// Read values back
-		Collection<Object> collection = (Collection<Object>) connVABElement.getModelPropertyValue("/structure/list/");
+		Collection<Object> collection = (Collection<Object>) connVABElement.getValue("/structure/list/");
 	
 		// Check test case results
 		assertEquals(3, collection.size());
@@ -81,13 +81,13 @@ public class TestCollectionProperty {
 
 		// Test invalid list access - single list elements cannot be accessed directly
 		try {
-			connVABElement.setModelPropertyValue("/structure/list/0", 3);
+			connVABElement.setValue("/structure/list/0", 3);
 			fail();
 		} catch (ResourceNotFoundException e) {
 		}
 	
 		// Write original back
-		connVABElement.setModelPropertyValue("/structure/list/", original);
+		connVABElement.setValue("/structure/list/", original);
 	}
 
 	public static void testCreateDelete(VABConnectionManager connManager) {
@@ -96,7 +96,7 @@ public class TestCollectionProperty {
 	
 		// Create element in Set (no key provided)
 		connVABElement.createValue("/structure/set/", true);
-		Object toTest = connVABElement.getModelPropertyValue("/structure/set/");
+		Object toTest = connVABElement.getValue("/structure/set/");
 		assertTrue(((Collection<?>) toTest).contains(true));
 	
 		// Delete at Set
@@ -105,28 +105,28 @@ public class TestCollectionProperty {
 			connVABElement.deleteValue("/structure/set/0/");
 			fail();
 		} catch (ResourceNotFoundException e) {}
-		toTest = connVABElement.getModelPropertyValue("/structure/set/");
+		toTest = connVABElement.getValue("/structure/set/");
 		assertEquals(1, ((Collection<?>) toTest).size());
 		// - by object
 		connVABElement.deleteValue("/structure/set/", true);
-		toTest = connVABElement.getModelPropertyValue("/structure/set/");
+		toTest = connVABElement.getValue("/structure/set/");
 		assertEquals(0, ((Collection<?>) toTest).size());
 	
 		// Create elements in List (no key provided)
 		connVABElement.createValue("/structure/list/", 56);
-		toTest = connVABElement.getModelPropertyValue("/structure/list/");
+		toTest = connVABElement.getValue("/structure/list/");
 		assertTrue(((List<?>) toTest).contains(56));
 	
 		// Delete at List
 		// by object
 		connVABElement.deleteValue("/structure/list/", 56);
-		toTest = connVABElement.getModelPropertyValue("/structure/list/");
+		toTest = connVABElement.getValue("/structure/list/");
 		assertEquals(0, ((List<?>) toTest).size());
 	
 		// Create a list element
 		connVABElement.createValue("listInRoot", Arrays.asList(1, 1, 2, 3, 5));
 		// Test whole list
-		toTest = connVABElement.getModelPropertyValue("listInRoot");
+		toTest = connVABElement.getValue("listInRoot");
 		assertTrue(toTest instanceof List);
 		assertEquals(5, ((List<?>) toTest).size());
 		assertEquals(2, ((List<?>) toTest).get(2));
@@ -134,7 +134,7 @@ public class TestCollectionProperty {
 		// Delete whole list
 		connVABElement.deleteValue("listInRoot");
 		try {
-			connVABElement.getModelPropertyValue("listInRoot");
+			connVABElement.getValue("listInRoot");
 			fail();
 		} catch (ResourceNotFoundException e) {}
 	
@@ -151,19 +151,19 @@ public class TestCollectionProperty {
 			fail();
 		} catch (ResourceNotFoundException e) {}
 	
-		toTest = connVABElement.getModelPropertyValue("/structure/list/");
+		toTest = connVABElement.getValue("/structure/list/");
 		assertEquals(4, ((List<?>) toTest).size());
 	
 		// Delete half of the elements
 		connVABElement.deleteValue("/structure/list/", 10);
 		connVABElement.deleteValue("/structure/list/", 40);
-		toTest = connVABElement.getModelPropertyValue("/structure/list/");
+		toTest = connVABElement.getValue("/structure/list/");
 		assertEquals(2, ((List<?>) toTest).size());
 
 		// Delete remaining elements
 		connVABElement.deleteValue("/structure/list/", 20);
 		connVABElement.deleteValue("/structure/list/", 80);
-		toTest = connVABElement.getModelPropertyValue("/structure/list/");
+		toTest = connVABElement.getValue("/structure/list/");
 		assertEquals(0, ((List<?>) toTest).size());
 	}
 }

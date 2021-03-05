@@ -333,7 +333,7 @@ public class FileSystemProvider implements IModelProvider {
 	}
 
 	@Override
-	public synchronized Object getModelPropertyValue(String path) throws ProviderException {
+	public synchronized Object getValue(String path) throws ProviderException {
 		path = unifyPath(path);
 		String directory = VABPathTools.getParentPath(path);
 		String fileName = VABPathTools.getLastElement(path);
@@ -384,7 +384,7 @@ public class FileSystemProvider implements IModelProvider {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public synchronized void setModelPropertyValue(String path, Object newValue) throws ProviderException {
+	public synchronized void setValue(String path, Object newValue) throws ProviderException {
 		path = unifyPath(path);
 		String fileName = VABPathTools.getLastElement(path);
 		String fullPath = rootDir + "/" + path;

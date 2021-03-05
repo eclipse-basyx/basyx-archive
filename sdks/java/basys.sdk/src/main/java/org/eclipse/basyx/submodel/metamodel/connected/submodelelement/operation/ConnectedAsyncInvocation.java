@@ -94,7 +94,7 @@ public class ConnectedAsyncInvocation implements IAsyncInvocation {
 		// 1. Retrieve InvocationResponse from proxy
 		Object responseObj = null;
 		try {
-			 responseObj = proxy.getModelPropertyValue(getListPath());
+			 responseObj = proxy.getValue(getListPath());
 		} catch (ProviderException e) {
 			// As the Submodel-API does not specify a request to ask whether
 			// the operation is finished, it has to be done via the retrieval of the value.

@@ -31,7 +31,7 @@ public class ConnectedAnnotatedRelationshipElement extends ConnectedRelationship
 	@SuppressWarnings("unchecked")
 	@Override
 	public AnnotatedRelationshipElementValue getValue() {
-		Object obj = getProxy().getModelPropertyValue(Property.VALUE);
+		Object obj = getProxy().getValue(Property.VALUE);
 
 		return AnnotatedRelationshipElementValue.createAsFacade((Map<String, Object>) obj);
 	}

@@ -135,7 +135,7 @@ public class DynamicPropertyClass {
 		connSubmodel1.createValue("dynamicExampleProperty", dynamicPropertyVal);
 
 		// Read dynamicExample property
-		Object propertyValue = connSubmodel1.getModelPropertyValue("dynamicExampleProperty");
+		Object propertyValue = connSubmodel1.getValue("dynamicExampleProperty");
 
 		
 		// Compare returned to expected values

@@ -35,66 +35,66 @@ public class MapRead {
 		VABElementProxy connVABElement = connManager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
 		
 		// Test path access
-		Object slashA = connVABElement.getModelPropertyValue("/primitives/integer");
-		Object slashB = connVABElement.getModelPropertyValue("primitives/integer/");
-		Object slashC = connVABElement.getModelPropertyValue("/primitives/integer/");
-		Object slashD = connVABElement.getModelPropertyValue("/primitives/integer/");
+		Object slashA = connVABElement.getValue("/primitives/integer");
+		Object slashB = connVABElement.getValue("primitives/integer/");
+		Object slashC = connVABElement.getValue("/primitives/integer/");
+		Object slashD = connVABElement.getValue("/primitives/integer/");
 		assertEquals(slashA, 123);
 		assertEquals(slashB, 123);
 		assertEquals(slashC, 123);
 		assertEquals(slashD, 123);
 		
 		// Test reading different data types
-		Object map = connVABElement.getModelPropertyValue("primitives");
-		Object doubleValue = connVABElement.getModelPropertyValue("primitives/double");
-		Object string = connVABElement.getModelPropertyValue("primitives/string");
+		Object map = connVABElement.getValue("primitives");
+		Object doubleValue = connVABElement.getValue("primitives/double");
+		Object string = connVABElement.getValue("primitives/string");
 		assertEquals(3, ((Map<?, ?>) map).size());
 		assertEquals(3.14d, doubleValue);
 		assertEquals("TestValue", string);
 		
 		// Test case sensitivity
-		Object caseSensitiveA = connVABElement.getModelPropertyValue("special/casesensitivity");
-		Object caseSensitiveB = connVABElement.getModelPropertyValue("special/caseSensitivity");
+		Object caseSensitiveA = connVABElement.getValue("special/casesensitivity");
+		Object caseSensitiveB = connVABElement.getValue("special/caseSensitivity");
 		assertEquals(true, caseSensitiveA);
 		assertEquals(false, caseSensitiveB);
 		
 		// Test reading null value
-		Object nullValue = connVABElement.getModelPropertyValue("special/null");
+		Object nullValue = connVABElement.getValue("special/null");
 		assertNull(nullValue);
 		
 		// Test reading serializable functions
-		Object serializableFunction = connVABElement.getModelPropertyValue("operations/serializable");
+		Object serializableFunction = connVABElement.getValue("operations/serializable");
 		Function<Object[], Object> testFunction = (Function<Object[], Object>) serializableFunction;
 		assertEquals(3, testFunction.apply(new Object[] { 1, 2 }));
 		
 		// Non-existing parent element
 		try {
-			connVABElement.getModelPropertyValue("unknown/x");
+			connVABElement.getValue("unknown/x");
 			fail();
 		} catch (ResourceNotFoundException e) {}
 		
 		// Non-existing target element
 		try {
-			connVABElement.getModelPropertyValue("primitives/unkown");
+			connVABElement.getValue("primitives/unkown");
 			fail();
 		} catch (ResourceNotFoundException e) {}
 		try {
-			connVABElement.getModelPropertyValue("unkown");
+			connVABElement.getValue("unkown");
 			fail();
 		} catch (ResourceNotFoundException e) {}
 		
 		// Nested access
-		assertEquals(100, connVABElement.getModelPropertyValue("special/nested/nested/value"));
+		assertEquals(100, connVABElement.getValue("special/nested/nested/value"));
 		
 		// Empty path
-		Object rootValueA = connVABElement.getModelPropertyValue("");
-		Object rootValueB = connVABElement.getModelPropertyValue("/");
+		Object rootValueA = connVABElement.getValue("");
+		Object rootValueB = connVABElement.getValue("/");
 		assertEquals(4, ((Map<?, ?>) rootValueA).size());
 		assertEquals(4, ((Map<?, ?>) rootValueB).size());
 		
 		// Null path - should throw exception
 		try {
-			connVABElement.getModelPropertyValue(null);
+			connVABElement.getValue(null);
 			fail();
 		} catch (MalformedRequestException e) {}
 	}

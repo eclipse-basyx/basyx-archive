@@ -101,7 +101,7 @@ public class DynamicPropertyLambda {
 
 		// Read dynamicExample property
 		// - This will invoke the previously uploaded Lambda expression
-		Object propertyValue = connSubmodel1.getModelPropertyValue("dynamicExampleProperty");
+		Object propertyValue = connSubmodel1.getValue("dynamicExampleProperty");
 		
 		
 		// Compare returned to expected values

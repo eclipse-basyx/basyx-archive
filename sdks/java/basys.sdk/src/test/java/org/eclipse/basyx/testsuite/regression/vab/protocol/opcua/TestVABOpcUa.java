@@ -54,10 +54,10 @@ public class TestVABOpcUa {
         clientMapper.addConnectorProvider("opc.tcp", new OpcUaConnectorProvider());
         try {
             clientMapper.getConnector("opc.tcp://opcua.demo-this.com:51210/UA/SampleServer")
-                    .setModelPropertyValue("0:Objects/2:Data/2:Static/2:AnalogScalar/2:Int32Value", 42);
+                    .setValue("0:Objects/2:Data/2:Static/2:AnalogScalar/2:Int32Value", 42);
 
             Object ret = clientMapper.getConnector("opc.tcp://opcua.demo-this.com:51210/UA/SampleServer")
-                    .getModelPropertyValue("0:Objects/2:Data/2:Static/2:AnalogScalar/2:Int32Value");
+                    .getValue("0:Objects/2:Data/2:Static/2:AnalogScalar/2:Int32Value");
             Assert.assertEquals("42", ret);
         } catch (Exception e) {
             // TODO Auto-generated catch block

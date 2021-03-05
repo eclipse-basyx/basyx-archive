@@ -45,15 +45,15 @@ public class RecordingProvider implements IModelProvider {
 
 
 	@Override
-	public Object getModelPropertyValue(String path) throws ProviderException {
+	public Object getValue(String path) throws ProviderException {
 		paths.add(path);
-		return wrapped.getModelPropertyValue(path);
+		return wrapped.getValue(path);
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
+	public void setValue(String path, Object newValue) throws ProviderException {
 		paths.add(path);
-		wrapped.setModelPropertyValue(path, newValue);
+		wrapped.setValue(path, newValue);
 	}
 
 	@Override

@@ -168,7 +168,7 @@ public class AASRegistryModelProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) throws ProviderException {
+	public Object getValue(String path) throws ProviderException {
 		String[] splitted = preparePath(path);
 
 		//Path is empty, request for all AASDescriptors
@@ -207,7 +207,7 @@ public class AASRegistryModelProvider implements IModelProvider {
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
+	public void setValue(String path, Object newValue) throws ProviderException {
 		String[] splitted = preparePath(path);
 
 		if (splitted.length > 0) { // Overwriting existing entry

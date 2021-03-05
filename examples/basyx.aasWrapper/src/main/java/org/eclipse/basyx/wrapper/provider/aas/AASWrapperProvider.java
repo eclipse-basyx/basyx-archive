@@ -127,7 +127,7 @@ public class AASWrapperProvider implements IWrapperProvider {
 	 */
 	@Override
 	public Object get(String path) {
-		return provider.getModelPropertyValue(path);
+		return provider.getValue(path);
 	}
 
 	@Override

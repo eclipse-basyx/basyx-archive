@@ -37,12 +37,12 @@ public class TaggedDirectoryProvider extends AASRegistryModelProvider {
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) throws ProviderException {
+	public Object getValue(String path) throws ProviderException {
 		path = VABPathTools.stripSlashes(path);
 		if (path.startsWith(PREFIX)) {
 			return directory.lookupTags(extractTags(path));
 		} else {
-			return super.getModelPropertyValue(path);
+			return super.getValue(path);
 		}
 	}
 	

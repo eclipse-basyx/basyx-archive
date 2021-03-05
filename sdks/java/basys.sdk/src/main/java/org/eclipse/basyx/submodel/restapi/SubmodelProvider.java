@@ -102,7 +102,7 @@ public class SubmodelProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) throws ProviderException {
+	public Object getValue(String path) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 		path = removeSubmodelPrefix(path);
 		if (path.isEmpty()) {
@@ -170,7 +170,7 @@ public class SubmodelProvider implements IModelProvider {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
+	public void setValue(String path, Object newValue) throws ProviderException {
 		path = removeSubmodelPrefix(path);
 		if (path.isEmpty()) {
 			throw new MalformedRequestException("Set on \"submodel\" not supported");

@@ -34,31 +34,31 @@ public class PropertyProvider implements IModelProvider {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object getModelPropertyValue(String path) throws ProviderException {
+	public Object getValue(String path) throws ProviderException {
 		path = VABPathTools.stripSlashes(path);
 
 		// Handle "/value" path
 		if (path.equals(Property.VALUE)) {
 			// return value
-			Map<String, Object> p = (Map<String, Object>) proxy.getModelPropertyValue("");
+			Map<String, Object> p = (Map<String, Object>) proxy.getValue("");
 			return p.get(Property.VALUE);
 
 		} else if (path.isEmpty()) {
 			// Handle "" path by returning complete property
-			return proxy.getModelPropertyValue("");
+			return proxy.getValue("");
 		} else {
 			throw new MalformedRequestException("Unknown path: " + path);
 		}
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
+	public void setValue(String path, Object newValue) throws ProviderException {
 		path = VABPathTools.stripSlashes(path);
 		// Only handle "/value" paths
 		if (path.equals(Property.VALUE)) {
 			// Set value and type
-			proxy.setModelPropertyValue(Property.VALUE, newValue);
-			proxy.setModelPropertyValue(Property.VALUETYPE, ValueTypeHelper.getType(newValue).toString());
+			proxy.setValue(Property.VALUE, newValue);
+			proxy.setValue(Property.VALUETYPE, ValueTypeHelper.getType(newValue).toString());
 		} else {
 			throw new MalformedRequestException("Given Set path '" + path + "' does not end in /value");
 		}

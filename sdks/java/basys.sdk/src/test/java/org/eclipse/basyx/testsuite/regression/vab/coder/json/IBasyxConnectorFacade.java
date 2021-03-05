@@ -40,7 +40,7 @@ public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxCo
 	 * message
 	 */
 	@Override
-	public String getModelPropertyValue(String path) {
+	public String getValue(String path) {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		provider.processBaSysGet(path, outputStream);
 		
@@ -56,7 +56,7 @@ public class IBasyxConnectorFacade<T extends IModelProvider> implements IBaSyxCo
 	 * message
 	 */
 	@Override
-	public String setModelPropertyValue(String path, String newValue) throws ProviderException {
+	public String setValue(String path, String newValue) throws ProviderException {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		provider.processBaSysSet(path, newValue, outputStream);
 		

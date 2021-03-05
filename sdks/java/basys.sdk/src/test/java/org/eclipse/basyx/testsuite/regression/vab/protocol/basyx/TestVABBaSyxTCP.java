@@ -51,7 +51,7 @@ public class TestVABBaSyxTCP extends TestProvider {
 	public void testSuccessfulShutdown() throws InterruptedException {
 		BaSyxConnector connector = new BaSyxConnector("localhost", 6998);
 
-		connector.getModelPropertyValue("integer");
+		connector.getValue("integer");
 
 		// Wait until thread is closed on server
 		Thread.sleep(100);

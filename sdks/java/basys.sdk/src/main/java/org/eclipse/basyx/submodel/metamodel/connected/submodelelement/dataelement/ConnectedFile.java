@@ -30,7 +30,7 @@ public class ConnectedFile extends ConnectedDataElement implements IFile {
 	public String getValue() {
 		
 		// FIXME: This is a hack, fix this when API is clear
-		return (String) getProxy().getModelPropertyValue(Property.VALUE);
+		return (String) getProxy().getValue(Property.VALUE);
 	}
 
 	@Override

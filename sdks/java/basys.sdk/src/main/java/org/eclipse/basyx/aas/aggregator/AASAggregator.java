@@ -97,7 +97,7 @@ public class AASAggregator implements IAASAggregator {
 	public Collection<IAssetAdministrationShell> getAASList() {
 		return aasProviderMap.values().stream().map(p -> {
 			try {
-				return p.getModelPropertyValue("/aas");
+				return p.getValue("/aas");
 			} catch (Exception e1) {
 				e1.printStackTrace();
 				throw new RuntimeException();
@@ -115,7 +115,7 @@ public class AASAggregator implements IAASAggregator {
 		IModelProvider aasProvider = getAASProvider(aasId);
 
 		// get all Elements from provider
-		Map<String, Object> aasMap = (Map<String, Object>) aasProvider.getModelPropertyValue("/aas");
+		Map<String, Object> aasMap = (Map<String, Object>) aasProvider.getValue("/aas");
 		IAssetAdministrationShell aas = AssetAdministrationShell.createAsFacade(aasMap);
 
 		return aas;
