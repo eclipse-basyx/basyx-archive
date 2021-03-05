@@ -32,9 +32,9 @@ import org.slf4j.LoggerFactory;
  * @author pschorn, espen, haque
  * 
  */
-public class AASHTTPServer {
+public class BaSyxHTTPServer {
 	
-	private static Logger logger = LoggerFactory.getLogger(AASHTTPServer.class);
+	private static Logger logger = LoggerFactory.getLogger(BaSyxHTTPServer.class);
 	
 	private Tomcat tomcat;
 
@@ -52,7 +52,7 @@ public class AASHTTPServer {
 	 *            Basyx context with of url mappings to HTTPServlet
 	 */
 
-	public AASHTTPServer(BaSyxContext context) {
+	public BaSyxHTTPServer(BaSyxContext context) {
 		// Instantiate and setup Tomcat server
 		tomcat = new Tomcat();
 

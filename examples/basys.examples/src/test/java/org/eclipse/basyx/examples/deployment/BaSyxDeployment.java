@@ -12,7 +12,7 @@ package org.eclipse.basyx.examples.deployment;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
+import org.eclipse.basyx.vab.protocol.http.server.BaSyxHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.eclipse.basyx.vab.service.api.BaSyxService;
 import org.junit.rules.ExternalResource;
@@ -49,7 +49,7 @@ public class BaSyxDeployment extends ExternalResource {
 	/**
 	 * Deployment on HTTP server
 	 */
-	private AASHTTPServer server;
+	private BaSyxHTTPServer server;
 	
 	
 	
@@ -87,7 +87,7 @@ public class BaSyxDeployment extends ExternalResource {
     		// Process BaSyx context objects that run in a tomcat server
     		if (contextComponent instanceof BaSyxContext) {
     			// Get HTTP server resource
-				server = new AASHTTPServer((BaSyxContext) contextComponent);
+				server = new BaSyxHTTPServer((BaSyxContext) contextComponent);
 				// - Start the server
 				server.start();
     			// - Continue loop

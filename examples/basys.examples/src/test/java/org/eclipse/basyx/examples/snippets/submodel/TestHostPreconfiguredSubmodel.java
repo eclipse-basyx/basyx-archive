@@ -19,7 +19,7 @@ import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnector;
-import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
+import org.eclipse.basyx.vab.protocol.http.server.BaSyxHTTPServer;
 import org.junit.After;
 import org.junit.Test;
 
@@ -32,7 +32,7 @@ import org.junit.Test;
 public class TestHostPreconfiguredSubmodel {
 
 	// Used for test case tear down
-	private AASHTTPServer server;
+	private BaSyxHTTPServer server;
 
 	@Test
 	public void testHostPreconfiguredSubmodel() {

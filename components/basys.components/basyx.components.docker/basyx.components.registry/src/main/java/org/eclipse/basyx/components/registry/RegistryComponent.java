@@ -20,7 +20,7 @@ import org.eclipse.basyx.components.registry.configuration.RegistryBackend;
 import org.eclipse.basyx.components.registry.servlet.InMemoryRegistryServlet;
 import org.eclipse.basyx.components.registry.servlet.MongoDBRegistryServlet;
 import org.eclipse.basyx.components.registry.servlet.SQLRegistryServlet;
-import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
+import org.eclipse.basyx.vab.protocol.http.server.BaSyxHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class RegistryComponent implements IComponent {
 	private static Logger logger = LoggerFactory.getLogger(RegistryComponent.class);
 	
 	// The server with the servlet that will be created
-	private AASHTTPServer server;
+	private BaSyxHTTPServer server;
 
 	// The component configuration
 	private BaSyxContextConfiguration contextConfig;
@@ -111,7 +111,7 @@ public class RegistryComponent implements IComponent {
 	public void startComponent() {
 		BaSyxContext context = contextConfig.createBaSyxContext();
 		context.addServletMapping("/*", loadRegistryServlet());
-		server = new AASHTTPServer(context);
+		server = new BaSyxHTTPServer(context);
 		server.start();
 		logger.info("Registry server started");
 	}

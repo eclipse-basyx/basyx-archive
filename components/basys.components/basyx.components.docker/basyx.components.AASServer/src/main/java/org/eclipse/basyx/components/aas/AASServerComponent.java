@@ -48,7 +48,7 @@ import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPIFactory;
 import org.eclipse.basyx.support.bundle.AASBundle;
 import org.eclipse.basyx.support.bundle.AASBundleDescriptorFactory;
 import org.eclipse.basyx.support.bundle.AASBundleIntegrator;
-import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
+import org.eclipse.basyx.vab.protocol.http.server.BaSyxHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +66,7 @@ public class AASServerComponent implements IComponent {
 	private static Logger logger = LoggerFactory.getLogger(AASServerComponent.class);
 
 	// The server with the servlet that will be created
-	private AASHTTPServer server;
+	private BaSyxHTTPServer server;
 	private IAASRegistryService registry;
 
 	// Configurations
@@ -159,7 +159,7 @@ public class AASServerComponent implements IComponent {
 		}
 
 		logger.info("Start the server");
-		server = new AASHTTPServer(context);
+		server = new BaSyxHTTPServer(context);
 		server.start();
 	}
 

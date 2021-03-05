@@ -12,7 +12,7 @@ package org.eclipse.basyx.examples.snippets.submodel;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.components.servlet.submodel.SubmodelServlet;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
-import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
+import org.eclipse.basyx.vab.protocol.http.server.BaSyxHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 
 /**
@@ -39,7 +39,7 @@ public class HostPreconfiguredSubmodel {
 	 *            the submodel to be hosted
 	 * @return the started server
 	 */
-	public static AASHTTPServer hostPreconfiguredSubmodel(BaSyxContextConfiguration serverContext, Submodel sm) {
+	public static BaSyxHTTPServer hostPreconfiguredSubmodel(BaSyxContextConfiguration serverContext, Submodel sm) {
 		// Create the BaSyx context from the context configuration
 		BaSyxContext context = serverContext.createBaSyxContext();
 
@@ -51,7 +51,7 @@ public class HostPreconfiguredSubmodel {
 		context.addServletMapping("/" + sm.getIdShort() + "/*", smServlet);
 
 		// Create and start a HTTP server with the context created above
-		AASHTTPServer preconfiguredSmServer = new AASHTTPServer(context);
+		BaSyxHTTPServer preconfiguredSmServer = new BaSyxHTTPServer(context);
 		preconfiguredSmServer.start();
 
 		return preconfiguredSmServer;

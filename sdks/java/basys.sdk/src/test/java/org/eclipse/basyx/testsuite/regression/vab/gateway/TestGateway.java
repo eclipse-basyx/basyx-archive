@@ -24,7 +24,7 @@ import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorProvider;
 import org.eclipse.basyx.vab.protocol.basyx.server.BaSyxTCPServer;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
-import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
+import org.eclipse.basyx.vab.protocol.http.server.BaSyxHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 import org.eclipse.basyx.vab.registry.memory.VABInMemoryRegistry;
@@ -42,7 +42,7 @@ import org.junit.Test;
 public class TestGateway {
 	private BaSyxTCPServer<VABMapProvider> server;
 	private BaSyxTCPServer<DelegatingModelProvider> basyxGateway;
-	private AASHTTPServer httpGateway;
+	private BaSyxHTTPServer httpGateway;
 
 	@Before
 	public void build() { // Create VAB element
@@ -65,7 +65,7 @@ public class TestGateway {
 		DelegatingModelProvider httpGWProvider = new DelegatingModelProvider(gatewayMapper);
 		BaSyxContext context = new BaSyxContext("", "", "localhost", 5123);
 		context.addServletMapping("/path/to/gateway/*", new VABHTTPInterface<DelegatingModelProvider>(httpGWProvider));
-		httpGateway = new AASHTTPServer(context);
+		httpGateway = new BaSyxHTTPServer(context);
 
 		// Start element provider and gateway
 		server.start();

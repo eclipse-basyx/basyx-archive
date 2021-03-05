@@ -27,7 +27,7 @@ import org.eclipse.basyx.components.registry.configuration.RegistryBackend;
 import org.eclipse.basyx.components.servlet.submodel.SubmodelServlet;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
-import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
+import org.eclipse.basyx.vab.protocol.http.server.BaSyxHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 
 
@@ -75,7 +75,7 @@ public class CloudEdgeDeploymentScenario {
 
 	// Used for shutting down the scenario
 	private List<IComponent> startedComponents = new ArrayList<>();
-	private AASHTTPServer edgeServer;
+	private BaSyxHTTPServer edgeServer;
 
 	/**
 	 * Main method to start the scenario
@@ -158,7 +158,7 @@ public class CloudEdgeDeploymentScenario {
 		
 		
 		// Create and start a HTTP server with the context created above
-		edgeServer = new AASHTTPServer(context);
+		edgeServer = new BaSyxHTTPServer(context);
 		edgeServer.start();
 	}
 	

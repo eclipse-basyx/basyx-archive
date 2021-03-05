@@ -19,7 +19,7 @@ import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.configuration.BaSyxConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
-import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
+import org.eclipse.basyx.vab.protocol.http.server.BaSyxHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.eclipse.basyx.wrapper.provider.GenericHTTPInterface;
 import org.eclipse.basyx.wrapper.provider.GenericWrapperProvider;
@@ -202,7 +202,7 @@ public class AASWrapperExecutable {
 			context.addServletMapping(provider.getProviderPath() + "/*",
 					new GenericHTTPInterface(provider));
 		}
-        AASHTTPServer server = new AASHTTPServer(context);
+        BaSyxHTTPServer server = new BaSyxHTTPServer(context);
 		server.start();
 	}
 }

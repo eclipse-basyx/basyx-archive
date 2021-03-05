@@ -23,7 +23,7 @@ import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
+import org.eclipse.basyx.vab.protocol.http.server.BaSyxHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 import org.slf4j.Logger;
@@ -89,7 +89,7 @@ public class AASExecutable {
 		config.loadFromDefaultSource();
 		BaSyxContext context = config.createBaSyxContext();
 		context.addServletMapping("/*", new VABHTTPInterface<IModelProvider>(provider));
-        AASHTTPServer server = new AASHTTPServer(context);
+        BaSyxHTTPServer server = new BaSyxHTTPServer(context);
 		server.start();
 	}
 }
