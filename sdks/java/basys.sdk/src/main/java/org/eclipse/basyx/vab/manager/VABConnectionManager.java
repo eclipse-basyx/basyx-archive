@@ -9,10 +9,10 @@
  ******************************************************************************/
 package org.eclipse.basyx.vab.manager;
 
-import org.eclipse.basyx.vab.directory.api.IVABDirectoryService;
 import org.eclipse.basyx.vab.factory.java.ModelProxyFactory;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
+import org.eclipse.basyx.vab.registry.api.IVABRegistryService;
 
 
 
@@ -27,7 +27,7 @@ public class VABConnectionManager {
 	/**
 	 * Directory service reference
 	 */
-	protected IVABDirectoryService directoryService = null;
+	protected IVABRegistryService directoryService = null;
 
 	
 	/**
@@ -47,7 +47,7 @@ public class VABConnectionManager {
 	 * @param providerProvider
 	 *            used to get the appropriate connector for the selected address
 	 */
-	public VABConnectionManager(IVABDirectoryService networkDirectoryService, IConnectorProvider providerProvider) {
+	public VABConnectionManager(IVABRegistryService networkDirectoryService, IConnectorProvider providerProvider) {
 		// Set directory service reference
 		directoryService = networkDirectoryService;
 

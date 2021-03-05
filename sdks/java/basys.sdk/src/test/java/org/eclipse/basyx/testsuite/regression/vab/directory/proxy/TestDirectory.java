@@ -13,8 +13,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-import org.eclipse.basyx.vab.directory.api.IVABDirectoryService;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
+import org.eclipse.basyx.vab.registry.api.IVABRegistryService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +28,7 @@ import org.junit.Test;
  */
 public abstract class TestDirectory {
 	// The registry proxy that is used to access the backend
-	protected final IVABDirectoryService registry = getRegistry();
+	protected final IVABRegistryService registry = getRegistry();
 
 	// Ids and endpoints for registered elements
 	protected String elem1 = "elem1";
@@ -42,7 +42,7 @@ public abstract class TestDirectory {
 	 * Getter for the tested registry provider. Tests for actual registry provider
 	 * have to realize this method.
 	 */
-	protected abstract IVABDirectoryService getRegistry();
+	protected abstract IVABRegistryService getRegistry();
 
 	/**
 	 * During setup of the tests, new entries are created in the registry using a

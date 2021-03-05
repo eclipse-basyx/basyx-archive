@@ -9,8 +9,8 @@
  ******************************************************************************/
 package org.eclipse.basyx.components.configuration;
 
-import org.eclipse.basyx.vab.directory.api.IVABDirectoryService;
 import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
+import org.eclipse.basyx.vab.registry.api.IVABRegistryService;
 
 
 
@@ -87,14 +87,14 @@ public class CFGBaSyxConnection {
 	/**
 	 * Instantiate the directory class
 	 */
-	public IVABDirectoryService createDirectoryInstance() {
+	public IVABRegistryService createDirectoryInstance() {
 		// Try to create instance
 		try {
 			// Get Java class by name
 			Class<?> clazz = Class.forName(directoryProviderName);
 		
 			// Instantiate class
-			IVABDirectoryService directoryService = (IVABDirectoryService) clazz.newInstance();
+			IVABRegistryService directoryService = (IVABRegistryService) clazz.newInstance();
 			
 			// Return directory service instance
 			return directoryService;

@@ -7,13 +7,13 @@
  * 
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
-package org.eclipse.basyx.vab.directory.memory;
+package org.eclipse.basyx.vab.registry.memory;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.vab.directory.api.IVABDirectoryService;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
+import org.eclipse.basyx.vab.registry.api.IVABRegistryService;
 
 
 
@@ -23,7 +23,7 @@ import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
  * @author kuhn
  *
  */
-public class InMemoryDirectory implements IVABDirectoryService {
+public class VABInMemoryRegistry implements IVABRegistryService {
 
 	
 	/**
@@ -37,7 +37,7 @@ public class InMemoryDirectory implements IVABDirectoryService {
 	/**
 	 * Default constructor
 	 */
-	public InMemoryDirectory() {
+	public VABInMemoryRegistry() {
 		// Do nothing
 	}
 	
@@ -45,7 +45,7 @@ public class InMemoryDirectory implements IVABDirectoryService {
 	/**
 	 * Constructor that accepts initial entries
 	 */
-	public InMemoryDirectory(Map<String, String> addedValues) {
+	public VABInMemoryRegistry(Map<String, String> addedValues) {
 		keyToValue.putAll(addedValues);
 	}
 	
@@ -55,7 +55,7 @@ public class InMemoryDirectory implements IVABDirectoryService {
 	 * Add a mapping to directory
 	 */
 	@Override
-	public IVABDirectoryService addMapping(String key, String value) {
+	public IVABRegistryService addMapping(String key, String value) {
 		keyToValue.put(key, value);
 		
 		// Return 'this' instance

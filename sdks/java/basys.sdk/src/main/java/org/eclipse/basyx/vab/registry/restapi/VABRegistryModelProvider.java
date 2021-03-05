@@ -7,13 +7,13 @@
  * 
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
-package org.eclipse.basyx.vab.directory.restapi;
+package org.eclipse.basyx.vab.registry.restapi;
 
-import org.eclipse.basyx.vab.directory.api.IVABDirectoryService;
-import org.eclipse.basyx.vab.directory.memory.InMemoryDirectory;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
+import org.eclipse.basyx.vab.registry.api.IVABRegistryService;
+import org.eclipse.basyx.vab.registry.memory.VABInMemoryRegistry;
 
 /**
  * Connects an arbitrary IVABDirectoryService implementation to the VAB
@@ -21,16 +21,16 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  * @author schnicke
  */
 
-public class DirectoryModelProvider implements IModelProvider {
+public class VABRegistryModelProvider implements IModelProvider {
 
-	private IVABDirectoryService directory;
+	private IVABRegistryService directory;
 
 	/**
 	 * Creates a DirectoryModelProvider wrapping an IVABDirectoryService
 	 * 
 	 * @param directory
 	 */
-	public DirectoryModelProvider(IVABDirectoryService directory) {
+	public VABRegistryModelProvider(IVABRegistryService directory) {
 		super();
 		this.directory = directory;
 	}
@@ -38,8 +38,8 @@ public class DirectoryModelProvider implements IModelProvider {
 	/**
 	 * Creates a default DirectoryModelProvider wrapping an InMemoryDirectory
 	 */
-	public DirectoryModelProvider() {
-		this(new InMemoryDirectory());
+	public VABRegistryModelProvider() {
+		this(new VABInMemoryRegistry());
 	}
 
 	@Override

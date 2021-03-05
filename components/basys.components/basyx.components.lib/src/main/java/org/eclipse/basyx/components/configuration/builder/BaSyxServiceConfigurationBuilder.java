@@ -14,9 +14,9 @@ import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.configuration.CFGBaSyxProtocolType;
 import org.eclipse.basyx.components.configuration.ConfigurableComponent;
-import org.eclipse.basyx.vab.directory.api.IVABDirectoryService;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.registry.api.IVABRegistryService;
 
 /**
  * Configuration builder for BaSyx services
@@ -38,7 +38,7 @@ public class BaSyxServiceConfigurationBuilder<T extends BaSyxServiceConfiguratio
 	 */
 	protected CFGBaSyxProtocolType protocoltype = null;
 	
-	protected IVABDirectoryService vabDirectory = null;
+	protected IVABRegistryService vabDirectory = null;
 	
 	
 	/**
@@ -90,7 +90,7 @@ public class BaSyxServiceConfigurationBuilder<T extends BaSyxServiceConfiguratio
 	 * Set VAB Directory
 	 */
 	@SuppressWarnings("unchecked")
-	public T directoryService(IVABDirectoryService vabDirectory) {
+	public T directoryService(IVABRegistryService vabDirectory) {
 		// Store VAB directory
 		this.vabDirectory = vabDirectory;
 

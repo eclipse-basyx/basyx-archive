@@ -7,16 +7,16 @@
  * 
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
-package org.eclipse.basyx.vab.directory.proxy;
+package org.eclipse.basyx.vab.registry.proxy;
 
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
-import org.eclipse.basyx.vab.directory.api.IVABDirectoryService;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnector;
+import org.eclipse.basyx.vab.registry.api.IVABRegistryService;
 
-public class VABDirectoryProxy implements IVABDirectoryService {
+public class VABRegistryProxy implements IVABRegistryService {
 	/**
 	 * Store the URL of the registry of this proxy
 	 */
@@ -28,7 +28,7 @@ public class VABDirectoryProxy implements IVABDirectoryService {
 	 * @param directoryUrl
 	 *            The endpoint of the registry with a HTTP-REST interface
 	 */
-	public VABDirectoryProxy(String directoryUrl) {
+	public VABRegistryProxy(String directoryUrl) {
 		this(new VABElementProxy("", new JSONConnector(new HTTPConnector(directoryUrl))));
 	}
 	
@@ -38,7 +38,7 @@ public class VABDirectoryProxy implements IVABDirectoryService {
 	 * @param provider
 	 *            A model provider for the actual registry
 	 */
-	public VABDirectoryProxy(IModelProvider provider) {
+	public VABRegistryProxy(IModelProvider provider) {
 		this.provider = provider;
 	}
 
@@ -46,7 +46,7 @@ public class VABDirectoryProxy implements IVABDirectoryService {
 	 * Adds a single entry to the directory
 	 */
 	@Override
-	public IVABDirectoryService addMapping(String key, String value) {
+	public IVABRegistryService addMapping(String key, String value) {
 		provider.createValue(key, value);
 		return this;
 	}

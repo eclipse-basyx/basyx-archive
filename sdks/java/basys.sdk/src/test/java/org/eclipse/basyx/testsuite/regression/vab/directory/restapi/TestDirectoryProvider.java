@@ -10,9 +10,9 @@
 package org.eclipse.basyx.testsuite.regression.vab.directory.restapi;
 
 import org.eclipse.basyx.testsuite.regression.vab.directory.proxy.TestDirectory;
-import org.eclipse.basyx.vab.directory.api.IVABDirectoryService;
-import org.eclipse.basyx.vab.directory.proxy.VABDirectoryProxy;
-import org.eclipse.basyx.vab.directory.restapi.DirectoryModelProvider;
+import org.eclipse.basyx.vab.registry.api.IVABRegistryService;
+import org.eclipse.basyx.vab.registry.proxy.VABRegistryProxy;
+import org.eclipse.basyx.vab.registry.restapi.VABRegistryModelProvider;
 
 /**
  * Tests the directory provider using the TestDirectory Suite
@@ -23,9 +23,9 @@ import org.eclipse.basyx.vab.directory.restapi.DirectoryModelProvider;
 public class TestDirectoryProvider extends TestDirectory {
 
 	@Override
-	protected IVABDirectoryService getRegistry() {
-		DirectoryModelProvider provider = new DirectoryModelProvider();
-		return new VABDirectoryProxy(provider);
+	protected IVABRegistryService getRegistry() {
+		VABRegistryModelProvider provider = new VABRegistryModelProvider();
+		return new VABRegistryProxy(provider);
 	}
 
 }

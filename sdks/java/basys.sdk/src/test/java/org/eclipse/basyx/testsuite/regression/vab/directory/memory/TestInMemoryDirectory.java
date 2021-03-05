@@ -15,8 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.testsuite.regression.vab.directory.proxy.TestDirectory;
-import org.eclipse.basyx.vab.directory.api.IVABDirectoryService;
-import org.eclipse.basyx.vab.directory.memory.InMemoryDirectory;
+import org.eclipse.basyx.vab.registry.api.IVABRegistryService;
+import org.eclipse.basyx.vab.registry.memory.VABInMemoryRegistry;
 import org.junit.Test;
 
 /**
@@ -28,19 +28,19 @@ import org.junit.Test;
 public class TestInMemoryDirectory extends TestDirectory {
 
 	@Override
-	protected IVABDirectoryService getRegistry() {
-		return new InMemoryDirectory();
+	protected IVABRegistryService getRegistry() {
+		return new VABInMemoryRegistry();
 	}
 
 	@Test
 	public void testConstructor() {
-		IVABDirectoryService registry = new InMemoryDirectory(getAddedValues());
+		IVABRegistryService registry = new VABInMemoryRegistry(getAddedValues());
 		testElementsInMap(registry, getAddedValues());
 	}
 
 	@Test
 	public void testAddMappingMultipleKey() {
-		InMemoryDirectory registry = new InMemoryDirectory();
+		VABInMemoryRegistry registry = new VABInMemoryRegistry();
 		String key3 = "key3";
 		String value3 = "value3";
 		String key4 = "key4";
@@ -52,7 +52,7 @@ public class TestInMemoryDirectory extends TestDirectory {
 		testElementsInMap(registry, map);
 	}
 
-	private void testElementsInMap(IVABDirectoryService registry, Map<String, String> map) {
+	private void testElementsInMap(IVABRegistryService registry, Map<String, String> map) {
 		for (Map.Entry<String, String> entry : map.entrySet()) {
 			assertEquals(entry.getValue(), registry.lookup(entry.getKey()));
 		}

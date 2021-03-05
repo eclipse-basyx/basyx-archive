@@ -25,9 +25,9 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IPro
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.testsuite.regression.aas.restapi.StubAASServlet;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
-import org.eclipse.basyx.vab.directory.memory.InMemoryDirectory;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
+import org.eclipse.basyx.vab.registry.memory.VABInMemoryRegistry;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -58,7 +58,7 @@ public class TestAASHTTP {
 	@Before
 	public void build() {
 		// Fill directory stub
-		InMemoryDirectory directory = new InMemoryDirectory();
+		VABInMemoryRegistry directory = new VABInMemoryRegistry();
 		directory.addMapping(StubAASServlet.AASURN.getId(), "http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas");
 		directory.addMapping(StubAASServlet.SMURN.getId(),
 				"http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas/submodels/" + StubAASServlet.SMIDSHORT + "/submodel");

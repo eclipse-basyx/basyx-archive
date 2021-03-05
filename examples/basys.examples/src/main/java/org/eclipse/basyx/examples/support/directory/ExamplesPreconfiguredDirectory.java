@@ -9,7 +9,7 @@
  ******************************************************************************/
 package org.eclipse.basyx.examples.support.directory;
 
-import org.eclipse.basyx.vab.directory.memory.InMemoryDirectory;
+import org.eclipse.basyx.vab.registry.memory.VABInMemoryRegistry;
 
 /**
  * Implement the examples directory service with pre-configured directory entries
@@ -17,7 +17,7 @@ import org.eclipse.basyx.vab.directory.memory.InMemoryDirectory;
  * @author kuhn
  *
  */
-public class ExamplesPreconfiguredDirectory extends InMemoryDirectory {
+public class ExamplesPreconfiguredDirectory extends VABInMemoryRegistry {
 
 	
 	/**

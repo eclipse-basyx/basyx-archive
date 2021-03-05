@@ -22,12 +22,12 @@ import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.restapi.DirectoryModelProvider;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
-import org.eclipse.basyx.vab.directory.proxy.VABDirectoryProxy;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnector;
+import org.eclipse.basyx.vab.registry.proxy.VABRegistryProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  * @author kuhn, schnicke
  *
  */
-public class AASRegistryProxy extends VABDirectoryProxy implements IAASRegistryService {
+public class AASRegistryProxy extends VABRegistryProxy implements IAASRegistryService {
 	
 	private static Logger logger = LoggerFactory.getLogger(AASRegistryProxy.class);
 

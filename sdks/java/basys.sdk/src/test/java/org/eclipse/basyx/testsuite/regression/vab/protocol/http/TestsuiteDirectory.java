@@ -9,7 +9,7 @@
  ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.vab.protocol.http;
 
-import org.eclipse.basyx.vab.directory.memory.InMemoryDirectory;
+import org.eclipse.basyx.vab.registry.memory.VABInMemoryRegistry;
 
 
 
@@ -20,7 +20,7 @@ import org.eclipse.basyx.vab.directory.memory.InMemoryDirectory;
  * @author kuhn
  *
  */
-public class TestsuiteDirectory extends InMemoryDirectory {
+public class TestsuiteDirectory extends VABInMemoryRegistry {
 	
 	/**
 	 * Constructor - load all directory entries

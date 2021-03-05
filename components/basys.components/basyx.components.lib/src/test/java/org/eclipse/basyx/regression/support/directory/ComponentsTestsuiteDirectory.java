@@ -9,7 +9,7 @@
  ******************************************************************************/
 package org.eclipse.basyx.regression.support.directory;
 
-import org.eclipse.basyx.vab.directory.memory.InMemoryDirectory;
+import org.eclipse.basyx.vab.registry.memory.VABInMemoryRegistry;
 
 
 
@@ -20,7 +20,7 @@ import org.eclipse.basyx.vab.directory.memory.InMemoryDirectory;
  * @author kuhn
  *
  */
-public class ComponentsTestsuiteDirectory extends InMemoryDirectory {
+public class ComponentsTestsuiteDirectory extends VABInMemoryRegistry {
 
 	
 	/**

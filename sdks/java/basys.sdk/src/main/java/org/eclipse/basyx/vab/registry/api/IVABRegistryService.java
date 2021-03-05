@@ -7,7 +7,7 @@
  * 
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
-package org.eclipse.basyx.vab.directory.api;
+package org.eclipse.basyx.vab.registry.api;
 
 /**
  * Directory service SDK interface.
@@ -15,13 +15,13 @@ package org.eclipse.basyx.vab.directory.api;
  * @author kuhn
  *
  */
-public interface IVABDirectoryService {
+public interface IVABRegistryService {
 
 	
 	/**
 	 * Add a mapping to directory
 	 */
-	public IVABDirectoryService addMapping(String key, String value);
+	public IVABRegistryService addMapping(String key, String value);
 
 	
 	/**
