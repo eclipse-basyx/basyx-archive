@@ -38,12 +38,6 @@ public interface IAssetAdministrationShellManager {
 	public Collection<IAssetAdministrationShell> retrieveAASAll();
 	
 	/**
-	 * Creates an AAS on a remote server.
-	 */
-	@Deprecated
-	void createAAS(AssetAdministrationShell aas, IIdentifier aasId, String endpoint);
-	
-	/**
 	 * Creates an AAS on a remote server
 	 * 
 	 * @param aas

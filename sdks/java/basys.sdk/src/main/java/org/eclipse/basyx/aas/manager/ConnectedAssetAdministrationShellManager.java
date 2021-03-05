@@ -97,12 +97,6 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 		return submodels;
 	}
 
-	@Override
-	@Deprecated
-	public void createAAS(AssetAdministrationShell aas, IIdentifier aasId, String endpoint) {
-		createAAS(aas, endpoint);
-	}
-
 	private VABElementProxy getAASProxyFromId(IIdentifier aasId) {
 		// Lookup AAS descriptor
 		AASDescriptor aasDescriptor = aasDirectory.lookupAAS(aasId);
