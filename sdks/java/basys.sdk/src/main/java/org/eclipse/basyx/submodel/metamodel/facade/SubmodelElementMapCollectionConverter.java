@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.facade.submodelelement.SubmodelElementFacadeFactory;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
@@ -25,8 +25,8 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.prop
 
 /**
  * This class provides the functionality to convert the
- * smElements of a SubModel/SubmodelElementCollection from a Collection to a Map and vice versa.<br>
- * The given SubModel/Map is not changed.<br>
+ * smElements of a Submodel/SubmodelElementCollection from a Collection to a Map and vice versa.<br>
+ * The given Submodel/Map is not changed.<br>
  * This is necessary, because internally smElements are represented as Map and externally as Collection.
  * 
  * @author conradi
@@ -36,37 +36,37 @@ public class SubmodelElementMapCollectionConverter {
 	
 	
 	/**
-	 * Builds a SubModel from a given Map.<br>
-	 * Converts the SubModel.SUBMODELELEMENT entry of a Map to a Map<IdShort, SMElement>.<br>
+	 * Builds a Submodel from a given Map.<br>
+	 * Converts the Submodel.SUBMODELELEMENT entry of a Map to a Map<IdShort, SMElement>.<br>
 	 * Creates Facades for all smElements.
 	 * 
-	 * @param submodel a Map representing the SubModel to be converted.
-	 * @return a new SubModel made from the given Map with the smElements as Map
+	 * @param submodel a Map representing the Submodel to be converted.
+	 * @return a new Submodel made from the given Map with the smElements as Map
 	 */
-	public static SubModel mapToSM(Map<String, Object> submodel) {
+	public static Submodel mapToSM(Map<String, Object> submodel) {
 		
 		// Put the content of the Map into a SM and replace its smElements with the new Map of smElements
-		SubModel ret = new SubModel();
+		Submodel ret = new Submodel();
 		ret.setMap(submodel);
 		
-		Object smElements = submodel.get(SubModel.SUBMODELELEMENT);
+		Object smElements = submodel.get(Submodel.SUBMODELELEMENT);
 		
-		ret.put(SubModel.SUBMODELELEMENT, convertCollectionToIDMap(smElements));
+		ret.put(Submodel.SUBMODELELEMENT, convertCollectionToIDMap(smElements));
 		
 		return ret;
 	}
 	
 	/**
-	 * Converts a given SubModel to a Map<br>
-	 * Converts the SubModel.SUBMODELELEMENT entry of a SubModel to a Collection.<br>
+	 * Converts a given Submodel to a Map<br>
+	 * Converts the Submodel.SUBMODELELEMENT entry of a Submodel to a Collection.<br>
 	 * 
-	 * @param submodel the SubModel to be converted.
-	 * @return a Map made from the given SubModel containing the smElements as Collection.
+	 * @param submodel the Submodel to be converted.
+	 * @return a Map made from the given Submodel containing the smElements as Collection.
 	 */
 	@SuppressWarnings("unchecked")
-	public static Map<String, Object> smToMap(SubModel submodel) {		
+	public static Map<String, Object> smToMap(Submodel submodel) {		
 		
-		// Get the smElements Map from the given SubModel
+		// Get the smElements Map from the given Submodel
 		Map<String, ISubmodelElement> smElements = submodel.getSubmodelElements();
 		
 		// Put the Entries of the SM in a new Map
@@ -78,7 +78,7 @@ public class SubmodelElementMapCollectionConverter {
 				.map(e -> smElementToMap((Map<String, Object>) e)).collect(Collectors.toList());
 		
 		// Replace the smElements Map with the Collection of Elements
-		ret.put(SubModel.SUBMODELELEMENT, newElements);
+		ret.put(Submodel.SUBMODELELEMENT, newElements);
 		
 		return ret;
 	}

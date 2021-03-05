@@ -15,7 +15,7 @@ import java.util.function.Function;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
@@ -30,7 +30,7 @@ import org.eclipse.basyx.vab.exception.provider.ProviderException;
  * @author kuhn
  *
  */
-public class SimpleAASSubmodel extends SubModel {
+public class SimpleAASSubmodel extends Submodel {
 
 	public static final String INTPROPIDSHORT = "integerProperty";
 	public static final String OPERATIONSIMPLEIDSHORT = "simple";
@@ -50,15 +50,15 @@ public class SimpleAASSubmodel extends SubModel {
 
 		Property intProp = new Property(123);
 		intProp.setIdShort(INTPROPIDSHORT);
-		addSubModelElement(intProp);
+		addSubmodelElement(intProp);
 
 		Property stringProp = new Property("Test");
 		stringProp.setIdShort("stringProperty");
-		addSubModelElement(stringProp);
+		addSubmodelElement(stringProp);
 
 		Property nullProp = new Property("nullProperty", PropertyValueTypeDef.String);
 		nullProp.setValue(null);
-		addSubModelElement(nullProp);
+		addSubmodelElement(nullProp);
 
 		// Create example operations
 		Operation complex = new Operation((Function<Object[], Object>) v -> {
@@ -74,13 +74,13 @@ public class SimpleAASSubmodel extends SubModel {
 				new OperationVariable(inProp2)));
 		complex.setOutputVariables(Collections.singleton(new OperationVariable(outProp)));
 		complex.setIdShort("complex");
-		addSubModelElement(complex);
+		addSubmodelElement(complex);
 
 		Operation simple = new Operation((Function<Object[], Object>) v -> {
 			return true;
 		});
 		simple.setIdShort(OPERATIONSIMPLEIDSHORT);
-		addSubModelElement(simple);
+		addSubmodelElement(simple);
 
 		// Create example operations
 		// - Contained operation that throws native JAVA exception
@@ -88,14 +88,14 @@ public class SimpleAASSubmodel extends SubModel {
 			throw new NullPointerException();
 		});
 		exception1.setIdShort("exception1");
-		addSubModelElement(exception1);
+		addSubmodelElement(exception1);
 
 		// - Contained operation that throws VAB exception
 		Operation exception2 = new Operation((Function<Object[], Object>) elId -> {
 			throw new ProviderException("Exception description");
 		});
 		exception2.setIdShort("exception2");
-		addSubModelElement(exception2);
+		addSubmodelElement(exception2);
 
 		Operation opInCollection = new Operation((Function<Object[], Object>) v -> {
 			return 123;
@@ -104,12 +104,12 @@ public class SimpleAASSubmodel extends SubModel {
 		
 		SubmodelElementCollection containerProp = new SubmodelElementCollection();
 		containerProp.setIdShort("container");
-		containerProp.addSubModelElement(intProp);
-		containerProp.addSubModelElement(opInCollection);
+		containerProp.addSubmodelElement(intProp);
+		containerProp.addSubmodelElement(opInCollection);
 
 		SubmodelElementCollection containerPropRoot = new SubmodelElementCollection();
 		containerPropRoot.setIdShort("containerRoot");
-		containerPropRoot.addSubModelElement(containerProp);
-		addSubModelElement(containerPropRoot);
+		containerPropRoot.addSubmodelElement(containerProp);
+		addSubmodelElement(containerPropRoot);
 	}
 }

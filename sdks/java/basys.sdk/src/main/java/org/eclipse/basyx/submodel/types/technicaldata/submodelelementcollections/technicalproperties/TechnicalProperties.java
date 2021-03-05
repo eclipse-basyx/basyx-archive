@@ -102,7 +102,7 @@ public class TechnicalProperties extends SubmodelElementCollection {
 	public void setArbitrary(List<SubmodelElement> elements) {
 		if (elements != null && elements.size() > 0) {
 			for (SubmodelElement elem: elements) {
-				addSubModelElement(elem);	
+				addSubmodelElement(elem);	
 			}
 		}
 	}
@@ -141,7 +141,7 @@ public class TechnicalProperties extends SubmodelElementCollection {
 	public void setSMENotDescribedBySemanticId(List<SubmodelElement> elements) {
 		if (elements != null && elements.size() > 0) {
 			for (SubmodelElement elem: elements) {
-				addSubModelElement(elem);	
+				addSubmodelElement(elem);	
 			}
 		}
 	}
@@ -172,7 +172,7 @@ public class TechnicalProperties extends SubmodelElementCollection {
 	public void setMainSections(List<SubmodelElementCollection> mainSections) {
 		if (mainSections != null && mainSections.size() > 0) {
 			for (SubmodelElementCollection section: mainSections) {
-				addSubModelElement(section);	
+				addSubmodelElement(section);	
 			}
 		}
 	}
@@ -204,7 +204,7 @@ public class TechnicalProperties extends SubmodelElementCollection {
 	public void setSubSections(List<SubmodelElementCollection> subSections) {
 		if (subSections != null && subSections.size() > 0) {
 			for (SubmodelElementCollection section: subSections) {
-				addSubModelElement(section);	
+				addSubmodelElement(section);	
 			}
 		}
 	}

@@ -19,7 +19,7 @@ import java.util.Map;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.vab.support.TypeDestroyer;
@@ -38,10 +38,10 @@ public class TestSubmodelElementMapCollectionConverter {
 
 	@Test
 	public void testMapToSM() {
-		SubModel sm = getSM();
+		Submodel sm = getSM();
 		
 		// Replace the smElement Map with a Collection
-		sm.put(SubModel.SUBMODELELEMENT, sm.getSubmodelElements().values());
+		sm.put(Submodel.SUBMODELELEMENT, sm.getSubmodelElements().values());
 		
 		// Make a Map from the SM, as if it was transferred over the VAB
 		Map<String, Object> map = TypeDestroyer.destroyType(sm);
@@ -49,7 +49,7 @@ public class TestSubmodelElementMapCollectionConverter {
 		
 		sm = SubmodelElementMapCollectionConverter.mapToSM(map);
 		
-		assertTrue(sm.get(SubModel.SUBMODELELEMENT) instanceof Map<?, ?>);
+		assertTrue(sm.get(Submodel.SUBMODELELEMENT) instanceof Map<?, ?>);
 		
 		assertNotNull(sm.getSubmodelElements().get(ID_SHORT));
 		assertTrue(sm.getSubmodelElements().get(ID_SHORT) instanceof Property);
@@ -58,20 +58,20 @@ public class TestSubmodelElementMapCollectionConverter {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testSMToMap() {
-		SubModel sm = getSM();
+		Submodel sm = getSM();
 		
 		Map<String, Object> map = SubmodelElementMapCollectionConverter.smToMap(sm);
 		
-		assertTrue(map.get(SubModel.SUBMODELELEMENT) instanceof Collection<?>);
-		assertEquals(1, ((Collection<ISubmodelElement>) map.get(SubModel.SUBMODELELEMENT)).size());
+		assertTrue(map.get(Submodel.SUBMODELELEMENT) instanceof Collection<?>);
+		assertEquals(1, ((Collection<ISubmodelElement>) map.get(Submodel.SUBMODELELEMENT)).size());
 	}
 
 
-	private SubModel getSM() {
-		SubModel sm = new SubModel("submodelIdShort", new ModelUrn("submodelUrn"));
+	private Submodel getSM() {
+		Submodel sm = new Submodel("submodelIdShort", new ModelUrn("submodelUrn"));
 		Property property = new Property(ID_SHORT, PropertyValueTypeDef.String);
 		
-		sm.addSubModelElement(property);
+		sm.addSubmodelElement(property);
 		return sm;
 	}
 	

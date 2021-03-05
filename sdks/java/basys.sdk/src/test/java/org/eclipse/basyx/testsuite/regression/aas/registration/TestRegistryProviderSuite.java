@@ -144,7 +144,7 @@ public abstract class TestRegistryProviderSuite {
 		assertEquals(aasEndpoint1, descriptor.getFirstEndpoint());
 
 		// Check, if the SM descriptor in the AASDescriptor is correct
-		SubmodelDescriptor smDescriptor = descriptor.getSubModelDescriptorFromIdentifierId(smId1.getId());
+		SubmodelDescriptor smDescriptor = descriptor.getSubmodelDescriptorFromIdentifierId(smId1.getId());
 		assertEquals(smId1.getId(), smDescriptor.getIdentifier().getId());
 		assertEquals(smId1.getIdType(), smDescriptor.getIdentifier().getIdType());
 		assertEquals(smIdShort1, smDescriptor.get(Referable.IDSHORT));
@@ -263,12 +263,12 @@ public abstract class TestRegistryProviderSuite {
 
 	@Test(expected = ResourceNotFoundException.class)
 	public void testDeleteNotExistingSubmodelFromNotExistingAAS() {
-		proxy.delete(new Identifier(IdentifierType.CUSTOM, "nonExistent"), new Identifier(IdentifierType.CUSTOM, "nonExistentSubModelId"));
+		proxy.delete(new Identifier(IdentifierType.CUSTOM, "nonExistent"), new Identifier(IdentifierType.CUSTOM, "nonExistentSubmodelId"));
 	}
 
 	@Test(expected = ResourceNotFoundException.class)
-	public void testDeleteNotExistingSubModel() {
-		proxy.delete(aasId1, new Identifier(IdentifierType.CUSTOM, "nonExistentSubModelId"));
+	public void testDeleteNotExistingSubmodel() {
+		proxy.delete(aasId1, new Identifier(IdentifierType.CUSTOM, "nonExistentSubmodelId"));
 	}
 
 	@Test(expected = ResourceNotFoundException.class)

@@ -11,7 +11,7 @@ package org.eclipse.basyx.aas.metamodel.map.descriptor;
 
 import java.util.Map;
 
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IHasSemantics;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -44,7 +44,7 @@ public class SubmodelDescriptor extends ModelDescriptor implements IHasSemantics
 	 * Create a new aas descriptor with minimal information based on an existing
 	 * submodel.
 	 */
-	public SubmodelDescriptor(ISubModel sm, String httpEndpoint) {
+	public SubmodelDescriptor(ISubmodel sm, String httpEndpoint) {
 		// Create descriptor with minimal information (id and idShort)
 		this(sm.getIdShort(), sm.getIdentification(), httpEndpoint);
 		

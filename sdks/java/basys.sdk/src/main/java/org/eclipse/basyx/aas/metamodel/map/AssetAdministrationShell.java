@@ -26,7 +26,7 @@ import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.aas.metamodel.map.parts.ConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.map.parts.View;
 import org.eclipse.basyx.aas.metamodel.map.security.Security;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
@@ -34,7 +34,7 @@ import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
@@ -75,7 +75,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	 * Constructor
 	 */
 	public AssetAdministrationShell() {
-		this(null, null, new Asset(), new HashSet<SubModel>(), new HashSet<IConceptDictionary>(), new HashSet<IView>());
+		this(null, null, new Asset(), new HashSet<Submodel>(), new HashSet<IConceptDictionary>(), new HashSet<IView>());
 	}
 	
 	/**
@@ -85,13 +85,13 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	 * @param asset
 	 */
 	public AssetAdministrationShell(String idShort, IIdentifier identification, Asset asset) {
-		this(null, null, asset, new HashSet<SubModel>(), new HashSet<IConceptDictionary>(), new HashSet<IView>());
+		this(null, null, asset, new HashSet<Submodel>(), new HashSet<IConceptDictionary>(), new HashSet<IView>());
 		setIdentification(identification);
 		setIdShort(idShort);
 	}
 
 	public AssetAdministrationShell(Reference derivedFrom, Security security, Asset asset,
-			Collection<SubModel> submodels, Collection<IConceptDictionary> dictionaries, Collection<IView> views) {
+			Collection<Submodel> submodels, Collection<IConceptDictionary> dictionaries, Collection<IView> views) {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
 		
@@ -105,7 +105,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		setSecurity(security);
 		setDerivedFrom(derivedFrom);
 		setAsset(asset);
-		setSubModels(submodels);
+		setSubmodels(submodels);
 
 		setViews(views);
 		setConceptDictionary(dictionaries);
@@ -234,7 +234,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	@SuppressWarnings("unchecked")
-	public void setSubModels(Collection<SubModel> submodels) {
+	public void setSubmodels(Collection<Submodel> submodels) {
 		setSubmodelParent(submodels);
 
 		// Clear submodel references and add new keys
@@ -266,8 +266,8 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	@Override
-	public Map<String, ISubModel> getSubModels() {
-		throw new RuntimeException("getSubModels on local copy is not supported");
+	public Map<String, ISubmodel> getSubmodels() {
+		throw new RuntimeException("getSubmodels on local copy is not supported");
 	}
 
 	@Override
@@ -303,7 +303,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	@Override
-	public void addSubModel(SubModel submodel) {
+	public void addSubmodel(Submodel submodel) {
 		logger.trace("adding Submodel", submodel.getIdentification().getId());
 		setSubmodelParent(Collections.singletonList(submodel));
 		addSubmodelReferences(submodel);
@@ -346,7 +346,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		smReferences.add(reference);
 	}
 
-	private void addSubmodelReferences(SubModel submodel) {
+	private void addSubmodelReferences(Submodel submodel) {
 		addSubmodelReference(submodel.getReference());
 	}
 
@@ -355,13 +355,13 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 	
 	/**
-	 * Set reference of current AAS to each SubModel of a collection
+	 * Set reference of current AAS to each Submodel of a collection
 	 * as a parent reference
 	 * 
 	 * @param submodels collection of Submodels
 	 */
-	private void setSubmodelParent(Collection<SubModel> submodels) {
-		for (SubModel submodel : submodels) {
+	private void setSubmodelParent(Collection<Submodel> submodels) {
+		for (Submodel submodel : submodels) {
 			submodel.setParent(getReference());
 		}
 	}
@@ -371,7 +371,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	@Override
-	public ISubModel getSubmodel(IIdentifier id) {
+	public ISubmodel getSubmodel(IIdentifier id) {
 		throw new RuntimeException("getSubmodel on local copy is not supported");
 	}
 

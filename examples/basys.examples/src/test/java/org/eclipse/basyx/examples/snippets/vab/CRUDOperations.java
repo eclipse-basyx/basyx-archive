@@ -82,7 +82,7 @@ public class CRUDOperations {
 		// Server connections
 		// - Connect to VAB object by ID. The connection manager looks up this ID in
 		//   its directory
-		VABElementProxy connSubModel1 = this.connManager.connectToVABElement("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
+		VABElementProxy connSubmodel1 = this.connManager.connectToVABElement("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
 
 		
 		// Create properties on AAS
@@ -90,33 +90,33 @@ public class CRUDOperations {
 		//   properties "prop1" and "prop2". Container and properties lack the 
 		//   required properties for AAS and AAS sub models. They are therefore
 		//   not compliant to Asset Administration Shells.
-		connSubModel1.createValue("properties", new HashMap<String, Object>());
-		connSubModel1.createValue("properties/prop1", 7);
-		connSubModel1.createValue("properties/prop2", "myStr");
+		connSubmodel1.createValue("properties", new HashMap<String, Object>());
+		connSubmodel1.createValue("properties/prop1", 7);
+		connSubmodel1.createValue("properties/prop2", "myStr");
 		
 		// Read property values
-		int    prop1Val = (int)    connSubModel1.getModelPropertyValue("properties/prop1");
-		String prop2Val = (String) connSubModel1.getModelPropertyValue("properties/prop2");
+		int    prop1Val = (int)    connSubmodel1.getModelPropertyValue("properties/prop1");
+		String prop2Val = (String) connSubmodel1.getModelPropertyValue("properties/prop2");
 		
 		// Update property values
-		connSubModel1.setModelPropertyValue("properties/prop1", 8);
-		connSubModel1.setModelPropertyValue("properties/prop2", "stillMine");
+		connSubmodel1.setModelPropertyValue("properties/prop1", 8);
+		connSubmodel1.setModelPropertyValue("properties/prop2", "stillMine");
 		
 		// Read property values again
-		int    prop1Val_2 = (int)    connSubModel1.getModelPropertyValue("properties/prop1");
-		String prop2Val_2 = (String) connSubModel1.getModelPropertyValue("properties/prop2");
+		int    prop1Val_2 = (int)    connSubmodel1.getModelPropertyValue("properties/prop1");
+		String prop2Val_2 = (String) connSubmodel1.getModelPropertyValue("properties/prop2");
 
 		// Delete property values
-		connSubModel1.deleteValue("properties/prop1");
-		connSubModel1.deleteValue("properties/prop2");
+		connSubmodel1.deleteValue("properties/prop1");
+		connSubmodel1.deleteValue("properties/prop2");
 		
 		// Read property values again
 		try {
-			connSubModel1.getModelPropertyValue("properties/prop1");
+			connSubmodel1.getModelPropertyValue("properties/prop1");
 			fail();
 		} catch (ResourceNotFoundException e) {}
 		try {
-			connSubModel1.getModelPropertyValue("properties/prop2");
+			connSubmodel1.getModelPropertyValue("properties/prop2");
 			fail();
 		} catch (ResourceNotFoundException e) {}
 

@@ -23,12 +23,12 @@ import java.util.function.Function;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
-import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubModel;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubmodel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.metamodel.TestSubmodelSuite;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
@@ -43,19 +43,19 @@ import org.junit.Test;
  * @author schnicke
  *
  */
-public class TestConnectedSubModel extends TestSubmodelSuite {
+public class TestConnectedSubmodel extends TestSubmodelSuite {
 
 	// String constants used in this test case
 	private final static String OP = "add";
 
 	private final String OPERATION_ID = "operation_id";
 
-	ConnectedSubModel submodel;
+	ConnectedSubmodel submodel;
 
 	@Before
 	public void build() {
 
-		SubModel reference = getReferenceSubmodel();
+		Submodel reference = getReferenceSubmodel();
 		// Create an operation
 		Operation op = new Operation((Function<Object[], Object> & Serializable) obj -> {
 			return (int) obj[0] + (int) obj[1];
@@ -72,16 +72,16 @@ public class TestConnectedSubModel extends TestSubmodelSuite {
 		op.setInputVariables(Arrays.asList(a, b));
 		op.setOutputVariables(Collections.singletonList(r));
 		op.setIdShort(OP);
-		reference.addSubModelElement(op);
+		reference.addSubmodelElement(op);
 
-		SubModelProvider provider = new SubModelProvider(new TypeDestroyingProvider(new VABLambdaProvider(reference)));
+		SubmodelProvider provider = new SubmodelProvider(new TypeDestroyingProvider(new VABLambdaProvider(reference)));
 
-		// Create the ConnectedSubModel based on the manager
-		submodel = new ConnectedSubModel(new VABConnectionManagerStub(provider).connectToVABElement(""));
+		// Create the ConnectedSubmodel based on the manager
+		submodel = new ConnectedSubmodel(new VABConnectionManagerStub(provider).connectToVABElement(""));
 	}
 
 	/**
-	 * Tests if a SubModel's operations can be used correctly
+	 * Tests if a Submodel's operations can be used correctly
 	 *
 	 * @throws Exception
 	 */
@@ -100,10 +100,10 @@ public class TestConnectedSubModel extends TestSubmodelSuite {
 
 	@Test
 	public void saveAndLoadOperationTest() throws Exception {
-		// Get sample Operations and save them into SubModel
+		// Get sample Operations and save them into Submodel
 		Map<String, IOperation> testOperations = getTestOperations();
 		for (ISubmodelElement element : testOperations.values()) {
-			submodel.addSubModelElement(element);
+			submodel.addSubmodelElement(element);
 		}
 
 		// Load it
@@ -115,11 +115,11 @@ public class TestConnectedSubModel extends TestSubmodelSuite {
 
 	@Test
 	public void testGetLocalCopy() {
-		SubModel reference = getReferenceSubmodel();
-		SubModelProvider provider = new SubModelProvider(new TypeDestroyingProvider(new VABLambdaProvider(reference)));
+		Submodel reference = getReferenceSubmodel();
+		SubmodelProvider provider = new SubmodelProvider(new TypeDestroyingProvider(new VABLambdaProvider(reference)));
 
-		// Create the ConnectedSubModel based on the manager
-		ConnectedSubModel cSM = new ConnectedSubModel(new VABConnectionManagerStub(provider).connectToVABElement(""));
+		// Create the ConnectedSubmodel based on the manager
+		ConnectedSubmodel cSM = new ConnectedSubmodel(new VABConnectionManagerStub(provider).connectToVABElement(""));
 
 		Object expected = TypeDestroyer.destroyType(reference);
 		Object actual = cSM.getLocalCopy();
@@ -155,7 +155,7 @@ public class TestConnectedSubModel extends TestSubmodelSuite {
 	}
 
 	@Override
-	protected ConnectedSubModel getSubmodel() {
+	protected ConnectedSubmodel getSubmodel() {
 		return submodel;
 	}
 }

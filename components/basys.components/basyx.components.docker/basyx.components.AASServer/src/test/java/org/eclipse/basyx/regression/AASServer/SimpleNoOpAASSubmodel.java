@@ -36,7 +36,7 @@ public class SimpleNoOpAASSubmodel extends SimpleAASSubmodel {
 		SubmodelElementCollection opContainer = (SubmodelElementCollection) root.getSubmodelElement("container");
 		opContainer.deleteSubmodelElement("operationId");
 		Operation opReplacement = new Operation("operationId");
-		opContainer.addSubModelElement(opReplacement);
+		opContainer.addSubmodelElement(opReplacement);
 	}
 
 }

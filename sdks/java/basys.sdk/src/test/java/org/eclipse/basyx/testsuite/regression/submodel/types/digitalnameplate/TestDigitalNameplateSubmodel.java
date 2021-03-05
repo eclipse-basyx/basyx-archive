@@ -21,7 +21,7 @@ import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
@@ -97,7 +97,7 @@ public class TestDigitalNameplateSubmodel {
 		elements.add(assetSpecificProperties);
 		submodelMap.put(Referable.IDSHORT, DigitalNameplateSubmodel.SUBMODELID);
 		submodelMap.put(HasSemantics.SEMANTICID, DigitalNameplateSubmodel.SEMANTICID);
-		submodelMap.put(SubModel.SUBMODELELEMENT, elements);
+		submodelMap.put(Submodel.SUBMODELELEMENT, elements);
 		submodelMap.put(Identifiable.IDENTIFICATION, identifier);
 	}
 
@@ -132,7 +132,7 @@ public class TestDigitalNameplateSubmodel {
 	@SuppressWarnings("unchecked")
 	@Test (expected = ResourceNotFoundException.class)
 	public void testCreateAsFacadeExceptionManufacturerName() {
-		List<ISubmodelElement> elements = (List<ISubmodelElement>)submodelMap.get(SubModel.SUBMODELELEMENT);
+		List<ISubmodelElement> elements = (List<ISubmodelElement>)submodelMap.get(Submodel.SUBMODELELEMENT);
 		elements.remove(manufacturerName);
 		DigitalNameplateSubmodel.createAsFacade(submodelMap);
 	}
@@ -140,7 +140,7 @@ public class TestDigitalNameplateSubmodel {
 	@SuppressWarnings("unchecked")
 	@Test (expected = ResourceNotFoundException.class)
 	public void testCreateAsFacadeExceptionZearsOfConstruction() {
-		List<ISubmodelElement> elements = (List<ISubmodelElement>)submodelMap.get(SubModel.SUBMODELELEMENT);
+		List<ISubmodelElement> elements = (List<ISubmodelElement>)submodelMap.get(Submodel.SUBMODELELEMENT);
 		elements.remove(yearsOfConstruction);
 		DigitalNameplateSubmodel.createAsFacade(submodelMap);
 	}
@@ -148,7 +148,7 @@ public class TestDigitalNameplateSubmodel {
 	@SuppressWarnings("unchecked")
 	@Test (expected = ResourceNotFoundException.class)
 	public void testCreateAsFacadeExceptionManufacturerProductDesignation() {
-		List<ISubmodelElement> elements = (List<ISubmodelElement>)submodelMap.get(SubModel.SUBMODELELEMENT);
+		List<ISubmodelElement> elements = (List<ISubmodelElement>)submodelMap.get(Submodel.SUBMODELELEMENT);
 		elements.remove(designation);
 		DigitalNameplateSubmodel.createAsFacade(submodelMap);
 	}
@@ -156,7 +156,7 @@ public class TestDigitalNameplateSubmodel {
 	@SuppressWarnings("unchecked")
 	@Test (expected = ResourceNotFoundException.class)
 	public void testCreateAsFacadeExceptionAddress() {
-		List<ISubmodelElement> elements = (List<ISubmodelElement>)submodelMap.get(SubModel.SUBMODELELEMENT);
+		List<ISubmodelElement> elements = (List<ISubmodelElement>)submodelMap.get(Submodel.SUBMODELELEMENT);
 		elements.remove(address);
 		DigitalNameplateSubmodel.createAsFacade(submodelMap);
 	}
@@ -164,7 +164,7 @@ public class TestDigitalNameplateSubmodel {
 	@SuppressWarnings("unchecked")
 	@Test (expected = ResourceNotFoundException.class)
 	public void testCreateAsFacadeExceptionManufacturerProductFamily() {
-		List<ISubmodelElement> elements = (List<ISubmodelElement>)submodelMap.get(SubModel.SUBMODELELEMENT);
+		List<ISubmodelElement> elements = (List<ISubmodelElement>)submodelMap.get(Submodel.SUBMODELELEMENT);
 		elements.remove(productFamily);
 		DigitalNameplateSubmodel.createAsFacade(submodelMap);
 	}

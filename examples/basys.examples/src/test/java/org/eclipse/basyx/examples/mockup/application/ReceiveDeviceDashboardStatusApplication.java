@@ -66,7 +66,7 @@ public class ReceiveDeviceDashboardStatusApplication extends BaseBaSyxService {
 		// Create connection to device sub model
 		// - This code assumes that network location of device sub model does not change while application is running
 		AASDescriptor      aasDescriptor = getRegistry().lookupAAS(lookupURN("AAS"));
-		SubmodelDescriptor smDescriptor  = aasDescriptor.getSubModelDescriptor(lookupURN("Status"));
+		SubmodelDescriptor smDescriptor  = aasDescriptor.getSubmodelDescriptor(lookupURN("Status"));
 		// - Connect to status sub model end point
 		aasServerConnection = getConnectionManager().connectToVABElementByPath(smDescriptor.getFirstEndpoint());		
 	}

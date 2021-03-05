@@ -13,7 +13,7 @@ import java.util.Set;
 
 import org.eclipse.basyx.components.configuration.BaSyxMqttConfiguration;
 import org.eclipse.basyx.extensions.submodel.mqtt.MqttSubmodelAPI;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPI;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPIFactory;
 import org.eclipse.basyx.submodel.restapi.vab.VABSubmodelAPI;
@@ -43,7 +43,7 @@ public class MqttSubmodelAPIFactory implements ISubmodelAPIFactory {
 	}
 
 	@Override
-	public ISubmodelAPI getSubmodelAPI(SubModel sm) {
+	public ISubmodelAPI getSubmodelAPI(Submodel sm) {
 		// Get the submodel's id from the given provider
 		String smId = sm.getIdentification().getId();
 		

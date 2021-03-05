@@ -33,11 +33,11 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPI;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPIFactory;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
@@ -138,7 +138,7 @@ public class MongoDBAASAggregator implements IAASAggregator {
 		};
 		this.smApiProvider = sm -> {
 			MongoDBSubmodelAPI api = new MongoDBSubmodelAPI(config, sm.getIdentification().getId());
-			api.setSubModel(sm);
+			api.setSubmodel(sm);
 			return api;
 		};
 	}
@@ -210,7 +210,7 @@ public class MongoDBAASAggregator implements IAASAggregator {
 	}
 
 	private String getSubmodelId(String idShort) {
-		SubModel sm = mongoOps.findOne(query(where(IDSHORTPATH).is(idShort)), SubModel.class);
+		Submodel sm = mongoOps.findOne(query(where(IDSHORTPATH).is(idShort)), Submodel.class);
 		if ( sm != null ) {
 			return sm.getIdentification().getId();
 		}
@@ -219,7 +219,7 @@ public class MongoDBAASAggregator implements IAASAggregator {
 
 	private void addSubmodelProvidersById(String smId, VABMultiSubmodelProvider provider) {
 		ISubmodelAPI smApi = new MongoDBSubmodelAPI(smId);
-		SubModelProvider smProvider = new SubModelProvider(smApi);
+		SubmodelProvider smProvider = new SubmodelProvider(smApi);
 		provider.addSubmodel(smProvider);
 	}
 

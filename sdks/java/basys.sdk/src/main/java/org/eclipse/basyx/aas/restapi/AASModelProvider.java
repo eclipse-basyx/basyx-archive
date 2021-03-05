@@ -13,7 +13,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.restapi.api.IAASAPI;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.NotAnInvokableException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
@@ -77,7 +77,7 @@ public class AASModelProvider implements IModelProvider {
 		path = preparePath(path);
 		if (path.equals("submodels")) {
 			Map<String, Object> smMap = (Map<String, Object>) newEntity;
-			SubModel sm = SubModel.createAsFacade(smMap);
+			Submodel sm = Submodel.createAsFacade(smMap);
 			aasApi.addSubmodel(sm.getReference());
 		} else {
 			throw new MalformedRequestException("Path " + path + " is not supported");

@@ -132,7 +132,7 @@ public class Markings extends SubmodelElementCollection {
 	public void setMarking(List<Marking> markings) {
 		if (markings != null && markings.size() > 0) {
 			for (Marking prop : markings) {
-				addSubModelElement(prop);
+				addSubmodelElement(prop);
 			}
 		}
 	}

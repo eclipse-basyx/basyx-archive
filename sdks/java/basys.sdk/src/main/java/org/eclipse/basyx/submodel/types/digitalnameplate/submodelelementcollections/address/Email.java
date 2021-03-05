@@ -124,7 +124,7 @@ public class Email extends SubmodelElementCollection {
 	 * @param emailAddress Property
 	 */
 	public void setEmailAddress(Property emailAddress) {
-		addSubModelElement(emailAddress);
+		addSubmodelElement(emailAddress);
 	}
 	
 	/**
@@ -152,7 +152,7 @@ public class Email extends SubmodelElementCollection {
 	 * @param key {@link MultiLanguageProperty}
 	 */
 	public void setPublicKey(MultiLanguageProperty key) {
-		addSubModelElement(key);
+		addSubmodelElement(key);
 	}
 	
 	/**
@@ -181,7 +181,7 @@ public class Email extends SubmodelElementCollection {
 	 * @param type {@link Property}
 	 */
 	public void setTypeOfEmailAddress(Property type) {
-		addSubModelElement(type);
+		addSubmodelElement(type);
 	}
 	
 	/**
@@ -211,7 +211,7 @@ public class Email extends SubmodelElementCollection {
 	 * @param key {@link MultiLanguageProperty}
 	 */
 	public void setTypeOfPublicKey(MultiLanguageProperty key) {
-		addSubModelElement(key);
+		addSubmodelElement(key);
 	}
 	
 	/**

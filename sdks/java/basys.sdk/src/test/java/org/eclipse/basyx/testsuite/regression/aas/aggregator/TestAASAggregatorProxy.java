@@ -18,11 +18,11 @@ import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
 import org.eclipse.basyx.aas.aggregator.proxy.AASAggregatorProxy;
 import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -55,23 +55,23 @@ public class TestAASAggregatorProxy extends AASAggregatorSuite {
 		assertEquals(aas1.getIdentification(), retrievedAAS.getIdentification());
 
 		// Test feedthrough of CREATE
-		SubModel sm = new SubModel();
+		Submodel sm = new Submodel();
 		sm.setIdentification(IdentifierType.CUSTOM, "smId");
 		sm.setIdShort("smIdShort");
 		Operation op = new Operation((o) -> {
 			return true;
 		});
 		op.setIdShort("op");
-		sm.addSubModelElement(op);
+		sm.addSubmodelElement(op);
 
 		Property prop = new Property(5);
 		prop.setIdShort("prop");
-		sm.addSubModelElement(prop);
+		sm.addSubmodelElement(prop);
 
-		retrievedAAS.addSubModel(sm);
+		retrievedAAS.addSubmodel(sm);
 
 		// Check if it was created
-		ISubModel retrievedSm = retrievedAAS.getSubModels().get(sm.getIdShort());
+		ISubmodel retrievedSm = retrievedAAS.getSubmodels().get(sm.getIdShort());
 		assertEquals(sm.getIdShort(), retrievedSm.getIdShort());
 
 		// Test feedthrough of SET
@@ -91,6 +91,6 @@ public class TestAASAggregatorProxy extends AASAggregatorSuite {
 		// Ensure only the submodel has been deleted
 		assertEquals(aas1.getIdentification(), retrievedAAS.getIdentification());
 
-		assertFalse(retrievedAAS.getSubModels().containsKey(sm.getIdShort()));
+		assertFalse(retrievedAAS.getSubmodels().containsKey(sm.getIdShort()));
 	}
 }

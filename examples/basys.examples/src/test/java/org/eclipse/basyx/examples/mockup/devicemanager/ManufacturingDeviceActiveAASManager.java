@@ -12,7 +12,7 @@ package org.eclipse.basyx.examples.mockup.devicemanager;
 import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.AASLambdaPropertyHelper;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.tools.aas.active.HTTPGetter;
@@ -43,9 +43,9 @@ public class ManufacturingDeviceActiveAASManager extends ManufacturingDeviceMana
 	 * Create the device AAS and sub model structure
 	 */
 	@Override
-	protected void createDeviceAASAndSubModels() {
+	protected void createDeviceAASAndSubmodels() {
 		// Invoke base implementation
-		super.createDeviceAASAndSubModels();
+		super.createDeviceAASAndSubmodels();
 		
 		
 		// Register URNs of managed VAB objects
@@ -53,7 +53,7 @@ public class ManufacturingDeviceActiveAASManager extends ManufacturingDeviceMana
 		
 
 		// Create sub model
-		SubModel supplySM = new SubModel();
+		Submodel supplySM = new Submodel();
 		// - Set submodel ID
 		supplySM.setIdShort("Supply");
 		//   - Property status: indicate device status
@@ -63,7 +63,7 @@ public class ManufacturingDeviceActiveAASManager extends ManufacturingDeviceMana
 		AASLambdaPropertyHelper.setLambdaValue(availabililtyProp,
 				new HTTPGetter("http://localhost:8080/basys.examples/Mockup/Supplier"), null);
 		availabililtyProp.setIdShort("partAvailability");
-		supplySM.addSubModelElement(availabililtyProp);
+		supplySM.addSubmodelElement(availabililtyProp);
 
 
 		// Transfer device sub model to server
@@ -78,8 +78,8 @@ public class ManufacturingDeviceActiveAASManager extends ManufacturingDeviceMana
 	protected AASDescriptor getAASDescriptor() {
 		// Create AAS and sub model descriptors
 		AASDescriptor aasDescriptor = new AASDescriptor(lookupURN("AAS"), getAASEndpoint(lookupURN("AAS")));
-		addSubModelDescriptorURI(aasDescriptor, lookupURN("Status"), "Status");
-		addSubModelDescriptorURI(aasDescriptor, lookupURN("Supply"), "Supply");
+		addSubmodelDescriptorURI(aasDescriptor, lookupURN("Status"), "Status");
+		addSubmodelDescriptorURI(aasDescriptor, lookupURN("Supply"), "Supply");
 		
 		// Return AAS and sub model descriptors
 		return aasDescriptor;

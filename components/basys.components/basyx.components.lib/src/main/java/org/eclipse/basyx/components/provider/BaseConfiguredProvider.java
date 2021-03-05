@@ -18,7 +18,7 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelFacadeCustomSemantics;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelFacadeIRDISemantics;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
@@ -29,7 +29,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifier;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.submodel.restapi.vab.VABSubmodelAPI;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 
-public class BaseConfiguredProvider extends SubModelProvider {
+public class BaseConfiguredProvider extends SubmodelProvider {
 	
 	/**
 	 * Initiates a logger using the current class
@@ -53,7 +53,7 @@ public class BaseConfiguredProvider extends SubModelProvider {
 	/**
 	 * This is a sub model
 	 */
-	protected SubModel submodelData = null;
+	protected Submodel submodelData = null;
 	
 	public static final String SUBMODELSEMANTICS = "submodelSemantics";
 	public static final String TYPE = "type";
@@ -70,12 +70,12 @@ public class BaseConfiguredProvider extends SubModelProvider {
 		super();
 
 		// Create sub model
-		submodelData = createSubModel(cfgValues);
+		submodelData = createSubmodel(cfgValues);
 
 		setSubmodel(submodelData);
 	}
 
-	protected void setSubmodel(SubModel sm) {
+	protected void setSubmodel(Submodel sm) {
 		setAPI(new VABSubmodelAPI(new VABMapProvider(sm)));
 	}
 
@@ -145,9 +145,9 @@ public class BaseConfiguredProvider extends SubModelProvider {
 	 * @param cfgValues
 	 *            Provider configuration
 	 */
-	protected SubModel createSubModel(Map<Object, Object> cfgValues) {
+	protected Submodel createSubmodel(Map<Object, Object> cfgValues) {
 		// Create sub model
-		SubModel submodel = null;
+		Submodel submodel = null;
 
 		// Try to load and convert configuration values. Keep value null if any error occurs
 		String basyx_submodelSemantics = null;
@@ -234,7 +234,7 @@ public class BaseConfiguredProvider extends SubModelProvider {
 
 		// If no sub model was created, create an empty one
 		if (submodel == null)
-			submodel = new SubModel();
+			submodel = new Submodel();
 
 		// Return sub model data
 		return submodel;

@@ -16,7 +16,7 @@ import java.util.Collections;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.support.bundle.AASBundle;
 import org.eclipse.basyx.support.bundle.AASBundleDescriptorFactory;
@@ -37,7 +37,7 @@ public class TestAASBundleDescriptorFactory {
 		shell.setIdentification(new Identifier(IdentifierType.CUSTOM, aasId));
 
 		String smId = "smId";
-		SubModel sm = new SubModel();
+		Submodel sm = new Submodel();
 		sm.setIdShort(smId);
 		sm.setIdentification(IdentifierType.IRI, "aasIdIRI");
 

@@ -14,10 +14,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
@@ -58,20 +58,20 @@ public class VABSubmodelAPI implements ISubmodelAPI {
 	 *         submodelelements
 	 */
 	private MultiSubmodelElementProvider getElementProvider() {
-		IModelProvider elementProxy = new VABElementProxy(SubModel.SUBMODELELEMENT, modelProvider);
+		IModelProvider elementProxy = new VABElementProxy(Submodel.SUBMODELELEMENT, modelProvider);
 		return new MultiSubmodelElementProvider(elementProxy);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public ISubModel getSubmodel() {
+	public ISubmodel getSubmodel() {
 		// For access on the container property root, return the whole model
 		Map<String, Object> map = (Map<String, Object>) modelProvider.getModelPropertyValue("");
 
 		// Only return a copy of the Submodel
 		Map<String, Object> smCopy = new HashMap<>();
 		smCopy.putAll(map);
-		return SubModel.createAsFacade(smCopy);
+		return Submodel.createAsFacade(smCopy);
 	}
 
 	@Override

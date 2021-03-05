@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
@@ -45,7 +45,7 @@ import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
  * @author espen, schnicke
  *
  */
-public class SubModelProvider implements IModelProvider {
+public class SubmodelProvider implements IModelProvider {
 
 	public static final String VALUES = "values";
 	public static final String SUBMODEL = "submodel";
@@ -55,8 +55,8 @@ public class SubModelProvider implements IModelProvider {
 	/**
 	 * Default constructor - based on an empty submodel with a lambda provider
 	 */
-	public SubModelProvider() {
-		this(new SubModel());
+	public SubmodelProvider() {
+		this(new Submodel());
 	}
 
 	/**
@@ -65,21 +65,21 @@ public class SubModelProvider implements IModelProvider {
 	 * @param provider
 	 *            to be wrapped by submodel API
 	 */
-	public SubModelProvider(IModelProvider provider) {
+	public SubmodelProvider(IModelProvider provider) {
 		submodelAPI = new VABSubmodelAPI(provider);
 	}
 
 	/**
-	 * Creates a SubModelProvider based on a lambda provider and a given model
+	 * Creates a SubmodelProvider based on a lambda provider and a given model
 	 */
-	public SubModelProvider(SubModel model) {
+	public SubmodelProvider(Submodel model) {
 		submodelAPI = new VABSubmodelAPI(new VABLambdaProvider(model));
 	}
 
 	/**
-	 * Creates a SubModelProvider based on a given ISubmodelAPI.
+	 * Creates a SubmodelProvider based on a given ISubmodelAPI.
 	 */
-	public SubModelProvider(ISubmodelAPI submodelAPI) {
+	public SubmodelProvider(ISubmodelAPI submodelAPI) {
 		this.submodelAPI = submodelAPI;
 	}
 
@@ -106,11 +106,11 @@ public class SubModelProvider implements IModelProvider {
 		VABPathTools.checkPathForNull(path);
 		path = removeSubmodelPrefix(path);
 		if (path.isEmpty()) {
-			ISubModel sm = submodelAPI.getSubmodel();
+			ISubmodel sm = submodelAPI.getSubmodel();
 
 			// Change internal map representation to set
-			if (sm instanceof SubModel) {
-				return SubmodelElementMapCollectionConverter.smToMap((SubModel) sm);
+			if (sm instanceof Submodel) {
+				return SubmodelElementMapCollectionConverter.smToMap((Submodel) sm);
 			} else {
 				return sm;
 			}

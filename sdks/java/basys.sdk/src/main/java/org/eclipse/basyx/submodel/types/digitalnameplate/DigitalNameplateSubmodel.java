@@ -20,7 +20,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IMultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangString;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
@@ -40,7 +40,7 @@ import org.eclipse.basyx.submodel.types.digitalnameplate.submodelelementcollecti
  * @author haque
  *
  */
-public class DigitalNameplateSubmodel extends SubModel {
+public class DigitalNameplateSubmodel extends Submodel {
 	public static final String MANUFACTURERNAMEID = "ManufacturerName";
 	public static final String MANUFACTURERPRODUCTDESIGNATIONID = "ManufacturerProductDesignation";
 	public static final String ADDRESSID = "Address";
@@ -198,7 +198,7 @@ public class DigitalNameplateSubmodel extends SubModel {
 	public static boolean isValid(Map<String, Object> obj) {
 		DigitalNameplateSubmodel submodel = createAsFacadeNonStrict(obj);
 		
-		return SubModel.isValid(obj)
+		return Submodel.isValid(obj)
 				&& MultiLanguageProperty.isValid((Map<String, Object>) submodel.getManufacturerName())
 				&& MultiLanguageProperty.isValid((Map<String, Object>) submodel.getManufacturerProductDesignation())
 				&& Address.isValid((Map<String, Object>) submodel.getAddress())
@@ -216,7 +216,7 @@ public class DigitalNameplateSubmodel extends SubModel {
 	 * @param manufacturerName {@link MultiLanguageProperty}
 	 */
 	public void setManufacturerName(MultiLanguageProperty manufacturerName) {
-		addSubModelElement(manufacturerName);
+		addSubmodelElement(manufacturerName);
 	}
 	
 	/**
@@ -257,7 +257,7 @@ public class DigitalNameplateSubmodel extends SubModel {
 	 * @param manufacturerProductDesignation {@link MultiLanguageProperty}
 	 */
 	public void setManufacturerProductDesignation(MultiLanguageProperty manufacturerProductDesignation) {
-		addSubModelElement(manufacturerProductDesignation);
+		addSubmodelElement(manufacturerProductDesignation);
 	}
 	
 	/**
@@ -292,7 +292,7 @@ public class DigitalNameplateSubmodel extends SubModel {
 	 * @param address
 	 */
 	public void setAddress(Address address) {
-		addSubModelElement(address);
+		addSubmodelElement(address);
 	}
 	
 	/**
@@ -315,7 +315,7 @@ public class DigitalNameplateSubmodel extends SubModel {
 	 * @param manufacturerProductFamily {@link MultiLanguageProperty}
 	 */
 	public void setManufacturerProductFamily(MultiLanguageProperty manufacturerProductFamily) {
-		addSubModelElement(manufacturerProductFamily);
+		addSubmodelElement(manufacturerProductFamily);
 	}
 	
 	/**
@@ -348,7 +348,7 @@ public class DigitalNameplateSubmodel extends SubModel {
 	 * @param serialNumber
 	 */
 	public void setSerialNumber(Property serialNumber) {
-		addSubModelElement(serialNumber);
+		addSubmodelElement(serialNumber);
 	}
 	
 	/**
@@ -379,7 +379,7 @@ public class DigitalNameplateSubmodel extends SubModel {
 	 * @param yearsOfConstruction
 	 */
 	public void setYearOfConstruction(Property yearsOfConstruction) {
-		addSubModelElement(yearsOfConstruction);
+		addSubmodelElement(yearsOfConstruction);
 	}
 	
 	/**
@@ -411,7 +411,7 @@ public class DigitalNameplateSubmodel extends SubModel {
 	 * @param markings
 	 */
 	public void setMarkings(Markings markings) {
-		addSubModelElement(markings);
+		addSubmodelElement(markings);
 	}
 	
 	/**
@@ -431,7 +431,7 @@ public class DigitalNameplateSubmodel extends SubModel {
 	 * @param assetSpecificProperties
 	 */
 	public void setAssetSpecificProperties(AssetSpecificProperties assetSpecificProperties) {
-		addSubModelElement(assetSpecificProperties);
+		addSubmodelElement(assetSpecificProperties);
 	}
 	
 	/**

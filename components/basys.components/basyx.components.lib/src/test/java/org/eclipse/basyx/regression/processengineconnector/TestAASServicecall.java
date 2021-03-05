@@ -29,9 +29,9 @@ import org.eclipse.basyx.regression.support.processengine.stubs.CoilcarStub;
 import org.eclipse.basyx.regression.support.processengine.submodel.DeviceSubmodelFactory;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.testsuite.regression.vab.gateway.ConnectorProviderStub;
 import org.junit.Before;
 import org.junit.Test;
@@ -85,13 +85,13 @@ public class TestAASServicecall {
 		coilcar = new CoilcarStub();
 		
 		// Create the submodel of services provided by the coilcar with id "submodel1"
-		SubModel sm = new DeviceSubmodelFactory().create(SUBMODEL_ID, coilcar);
+		Submodel sm = new DeviceSubmodelFactory().create(SUBMODEL_ID, coilcar);
 		
 		// Create VAB multi-submodel provider for holding the sub-models
 		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
 		
 		// Add sub-model to the provider
-		provider.addSubmodel(new SubModelProvider(sm));
+		provider.addSubmodel(new SubmodelProvider(sm));
 		
 		// Add aas to the provider
 		provider.setAssetAdministrationShell(new AASModelProvider(aas));

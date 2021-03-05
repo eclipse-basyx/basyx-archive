@@ -16,7 +16,7 @@ import java.util.function.Function;
 
 import org.eclipse.basyx.regression.support.processengine.stubs.ICoilcar;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
@@ -24,7 +24,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operat
 
 
 public class DeviceSubmodelFactory {
-	public SubModel create(String id, ICoilcar coilcar) {
+	public Submodel create(String id, ICoilcar coilcar) {
 		// create a single value property
 		Property property1 = new Property(0);
 		property1.setIdShort("currentPosition");
@@ -61,9 +61,9 @@ public class DeviceSubmodelFactory {
 		propList.add(property2);
 		propList.add(property3);
 		// create the sub-model and add the property and operations to the sub-model
-		SubModel sm = new SubModel(id, new Identifier(IdentifierType.CUSTOM, id + "Custom"));
-		propList.forEach(sm::addSubModelElement);
-		opList.forEach(sm::addSubModelElement);
+		Submodel sm = new Submodel(id, new Identifier(IdentifierType.CUSTOM, id + "Custom"));
+		propList.forEach(sm::addSubmodelElement);
+		opList.forEach(sm::addSubmodelElement);
 		return sm;
 	}
 }

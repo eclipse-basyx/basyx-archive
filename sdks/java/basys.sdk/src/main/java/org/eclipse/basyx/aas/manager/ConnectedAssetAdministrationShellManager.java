@@ -18,11 +18,11 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
-import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubModel;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubmodel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.vab.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.vab.factory.java.ModelProxyFactory;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -65,7 +65,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	}
 
 	@Override
-	public ISubModel retrieveSubModel(IIdentifier aasId, IIdentifier smId) {
+	public ISubmodel retrieveSubmodel(IIdentifier aasId, IIdentifier smId) {
 		// look up SM descriptor in the registry
 		SubmodelDescriptor smDescriptor = aasDirectory.lookupSubmodel(aasId, smId);
 
@@ -73,7 +73,7 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 		String addr = smDescriptor.getFirstEndpoint();
 
 		// Return a new VABElementProxy
-		return new ConnectedSubModel(proxyFactory.createProxy(addr));
+		return new ConnectedSubmodel(proxyFactory.createProxy(addr));
 	}
 
 	@Override
@@ -83,15 +83,15 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	}
 
 	@Override
-	public Map<String, ISubModel> retrieveSubmodels(IIdentifier aasId) {
+	public Map<String, ISubmodel> retrieveSubmodels(IIdentifier aasId) {
 		AASDescriptor aasDesc = aasDirectory.lookupAAS(aasId);
-		Collection<SubmodelDescriptor> smDescriptors = aasDesc.getSubModelDescriptors();
-		Map<String, ISubModel> submodels = new HashMap<>();
+		Collection<SubmodelDescriptor> smDescriptors = aasDesc.getSubmodelDescriptors();
+		Map<String, ISubmodel> submodels = new HashMap<>();
 		for (SubmodelDescriptor smDesc : smDescriptors) {
 			String smEndpoint = smDesc.getFirstEndpoint();
 			String smIdShort = smDesc.getIdShort();
 			VABElementProxy smProxy = proxyFactory.createProxy(smEndpoint);
-			ConnectedSubModel connectedSM = new ConnectedSubModel(smProxy);
+			ConnectedSubmodel connectedSM = new ConnectedSubmodel(smProxy);
 			submodels.put(smIdShort, connectedSM);
 		}
 		return submodels;
@@ -141,11 +141,11 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 	}
 
 	@Override
-	public void createSubModel(IIdentifier aasId, SubModel submodel) {
+	public void createSubmodel(IIdentifier aasId, Submodel submodel) {
 		
 		// Push the SM to the server using the ConnectedAAS
 
-		retrieveAAS(aasId).addSubModel(submodel);
+		retrieveAAS(aasId).addSubmodel(submodel);
 		
 		// Lookup AAS descriptor
 		AASDescriptor aasDescriptor = aasDirectory.lookupAAS(aasId);
@@ -154,12 +154,12 @@ public class ConnectedAssetAdministrationShellManager implements IAssetAdministr
 		String addr = aasDescriptor.getFirstEndpoint();
 		
 		// Register the SM
-		String smEndpoint = VABPathTools.concatenatePaths(addr, AssetAdministrationShell.SUBMODELS, submodel.getIdShort(), SubModelProvider.SUBMODEL);
+		String smEndpoint = VABPathTools.concatenatePaths(addr, AssetAdministrationShell.SUBMODELS, submodel.getIdShort(), SubmodelProvider.SUBMODEL);
 		aasDirectory.register(aasId, new SubmodelDescriptor(submodel, smEndpoint));
 	}
 
 	@Override
-	public void deleteSubModel(IIdentifier aasId, IIdentifier submodelId) {
+	public void deleteSubmodel(IIdentifier aasId, IIdentifier submodelId) {
 		IAssetAdministrationShell shell = retrieveAAS(aasId);
 		shell.removeSubmodel(submodelId);
 

@@ -11,7 +11,7 @@ package org.eclipse.basyx.examples.snippets.manager;
 
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 
 
@@ -30,9 +30,9 @@ public class RetrieveSubmodelFromAAS {
 	 * @param smIdentifier the Identifier of the requested Submodel
 	 * @param aasIdentifier the Identifier of the AAS the Submodel belongs to
 	 * @param registryServerURL the URL of the registry server
-	 * @return the requested Submodel as ConnectedSubModel
+	 * @return the requested Submodel as ConnectedSubmodel
 	 */
-	public static ISubModel retrieveSubmodelFromAAS(IIdentifier smIdentifier, IIdentifier aasIdentifier, String registryServerURL) {
+	public static ISubmodel retrieveSubmodelFromAAS(IIdentifier smIdentifier, IIdentifier aasIdentifier, String registryServerURL) {
 
 		// Create a proxy pointing to the registry server
 		AASRegistryProxy registryProxy = new AASRegistryProxy(registryServerURL);
@@ -42,7 +42,7 @@ public class RetrieveSubmodelFromAAS {
 				new ConnectedAssetAdministrationShellManager(registryProxy);
 		
 		// Get the requested Submodel from the ConnectedAASManager using the Identifiers of the AAS and the SM
-		return manager.retrieveSubModel(aasIdentifier, smIdentifier);
+		return manager.retrieveSubmodel(aasIdentifier, smIdentifier);
 	}
 	
 }

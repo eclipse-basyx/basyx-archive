@@ -139,7 +139,7 @@ public class GuidelineSpecificProperties extends SubmodelElementCollection {
 	 * @param declaration {@link Property}
 	 */
 	public void setGuidelineForConformityDeclaration(Property declaration) {
-		addSubModelElement(declaration);
+		addSubmodelElement(declaration);
 	}
 	
 	/**
@@ -188,7 +188,7 @@ public class GuidelineSpecificProperties extends SubmodelElementCollection {
 	public void setArbitrary(List<Property> arbitraries) {
 		if (arbitraries != null & arbitraries.size() > 0) {
 			for (Property prop : arbitraries) {
-				addSubModelElement(prop);
+				addSubmodelElement(prop);
 			}
 		}
 	}

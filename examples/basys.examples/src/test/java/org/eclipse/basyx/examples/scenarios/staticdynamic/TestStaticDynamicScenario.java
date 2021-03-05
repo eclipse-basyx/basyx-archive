@@ -15,7 +15,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
@@ -51,14 +51,14 @@ public class TestStaticDynamicScenario {
 		
 		Identifier AASIdentifier = new Identifier(IdentifierType.IRI, StaticDynamicScenario.AAS_ID);
 		
-		Map<String, ISubModel> submodels = manager.retrieveSubmodels(AASIdentifier);
+		Map<String, ISubmodel> submodels = manager.retrieveSubmodels(AASIdentifier);
 		
 		// The aas should contain 6 SMs
 		assertEquals(6, submodels.size());
 		
-		ISubModel staticSM = submodels.get(ExampleDynamicSubmodel.SM_ID_SHORT);
+		ISubmodel staticSM = submodels.get(ExampleDynamicSubmodel.SM_ID_SHORT);
 		
-		// Get the Property from the SubModel
+		// Get the Property from the Submodel
 		IProperty smElement = (IProperty) staticSM.getSubmodelElements().get(ExampleDynamicSubmodel.PROPERTY_ID_SHORT);
 
 		// Check if the Property contains the correct value

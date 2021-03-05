@@ -23,7 +23,7 @@ import org.eclipse.basyx.examples.snippets.AbstractSnippetTest;
 import org.eclipse.basyx.examples.support.ExampleComponentBuilder;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
@@ -59,7 +59,7 @@ public class TestExecuteOperation extends AbstractSnippetTest {
 	@Test
 	public void testExecuteOperation() throws Exception {
 		
-		SubModel submodel = ExampleComponentBuilder.buildExampleSubmodel(NEW_SM_ID_SHORT, NEW_SM_ID);
+		Submodel submodel = ExampleComponentBuilder.buildExampleSubmodel(NEW_SM_ID_SHORT, NEW_SM_ID);
 		
 		// Add an Operation which calculates the sum of the two parameters
 		Operation operation = new Operation((Function<Object[], Object>) v -> {
@@ -71,7 +71,7 @@ public class TestExecuteOperation extends AbstractSnippetTest {
 		operation.setInputVariables(Arrays.asList(a, b));
 		operation.setOutputVariables(Collections.singletonList(r));
 		operation.setIdShort(OPERATION_ID);
-		submodel.addSubModelElement(operation);
+		submodel.addSubmodelElement(operation);
 		
 		// Startup a Server hosting this Submodel
 		provideSubmodel(submodel);
@@ -95,7 +95,7 @@ public class TestExecuteOperation extends AbstractSnippetTest {
 	 * 
 	 * @param submodel the Submodel to be hosted
 	 */
-	private void provideSubmodel(SubModel submodel) {
+	private void provideSubmodel(Submodel submodel) {
 		// Create a BaSyxConetxt for port 8082 with an empty endpoint
 		BaSyxContextConfiguration contextConfig = new BaSyxContextConfiguration(8082, "");
 		BaSyxContext context = contextConfig.createBaSyxContext();

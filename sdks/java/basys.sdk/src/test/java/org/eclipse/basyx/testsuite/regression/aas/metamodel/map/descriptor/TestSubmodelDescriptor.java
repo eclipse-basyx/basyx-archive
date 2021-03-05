@@ -18,7 +18,7 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
@@ -60,7 +60,7 @@ public class TestSubmodelDescriptor {
 		Formula formula = new Formula(Collections.singleton(new Reference(new Key(KeyElements.BLOB, true, "TestValue", IdentifierType.IRI))));
 		Qualifiable qualifiable = new Qualifiable(formula);
 		HasDataSpecification hasDataSpecification = new HasDataSpecification(new ArrayList<>(), Collections.singleton(reference));
-		SubModel subModel = new SubModel(hasSemantics, identifiable, qualifiable, hasDataSpecification, hasKind);
+		Submodel subModel = new Submodel(hasSemantics, identifiable, qualifiable, hasDataSpecification, hasKind);
 		
 		SubmodelDescriptor descriptor = new SubmodelDescriptor(subModel, HTTP_ENDPOINT);
 		assertEquals(HTTP_ENDPOINT, descriptor.getFirstEndpoint());

@@ -27,11 +27,11 @@ import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.support.bundle.AASBundle;
 import org.eclipse.basyx.support.bundle.AASBundleIntegrator;
@@ -77,8 +77,8 @@ public class TestAASBundleIntegrator {
 		
 		// Load AAS and SM AASAggregator
 		AssetAdministrationShell aas = (AssetAdministrationShell) bundle.getAAS();
-		Set<ISubModel> submodels = bundle.getSubmodels();
-		SubModel sm = (SubModel) submodels.iterator().next();
+		Set<ISubmodel> submodels = bundle.getSubmodels();
+		Submodel sm = (Submodel) submodels.iterator().next();
 		pushAAS(aas);
 		pushSubmodel(sm, aas.getIdentification());
 		
@@ -144,7 +144,7 @@ public class TestAASBundleIntegrator {
 		assertEquals(AAS_ID, aas.getIdShort());
 		IModelProvider provider = aggregator.getAASProvider(new Identifier(IdentifierType.CUSTOM, AAS_ID));
 		
-		SubModel sm = SubmodelElementMapCollectionConverter.mapToSM(
+		Submodel sm = SubmodelElementMapCollectionConverter.mapToSM(
 				(Map<String, Object>) provider.getModelPropertyValue("/aas/submodels/" + SM_ID));
 		
 		assertEquals(SM_ID, sm.getIdentification().getId());
@@ -154,19 +154,19 @@ public class TestAASBundleIntegrator {
 		aggregator.createAAS(aas);
 	}
 	
-	private void pushSubmodel(SubModel sm, IIdentifier aasIdentifier) {
+	private void pushSubmodel(Submodel sm, IIdentifier aasIdentifier) {
 		provider.setModelPropertyValue("/" + AASAggregatorProvider.PREFIX + "/" + aasIdentifier.getId() + "/aas/submodels/" + sm.getIdShort(), sm);
 	}
 	
 	private AASBundle getTestBundle() {
-		SubModel sm = new SubModel();
+		Submodel sm = new Submodel();
 		sm.setIdShort(SM_ID);
 		sm.setIdentification(IdentifierType.CUSTOM, SM_ID);
 
 		AssetAdministrationShell aas = new AssetAdministrationShell();
 		aas.setIdentification(IdentifierType.CUSTOM, AAS_ID);
 		aas.setIdShort(AAS_ID);
-		aas.addSubModel(sm);
+		aas.addSubmodel(sm);
 
 		return new AASBundle(aas, new HashSet<>(Arrays.asList(sm)));
 	}

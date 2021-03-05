@@ -20,8 +20,8 @@ import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
@@ -51,9 +51,9 @@ public class AASExecutable {
 		AssetAdministrationShell aas = new DashboardAssetAdministrationShell();
 		Asset asset = new DashboardAsset();
 		aas.setAsset(asset);
-		SubModel sm = new DashboardSubmodel();
+		Submodel sm = new DashboardSubmodel();
 		aas.setConceptDictionary(new ArrayList<>());
-		aas.addSubModel(sm);
+		aas.addSubmodel(sm);
 		
 		logger.info("Starting aas servlet...");
 		createServlet(aas, sm);
@@ -79,11 +79,11 @@ public class AASExecutable {
 		}
 	}
 
-	private static void createServlet(AssetAdministrationShell aas, SubModel... submodels) {
+	private static void createServlet(AssetAdministrationShell aas, Submodel... submodels) {
 		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
 		provider.setAssetAdministrationShell(new AASModelProvider(aas));
-		for (SubModel sm : submodels) {
-			provider.addSubmodel(new SubModelProvider(sm));
+		for (Submodel sm : submodels) {
+			provider.addSubmodel(new SubmodelProvider(sm));
 		}
 		BaSyxContextConfiguration config = new BaSyxContextConfiguration();
 		config.loadFromDefaultSource();

@@ -26,7 +26,7 @@ import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.components.registry.RegistryComponent;
 import org.eclipse.basyx.components.registry.configuration.BaSyxRegistryConfiguration;
 import org.eclipse.basyx.components.registry.configuration.RegistryBackend;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.support.bundle.AASBundle;
 import org.eclipse.basyx.support.bundle.AASBundleIntegrator;
 import org.xml.sax.SAXException;
@@ -70,13 +70,13 @@ public class StaticDynamicScenario {
 		AASXPackageManager packageManager = new AASXPackageManager("aasx/01_Festo.aasx");
 		Set<AASBundle> bundles = packageManager.retrieveAASBundles();
 		
-		// Create static SubModel
-		SubModel sm = new ExampleDynamicSubmodel();
+		// Create static Submodel
+		Submodel sm = new ExampleDynamicSubmodel();
 
 		// Get the correct Bundle from the Set
 		AASBundle bundle = findBundle(bundles, AAS_ID_SHORT);
 		
-		// Add the new SubModel to the Bundle
+		// Add the new Submodel to the Bundle
 		bundle.getSubmodels().add(sm);
 		
 		// Load the new Bundles to the Server

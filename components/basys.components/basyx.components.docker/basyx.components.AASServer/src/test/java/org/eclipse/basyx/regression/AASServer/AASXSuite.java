@@ -29,7 +29,7 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IFile;
@@ -95,7 +95,7 @@ public abstract class AASXSuite {
 
 	@Test
 	public void testGetSingleSubmodel() throws Exception {
-		ISubModel subModel = getConnectedSubmodel();
+		ISubmodel subModel = getConnectedSubmodel();
 		assertEquals(smShortId, subModel.getIdShort());
 	}
 
@@ -106,7 +106,7 @@ public abstract class AASXSuite {
 		checkFile(FILE_PATH);
 
 		// Get the submdoel nameplate
-		ISubModel nameplate = getConnectedSubmodel();
+		ISubmodel nameplate = getConnectedSubmodel();
 		// Get the submodel element collection marking_rcm
 		ConnectedSubmodelElementCollection marking_rcm = (ConnectedSubmodelElementCollection) nameplate.getSubmodelElements().get("Marking_RCM");
 		Collection<ISubmodelElement> values = marking_rcm.getValue();
@@ -131,9 +131,9 @@ public abstract class AASXSuite {
 		ConnectedAssetAdministrationShell aas = getConnectedAssetAdministrationShell();
 		logger.info("AAS idShort: " + aas.getIdShort());
 		logger.info("AAS identifier: " + aas.getIdentification().getId());
-		Map<String, ISubModel> submodels = aas.getSubModels();
+		Map<String, ISubmodel> submodels = aas.getSubmodels();
 		logger.info("# Submodels: " + submodels.size());
-		for (ISubModel sm : submodels.values()) {
+		for (ISubmodel sm : submodels.values()) {
 			logger.info("Checking submodel: " + sm.getIdShort());
 			checkElementCollectionFiles(sm.getSubmodelElements().values());
 		}
@@ -179,7 +179,7 @@ public abstract class AASXSuite {
 	 * @return connected SM
 	 * @throws Exception
 	 */
-	private ISubModel getConnectedSubmodel() {
-		return manager.retrieveSubModel(aasId, smId);
+	private ISubmodel getConnectedSubmodel() {
+		return manager.retrieveSubmodel(aasId, smId);
 	}
 }

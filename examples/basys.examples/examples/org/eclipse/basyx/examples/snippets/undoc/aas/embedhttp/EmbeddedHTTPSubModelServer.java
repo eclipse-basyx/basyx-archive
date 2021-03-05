@@ -23,13 +23,13 @@ import org.eclipse.basyx.vab.core.IModelProvider;
  * @author kuhn
  *
  */
-public class EmbeddedHTTPSubModelServer extends EmbeddedHTTPServer {
+public class EmbeddedHTTPSubmodelServer extends EmbeddedHTTPServer {
 
 	
 	/**
 	 * Constructor
 	 */
-	public EmbeddedHTTPSubModelServer(String context, IModelProvider provider) {
+	public EmbeddedHTTPSubmodelServer(String context, IModelProvider provider) {
 		// Invoke base constructor
 		super(context, provider);
 

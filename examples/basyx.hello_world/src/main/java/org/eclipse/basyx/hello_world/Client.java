@@ -11,7 +11,7 @@ package org.eclipse.basyx.hello_world;
 
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 
 /**
@@ -30,7 +30,7 @@ public class Client {
 				new ConnectedAssetAdministrationShellManager(new AASRegistryProxy(Server.REGISTRYPATH));
 
 		// Retrieve submodel
-		ISubModel submodel = manager.retrieveSubModel(Server.OVENAASID, Server.DOCUSMID);
+		ISubmodel submodel = manager.retrieveSubmodel(Server.OVENAASID, Server.DOCUSMID);
 
 		// Retrieve MaxTemp Property
 		ISubmodelElement maxTemp = submodel.getSubmodelElement(Server.MAXTEMPID);

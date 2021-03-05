@@ -14,8 +14,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.CustomId;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
-import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubModel;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubmodel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnector;
@@ -36,14 +36,14 @@ public class TestHostPreconfiguredSubmodel {
 
 	@Test
 	public void testHostPreconfiguredSubmodel() {
-		SubModel sm = new SubModel("testSubmodelIdShort", new CustomId("testSubmodel"));
+		Submodel sm = new Submodel("testSubmodelIdShort", new CustomId("testSubmodel"));
 		BaSyxContextConfiguration contextConfig = new BaSyxContextConfiguration(4040, "");
 		server = HostPreconfiguredSubmodel.hostPreconfiguredSubmodel(contextConfig, sm);
 		String smPath = "http://localhost:4040/" + sm.getIdShort() + "/submodel";
 
 		// Here, for simplicity reason of the test, the ConnectedSubmodel is created by hand. 
 		// In a real-world application, the AASManager would be used instead.
-		ConnectedSubModel cSm = new ConnectedSubModel(new VABElementProxy("", new JSONConnector(new HTTPConnector(smPath))));
+		ConnectedSubmodel cSm = new ConnectedSubmodel(new VABElementProxy("", new JSONConnector(new HTTPConnector(smPath))));
 		assertEquals(sm.getIdentification(), cSm.getIdentification());
 	}
 

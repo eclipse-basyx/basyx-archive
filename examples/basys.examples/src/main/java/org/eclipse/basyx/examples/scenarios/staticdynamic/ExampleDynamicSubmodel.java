@@ -10,7 +10,7 @@
 package org.eclipse.basyx.examples.scenarios.staticdynamic;
 
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 
 /**
@@ -21,7 +21,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.prop
  * @author schnicke, conradi
  *
  */
-public class ExampleDynamicSubmodel extends SubModel {
+public class ExampleDynamicSubmodel extends Submodel {
 
 	public static final String SM_ID_SHORT = "maintenance";
 	public static final String SM_ID = "maintenanceInformationSubmodel";
@@ -37,7 +37,7 @@ public class ExampleDynamicSubmodel extends SubModel {
 		interval.setIdShort(PROPERTY_ID_SHORT);
 
 		// Add the property to the submodel
-		addSubModelElement(interval);
+		addSubmodelElement(interval);
 
 		// Set the idShort
 		setIdShort(SM_ID_SHORT);

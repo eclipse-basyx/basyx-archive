@@ -10,7 +10,7 @@
 package org.eclipse.basyx.examples.snippets.submodel;
 
 import org.eclipse.basyx.examples.snippets.manager.RetrieveSubmodelFromAAS;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 
 /**
@@ -32,7 +32,7 @@ public class DeleteSubmodelElement {
 	public static void deleteSubmodelElement(String elementId, IIdentifier smIdentifier, IIdentifier aasIdentifier, String registryServerURL) {
 	
 		// Retrieve the Submodel from the server as a ConnectedSubmodel
-		ISubModel submodel = RetrieveSubmodelFromAAS.retrieveSubmodelFromAAS(smIdentifier, aasIdentifier, registryServerURL);
+		ISubmodel submodel = RetrieveSubmodelFromAAS.retrieveSubmodelFromAAS(smIdentifier, aasIdentifier, registryServerURL);
 		
 		// Delete the Element from the Submodel
 		submodel.deleteSubmodelElement(elementId);

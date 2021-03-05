@@ -35,13 +35,13 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.components.aas.aasx.AASXPackageManager;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
@@ -96,7 +96,7 @@ public class TestAASXPackageManager {
 	/**
 	 * Submodels parsed by the converter
 	 */
-	private Set<ISubModel> submodels;
+	private Set<ISubmodel> submodels;
 
 	/**
 	 * Initialize the AASX package converter
@@ -135,7 +135,7 @@ public class TestAASXPackageManager {
 			throws InvalidFormatException, IOException, ParserConfigurationException, SAXException, TransformerException, URISyntaxException {
 		
 		List<IAssetAdministrationShell> aasList = new ArrayList<>();
-		List<ISubModel> submodelList = new ArrayList<>();
+		List<ISubmodel> submodelList = new ArrayList<>();
 		List<IAsset> assetList = new ArrayList<>();
 		List<IConceptDescription> conceptDescriptionList = new ArrayList<>();
 
@@ -145,7 +145,7 @@ public class TestAASXPackageManager {
 		AssetAdministrationShell aas = new AssetAdministrationShell("aasIdShort", new ModelUrn("aasId"), asset);
 		aas.setAssetReference((Reference) asset.getReference());
 		
-		SubModel sm = new SubModel("smIdShort", new ModelUrn("smId"));
+		Submodel sm = new Submodel("smIdShort", new ModelUrn("smId"));
 		
 		// Create File SubmodelElements
 		File file1 = new File("/icon.png", "image/png");
@@ -154,11 +154,11 @@ public class TestAASXPackageManager {
 		file2.setIdShort("file2");
 		
 		SubmodelElementCollection collection = new SubmodelElementCollection("Marking_RCM");
-		collection.addSubModelElement(file1);
+		collection.addSubmodelElement(file1);
 		
-		sm.addSubModelElement(collection);
-		sm.addSubModelElement(file2);
-		aas.addSubModel(sm);
+		sm.addSubmodelElement(collection);
+		sm.addSubmodelElement(file2);
+		aas.addSubmodel(sm);
 		
 		aasList.add(aas);
 		submodelList.add(sm);
@@ -191,7 +191,7 @@ public class TestAASXPackageManager {
 		
 	}
 	
-	private void checkBundle(Set<AASBundle> bundles, IAssetAdministrationShell aas, ISubModel sm) {
+	private void checkBundle(Set<AASBundle> bundles, IAssetAdministrationShell aas, ISubmodel sm) {
 		assertEquals(1, bundles.size());
 		AASBundle bundle = bundles.stream().findFirst().get();
 		
@@ -200,7 +200,7 @@ public class TestAASXPackageManager {
 		assertEquals(aas.getIdentification().getId(), parsedAAS.getIdentification().getId());
 		
 		assertEquals(1, bundle.getSubmodels().size());
-		ISubModel parsedSubmodel = bundle.getSubmodels().stream().findFirst().get();
+		ISubmodel parsedSubmodel = bundle.getSubmodels().stream().findFirst().get();
 		assertEquals(sm.getIdShort(), parsedSubmodel.getIdShort());
 		assertEquals(sm.getIdentification().getId(), parsedSubmodel.getIdentification().getId());
 		assertEquals(sm.getSubmodelElements().size(), parsedSubmodel.getSubmodelElements().size());
@@ -283,13 +283,13 @@ public class TestAASXPackageManager {
 	 * 
 	 * @param submodels
 	 */
-	private void checkSubmodels(Set<ISubModel> submodels) {
+	private void checkSubmodels(Set<ISubmodel> submodels) {
 		assertEquals(5, submodels.size());
 
 		// filter the submodel with id "Nameplate"
-		Optional<ISubModel> sm1Optional = submodels.stream().filter(s -> s.getIdShort().equals("Nameplate")).findFirst();
+		Optional<ISubmodel> sm1Optional = submodels.stream().filter(s -> s.getIdShort().equals("Nameplate")).findFirst();
 		assertTrue(sm1Optional.isPresent());
-		ISubModel sm1 = sm1Optional.get();
+		ISubmodel sm1 = sm1Optional.get();
 
 		// verify short id, id-type, id and model-kind of the submodel
 		assertEquals("Nameplate", sm1.getIdShort());

@@ -20,7 +20,7 @@ import org.eclipse.basyx.components.configuration.CFGBaSyxProtocolType;
 import org.eclipse.basyx.components.devicemanager.TCPDeviceManagerComponent;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
@@ -100,7 +100,7 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 		super.start();
 		
 		// Create the device AAS and sub model structure
-		createDeviceAASAndSubModels();
+		createDeviceAASAndSubmodels();
 		
 		// Register AAS and sub model descriptors in directory (push AAS descriptor to server)
 		getRegistry().register(getAASDescriptor());
@@ -114,7 +114,7 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 	protected AASDescriptor getAASDescriptor() {
 		// Create AAS and sub model descriptors
 		AASDescriptor aasDescriptor = new AASDescriptor(lookupURN("AAS"), getAASEndpoint(lookupURN("AAS")));
-		addSubModelDescriptorURI(aasDescriptor, lookupURN("Status"), "Status");
+		addSubmodelDescriptorURI(aasDescriptor, lookupURN("Status"), "Status");
 		
 		// Return AAS and sub model descriptors
 		return aasDescriptor;
@@ -125,7 +125,7 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 	/**
 	 * Create the device AAS and sub model structure
 	 */
-	protected void createDeviceAASAndSubModels() {
+	protected void createDeviceAASAndSubmodels() {
 		// Register URNs of managed VAB objects
 		addShortcut("AAS",        new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#001"));
 		addShortcut("Status",     new ModelUrn("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#001"));
@@ -141,19 +141,19 @@ public class ManufacturingDeviceManager extends TCPDeviceManagerComponent {
 	
 		// The device also brings a sub model structure with an own ID that is being pushed on the server
 		// - Create generic sub model and add properties
-		SubModel statusSM = new SubModel();
+		Submodel statusSM = new Submodel();
 		// - Set submodel ID
 		statusSM.setIdShort("Status");
 		//   - Property status: indicate device status
 		Property statusProp = new Property("offline");
 		statusProp.setIdShort("status");
-		statusSM.addSubModelElement(statusProp);
+		statusSM.addSubmodelElement(statusProp);
 		//   - Property statistics: export invocation statistics for every service
 		//     - invocations: indicate total service invocations. Properties are not persisted in this example,
 		//                    therefore we start counting always at 0.
 		Property invocationsProp = new Property(0);
 		invocationsProp.setIdShort("invocations");
-		statusSM.addSubModelElement(invocationsProp);
+		statusSM.addSubmodelElement(invocationsProp);
 		// - Transfer device sub model to server
 		aasServerConnection.setModelPropertyValue(AASAggregatorProvider.PREFIX + "/" + VABPathTools.encodePathElement(lookupURN("AAS").getId()) + "/aas/submodels/" + statusSM.getIdShort(), statusSM);
 	}

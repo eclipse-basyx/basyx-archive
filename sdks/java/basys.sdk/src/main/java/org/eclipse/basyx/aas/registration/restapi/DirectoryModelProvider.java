@@ -338,7 +338,7 @@ public class DirectoryModelProvider implements IModelProvider {
 		if(aasDescriptor == null) {
 			throw new ResourceNotFoundException("Specified AASid '" + id.getId() + "' does not exist.");
 		}
-		return aasDescriptor.getSubModelDescriptors();
+		return aasDescriptor.getSubmodelDescriptors();
 	}
 	
 	/**
@@ -357,7 +357,7 @@ public class DirectoryModelProvider implements IModelProvider {
 			throw new ResourceNotFoundException("Specified AASId '" + aasId.getId() + "' does not exist.");
 		}
 		
-		SubmodelDescriptor smDescriptor = aasDescriptor.getSubModelDescriptorFromIdentifierId(smId);
+		SubmodelDescriptor smDescriptor = aasDescriptor.getSubmodelDescriptorFromIdentifierId(smId);
 		if (smDescriptor == null) {
 			throw new ResourceNotFoundException("Specified SMId '" + smId + "' for AAS " + aasId.getId() + " does not exist.");
 		}

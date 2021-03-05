@@ -19,7 +19,7 @@ import java.util.Set;
 
 import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.IElementContainer;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
@@ -62,7 +62,7 @@ import org.eclipse.basyx.vab.model.VABModelMap;
  *
  *
  */
-public class SubModel extends VABModelMap<Object> implements IElementContainer, ISubModel {
+public class Submodel extends VABModelMap<Object> implements IElementContainer, ISubmodel {
 
 	public static final String SUBMODELELEMENT = "submodelElements";
 	public static final String MODELTYPE = "Submodel";
@@ -70,7 +70,7 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	/**
 	 * Constructor
 	 */
-	public SubModel() {
+	public Submodel() {
 		// Add qualifiers
 		putAll(new Identifiable());
 		putAll(new HasDataSpecification());
@@ -88,7 +88,7 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	 * @param idShort
 	 * @param identification
 	 */
-	public SubModel(String idShort, IIdentifier identification) {
+	public Submodel(String idShort, IIdentifier identification) {
 		this();
 		setIdentification(identification);
 		setIdShort(idShort);
@@ -98,7 +98,7 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	/**
 	 * Constructor
 	 */
-	public SubModel(HasSemantics semantics, Identifiable identifiable, Qualifiable qualifiable,
+	public Submodel(HasSemantics semantics, Identifiable identifiable, Qualifiable qualifiable,
 			HasDataSpecification specification, HasKind hasKind) {
 		this();
 		// Add qualifiers
@@ -115,27 +115,27 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	/**
 	 * Constructor
 	 */
-	public SubModel(List<Property> properties) {
+	public Submodel(List<Property> properties) {
 		this();
-		properties.forEach(this::addSubModelElement);
+		properties.forEach(this::addSubmodelElement);
 	}
 
 	/**
 	 * Constructor
 	 */
-	public SubModel(List<Property> properties, List<Operation> operations) {
+	public Submodel(List<Property> properties, List<Operation> operations) {
 		this();
-		properties.forEach(this::addSubModelElement);
-		operations.forEach(this::addSubModelElement);
+		properties.forEach(this::addSubmodelElement);
+		operations.forEach(this::addSubmodelElement);
 	}
 
-	public static SubModel createAsFacade(Map<String, Object> map) {
+	public static Submodel createAsFacade(Map<String, Object> map) {
 		if (map == null) {
 			return null;
 		}
 		
 		if (!isValid(map)) {
-			throw new MetamodelConstructionException(SubModel.class, map);
+			throw new MetamodelConstructionException(Submodel.class, map);
 		}
 		
 		if (!map.containsKey(SUBMODELELEMENT)) {
@@ -231,7 +231,7 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 			}
 		}
 		// then add all given data properties
-		properties.values().forEach(this::addSubModelElement);
+		properties.values().forEach(this::addSubmodelElement);
 	}
 
 	public void setOperations(Map<String, IOperation> operations) {
@@ -244,7 +244,7 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 			}
 		}
 		// then add all given operations
-		operations.values().forEach(this::addSubModelElement);
+		operations.values().forEach(this::addSubmodelElement);
 	}
 
 	@Override
@@ -279,7 +279,7 @@ public class SubModel extends VABModelMap<Object> implements IElementContainer, 
 	}
 
 	@Override
-	public void addSubModelElement(ISubmodelElement element) {
+	public void addSubmodelElement(ISubmodelElement element) {
 		if (element instanceof SubmodelElement) {
 			((SubmodelElement) element).setParent(getReference());
 		}

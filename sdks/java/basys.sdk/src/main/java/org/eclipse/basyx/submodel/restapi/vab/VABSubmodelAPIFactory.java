@@ -9,7 +9,7 @@
  ******************************************************************************/
 package org.eclipse.basyx.submodel.restapi.vab;
 
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPI;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPIFactory;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
@@ -22,7 +22,7 @@ import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
  */
 public class VABSubmodelAPIFactory implements ISubmodelAPIFactory {
 	@Override
-	public ISubmodelAPI getSubmodelAPI(SubModel submodel) {
+	public ISubmodelAPI getSubmodelAPI(Submodel submodel) {
 		return new VABSubmodelAPI(new VABLambdaProvider(submodel));
 	}
 }

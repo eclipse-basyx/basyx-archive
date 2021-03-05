@@ -23,9 +23,9 @@ import org.eclipse.basyx.components.aas.mongodb.MongoDBAASAggregator;
 import org.eclipse.basyx.components.aas.mongodb.MongoDBSubmodelAPI;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxMongoDBConfiguration;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -68,11 +68,11 @@ public class TestMongoDBServer extends AASServerSuite {
 	public void testAddSubmodelPersistency() throws Exception {
 		testAddAAS();
 
-		SubModel sm = new SubModel("MongoDB", new Identifier(IdentifierType.CUSTOM, "MongoDBId"));
-		manager.createSubModel(new ModelUrn(aasId), sm);
+		Submodel sm = new Submodel("MongoDB", new Identifier(IdentifierType.CUSTOM, "MongoDBId"));
+		manager.createSubmodel(new ModelUrn(aasId), sm);
 
 		MongoDBSubmodelAPI api = new MongoDBSubmodelAPI(mongoDBConfig, sm.getIdentification().getId());
-		ISubModel persistentSM = api.getSubmodel();
+		ISubmodel persistentSM = api.getSubmodel();
 		assertEquals("MongoDB", persistentSM.getIdShort());
 	}
 

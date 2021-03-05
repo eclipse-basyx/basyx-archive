@@ -98,7 +98,7 @@ public abstract class DeviceManagerComponent extends BaseBaSyxService {
 	 * 
 	 * @return Sub model descriptor endpoint points to default AAS server location and contains default prefix path
 	 */
-	protected SubmodelDescriptor addSubModelDescriptorURI(AASDescriptor aasDescriptor, ModelUrn subModelURN, String subModelId) {
+	protected SubmodelDescriptor addSubmodelDescriptorURI(AASDescriptor aasDescriptor, ModelUrn subModelURN, String subModelId) {
 		// Create sub model descriptor
 		String submodelEndpoint = VABPathTools.concatenatePaths(getAASServerURL(), AASAggregatorProvider.PREFIX, VABPathTools.encodePathElement(aasDescriptor.getIdentifier().getId()), "/aas/submodels", subModelId);
 		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(subModelId, subModelURN, submodelEndpoint);

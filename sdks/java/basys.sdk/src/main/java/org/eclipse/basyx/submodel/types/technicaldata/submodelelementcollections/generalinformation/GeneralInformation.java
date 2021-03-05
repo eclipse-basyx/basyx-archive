@@ -176,7 +176,7 @@ public class GeneralInformation extends SubmodelElementCollection{
 	 * @param name
 	 */
 	public void setManufacturerName(Property name) {
-		addSubModelElement(name);
+		addSubmodelElement(name);
 	}
 	
 	/**
@@ -207,7 +207,7 @@ public class GeneralInformation extends SubmodelElementCollection{
 	 * @param logo
 	 */
 	public void setManufacturerLogo(File logo) {
-		addSubModelElement(logo);
+		addSubmodelElement(logo);
 	}
 	
 	/**
@@ -228,7 +228,7 @@ public class GeneralInformation extends SubmodelElementCollection{
 	 * @param designation {@link MultiLanguageProperty}
 	 */
 	public void setManufacturerProductDesignation(MultiLanguageProperty designation) {
-		addSubModelElement(designation);
+		addSubmodelElement(designation);
 	}
 	
 	/**
@@ -263,7 +263,7 @@ public class GeneralInformation extends SubmodelElementCollection{
 	 * @param partNumber
 	 */
 	public void setManufacturerPartNumber(Property partNumber) {
-		addSubModelElement(partNumber);
+		addSubmodelElement(partNumber);
 	}
 	
 	/**
@@ -296,7 +296,7 @@ public class GeneralInformation extends SubmodelElementCollection{
 	 * @param orderCode
 	 */
 	public void setManufacturerOrderCode(Property orderCode) {
-		addSubModelElement(orderCode);
+		addSubmodelElement(orderCode);
 	}
 	
 	/**
@@ -329,7 +329,7 @@ public class GeneralInformation extends SubmodelElementCollection{
 	public void setProductImages(List<File> images) {
 		if (images != null && images.size() > 0) {
 			for (File image : images) {
-				addSubModelElement(image);
+				addSubmodelElement(image);
 			}
 		}
 	}

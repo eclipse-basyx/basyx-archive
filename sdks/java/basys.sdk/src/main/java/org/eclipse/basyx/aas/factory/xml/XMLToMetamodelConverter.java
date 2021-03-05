@@ -22,7 +22,7 @@ import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.submodel.factory.xml.api.parts.ConceptDescriptionXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.SubmodelXMLConverter;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.vab.factory.xml.XmlParser;
 import org.xml.sax.SAXException;
@@ -89,15 +89,15 @@ public class XMLToMetamodelConverter {
 
 	
 	/**
-	 * Parses the SubModels form the XML
+	 * Parses the Submodels form the XML
 	 * 
-	 * @return the SubModels parsed form the XML
+	 * @return the Submodels parsed form the XML
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
-	public List<ISubModel> parseSubmodels() {
+	public List<ISubmodel> parseSubmodels() {
 		Map<String, Object> xmlSubmodels = (Map<String, Object>) root.get(SubmodelXMLConverter.SUBMODELS);		
 		return SubmodelXMLConverter.parseSubmodels(xmlSubmodels);		
 	}

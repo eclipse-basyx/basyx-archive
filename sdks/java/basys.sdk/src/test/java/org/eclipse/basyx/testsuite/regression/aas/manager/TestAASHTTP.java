@@ -19,7 +19,7 @@ import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
@@ -97,7 +97,7 @@ public class TestAASHTTP {
 		assertEquals(StubAASServlet.AASIDSHORT, shell.getIdShort());
 
 		// Retrieve submodels
-		Map<String, ISubModel> submodels = shell.getSubModels();
+		Map<String, ISubmodel> submodels = shell.getSubmodels();
 
 		// Check content of submodels
 		assertEquals(1, submodels.size());
@@ -110,9 +110,9 @@ public class TestAASHTTP {
 	 * @throws Exception
 	 */
 	@Test
-	public void testSubModel() throws Exception {
-		// Retrieve SubModel
-		ISubModel sm = manager.retrieveSubModel(StubAASServlet.AASURN, StubAASServlet.SMURN);
+	public void testSubmodel() throws Exception {
+		// Retrieve Submodel
+		ISubmodel sm = manager.retrieveSubmodel(StubAASServlet.AASURN, StubAASServlet.SMURN);
 
 		// Check id
 		assertEquals(StubAASServlet.SMIDSHORT, sm.getIdShort());

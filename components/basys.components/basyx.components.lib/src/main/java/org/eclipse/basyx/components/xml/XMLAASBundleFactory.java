@@ -24,7 +24,7 @@ import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IIdentifiable;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -72,7 +72,7 @@ public class XMLAASBundleFactory {
 		XMLToMetamodelConverter converter = new XMLToMetamodelConverter(content);
 
 		List<IAssetAdministrationShell> shells = converter.parseAAS();
-		List<ISubModel> submodels = converter.parseSubmodels();
+		List<ISubmodel> submodels = converter.parseSubmodels();
 
 		List<IAsset> assets = converter.parseAssets();
 
@@ -89,7 +89,7 @@ public class XMLAASBundleFactory {
 			}
 
 			// Retrieve submodels
-			Set<ISubModel> currentSM = retrieveSubmodelsForAAS(submodels, shell);
+			Set<ISubmodel> currentSM = retrieveSubmodelsForAAS(submodels, shell);
 			bundles.add(new AASBundle(shell, currentSM));
 		}
 
@@ -103,12 +103,12 @@ public class XMLAASBundleFactory {
 	 * @param shell
 	 * @return
 	 */
-	private Set<ISubModel> retrieveSubmodelsForAAS(List<ISubModel> submodels, IAssetAdministrationShell shell) {
-		Set<ISubModel> currentSM = new HashSet<>();
+	private Set<ISubmodel> retrieveSubmodelsForAAS(List<ISubmodel> submodels, IAssetAdministrationShell shell) {
+		Set<ISubmodel> currentSM = new HashSet<>();
 
 		for (IReference submodelRef : shell.getSubmodelReferences()) {
 			try {
-				ISubModel sm = getByReference(submodelRef, submodels);
+				ISubmodel sm = getByReference(submodelRef, submodels);
 				currentSM.add(sm);
 				logger.debug("Found Submodel " + sm.getIdShort() + " for AAS " + shell.getIdShort());
 			} catch (ResourceNotFoundException e) {

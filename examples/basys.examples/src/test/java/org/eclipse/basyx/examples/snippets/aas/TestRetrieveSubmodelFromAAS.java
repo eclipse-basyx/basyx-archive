@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.examples.snippets.AbstractSnippetTest;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
@@ -40,7 +40,7 @@ public class TestRetrieveSubmodelFromAAS extends AbstractSnippetTest {
 		IAssetAdministrationShell aas = manager.retrieveAAS(aasIdentifier);
 		
 		// Get the Submodel from the server
-		ISubModel remoteSubmodel = RetrieveSubmodelFromAAS.retrieveSubmodelFromAAS(
+		ISubmodel remoteSubmodel = RetrieveSubmodelFromAAS.retrieveSubmodelFromAAS(
 				smIdentifier, aas);
 		
 		

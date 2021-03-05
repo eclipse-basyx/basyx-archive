@@ -14,9 +14,9 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 
 
 
@@ -60,13 +60,13 @@ public interface IAssetAdministrationShellManager {
 	/**
 	 * Retrieves a submodel
 	 */
-	ISubModel retrieveSubModel(IIdentifier aasId, IIdentifier subModelId);
+	ISubmodel retrieveSubmodel(IIdentifier aasId, IIdentifier subModelId);
 
 	/**
 	 * Creates a submodel on a remote server. Assumes that the AAS is already
 	 * registered in the directory
 	 */
-	void createSubModel(IIdentifier aasId, SubModel submodel);
+	void createSubmodel(IIdentifier aasId, Submodel submodel);
 
 	/**
 	 * Deletes a submodel on a remote server and removes its registry entry
@@ -74,10 +74,10 @@ public interface IAssetAdministrationShellManager {
 	 * @param aasId
 	 * @param submodelId
 	 */
-	void deleteSubModel(IIdentifier aasId, IIdentifier submodelId);
+	void deleteSubmodel(IIdentifier aasId, IIdentifier submodelId);
 
 	/**
 	 * Retrieves all submodels in a specific AAS
 	 */
-	Map<String, ISubModel> retrieveSubmodels(IIdentifier aasId);
+	Map<String, ISubmodel> retrieveSubmodels(IIdentifier aasId);
 }

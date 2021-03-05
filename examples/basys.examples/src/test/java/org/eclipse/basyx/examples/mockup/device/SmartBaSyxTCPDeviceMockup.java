@@ -21,7 +21,7 @@ import org.eclipse.basyx.components.device.BaseSmartDevice;
 import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.models.controlcomponent.ExecutionState;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
@@ -146,18 +146,18 @@ public class SmartBaSyxTCPDeviceMockup extends BaseSmartDevice {
 		
 		// The device also brings a sub model structure with an own ID that is being pushed on the server
 		// - Create generic sub model and add properties
-		SubModel statusSM = new SubModel();
+		Submodel statusSM = new Submodel();
 		statusSM.setIdShort("Status");
 		//   - Property status: indicate device status
 		Property statusProp = new Property("offline");
 		statusProp.setIdShort("status");
-		statusSM.addSubModelElement(statusProp);
+		statusSM.addSubmodelElement(statusProp);
 		//   - Property statistics: export invocation statistics for every service
 		//     - invocations: indicate total service invocations. Properties are not persisted in this example,
 		//                    therefore we start counting always at 0.
 		Property invocationsProp = new Property(0);
 		invocationsProp.setIdShort("invocations");
-		statusSM.addSubModelElement(invocationsProp);
+		statusSM.addSubmodelElement(invocationsProp);
 		// - Transfer device sub model to server
 		aasServerConnection.setModelPropertyValue(aasPath + "/submodels/" + statusSM.getIdShort(), statusSM);
 

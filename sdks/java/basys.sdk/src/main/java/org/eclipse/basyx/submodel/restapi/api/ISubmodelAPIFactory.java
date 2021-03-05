@@ -9,7 +9,7 @@
  ******************************************************************************/
 package org.eclipse.basyx.submodel.restapi.api;
 
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 
 /**
  * Interface for providing an Submodel API
@@ -23,5 +23,5 @@ public interface ISubmodelAPIFactory {
 	 * 
 	 * @return
 	 */
-	public ISubmodelAPI getSubmodelAPI(SubModel submodel);
+	public ISubmodelAPI getSubmodelAPI(Submodel submodel);
 }

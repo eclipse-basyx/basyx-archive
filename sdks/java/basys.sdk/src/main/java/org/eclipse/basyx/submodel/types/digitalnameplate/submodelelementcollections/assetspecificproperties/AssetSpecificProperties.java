@@ -122,7 +122,7 @@ public class AssetSpecificProperties extends SubmodelElementCollection {
 	public void setGuidelineSpecificProperties(List<GuidelineSpecificProperties> properties) {
 		if (properties != null & properties.size() > 0) {
 			for (GuidelineSpecificProperties prop : properties) {
-				addSubModelElement(prop);
+				addSubmodelElement(prop);
 			}
 		}
 	}

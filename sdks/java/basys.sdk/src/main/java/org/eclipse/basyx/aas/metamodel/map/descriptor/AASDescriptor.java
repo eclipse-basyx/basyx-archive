@@ -118,7 +118,7 @@ public class AASDescriptor extends ModelDescriptor {
 
 	@SuppressWarnings("unchecked")
 	public void removeSubmodelDescriptor(String idShort) {
-		Optional<SubmodelDescriptor> toRemove = getSubModelDescriptors().stream().filter(x -> x.getIdShort().equals(idShort)).findAny();
+		Optional<SubmodelDescriptor> toRemove = getSubmodelDescriptors().stream().filter(x -> x.getIdShort().equals(idShort)).findAny();
 
 		// TODO: Exception in else case
 		if (toRemove.isPresent()) {
@@ -129,7 +129,7 @@ public class AASDescriptor extends ModelDescriptor {
 
 	@SuppressWarnings("unchecked")
 	public void removeSubmodelDescriptor(IIdentifier id) {
-		Optional<SubmodelDescriptor> toRemove = getSubModelDescriptors().stream().filter(x -> x.getIdentifier().getId().equals(id.getId())).findAny();
+		Optional<SubmodelDescriptor> toRemove = getSubmodelDescriptors().stream().filter(x -> x.getIdentifier().getId().equals(id.getId())).findAny();
 
 		// TODO: Exception in else case
 		if (toRemove.isPresent()) {
@@ -146,7 +146,7 @@ public class AASDescriptor extends ModelDescriptor {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public SubmodelDescriptor getSubModelDescriptorFromIdentifierId(String subModelId) {
+	public SubmodelDescriptor getSubmodelDescriptorFromIdentifierId(String subModelId) {
 		// Sub model descriptors are stored in a list
 		Collection<Map<String, Object>> smDescriptorMaps = (Collection<Map<String, Object>>) get(
 				AssetAdministrationShell.SUBMODELS);
@@ -171,14 +171,14 @@ public class AASDescriptor extends ModelDescriptor {
 	 * @return
 	 */
 	public SubmodelDescriptor getSubmodelDescriptorFromIdShort(String idShort) {
-		return getSubModelDescriptors().stream().filter(x -> x.getIdShort().equals(idShort)).findAny().orElse(null); // TODO: Exception
+		return getSubmodelDescriptors().stream().filter(x -> x.getIdShort().equals(idShort)).findAny().orElse(null); // TODO: Exception
 	}
 
 	/**
 	 * Get a specific sub model descriptor from a ModelUrn
 	 */
-	public SubmodelDescriptor getSubModelDescriptor(ModelUrn submodelUrn) {
-		return getSubModelDescriptorFromIdentifierId(submodelUrn.getURN());
+	public SubmodelDescriptor getSubmodelDescriptor(ModelUrn submodelUrn) {
+		return getSubmodelDescriptorFromIdentifierId(submodelUrn.getURN());
 	}
 
 	/**
@@ -187,7 +187,7 @@ public class AASDescriptor extends ModelDescriptor {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public Collection<SubmodelDescriptor> getSubModelDescriptors() {
+	public Collection<SubmodelDescriptor> getSubmodelDescriptors() {
 		Collection<Map<String, Object>> descriptors = (Collection<Map<String, Object>>) get(AssetAdministrationShell.SUBMODELS);
 		return descriptors.stream().map(SubmodelDescriptor::new).collect(Collectors.toSet());
 	}

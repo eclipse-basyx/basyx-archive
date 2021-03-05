@@ -136,7 +136,7 @@ public class Marking extends SubmodelElementCollection {
 	 * @param markingName
 	 */
 	public void setMarkingName(Property markingName) {
-		addSubModelElement(markingName);
+		addSubmodelElement(markingName);
 	}
 	
 	/**
@@ -173,7 +173,7 @@ public class Marking extends SubmodelElementCollection {
 	 * @param markingFile
 	 */
 	public void setMarkingFile(File markingFile) {
-		addSubModelElement(markingFile);
+		addSubmodelElement(markingFile);
 	}
 	
 	/**
@@ -196,7 +196,7 @@ public class Marking extends SubmodelElementCollection {
 	public void setMarkingAdditionalText(List<Property> markingAdditionalText) {
 		if (markingAdditionalText != null && markingAdditionalText.size() > 0) {
 			for (Property markingAdditionalSingle : markingAdditionalText) {
-				addSubModelElement(markingAdditionalSingle);
+				addSubmodelElement(markingAdditionalSingle);
 			}
 		}
 	}

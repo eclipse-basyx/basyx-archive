@@ -52,20 +52,20 @@ public class TestAASDescriptor {
 	 * Tests retrieval of all registered submodel descriptors
 	 */
 	@Test
-	public void testGetAllSubModels() {
+	public void testGetAllSubmodels() {
 		// Setup descriptor and add one submodel descriptor
 		AASDescriptor descriptor = new AASDescriptor(new Identifier(IdentifierType.CUSTOM, "Test"), "http://a.b/c/aas");
 		descriptor.addSubmodelDescriptor(new SubmodelDescriptor("SM1", new Identifier(IdentifierType.CUSTOM, "SM1"), "http://a.b/c/aas/submodels/SM1"));
 
 		// Assert correct retrieval
-		assertEquals(1, descriptor.getSubModelDescriptors().size());
-		assertEquals("SM1", descriptor.getSubModelDescriptors().iterator().next().getIdentifier().getId());
+		assertEquals(1, descriptor.getSubmodelDescriptors().size());
+		assertEquals("SM1", descriptor.getSubmodelDescriptors().iterator().next().getIdentifier().getId());
 
 		// Add a second descriptor
 		descriptor.addSubmodelDescriptor(new SubmodelDescriptor("SM2", new Identifier(IdentifierType.CUSTOM, "SM2"), "http://a.b/c/aas/submodels/SM2"));
 
 		// Assert correct retrieval
-		assertEquals(2, descriptor.getSubModelDescriptors().size());
+		assertEquals(2, descriptor.getSubmodelDescriptors().size());
 	}
 	
 	@Test(expected = MalformedRequestException.class)
@@ -125,18 +125,18 @@ public class TestAASDescriptor {
 	@Test
 	public void testValidateNoSubmodels() {
 		map.remove(AssetAdministrationShell.SUBMODELS);
-		assertNotNull(new AASDescriptor(map).getSubModelDescriptors());
+		assertNotNull(new AASDescriptor(map).getSubmodelDescriptors());
 	}
 
 	@Test(expected = MalformedRequestException.class)
 	public void testValidateNullSubmodels() {
 		map.put(AssetAdministrationShell.SUBMODELS, null);
-		new AASDescriptor(map).getSubModelDescriptors();
+		new AASDescriptor(map).getSubmodelDescriptors();
 	}
 
 	@Test(expected = MalformedRequestException.class)
 	public void testValidateWrongSubmodels() {
 		map.put(AssetAdministrationShell.SUBMODELS, "testSubmodel");
-		new AASDescriptor(map).getSubModelDescriptors();
+		new AASDescriptor(map).getSubmodelDescriptors();
 	}
 }

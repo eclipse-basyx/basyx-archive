@@ -43,7 +43,7 @@ import org.eclipse.basyx.components.configuration.BaSyxMongoDBConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxMqttConfiguration;
 import org.eclipse.basyx.components.json.JSONAASBundleFactory;
 import org.eclipse.basyx.components.xml.XMLAASBundleFactory;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPIFactory;
 import org.eclipse.basyx.support.bundle.AASBundle;
 import org.eclipse.basyx.support.bundle.AASBundleDescriptorFactory;
@@ -300,8 +300,8 @@ public class AASServerComponent implements IComponent {
 	private void modifyFilePaths(String hostName, int port, String rootPath) {
 		rootPath = rootPath + "/files";
 		for (AASBundle bundle : aasBundles) {
-			Set<ISubModel> submodels = bundle.getSubmodels();
-			for (ISubModel sm : submodels) {
+			Set<ISubmodel> submodels = bundle.getSubmodels();
+			for (ISubmodel sm : submodels) {
 				SubmodelFileEndpointLoader.setRelativeFileEndpoints(sm, hostName, port, rootPath);
 			}
 		}

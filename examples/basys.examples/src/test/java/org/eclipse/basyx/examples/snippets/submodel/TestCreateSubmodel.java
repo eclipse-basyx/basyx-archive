@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 import org.eclipse.basyx.examples.snippets.AbstractSnippetTest;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.junit.Test;
 
@@ -37,7 +37,7 @@ public class TestCreateSubmodel extends AbstractSnippetTest {
 	public void testCreateSubmodel() {
 		
 		// Create a Submodel
-		SubModel sm = CreateSubmodel.createSubmodel(SM_ID_SHORT, new Identifier(IdentifierType.CUSTOM, SM_ID), PROPERTY_ID_SHORT, PROPERTY_VALUE);
+		Submodel sm = CreateSubmodel.createSubmodel(SM_ID_SHORT, new Identifier(IdentifierType.CUSTOM, SM_ID), PROPERTY_ID_SHORT, PROPERTY_VALUE);
 		
 		// Check the created Submodel
 		assertEquals(SM_ID_SHORT, sm.getIdShort());

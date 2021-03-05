@@ -21,7 +21,7 @@ import java.util.Map;
 import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
@@ -71,7 +71,7 @@ public class TestTechnicalDataSubmodel {
 		
 		submodelMap.put(Referable.IDSHORT, TechnicalDataSubmodel.SUBMODELID);
 		submodelMap.put(HasSemantics.SEMANTICID, TechnicalDataSubmodel.SEMANTICID);
-		submodelMap.put(SubModel.SUBMODELELEMENT, elements);
+		submodelMap.put(Submodel.SUBMODELELEMENT, elements);
 		submodelMap.put(Identifiable.IDENTIFICATION, identifier);
 	}
 
@@ -102,7 +102,7 @@ public class TestTechnicalDataSubmodel {
 	@SuppressWarnings("unchecked")
 	@Test (expected = ResourceNotFoundException.class)
 	public void testCreateAsFacadeExceptionGeneralInfo() {
-		List<ISubmodelElement> elements = (List<ISubmodelElement>)submodelMap.get(SubModel.SUBMODELELEMENT);
+		List<ISubmodelElement> elements = (List<ISubmodelElement>)submodelMap.get(Submodel.SUBMODELELEMENT);
 		elements.remove(generalInformation);
 		TechnicalDataSubmodel.createAsFacade(submodelMap);
 	}
@@ -110,7 +110,7 @@ public class TestTechnicalDataSubmodel {
 	@SuppressWarnings("unchecked")
 	@Test (expected = ResourceNotFoundException.class)
 	public void testCreateAsFacadeExceptionTechnicalProp() {
-		List<ISubmodelElement> elements = (List<ISubmodelElement>)submodelMap.get(SubModel.SUBMODELELEMENT);
+		List<ISubmodelElement> elements = (List<ISubmodelElement>)submodelMap.get(Submodel.SUBMODELELEMENT);
 		elements.remove(technicalProperties);
 		TechnicalDataSubmodel.createAsFacade(submodelMap);
 	}

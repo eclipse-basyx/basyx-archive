@@ -32,7 +32,7 @@ import org.eclipse.basyx.aas.metamodel.api.parts.IView;
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IDataSpecificationContent;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
@@ -47,7 +47,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.entity.EntityType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.dataspecification.DataSpecificationIEC61360Content;
 import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
@@ -107,7 +107,7 @@ public class TestXMLConverter {
 		List<IAssetAdministrationShell> assetAdministrationShellList = converter.parseAAS();
 		List<IAsset> assetList = converter.parseAssets();
 		List<IConceptDescription> conceptDescriptionList = converter.parseConceptDescriptions();
-		List<ISubModel> submodelList = converter.parseSubmodels();
+		List<ISubmodel> submodelList = converter.parseSubmodels();
 		
 		//Build XML-File from the Objects and write it to a StringWriter
 		StringWriter resultWithTypes = new StringWriter();
@@ -126,7 +126,7 @@ public class TestXMLConverter {
 		List<IAssetAdministrationShell> iAssetAdministrationShellList = destroyAASTypes(assetAdministrationShellList);
 		List<IAsset> iAssetList = destroyAssetTypes(assetList);
 		List<IConceptDescription> iConceptDescriptionList = destroyConceptDescriptionTypes(conceptDescriptionList);
-		List<ISubModel> iSubmodelList = destroySubmodelTypes(submodelList);
+		List<ISubmodel> iSubmodelList = destroySubmodelTypes(submodelList);
 		
 		//Build XML-File from the Objects and write it to a StringWriter
 		StringWriter resultWithoutTypes = new StringWriter();
@@ -319,12 +319,12 @@ public class TestXMLConverter {
 		assertEquals(1, refs.size());
 	}
 	
-	private void checkSubmodels(List<ISubModel> submodels) {
+	private void checkSubmodels(List<ISubmodel> submodels) {
 		assertEquals(2, submodels.size());
-		ISubModel submodel = null;
+		ISubmodel submodel = null;
 		
-		//select the SubModel with a specific ID form the list
-		for(ISubModel s: submodels) {
+		//select the Submodel with a specific ID form the list
+		for(ISubmodel s: submodels) {
 			if(s.getIdShort().equals("3s7plfdrs35_submodel1")) {
 				submodel = s;
 				break;
@@ -340,9 +340,9 @@ public class TestXMLConverter {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void checkSubmodelElements(ISubModel submodel) {
+	private void checkSubmodelElements(ISubmodel submodel) {
 		Map<String, ISubmodelElement> submodelElements = (Map<String, ISubmodelElement>)
-				((Map<String, Object>)submodel).get(SubModel.SUBMODELELEMENT);
+				((Map<String, Object>)submodel).get(Submodel.SUBMODELELEMENT);
 		assertEquals(13, submodelElements.size());
 		
 		ISubmodelElement element = submodelElements.get("rotationSpeed");
@@ -471,10 +471,10 @@ public class TestXMLConverter {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private List<ISubModel> destroySubmodelTypes(List<ISubModel> submodelList) {
-		List<ISubModel> ret = new ArrayList<>();
-		for(ISubModel submodel: submodelList) {
-			ret.add(SubModel.createAsFacade(new VABModelMap<>(TypeDestroyer.destroyType((Map<String, Object>) submodel))));
+	private List<ISubmodel> destroySubmodelTypes(List<ISubmodel> submodelList) {
+		List<ISubmodel> ret = new ArrayList<>();
+		for(ISubmodel submodel: submodelList) {
+			ret.add(Submodel.createAsFacade(new VABModelMap<>(TypeDestroyer.destroyType((Map<String, Object>) submodel))));
 		}
 		return ret;
 	}

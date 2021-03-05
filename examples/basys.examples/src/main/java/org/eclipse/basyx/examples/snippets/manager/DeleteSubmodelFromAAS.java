@@ -39,6 +39,6 @@ public class DeleteSubmodelFromAAS {
 		
 		// Delete the Submodel
 		// Automatically deregisters it
-		manager.deleteSubModel(aasIdentifier, smIdentifier);
+		manager.deleteSubmodel(aasIdentifier, smIdentifier);
 	}
 }

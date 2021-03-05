@@ -18,7 +18,7 @@ import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
@@ -35,7 +35,7 @@ import org.eclipse.basyx.submodel.types.technicaldata.submodelelementcollections
  * @author haque
  *
  */
-public class TechnicalDataSubmodel extends SubModel {
+public class TechnicalDataSubmodel extends Submodel {
 	public static final String GENERALINFORMATIONID = "GeneralInformation";
 	public static final String PRODUCTCLASSIFICATIONSID = "ProductClassifications";
 	public static final String TECHNICALPROPERTIESID = "TechnicalProperties";
@@ -136,7 +136,7 @@ public class TechnicalDataSubmodel extends SubModel {
 	public static boolean isValid(Map<String, Object> obj) {
 		TechnicalDataSubmodel submodel = createAsFacadeNonStrict(obj);
 		
-		return SubModel.isValid(obj)
+		return Submodel.isValid(obj)
 				&& GeneralInformation.isValid((Map<String, Object>) submodel.getGeneralInformation())
 				&& TechnicalProperties.isValid((Map<String, Object>) submodel.getTechnicalProperties());
 	}
@@ -147,7 +147,7 @@ public class TechnicalDataSubmodel extends SubModel {
 	 * @param information
 	 */
 	public void setGeneralInformation(GeneralInformation information) {
-		addSubModelElement(information);
+		addSubmodelElement(information);
 	}
 	
 	/**
@@ -167,7 +167,7 @@ public class TechnicalDataSubmodel extends SubModel {
 	 * @param classifications
 	 */
 	public void setProductClassifications(ProductClassifications classifications) {
-		addSubModelElement(classifications);
+		addSubmodelElement(classifications);
 	}
 	
 	/**
@@ -187,7 +187,7 @@ public class TechnicalDataSubmodel extends SubModel {
 	 * @param properties
 	 */
 	public void setTechnicalProperties(TechnicalProperties properties) {
-		addSubModelElement(properties);
+		addSubmodelElement(properties);
 	}
 	
 	/**
@@ -207,7 +207,7 @@ public class TechnicalDataSubmodel extends SubModel {
 	 * @param information
 	 */
 	public void setFurtherInformation(FurtherInformation information) {
-		addSubModelElement(information);
+		addSubmodelElement(information);
 	}
 	
 	/**

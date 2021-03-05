@@ -20,7 +20,7 @@ import org.eclipse.basyx.aas.factory.json.JSONToMetamodelConverter;
 import org.eclipse.basyx.aas.factory.json.MetamodelToJSONConverter;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.junit.Before;
@@ -71,7 +71,7 @@ public class TestJSONConverter {
 		List<AssetAdministrationShell> aasList = converter.parseAAS();
 		List<Asset> assetList = converter.parseAssets();
 		List<ConceptDescription> conceptDescriptionList = converter.parseConceptDescriptions();
-		List<SubModel> submodelList = converter.parseSubmodels();
+		List<Submodel> submodelList = converter.parseSubmodels();
 		
 		// Convert Metamodel-Objects to JSON
 		String json = MetamodelToJSONConverter.convertToJSON(aasList, assetList, conceptDescriptionList, submodelList);
@@ -97,10 +97,10 @@ public class TestJSONConverter {
 		assertEquals("http://customer.com/aas/9175_7013_7091_9168", aas.getIdentification().getId());
 	}
 	
-	private void checkSubmodels(List<SubModel> smList) {
+	private void checkSubmodels(List<Submodel> smList) {
 		assertEquals(3, smList.size());
 		
-		SubModel sm = smList.stream().filter(c -> c.getIdShort().equals("TechnicalData")).findAny().get();
+		Submodel sm = smList.stream().filter(c -> c.getIdShort().equals("TechnicalData")).findAny().get();
 		
 		assertEquals(1, sm.getSubmodelElements().size());
 		

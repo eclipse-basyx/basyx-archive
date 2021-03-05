@@ -27,7 +27,7 @@ public interface IElementContainer {
 	 * 
 	 * @param element
 	 */
-	public void addSubModelElement(ISubmodelElement element);
+	public void addSubmodelElement(ISubmodelElement element);
 
 	/**
 	 * Gets all contained submodel elements

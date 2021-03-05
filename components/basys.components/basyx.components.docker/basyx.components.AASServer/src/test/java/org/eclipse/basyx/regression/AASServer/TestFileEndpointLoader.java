@@ -17,7 +17,7 @@ import org.eclipse.basyx.components.aas.aasx.SubmodelFileEndpointLoader;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IFile;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
@@ -31,7 +31,7 @@ import org.junit.Test;
  *
  */
 public class TestFileEndpointLoader {
-	private SubModel submodel;
+	private Submodel submodel;
 	private final String relativePath = "/file/root/text.txt";
 	private final String absolutePath = "http://localhost:1234/file/root/text.txt";
 	private final String relativeTargetPath = "http://localhost:4321/new/file/root/text.txt";
@@ -46,11 +46,11 @@ public class TestFileEndpointLoader {
 		col.setIdShort("fileCollection");
 		File fCol = new File(relativePath, "application/json");
 		fCol.setIdShort("fInside");
-		col.addSubModelElement(fCol);
-		submodel = new SubModel("FileTestSubmodel", new Identifier(IdentifierType.IRDI, "FileTestSubmodel"));
-		submodel.addSubModelElement(fRel);
-		submodel.addSubModelElement(fAbs);
-		submodel.addSubModelElement(col);
+		col.addSubmodelElement(fCol);
+		submodel = new Submodel("FileTestSubmodel", new Identifier(IdentifierType.IRDI, "FileTestSubmodel"));
+		submodel.addSubmodelElement(fRel);
+		submodel.addSubmodelElement(fAbs);
+		submodel.addSubmodelElement(col);
 	}
 	
 	/**

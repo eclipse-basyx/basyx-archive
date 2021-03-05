@@ -22,9 +22,9 @@ import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.testsuite.regression.aas.metamodel.AssetAdministrationShellSuite;
 import org.eclipse.basyx.testsuite.regression.vab.gateway.ConnectorProviderStub;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -49,9 +49,9 @@ public class TestConnectedAssetAdministrationShell extends AssetAdministrationSh
 		AssetAdministrationShell shell = retrieveBaselineShell();
 		provider.setAssetAdministrationShell(new AASModelProvider(AssetAdministrationShell.createAsFacade(TypeDestroyer.destroyType(shell))));
 
-		SubModel sm = retrieveBaselineSM();
+		Submodel sm = retrieveBaselineSM();
 		sm.setParent(shell.getReference());
-		provider.addSubmodel(new SubModelProvider(SubModel.createAsFacade(TypeDestroyer.destroyType(sm))));
+		provider.addSubmodel(new SubmodelProvider(Submodel.createAsFacade(TypeDestroyer.destroyType(sm))));
 
 		// Create AAS registry
 		IAASRegistryService registry = new InMemoryRegistry();
@@ -83,14 +83,14 @@ public class TestConnectedAssetAdministrationShell extends AssetAdministrationSh
 
 	@Test
 	public void testGetSpecificSubmodel() {
-		ISubModel sm = retrieveShell().getSubmodel(SMID);
+		ISubmodel sm = retrieveShell().getSubmodel(SMID);
 		assertEquals(SMIDSHORT, sm.getIdShort());
 	}
 
 	@Test
 	public void testDeleteSubmodel() {
 		retrieveShell().removeSubmodel(SMID);
-		assertFalse(retrieveShell().getSubModels().containsKey(SMIDSHORT));
+		assertFalse(retrieveShell().getSubmodels().containsKey(SMIDSHORT));
 	}
 
 	@Test

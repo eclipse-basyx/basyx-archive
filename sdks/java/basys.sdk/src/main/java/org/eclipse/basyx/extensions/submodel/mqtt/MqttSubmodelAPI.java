@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.basyx.extensions.shared.mqtt.MqttEventService;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
@@ -131,7 +131,7 @@ public class MqttSubmodelAPI extends MqttEventService implements ISubmodelAPI {
 	}
 
 	@Override
-	public ISubModel getSubmodel() {
+	public ISubmodel getSubmodel() {
 		return observedAPI.getSubmodel();
 	}
 
@@ -213,12 +213,12 @@ public class MqttSubmodelAPI extends MqttEventService implements ISubmodelAPI {
 	}
 	
 	private String getSubmodelId() {
-		ISubModel submodel = getSubmodel();
+		ISubmodel submodel = getSubmodel();
 		return submodel.getIdentification().getId();
 	}
 	
 	private String getAASId() {
-		ISubModel submodel = getSubmodel();
+		ISubmodel submodel = getSubmodel();
 		IReference parentReference = submodel.getParent();
 		if (parentReference != null) {
 			List<IKey> keys = parentReference.getKeys();

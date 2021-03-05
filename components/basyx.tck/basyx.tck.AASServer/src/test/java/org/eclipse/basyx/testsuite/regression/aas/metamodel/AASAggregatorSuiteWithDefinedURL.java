@@ -23,11 +23,11 @@ import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShe
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.components.aas.aasx.AASXPackageManager;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubModel;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubmodel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.support.bundle.AASBundle;
 import org.eclipse.basyx.testsuite.regression.aas.aggregator.AASAggregatorSuite;
@@ -95,7 +95,7 @@ public class AASAggregatorSuiteWithDefinedURL extends AASAggregatorSuite {
 
 			// create the Submodels
 			x.getSubmodels().forEach(y -> {
-				manager.createSubModel(aasid, (SubModel) y);
+				manager.createSubmodel(aasid, (Submodel) y);
 			});
 
 		});
@@ -127,9 +127,9 @@ public class AASAggregatorSuiteWithDefinedURL extends AASAggregatorSuite {
 		// Get submodels from bundle
 		AASBundle aasBundle = aasBundles.stream().filter(b -> b.getAAS().getIdentification().getId().equals(aasIdentifier.getId())).findFirst().get();
 		aasBundle.getSubmodels().forEach(expectedSm -> {
-				Map<String, ISubModel> sms = manager.retrieveSubmodels(aasIdentifier);
+				Map<String, ISubmodel> sms = manager.retrieveSubmodels(aasIdentifier);
 				// get submodel from remote
-				ConnectedSubModel remote = (ConnectedSubModel) sms.get(expectedSm.getIdShort());
+				ConnectedSubmodel remote = (ConnectedSubmodel) sms.get(expectedSm.getIdShort());
 				// compare the both submodels
 				assertEquals(expectedSm, remote.getLocalCopy());
 			});

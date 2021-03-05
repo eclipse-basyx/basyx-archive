@@ -17,12 +17,12 @@ import org.eclipse.basyx.aas.metamodel.api.parts.IView;
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.api.security.ISecurity;
 import org.eclipse.basyx.submodel.metamodel.api.IElement;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IHasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IIdentifiable;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 
 /**
  * Asset Administration Shell (AAS) interface
@@ -37,7 +37,7 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHas
 	 * 
 	 * @return IdShort -> ISubmodel
 	 */
-	public Map<String, ISubModel> getSubModels();
+	public Map<String, ISubmodel> getSubmodels();
 
 	/**
 	 * Return the references to all registered submodels
@@ -52,7 +52,7 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHas
 	 * @param subModel
 	 *            The added sub model
 	 */
-	public void addSubModel(SubModel subModel);
+	public void addSubmodel(Submodel subModel);
 
 	/**
 	 * Removes a submodel from the AAS
@@ -66,7 +66,7 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHas
 	 * 
 	 * @param id
 	 */
-	public ISubModel getSubmodel(IIdentifier id);
+	public ISubmodel getSubmodel(IIdentifier id);
 
 	/**
 	 * Gets the definition of the security relevant aspects of the AAS.

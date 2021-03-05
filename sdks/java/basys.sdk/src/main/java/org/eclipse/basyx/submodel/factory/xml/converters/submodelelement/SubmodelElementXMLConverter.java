@@ -205,7 +205,7 @@ public class SubmodelElementXMLConverter {
 	 * Builds the SubmodelElemensts XML tag &lt;aas:submodelElements&gt;
 	 * 
 	 * @param document the XML document
-	 * @param submodelElements the SubmodelElements of the SubModel 
+	 * @param submodelElements the SubmodelElements of the Submodel 
 	 * @return XML Element with the root tag &lt;aas:submodelElements&gt;
 	 */
 	public static Element buildSubmodelElementsXML(Document document, Collection<ISubmodelElement> submodelElements) {

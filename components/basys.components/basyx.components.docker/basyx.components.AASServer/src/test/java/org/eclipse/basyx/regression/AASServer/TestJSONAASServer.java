@@ -23,7 +23,7 @@ import org.eclipse.basyx.components.aas.AASServerComponent;
 import org.eclipse.basyx.components.aas.configuration.AASServerBackend;
 import org.eclipse.basyx.components.aas.configuration.BaSyxAASServerConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.junit.AfterClass;
@@ -99,13 +99,13 @@ public class TestJSONAASServer {
 
 	@Test
 	public void testGetSingleSubmodel() throws Exception {
-		ISubModel subModel = getConnectedSubmodel();
+		ISubmodel subModel = getConnectedSubmodel();
 		assertEquals(smShortId, subModel.getIdShort());
 	}
 
 	@Test
 	public void testGetAllSubmodels() throws Exception {
-		Map<String, ISubModel> subModels = getAllConnectedSubmodels();
+		Map<String, ISubmodel> subModels = getAllConnectedSubmodels();
 		assertEquals(3, subModels.size());
 		assertEquals(smShortId, subModels.get(smShortId).getIdShort());
 		assertEquals(smShortId2, subModels.get(smShortId2).getIdShort());
@@ -128,8 +128,8 @@ public class TestJSONAASServer {
 	 * @return connected SM
 	 * @throws Exception
 	 */
-	private ISubModel getConnectedSubmodel() {
-		return manager.retrieveSubModel(aasId, smId);
+	private ISubmodel getConnectedSubmodel() {
+		return manager.retrieveSubmodel(aasId, smId);
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class TestJSONAASServer {
 	 * @return connected SM
 	 * @throws Exception
 	 */
-	private Map<String, ISubModel> getAllConnectedSubmodels() {
+	private Map<String, ISubmodel> getAllConnectedSubmodels() {
 		return manager.retrieveSubmodels(aasId);
 	}
 }

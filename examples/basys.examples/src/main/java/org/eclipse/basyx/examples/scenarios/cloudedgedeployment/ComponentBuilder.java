@@ -15,7 +15,7 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.CustomId;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 
@@ -59,13 +59,13 @@ public class ComponentBuilder {
 	 * 
 	 * @return the created Submodel
 	 */
-	public static SubModel getDocuSM() {
+	public static Submodel getDocuSM() {
 		// Create the documentation Submodel
-		SubModel docuSm = new SubModel(DOCUSM_ID_SHORT, new CustomId(DOCUSM_ID));
+		Submodel docuSm = new Submodel(DOCUSM_ID_SHORT, new CustomId(DOCUSM_ID));
 
 		// Create the maximum temperature property and include it in the submodel
 		Property maxTemp = new Property("max_temp", 1000);
-		docuSm.addSubModelElement(maxTemp);
+		docuSm.addSubmodelElement(maxTemp);
 		
 		return docuSm;
 	}
@@ -85,14 +85,14 @@ public class ComponentBuilder {
 	 * 
 	 * @return the created Submodel
 	 */
-	public static SubModel createEdgeSubModel() {
+	public static Submodel createEdgeSubmodel() {
 		// Create the edge submodel
-		SubModel edgeSm = new SubModel(EDGESM_ID_SHORT, new CustomId(EDGESM_ID));
+		Submodel edgeSm = new Submodel(EDGESM_ID_SHORT, new CustomId(EDGESM_ID));
 		
 		// The property in this Submodel contains the currently measured temperature of the oven
 		// It is represented by a static value in this example
 		Property property = new Property("temp", 31);
-		edgeSm.addSubModelElement(property);
+		edgeSm.addSubmodelElement(property);
 		return edgeSm;
 	}
 	

@@ -11,7 +11,7 @@ package org.eclipse.basyx.examples.snippets.aas.active;
 
 import org.eclipse.basyx.examples.snippets.aas.active.tasks.AverageTask;
 import org.eclipse.basyx.examples.snippets.aas.active.tasks.IncrementTask;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.tools.aas.active.ActiveModel;
 import org.eclipse.basyx.tools.aas.active.VABModelTaskGroup;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
@@ -35,7 +35,7 @@ public class RunComposedActiveModelSnippet {
 	@Ignore
 	public void snippet() throws Exception {
 		// Create the model provider for the active model
-		IModelProvider modelProvider = new SubModelProvider();
+		IModelProvider modelProvider = new SubmodelProvider();
 		modelProvider.createValue("count", 0);
 		modelProvider.createValue("temperature", VABLambdaProviderHelper.createSimple(() -> {
 			return 30d + (Math.random() * 10d - 5d);

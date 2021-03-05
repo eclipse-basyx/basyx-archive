@@ -13,8 +13,8 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.restapi.SimpleAASSubmodel;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 
@@ -32,16 +32,16 @@ public class StubAASServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
 	public StubAASServlet() {
 		super(new VABMultiSubmodelProvider());
 
-		SubModel sm = new SubModel();
+		Submodel sm = new Submodel();
 		sm.setIdentification(SMURN.getIdType(), SMURN.getId());
 		sm.setIdShort(SMIDSHORT);
 		AssetAdministrationShell aas = new AssetAdministrationShell();
-		aas.addSubModel(sm);
+		aas.addSubmodel(sm);
 		aas.setIdShort(AASIDSHORT);
 		aas.setIdentification(AASURN);
 
 		getModelProvider().setAssetAdministrationShell(new AASModelProvider(aas));
-		getModelProvider().addSubmodel(new SubModelProvider(new SimpleAASSubmodel(SMIDSHORT)));
+		getModelProvider().addSubmodel(new SubmodelProvider(new SimpleAASSubmodel(SMIDSHORT)));
 	}
 
 }

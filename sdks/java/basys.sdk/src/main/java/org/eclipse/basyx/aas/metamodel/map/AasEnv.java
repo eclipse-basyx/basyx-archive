@@ -19,9 +19,9 @@ import org.eclipse.basyx.aas.metamodel.api.IAasEnv;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.vab.model.VABModelMap;
@@ -80,11 +80,11 @@ public class AasEnv extends VABModelMap<Object> implements IAasEnv {
 		}
 		ret.put(ASSETADMINISTRATIONSHELLS, aasTarget);
 		
-		Collection<ISubModel> submodelsTarget = new LinkedList<>();
+		Collection<ISubmodel> submodelsTarget = new LinkedList<>();
 		if (map.get(SUBMODELS) != null && map.get(SUBMODELS) instanceof Collection) {
 			Collection<Map<String, Object>> objectMapCollection = (Collection<Map<String, Object>>) map.get(SUBMODELS);
 			for(Map<String, Object> objectMap : objectMapCollection) {
-				submodelsTarget.add(SubModel.createAsFacade(objectMap));
+				submodelsTarget.add(Submodel.createAsFacade(objectMap));
 			}
 		}
 		ret.put(SUBMODELS, submodelsTarget);
@@ -131,14 +131,14 @@ public class AasEnv extends VABModelMap<Object> implements IAasEnv {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<ISubModel> getSubmodels() {
-		List<ISubModel> internal = (List<ISubModel>) get(SUBMODELS);
-		List<ISubModel> result = new ArrayList<ISubModel>(internal.size());
+	public Collection<ISubmodel> getSubmodels() {
+		List<ISubmodel> internal = (List<ISubmodel>) get(SUBMODELS);
+		List<ISubmodel> result = new ArrayList<ISubmodel>(internal.size());
 		result.addAll(internal);
 		return result;
 	}
 
-	public void setSubmodels(Collection<ISubModel> submodels) {
+	public void setSubmodels(Collection<ISubmodel> submodels) {
 		put(SUBMODELS, submodels);
 	}
 

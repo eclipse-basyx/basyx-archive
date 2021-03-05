@@ -23,14 +23,14 @@ import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.submodel.restapi.OperationProvider;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.submodel.restapi.operation.CallbackResponse;
 import org.eclipse.basyx.submodel.restapi.operation.ExecutionState;
 import org.eclipse.basyx.submodel.restapi.operation.InvocationResponse;
@@ -45,7 +45,7 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
 import org.junit.Test;
 
-public class SubModelProviderTest {
+public class SubmodelProviderTest {
 	private VABConnectionManager connManager;
 	protected static final String submodelAddr = "urn:fhg:es.iese:aas:1:1:submodel";
 
@@ -55,7 +55,7 @@ public class SubModelProviderTest {
 				@Override
 				protected IModelProvider createProvider(String addr) {
 					// Simple submodel for testing specific mappings for submodels
-					return new SubModelProvider(new SimpleAASSubmodel("mySubmodelId"));
+					return new SubmodelProvider(new SimpleAASSubmodel("mySubmodelId"));
 				}
 			});
 		}
@@ -68,7 +68,7 @@ public class SubModelProviderTest {
 	 */
 	@Test
 	public void testPathsRaw() throws Exception {
-		SubModelProvider provider = new SubModelProvider(new SimpleAASSubmodel("mySubmodelId"));
+		SubmodelProvider provider = new SubmodelProvider(new SimpleAASSubmodel("mySubmodelId"));
 		provider.getModelPropertyValue("/submodel");
 		provider.getModelPropertyValue("/submodel/");
 
@@ -278,7 +278,7 @@ public class SubModelProviderTest {
 	public void testReadSubmodelCheckElementsInCollection() {
 		VABElementProxy submodel = getConnectionManager().connectToVABElement(submodelAddr);
 		Map<String, Object> smMap = (Map<String, Object>) submodel.getModelPropertyValue("/submodel");
-		Object o = smMap.get(SubModel.SUBMODELELEMENT);
+		Object o = smMap.get(Submodel.SUBMODELELEMENT);
 		assertTrue(o instanceof Collection<?>);
 	}
 
@@ -287,7 +287,7 @@ public class SubModelProviderTest {
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testReadSubModelElements() {
+	public void testReadSubmodelElements() {
 		VABElementProxy submodel = getConnectionManager().connectToVABElement(submodelAddr);
 		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) submodel
 				.getModelPropertyValue("/submodel/submodelElements");
@@ -409,7 +409,7 @@ public class SubModelProviderTest {
 	@Test
 	public void testGetValues() {
 		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
-		Map<String, Object> values = (Map<String, Object>) submodelElement.getModelPropertyValue("submodel/" + SubModelProvider.VALUES);
+		Map<String, Object> values = (Map<String, Object>) submodelElement.getModelPropertyValue("submodel/" + SubmodelProvider.VALUES);
 		
 		assertEquals(4, values.size());
 		

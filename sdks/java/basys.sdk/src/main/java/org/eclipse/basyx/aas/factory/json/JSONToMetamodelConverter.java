@@ -17,7 +17,7 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
@@ -84,9 +84,9 @@ public class JSONToMetamodelConverter {
 	 * @return the Submodels parsed from the JSON
 	 */
 	@SuppressWarnings("unchecked")
-	public List<SubModel> parseSubmodels() {
+	public List<Submodel> parseSubmodels() {
 		return ((List<Object>) root.get(MetamodelToJSONConverter.SUBMODELS)).stream()
-				.map(i -> SubModel.createAsFacade((Map<String, Object>) i)).collect(Collectors.toList());
+				.map(i -> Submodel.createAsFacade((Map<String, Object>) i)).collect(Collectors.toList());
 	}
 	
 	/**

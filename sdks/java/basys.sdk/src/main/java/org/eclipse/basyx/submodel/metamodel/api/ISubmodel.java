@@ -30,7 +30,7 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IQualifiab
  * @author kuhn, schnicke
  *
  */
-public interface ISubModel extends IElement, IHasSemantics, IIdentifiable, IQualifiable, IHasDataSpecification, IHasKind, IElementContainer {
+public interface ISubmodel extends IElement, IHasSemantics, IIdentifiable, IQualifiable, IHasDataSpecification, IHasKind, IElementContainer {
 	
 	/**
 	 * Gets a Map<IdShort, smElement.getValue()> containing the values of all submodelElements

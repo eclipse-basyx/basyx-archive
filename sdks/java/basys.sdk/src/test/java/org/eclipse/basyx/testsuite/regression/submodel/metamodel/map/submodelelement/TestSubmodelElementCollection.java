@@ -85,7 +85,7 @@ public class TestSubmodelElementCollection {
 	public void testAddValue() {
 		Property element = new Property("testProperty");
 		element.setIdShort("propId");
-		elementCollection.addSubModelElement(element);
+		elementCollection.addSubmodelElement(element);
 		elements2.add(element);
 		
 		ISubmodelElement checkProperty = elementCollection.getSubmodelElements().get("propId");
@@ -155,14 +155,14 @@ public class TestSubmodelElementCollection {
 	}
 
 	@Test
-	public void testAddSubModelElement() {
+	public void testAddSubmodelElement() {
 		SubmodelElementCollection collection = new SubmodelElementCollection(elements1, false, false);
 		String smCollIdShort = "coll1";
 		collection.setIdShort(smCollIdShort);
 		Property property = new Property("testValue");
 		String newIdShort = "newIdShort";
 		property.put(Referable.IDSHORT, newIdShort);
-		collection.addSubModelElement(property);
+		collection.addSubmodelElement(property);
 		assertEquals(new Reference(new Key(KeyElements.SUBMODELELEMENTCOLLECTION, true, smCollIdShort, KeyType.IDSHORT)), property.getParent());
 		Map<String, ISubmodelElement> submodelElements = new HashMap<String, ISubmodelElement>();
 		submodelElements.put(PROPERTY_ID, getProperty());
@@ -172,27 +172,27 @@ public class TestSubmodelElementCollection {
 	}
 	
 	@Test
-	public void testGetSubModelElement() {
+	public void testGetSubmodelElement() {
 		SubmodelElementCollection collection = new SubmodelElementCollection(elements1, false, false);
 		ISubmodelElement retrievedElement = collection.getSubmodelElement(PROPERTY_ID);
 		assertEquals(getProperty(), retrievedElement);
 	}
 	
 	@Test(expected = ResourceNotFoundException.class)
-	public void testGetSubModelElementNotExist() {
+	public void testGetSubmodelElementNotExist() {
 		SubmodelElementCollection collection = new SubmodelElementCollection(elements1, false, false);
 		collection.getSubmodelElement("Id_Which_Does_Not_Exist");
 	}
 	
 	@Test(expected = ResourceNotFoundException.class)
-	public void testDeleteSubModelElement() {
+	public void testDeleteSubmodelElement() {
 		SubmodelElementCollection collection = new SubmodelElementCollection(elements1, false, false);
 		collection.deleteSubmodelElement(PROPERTY_ID);
 		collection.getSubmodelElement(PROPERTY_ID);
 	}
 	
 	@Test(expected = ResourceNotFoundException.class)
-	public void testDeleteSubModelElementNotExist() {
+	public void testDeleteSubmodelElementNotExist() {
 		SubmodelElementCollection collection = new SubmodelElementCollection(elements1, false, false);
 		collection.deleteSubmodelElement("Id_Which_Does_Not_Exist");
 	}

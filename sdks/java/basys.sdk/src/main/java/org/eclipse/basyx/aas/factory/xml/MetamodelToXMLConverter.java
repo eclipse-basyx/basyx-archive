@@ -27,7 +27,7 @@ import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.submodel.factory.xml.api.parts.ConceptDescriptionXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.SubmodelXMLConverter;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -47,13 +47,13 @@ public class MetamodelToXMLConverter {
 	 * @param aasList the AASs to build the XML for
 	 * @param assetList the Assets to build the XML for
 	 * @param conceptDescriptionList the ConceptDescriptions to build the XML for
-	 * @param submodelList the SubModels to build the XML for
+	 * @param submodelList the Submodels to build the XML for
 	 * @param result a Result object to write the XML to e.g. ResultStream
 	 * @throws TransformerException
 	 * @throws ParserConfigurationException
 	 */
 	public static void convertToXML(Collection<IAssetAdministrationShell> aasList, Collection<IAsset> assetList, 
-			Collection<IConceptDescription> conceptDescriptionList, Collection<ISubModel> submodelList, Result result)
+			Collection<IConceptDescription> conceptDescriptionList, Collection<ISubmodel> submodelList, Result result)
 					throws TransformerException, ParserConfigurationException {
 		
 		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();

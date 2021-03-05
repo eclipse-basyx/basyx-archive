@@ -21,7 +21,7 @@ import org.eclipse.basyx.aas.metamodel.map.AasEnv;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
@@ -62,7 +62,7 @@ public class TestAasEnv {
 	@Test
 	public void testSubmodelsGetSet() {
 		AasEnv env = new AasEnv();
-		SubModel submodels = new SubModel();
+		Submodel submodels = new Submodel();
 		submodels.setIdShort("TestAasEnv");
 		env.setSubmodels(Arrays.asList(submodels));
 		assertEquals(submodels, env.getSubmodels().toArray()[0]);
@@ -84,9 +84,9 @@ public class TestAasEnv {
 		
 		
 		Map<String, Object> submodel = new HashMap<>();
-		submodel.put(ModelType.MODELTYPE, SubModel.MODELTYPE);
+		submodel.put(ModelType.MODELTYPE, Submodel.MODELTYPE);
 		submodel.put(Referable.IDSHORT, "TestSubmodel");
-		submodel.put(SubModel.SUBMODELELEMENT, new ArrayList<Object>());
+		submodel.put(Submodel.SUBMODELELEMENT, new ArrayList<Object>());
 		submodel.put(Identifiable.IDENTIFICATION, new Identifier(IdentifierType.IRI, "testSubmodelIdShort"));
 		
 		Map<String, Object> conceptDescription = new HashMap<>();
@@ -107,7 +107,7 @@ public class TestAasEnv {
 		assertEquals(assetObj.getIdShort(), asset.get(Referable.IDSHORT));
 		AssetAdministrationShell assetAdministrationShellObj = (AssetAdministrationShell)aasEnv.getAssetAdministrationShells().toArray()[0];
 		assertEquals(assetAdministrationShellObj.getIdShort(), assetAdministrationShell.get(Referable.IDSHORT));
-		SubModel submodelObj = (SubModel)aasEnv.getSubmodels().toArray()[0];
+		Submodel submodelObj = (Submodel)aasEnv.getSubmodels().toArray()[0];
 		assertEquals(submodelObj.getIdShort(), submodel.get(Referable.IDSHORT));
 		ConceptDescription conceptDescriptionObj = (ConceptDescription)aasEnv.getConceptDescriptions().toArray()[0];
 		assertEquals(conceptDescriptionObj.getIdShort(), conceptDescription.get(Referable.IDSHORT));

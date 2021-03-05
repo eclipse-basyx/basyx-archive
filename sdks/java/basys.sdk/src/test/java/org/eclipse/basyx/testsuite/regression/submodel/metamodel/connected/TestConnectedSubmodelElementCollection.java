@@ -23,12 +23,12 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElementCollection;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
@@ -74,18 +74,18 @@ public class TestConnectedSubmodelElementCollection {
 
 		// Create ComplexDataProperty containing the created operation and property
 		SubmodelElementCollection complex = new SubmodelElementCollection("SubmodelCollectionId");
-		complex.addSubModelElement(propertyMeta);
-		complex.addSubModelElement(operation);
+		complex.addSubmodelElement(propertyMeta);
+		complex.addSubmodelElement(operation);
 		complex.setIdShort("CollectionId");
 
-		SubModel sm = new SubModel("submodelId", new ModelUrn("testUrn"));
-		sm.addSubModelElement(complex);
+		Submodel sm = new Submodel("submodelId", new ModelUrn("testUrn"));
+		sm.addSubmodelElement(complex);
 
 		Map<String, Object> destroyType = TypeDestroyer.destroyType(sm);
 		// Create a dummy connection manager containing the created ContainerProperty map
 		// The model is wrapped in the corresponding ModelProvider that implements the API access
 		VABConnectionManagerStub manager = new VABConnectionManagerStub(
-				new SubModelProvider(new VABLambdaProvider(destroyType)));
+				new SubmodelProvider(new VABLambdaProvider(destroyType)));
 
 		// Retrieve the ConnectedContainerProperty
 		prop = new ConnectedSubmodelElementCollection(manager.connectToVABElement("").getDeepProxy("/submodel/submodelElements/" + complex.getIdShort()));
@@ -163,7 +163,7 @@ public class TestConnectedSubmodelElementCollection {
 		String newId = "abc";
 		Property newProp = new Property(6);
 		newProp.setIdShort(newId);
-		prop.addSubModelElement(newProp);
+		prop.addSubmodelElement(newProp);
 		ISubmodelElement element = prop.getSubmodelElement(newId);
 		assertEquals(newId, element.getIdShort());
 	}

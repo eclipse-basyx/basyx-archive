@@ -28,7 +28,7 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.dataspecification.EmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
@@ -119,22 +119,22 @@ public class TestAssetAdministrationShell extends AssetAdministrationShellSuite 
 	@Test
 	public void testSetSubmodels() {
 		// Create submodels
-		SubModel subModel1 = new SubModel("newSubmodelId1", new Identifier(IdentifierType.CUSTOM, "smId1"));
+		Submodel subModel1 = new Submodel("newSubmodelId1", new Identifier(IdentifierType.CUSTOM, "smId1"));
 		Property prop1 = new Property("prop1Id", PropertyValueTypeDef.String);
 		prop1.setValue("testProperty1");
-		subModel1.addSubModelElement(prop1);
+		subModel1.addSubmodelElement(prop1);
 
-		SubModel subModel2 = new SubModel("newSubmodelId2", new Identifier(IdentifierType.CUSTOM, "smId2"));
+		Submodel subModel2 = new Submodel("newSubmodelId2", new Identifier(IdentifierType.CUSTOM, "smId2"));
 		Property prop2 = new Property("prop2Id", PropertyValueTypeDef.String);
 		prop2.setValue("testProperty2");
-		subModel2.addSubModelElement(prop2);
+		subModel2.addSubmodelElement(prop2);
 		
 		// create a collection of descriptors and add the above descriptors
-		Collection<SubModel> submodels = new ArrayList<SubModel>();
+		Collection<Submodel> submodels = new ArrayList<Submodel>();
 		submodels.add(subModel1);
 		submodels.add(subModel2);
 
-		shell.setSubModels(submodels);
+		shell.setSubmodels(submodels);
 
 		// expect references to be set according to the descriptors
 		Collection<IReference> smReferences = shell.getSubmodelReferences();

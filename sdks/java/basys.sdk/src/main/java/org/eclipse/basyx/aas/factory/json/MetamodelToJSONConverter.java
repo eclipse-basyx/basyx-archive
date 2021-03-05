@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
 import org.eclipse.basyx.vab.coder.json.serialization.GSONTools;
@@ -44,12 +44,12 @@ public class MetamodelToJSONConverter {
 	 * @param aasList the AASs to build the JSON for
 	 * @param assetList the Assets to build the JSON for
 	 * @param conceptDescriptionList the ConceptDescriptions to build the JSON for
-	 * @param submodelList the SubModels to build the JSON for
+	 * @param submodelList the Submodels to build the JSON for
 	 */
 	public static String convertToJSON(Collection<AssetAdministrationShell> aasList, Collection<Asset> assetList, 
-			Collection<ConceptDescription> conceptDescriptionList, Collection<SubModel> submodelList) {
+			Collection<ConceptDescription> conceptDescriptionList, Collection<Submodel> submodelList) {
 		
-		// The SubModel-Object holds SubmodelElements in a Map<IdShort, SMElement>
+		// The Submodel-Object holds SubmodelElements in a Map<IdShort, SMElement>
 		// The JSON-Schema requires the SubmodelElements to be in a List
 		// This conversion is done by converting the sm to a Map
 		List<Object> smMapList;

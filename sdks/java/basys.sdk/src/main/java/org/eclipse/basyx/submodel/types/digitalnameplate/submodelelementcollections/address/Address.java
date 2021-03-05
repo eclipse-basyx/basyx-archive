@@ -186,7 +186,7 @@ public class Address extends SubmodelElementCollection {
 	 * @param department {@link MultiLanguageProperty}
 	 */
 	public void setDepartment(MultiLanguageProperty department) {
-		addSubModelElement(department);
+		addSubmodelElement(department);
 	}
 	
 	/**
@@ -216,7 +216,7 @@ public class Address extends SubmodelElementCollection {
 	 * @param street {@link MultiLanguageProperty}
 	 */
 	public void setStreet(MultiLanguageProperty street) {
-		addSubModelElement(street);
+		addSubmodelElement(street);
 	}
 	
 	/**
@@ -247,7 +247,7 @@ public class Address extends SubmodelElementCollection {
 	 * @param zipCode {@link MultiLanguageProperty}
 	 */
 	public void setZipCode(MultiLanguageProperty zipCode) {
-		addSubModelElement(zipCode);
+		addSubmodelElement(zipCode);
 	}
 	
 	/**
@@ -276,7 +276,7 @@ public class Address extends SubmodelElementCollection {
 	 * @param poBox {@link MultiLanguageProperty}
 	 */
 	public void setPOBox(MultiLanguageProperty poBox) {
-		addSubModelElement(poBox);
+		addSubmodelElement(poBox);
 	}
 	
 	/**
@@ -304,7 +304,7 @@ public class Address extends SubmodelElementCollection {
 	 * @param zipCodeOfPoBox {@link MultiLanguageProperty}
 	 */
 	public void setZipCodeOfPOBox(MultiLanguageProperty zipCodeOfPoBox) {
-		addSubModelElement(zipCodeOfPoBox);
+		addSubmodelElement(zipCodeOfPoBox);
 	}
 	
 	/**
@@ -334,7 +334,7 @@ public class Address extends SubmodelElementCollection {
 	 * @param cityTown {@link MultiLanguageProperty}
 	 */
 	public void setCityTown(MultiLanguageProperty cityTown) {
-		addSubModelElement(cityTown);
+		addSubmodelElement(cityTown);
 	}
 	
 	/**
@@ -363,7 +363,7 @@ public class Address extends SubmodelElementCollection {
 	 * @param stateCounty {@link MultiLanguageProperty}
 	 */
 	public void setStateCounty(MultiLanguageProperty stateCounty) {
-		addSubModelElement(stateCounty);
+		addSubmodelElement(stateCounty);
 	}
 
 	/**
@@ -395,7 +395,7 @@ public class Address extends SubmodelElementCollection {
 	 * @param nationalCode {@link MultiLanguageProperty}
 	 */
 	public void setNationalCode(MultiLanguageProperty nationalCode) {
-		addSubModelElement(nationalCode);
+		addSubmodelElement(nationalCode);
 	}
 	
 	/**
@@ -425,7 +425,7 @@ public class Address extends SubmodelElementCollection {
 	 * @param vatNumber {@link MultiLanguageProperty}
 	 */
 	public void setVatNumber(MultiLanguageProperty vatNumber) {
-		addSubModelElement(vatNumber);
+		addSubmodelElement(vatNumber);
 	}
 	
 	/**
@@ -453,7 +453,7 @@ public class Address extends SubmodelElementCollection {
 	 * @param addressRemarks {@link MultiLanguageProperty}
 	 */
 	public void setAddressRemarks(MultiLanguageProperty addressRemarks) {
-		addSubModelElement(addressRemarks);
+		addSubmodelElement(addressRemarks);
 	}
 	
 	/**
@@ -481,7 +481,7 @@ public class Address extends SubmodelElementCollection {
 	 * @param addressOfAdditionalLink {@link Property}
 	 */
 	public void setAddressOfAdditionalLink(Property addressOfAdditionalLink) {
-		addSubModelElement(addressOfAdditionalLink);
+		addSubmodelElement(addressOfAdditionalLink);
 	}
 	
 	/**
@@ -517,7 +517,7 @@ public class Address extends SubmodelElementCollection {
 	public void setPhone(List<Phone> phones) {
 		if (phones != null && phones.size() > 0) {
 			for (Phone phone : phones) {
-				addSubModelElement(phone);
+				addSubmodelElement(phone);
 			}
 		}
 	}
@@ -544,7 +544,7 @@ public class Address extends SubmodelElementCollection {
 	public void setFax(List<Fax> faxes) {
 		if (faxes != null && faxes.size() > 0) {
 			for (Fax fax : faxes) {
-				addSubModelElement(fax);
+				addSubmodelElement(fax);
 			}
 		}
 	}
@@ -571,7 +571,7 @@ public class Address extends SubmodelElementCollection {
 	public void setEmail(List<Email> emails) {
 		if (emails != null && emails.size() > 0) {
 			for (Email email : emails) {
-				addSubModelElement(email);
+				addSubmodelElement(email);
 			}
 		}
 	}

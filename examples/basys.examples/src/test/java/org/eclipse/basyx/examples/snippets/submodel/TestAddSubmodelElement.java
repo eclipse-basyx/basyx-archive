@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.examples.snippets.AbstractSnippetTest;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
@@ -49,7 +49,7 @@ public class TestAddSubmodelElement extends AbstractSnippetTest {
 		
 		// Get the Element from the server
 		ConnectedAssetAdministrationShellManager manager = getManager();
-		ISubModel remoteSubmodel = manager.retrieveSubModel(aasIdentifier, smIdentifier);
+		ISubmodel remoteSubmodel = manager.retrieveSubmodel(aasIdentifier, smIdentifier);
 		ISubmodelElement remoteElement = remoteSubmodel.getSubmodelElement(NEW_PROPERTY_ID);
 		
 		// Check if its value is as expected

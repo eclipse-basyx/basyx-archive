@@ -16,7 +16,7 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.examples.snippets.AbstractSnippetTest;
 import org.eclipse.basyx.examples.support.ExampleComponentBuilder;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.junit.Test;
 
 /**
@@ -36,7 +36,7 @@ public class TestRegisterSubmodel extends AbstractSnippetTest {
 		
 		// Get the example AAS and Submodel
 		AssetAdministrationShell aas = ExampleComponentBuilder.buildExampleAAS(AAS_ID_SHORT, AAS_ID);
-		SubModel sm = ExampleComponentBuilder.buildExampleSubmodel(NEW_SM_ID_SHORT, NEW_SM_ID);
+		Submodel sm = ExampleComponentBuilder.buildExampleSubmodel(NEW_SM_ID_SHORT, NEW_SM_ID);
 		
 		// Register this AAS
 		RegisterAAS.registerAAS(aas, AAS_ENDPOINT, registryComponent.getRegistryPath());

@@ -20,7 +20,7 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  * @author espen
  *
  */
-public class WrapperSubmodel extends SubModel {
+public class WrapperSubmodel extends Submodel {
 	private static final Logger logger = LoggerFactory.getLogger(WrapperSubmodel.class);
 
 	protected Map<String, SubmodelElementCollection> collections = new HashMap<>();
@@ -96,7 +96,7 @@ public class WrapperSubmodel extends SubModel {
 			// not supported, yet
 			return params;
 		};
-		setOperation.setInvocable(fillInvokable);
+		setOperation.setInvokable(fillInvokable);
 		elements.add(setOperation);
 		return elements;
 	}
@@ -105,14 +105,14 @@ public class WrapperSubmodel extends SubModel {
 		SubmodelElementCollection coll = new SubmodelElementCollection();
 		coll.setIdShort(propId);
 		collections.put(propId, coll);
-		addSubModelElement(coll);
+		addSubmodelElement(coll);
 	}
 
 	private void setPassiveProperty(final String propId) {
 		SubmodelElementCollection coll = new SubmodelElementCollection();
 		coll.setIdShort(propId);
 		collections.put(propId, new SubmodelElementCollection());
-		addSubModelElement(coll);
+		addSubmodelElement(coll);
 
 		coll.put(Property.VALUE, VABLambdaProviderHelper.createSimple(() -> {
 			proxyService.generatePassiveValue(propId);

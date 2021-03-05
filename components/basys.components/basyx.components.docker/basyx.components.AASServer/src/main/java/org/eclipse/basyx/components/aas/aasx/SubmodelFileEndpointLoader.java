@@ -13,7 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
@@ -35,7 +35,7 @@ public class SubmodelFileEndpointLoader {
 	 * @param port     port for the host
 	 * @param path     path at which the files are hosted on the host (e.g. "/files")
 	 */
-	public static void setRelativeFileEndpoints(ISubModel submodel, String host, int port, String path) {
+	public static void setRelativeFileEndpoints(ISubmodel submodel, String host, int port, String path) {
 		String fileRoot = "http://" + host + ":" + port + path;
 		setRelativeFileEndpoints(submodel, fileRoot);
 	}
@@ -47,7 +47,7 @@ public class SubmodelFileEndpointLoader {
 	 * @param submodel
 	 * @param fileRoot the full root path for the files (e.g. "http://localhost:1234/myFiles")
 	 */
-	public static void setRelativeFileEndpoints(ISubModel submodel, String fileRoot) {
+	public static void setRelativeFileEndpoints(ISubmodel submodel, String fileRoot) {
 		Map<String, ISubmodelElement> elements = submodel.getSubmodelElements();
 		setMapEndpoints(elements, fileRoot);
 	}

@@ -20,11 +20,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.basyx.components.configuration.BaSyxMongoDBConfiguration;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.facade.submodelelement.SubmodelElementFacadeFactory;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
@@ -113,7 +113,7 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 	 * 
 	 * @param sm
 	 */
-	public void setSubModel(SubModel sm) {
+	public void setSubmodel(Submodel sm) {
 		String id = sm.getIdentification().getId();
 		this.setSubmodelId(id);
 
@@ -126,10 +126,10 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public ISubModel getSubmodel() {
-		// Query SubModel from MongoDB
+	public ISubmodel getSubmodel() {
+		// Query Submodel from MongoDB
 		Query hasId = query(where(SMIDPATH).is(smId));
-		SubModel result = mongoOps.findOne(hasId, SubModel.class, collection);
+		Submodel result = mongoOps.findOne(hasId, Submodel.class, collection);
 		if (result == null) {
 			throw new ResourceNotFoundException("The submodel " + smId + " could not be found in the database.");
 		}
@@ -140,7 +140,7 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 		// Cast all SubmodelElement maps to ISubmodelElements before returning the submodel
 		Map<String, ISubmodelElement> elements = new HashMap<>();
 		Map<String, Map<String, Object>> elemMaps = (Map<String, Map<String, Object>>) result
-				.get(SubModel.SUBMODELELEMENT);
+				.get(Submodel.SUBMODELELEMENT);
 		for (Entry<String, Map<String, Object>> entry : elemMaps.entrySet()) {
 			String shortId = entry.getKey();
 			Map<String, Object> elemMap = entry.getValue();
@@ -148,7 +148,7 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 			elements.put(shortId, element);
 		}
 		// Replace the element map in the submodel
-		result.put(SubModel.SUBMODELELEMENT, elements);
+		result.put(Submodel.SUBMODELELEMENT, elements);
 		// Return the "fixed" submodel
 		return result;
 	}
@@ -156,16 +156,16 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 	@Override
 	public void addSubmodelElement(ISubmodelElement elem) {
 		// Get sm from db
-		SubModel sm = (SubModel) getSubmodel();
+		Submodel sm = (Submodel) getSubmodel();
 		// Add element
-		sm.addSubModelElement(elem);
+		sm.addSubmodelElement(elem);
 		// Replace db entry
 		Query hasId = query(where(SMIDPATH).is(smId));
 		mongoOps.findAndReplace(hasId, sm, collection);
 	}
 
 	private ISubmodelElement getTopLevelSubmodelElement(String idShort) {
-		SubModel sm = (SubModel) getSubmodel();
+		Submodel sm = (Submodel) getSubmodel();
 		Map<String, ISubmodelElement> submodelElements = sm.getSubmodelElements();
 		ISubmodelElement element = submodelElements.get(idShort);
 		if (element == null) {
@@ -185,7 +185,7 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 
 	private void deleteTopLevelSubmodelElement(String idShort) {
 		// Get sm from db
-		SubModel sm = (SubModel) getSubmodel();
+		Submodel sm = (Submodel) getSubmodel();
 		// Remove element
 		sm.getSubmodelElements().remove(idShort);
 		// Replace db entry
@@ -195,27 +195,27 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 
 	@Override
 	public Collection<IOperation> getOperations() {
-		SubModel sm = (SubModel) getSubmodel();
+		Submodel sm = (Submodel) getSubmodel();
 		return sm.getOperations().values();
 	}
 
 
 	private void addNestedSubmodelElement(List<String> idShorts, ISubmodelElement elem) {
-		SubModel sm = (SubModel) getSubmodel();
+		Submodel sm = (Submodel) getSubmodel();
 		// > 1 idShorts => add new sm element to an existing sm element
 		if (idShorts.size() > 1) {
 			idShorts = idShorts.subList(0, idShorts.size() - 1);
 			// Get parent SM element if more than 1 idShort
 			ISubmodelElement parentElement = getNestedSubmodelElement(sm, idShorts);
 			if (parentElement instanceof SubmodelElementCollection) {
-				((SubmodelElementCollection) parentElement).addSubModelElement(elem);
+				((SubmodelElementCollection) parentElement).addSubmodelElement(elem);
 				// Replace db entry
 				Query hasId = query(where(SMIDPATH).is(smId));
 				mongoOps.findAndReplace(hasId, sm, collection);
 			}
 		} else {
 			// else => directly add it to the submodel
-			sm.addSubModelElement(elem);
+			sm.addSubmodelElement(elem);
 			// Replace db entry
 			Query hasId = query(where(SMIDPATH).is(smId));
 			mongoOps.findAndReplace(hasId, sm, collection);
@@ -224,13 +224,13 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 
 	@Override
 	public Collection<ISubmodelElement> getSubmodelElements() {
-		SubModel sm = (SubModel) getSubmodel();
+		Submodel sm = (Submodel) getSubmodel();
 		return sm.getSubmodelElements().values();
 	}
 
 	private void updateTopLevelSubmodelElement(String idShort, Object newValue) {
 		// Get sm from db
-		SubModel sm = (SubModel) getSubmodel();
+		Submodel sm = (Submodel) getSubmodel();
 		// Unwrap value
 		newValue = unwrapParameter(newValue);
 		// Get and update property value
@@ -242,7 +242,7 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 
 	@SuppressWarnings("unchecked")
 	private void updateNestedSubmodelElement(List<String> idShorts, Object newValue) {
-		SubModel sm = (SubModel) getSubmodel();
+		Submodel sm = (Submodel) getSubmodel();
 
 		// Get parent SM element
 		ISubmodelElement element = getNestedSubmodelElement(sm, idShorts);
@@ -258,7 +258,7 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 	}
 
 	private Object getTopLevelSubmodelElementValue(String idShort) {
-		SubModel sm = (SubModel) getSubmodel();
+		Submodel sm = (Submodel) getSubmodel();
 		return getElementProvider(sm, idShort).getModelPropertyValue("/value");
 	}
 
@@ -283,13 +283,13 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 	}
 
 	@SuppressWarnings("unchecked")
-	private IModelProvider getElementProvider(SubModel sm, String idShort) {
+	private IModelProvider getElementProvider(Submodel sm, String idShort) {
 		ISubmodelElement elem = sm.getSubmodelElements().get(idShort);
 		IModelProvider mapProvider = new VABMapProvider((Map<String, Object>) elem);
 		return SubmodelElementProvider.getElementProvider(mapProvider);
 	}
 
-	private ISubmodelElement getNestedSubmodelElement(SubModel sm, List<String> idShorts) {
+	private ISubmodelElement getNestedSubmodelElement(Submodel sm, List<String> idShorts) {
 		Map<String, ISubmodelElement> elemMap = sm.getSubmodelElements();
 		// Get last nested submodel element
 		for (int i = 0; i < idShorts.size() - 1; i++) {
@@ -312,7 +312,7 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 
 	private ISubmodelElement getNestedSubmodelElement(List<String> idShorts) {
 		// Get sm from db
-		SubModel sm = (SubModel) getSubmodel();
+		Submodel sm = (Submodel) getSubmodel();
 		// Get nested sm element from this sm
 		return convertSubmodelElement(getNestedSubmodelElement(sm, idShorts));
 	}
@@ -329,7 +329,7 @@ public class MongoDBSubmodelAPI implements ISubmodelAPI {
 		}
 		
 		// Get sm from db
-		SubModel sm = (SubModel) getSubmodel();
+		Submodel sm = (Submodel) getSubmodel();
 		// Get parent collection
 		List<String> parentIds = idShorts.subList(0, idShorts.size() - 1);
 		ISubmodelElement parentElement = getNestedSubmodelElement(sm, parentIds);

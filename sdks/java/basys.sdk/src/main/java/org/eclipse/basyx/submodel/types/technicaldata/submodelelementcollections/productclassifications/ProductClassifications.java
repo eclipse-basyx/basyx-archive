@@ -94,7 +94,7 @@ public class ProductClassifications extends SubmodelElementCollection {
 	public void setProductClassificationItems(List<ProductClassificationItem> items) {
 		if (items != null && items.size() > 0) {
 			for (ProductClassificationItem item: items) {
-				addSubModelElement(item);
+				addSubmodelElement(item);
 			}
 		}
 	}

@@ -15,8 +15,8 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.CustomId;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.examples.snippets.submodel.HostPreconfiguredSubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
-import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubModel;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubmodel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
@@ -46,8 +46,8 @@ public class TestCreateLambdaProperty {
 		Property lambdaProp = CreateLambdaProperty.createLambdaProperty("lambdaProp", PropertyValueTypeDef.Integer, () -> testValue, (v) -> testValue = (int) v);
 
 		// Package it in a test submodel and host it
-		SubModel sm = new SubModel("testSubmodelIdShort", new CustomId("testSubmodelId"));
-		sm.addSubModelElement(lambdaProp);
+		Submodel sm = new Submodel("testSubmodelIdShort", new CustomId("testSubmodelId"));
+		sm.addSubmodelElement(lambdaProp);
 		
 		// Create the context configuration and host the submodel containg the lambda property
 		BaSyxContextConfiguration config = new BaSyxContextConfiguration(4040, "");
@@ -57,7 +57,7 @@ public class TestCreateLambdaProperty {
 		// In a real-world application, the AASManager would be used instead.
 		String smPath = "http://localhost:4040/" + sm.getIdShort() + "/submodel";
 
-		ConnectedSubModel cSm = new ConnectedSubModel(new VABElementProxy("", new JSONConnector(new HTTPConnector(smPath))));
+		ConnectedSubmodel cSm = new ConnectedSubmodel(new VABElementProxy("", new JSONConnector(new HTTPConnector(smPath))));
 		IProperty cLambdaProp = (IProperty) cSm.getSubmodelElement(lambdaProp.getIdShort());
 
 		// Test getting

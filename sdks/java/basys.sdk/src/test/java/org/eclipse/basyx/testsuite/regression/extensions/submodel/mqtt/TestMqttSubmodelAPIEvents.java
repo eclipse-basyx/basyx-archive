@@ -17,7 +17,7 @@ import java.io.IOException;
 import org.eclipse.basyx.extensions.submodel.mqtt.MqttSubmodelAPI;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
@@ -65,7 +65,7 @@ public class TestMqttSubmodelAPIEvents {
 		mqttBroker.startServer(classPathConfig);
 
 		// Create submodel
-		SubModel sm = new SubModel(SUBMODELID, new Identifier(IdentifierType.CUSTOM, SUBMODELID));
+		Submodel sm = new Submodel(SUBMODELID, new Identifier(IdentifierType.CUSTOM, SUBMODELID));
 		Reference parentRef = new Reference(new Key(KeyElements.ASSETADMINISTRATIONSHELL, true, AASID, IdentifierType.IRDI));
 		sm.setParent(parentRef);
 		

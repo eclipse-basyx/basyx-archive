@@ -155,7 +155,7 @@ public class FurtherInformation extends SubmodelElementCollection {
 	public void setTextStatements(List<MultiLanguageProperty> statements) {
 		if (statements != null && statements.size() > 0) {
 			for (MultiLanguageProperty statement: statements) {
-				addSubModelElement(statement);
+				addSubmodelElement(statement);
 			}
 		}
 	}
@@ -190,7 +190,7 @@ public class FurtherInformation extends SubmodelElementCollection {
 	 * @param validDate
 	 */
 	public void setValidDate(Property validDate) {
-		addSubModelElement(validDate);
+		addSubmodelElement(validDate);
 	}
 	
 	/**

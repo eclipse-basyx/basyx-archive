@@ -29,10 +29,10 @@ import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.restapi.SimpleAASSubmodel;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
@@ -59,7 +59,7 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 	private static final IIdentifier LOCALSMID = new ModelUrn("localSm");
 	private static final String LOCALSMIDSHORT = "localSmIdShort";
 
-	private static final String REMOTEPATH = "/aas/submodels/" + REMOTESMIDSHORT + "/" + SubModelProvider.SUBMODEL;
+	private static final String REMOTEPATH = "/aas/submodels/" + REMOTESMIDSHORT + "/" + SubmodelProvider.SUBMODEL;
 
 	private List<BaSyxService> services = new ArrayList<>();
 
@@ -95,16 +95,16 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 		provider.setAssetAdministrationShell(new AASModelProvider(aas));
 
 		// Create the local SM
-		SubModel localSM = new SubModel(LOCALSMIDSHORT, LOCALSMID);
-		provider.addSubmodel(new SubModelProvider(localSM));
+		Submodel localSM = new Submodel(LOCALSMIDSHORT, LOCALSMID);
+		provider.addSubmodel(new SubmodelProvider(localSM));
 
 		// Create the remote SM
-		SubModel remoteSm = new SimpleAASSubmodel(REMOTESMIDSHORT);
+		Submodel remoteSm = new SimpleAASSubmodel(REMOTESMIDSHORT);
 		remoteSm.setIdentification(REMOTESMID.getIdType(), REMOTESMID.getId());
 
 		// Setup and start the BaSyx TCP servers
 		services.add(new BaSyxTCPServer<>(provider, 8000));
-		services.add(new BaSyxTCPServer<>(new SubModelProvider(remoteSm), 8001));
+		services.add(new BaSyxTCPServer<>(new SubmodelProvider(remoteSm), 8001));
 
 		services.forEach(b -> b.start());
 	}
@@ -117,7 +117,7 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 	 */
 	@Test
 	public void testGetModelPropertyValue() throws Exception {
-		SubModel sm = getRemoteSubmodel();
+		Submodel sm = getRemoteSubmodel();
 		assertEquals(sm.getIdentification().getId(), REMOTESMID.getId());
 	}
 	
@@ -128,7 +128,7 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 	@Test
 	public void testGetAllSubmodels() {
 		Collection<Map<String, Object>> collection = (Collection<Map<String, Object>>) provider.getModelPropertyValue("/aas/submodels");
-		Collection<String> smIdShorts = collection.stream().map(m -> SubModel.createAsFacade(m)).map(sm -> sm.getIdShort()).collect(Collectors.toList());
+		Collection<String> smIdShorts = collection.stream().map(m -> Submodel.createAsFacade(m)).map(sm -> sm.getIdShort()).collect(Collectors.toList());
 		assertTrue(smIdShorts.contains(REMOTESMIDSHORT));
 		assertTrue(smIdShorts.contains(LOCALSMIDSHORT));
 		assertTrue(smIdShorts.size() == 2);
@@ -163,10 +163,10 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 	@Test
 	public void testSetModelPropertyValue() throws Exception {
 		int newVal = 0;
-		String path = VABPathTools.concatenatePaths(REMOTEPATH, SubModel.SUBMODELELEMENT, SimpleAASSubmodel.INTPROPIDSHORT, Property.VALUE);
+		String path = VABPathTools.concatenatePaths(REMOTEPATH, Submodel.SUBMODELELEMENT, SimpleAASSubmodel.INTPROPIDSHORT, Property.VALUE);
 		provider.setModelPropertyValue(path, newVal);
 
-		SubModel sm = getRemoteSubmodel();
+		Submodel sm = getRemoteSubmodel();
 		assertEquals(newVal, sm.getProperties().get(SimpleAASSubmodel.INTPROPIDSHORT).getValue());
 	}
 	
@@ -195,7 +195,7 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 	 */
 	@Test
 	public void testDeleteModelPropertyValue() throws Exception {
-		String path = VABPathTools.concatenatePaths(REMOTEPATH, SubModel.SUBMODELELEMENT, SimpleAASSubmodel.INTPROPIDSHORT);
+		String path = VABPathTools.concatenatePaths(REMOTEPATH, Submodel.SUBMODELELEMENT, SimpleAASSubmodel.INTPROPIDSHORT);
 		provider.deleteValue(path);
 		assertFalse(getRemoteSubmodel().getProperties().containsKey(SimpleAASSubmodel.INTPROPIDSHORT));
 	}
@@ -208,13 +208,13 @@ public class MultiSubmodelProviderRemoteInvocationTest {
 	 */
 	@Test
 	public void testInvoke() throws Exception {
-		String path = VABPathTools.concatenatePaths(REMOTEPATH, SubModel.SUBMODELELEMENT, SimpleAASSubmodel.OPERATIONSIMPLEIDSHORT, Operation.INVOKE);
+		String path = VABPathTools.concatenatePaths(REMOTEPATH, Submodel.SUBMODELELEMENT, SimpleAASSubmodel.OPERATIONSIMPLEIDSHORT, Operation.INVOKE);
 		assertTrue((Boolean) provider.invokeOperation(path));
 	}
 
 	@SuppressWarnings("unchecked")
-	private SubModel getRemoteSubmodel() {
-		return SubModel.createAsFacade((Map<String, Object>) provider.getModelPropertyValue(REMOTEPATH));
+	private Submodel getRemoteSubmodel() {
+		return Submodel.createAsFacade((Map<String, Object>) provider.getModelPropertyValue(REMOTEPATH));
 	}
 
 	@After

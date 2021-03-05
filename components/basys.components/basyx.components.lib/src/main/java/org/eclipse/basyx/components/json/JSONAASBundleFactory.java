@@ -20,11 +20,11 @@ import java.util.Set;
 import org.eclipse.basyx.aas.factory.json.JSONToMetamodelConverter;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IIdentifiable;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.support.bundle.AASBundle;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.slf4j.Logger;
@@ -65,7 +65,7 @@ public class JSONAASBundleFactory {
 		JSONToMetamodelConverter converter = new JSONToMetamodelConverter(content);
 
 		List<AssetAdministrationShell> shells = converter.parseAAS();
-		List<SubModel> submodels = converter.parseSubmodels();
+		List<Submodel> submodels = converter.parseSubmodels();
 
 		List<Asset> assets = converter.parseAssets();
 
@@ -82,7 +82,7 @@ public class JSONAASBundleFactory {
 			}
 
 			// Retrieve submodels
-			Set<ISubModel> currentSM = retrieveSubmodelsForAAS(submodels, shell);
+			Set<ISubmodel> currentSM = retrieveSubmodelsForAAS(submodels, shell);
 			bundles.add(new AASBundle(shell, currentSM));
 		}
 
@@ -96,12 +96,12 @@ public class JSONAASBundleFactory {
 	 * @param shell
 	 * @return
 	 */
-	private Set<ISubModel> retrieveSubmodelsForAAS(List<SubModel> submodels, AssetAdministrationShell shell) {
-		Set<ISubModel> currentSM = new HashSet<>();
+	private Set<ISubmodel> retrieveSubmodelsForAAS(List<Submodel> submodels, AssetAdministrationShell shell) {
+		Set<ISubmodel> currentSM = new HashSet<>();
 
 		for (IReference submodelRef : shell.getSubmodelReferences()) {
 			try {
-				ISubModel sm = getByReference(submodelRef, submodels);
+				ISubmodel sm = getByReference(submodelRef, submodels);
 				currentSM.add(sm);
 				logger.debug("Found Submodel " + sm.getIdShort() + " for AAS " + shell.getIdShort());
 			} catch (ResourceNotFoundException e) {

@@ -17,9 +17,9 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.MultiAASProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.support.bundle.AASBundle;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 
@@ -73,13 +73,13 @@ public class AASBundleServlet extends VABHTTPInterface<MultiAASProvider> {
 		}
 
 		provider.setAssetAdministrationShell(new AASModelProvider((AssetAdministrationShell) shell));
-		for (ISubModel sm : bundle.getSubmodels()) {
+		for (ISubmodel sm : bundle.getSubmodels()) {
 
-			if (!(sm instanceof SubModel)) {
-				throw new RuntimeException("Only instances of SubModel are allowed here");
+			if (!(sm instanceof Submodel)) {
+				throw new RuntimeException("Only instances of Submodel are allowed here");
 			}
 
-			provider.addSubmodel(new SubModelProvider((SubModel) sm));
+			provider.addSubmodel(new SubmodelProvider((Submodel) sm));
 		}
 		return provider;
 	}

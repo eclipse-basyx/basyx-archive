@@ -24,7 +24,7 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -62,11 +62,11 @@ public class TestCloudEdgeDeploymentScenario {
 		checkEndpoint(ComponentBuilder.AAS_ENDPOINT, aasDescriptor.getEndpoints());
 		
 		// Check if aasDescriptor has the correct number of SMDescriptors
-		assertEquals(2, aasDescriptor.getSubModelDescriptors().size());
+		assertEquals(2, aasDescriptor.getSubmodelDescriptors().size());
 		
 		// Iterate over the Collection of SMDescriptors and
 		// test if both have the expected idShort and endpoint
-		for(SubmodelDescriptor smDescriptor: aasDescriptor.getSubModelDescriptors()) {
+		for(SubmodelDescriptor smDescriptor: aasDescriptor.getSubmodelDescriptors()) {
 			if(smDescriptor.getIdShort().equals(ComponentBuilder.EDGESM_ID_SHORT)) {
 				checkEndpoint(ComponentBuilder.EDGESM_ENDPOINT, smDescriptor.getEndpoints());
 			} else if(smDescriptor.getIdShort().equals(ComponentBuilder.DOCUSM_ID_SHORT)) {
@@ -94,7 +94,7 @@ public class TestCloudEdgeDeploymentScenario {
 		assertEquals(ComponentBuilder.AAS_ID_SHORT, aas.getIdShort());
 		
 		// Get the Submodels and check if both expected SMs are present 
-		Map<String, ISubModel> submodels = aas.getSubModels();
+		Map<String, ISubmodel> submodels = aas.getSubmodels();
 		
 		assertTrue(submodels.containsKey(ComponentBuilder.EDGESM_ID_SHORT));
 		assertTrue(submodels.containsKey(ComponentBuilder.DOCUSM_ID_SHORT));
@@ -110,7 +110,7 @@ public class TestCloudEdgeDeploymentScenario {
 		ConnectedAssetAdministrationShellManager manager =
 				new ConnectedAssetAdministrationShellManager(getRegistry());
 		
-		ISubModel docuSM = manager.retrieveSubModel(CloudEdgeDeploymentScenario.aasIdentifier, CloudEdgeDeploymentScenario.docuSmIdentifier);
+		ISubmodel docuSM = manager.retrieveSubmodel(CloudEdgeDeploymentScenario.aasIdentifier, CloudEdgeDeploymentScenario.docuSmIdentifier);
 		
 		// Check if it has the correct idShort, and 1 SubmodelElement
 		assertEquals(ComponentBuilder.DOCUSM_ID_SHORT, docuSM.getIdShort());
@@ -127,7 +127,7 @@ public class TestCloudEdgeDeploymentScenario {
 		ConnectedAssetAdministrationShellManager manager =
 				new ConnectedAssetAdministrationShellManager(getRegistry());
 		
-		ISubModel edgeSM = manager.retrieveSubModel(CloudEdgeDeploymentScenario.aasIdentifier, CloudEdgeDeploymentScenario.edgeSmIdentifier);
+		ISubmodel edgeSM = manager.retrieveSubmodel(CloudEdgeDeploymentScenario.aasIdentifier, CloudEdgeDeploymentScenario.edgeSmIdentifier);
 		
 		// Check if it has the correct idShort, and 1 SubmodelElement
 		assertEquals(ComponentBuilder.EDGESM_ID_SHORT, edgeSM.getIdShort());

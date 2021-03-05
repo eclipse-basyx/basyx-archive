@@ -122,7 +122,7 @@ public class Fax extends SubmodelElementCollection {
 	 * @param faxNumber {@link MultiLanguageProperty}
 	 */
 	public void setFaxNumber(MultiLanguageProperty faxNumber) {
-		addSubModelElement(faxNumber);
+		addSubmodelElement(faxNumber);
 	}
 	
 	/**
@@ -142,7 +142,7 @@ public class Fax extends SubmodelElementCollection {
 	 * @param type {@link Property}
 	 */
 	public void setTypeOfFaxNumber(Property type) {
-		addSubModelElement(type);
+		addSubmodelElement(type);
 	}
 	
 	/**

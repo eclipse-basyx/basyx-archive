@@ -99,7 +99,7 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void addSubModelElement(ISubmodelElement element) {
+	public void addSubmodelElement(ISubmodelElement element) {
 		if (element instanceof SubmodelElement) {
 			((SubmodelElement) element).setParent(getReference());
 

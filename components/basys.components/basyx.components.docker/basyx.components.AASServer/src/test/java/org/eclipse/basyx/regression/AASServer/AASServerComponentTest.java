@@ -70,7 +70,7 @@ public class AASServerComponentTest {
 			}
 			
 			// Try to lookup all previously registered SMs
-			for(SubmodelDescriptor smDescriptor: aasDescriptor.getSubModelDescriptors()) {
+			for(SubmodelDescriptor smDescriptor: aasDescriptor.getSubmodelDescriptors()) {
 				try {
 					registry.lookupSubmodel(aasDescriptor.getIdentifier(), smDescriptor.getIdentifier());
 					fail();

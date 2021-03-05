@@ -125,17 +125,17 @@ public class DynamicPropertyClass {
 
 		// Server connections
 		// - Connect to device (VAB object)
-		VABElementProxy connSubModel1 = this.connManager.connectToVABElement("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
+		VABElementProxy connSubmodel1 = this.connManager.connectToVABElement("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
 
 		
 		// Create dynamic get/set operation. Instantiate class TailoredBaSyxSupplier as getter, 
 		// no setter (null) is provided.
 		Map<String, Object> dynamicPropertyVal = VABLambdaProviderHelper.createSimple(new TailoredBaSyxSupplier(), null);
 		// - Update property properties/dynamicExample with dynamic get/set operation
-		connSubModel1.createValue("dynamicExampleProperty", dynamicPropertyVal);
+		connSubmodel1.createValue("dynamicExampleProperty", dynamicPropertyVal);
 
 		// Read dynamicExample property
-		Object propertyValue = connSubModel1.getModelPropertyValue("dynamicExampleProperty");
+		Object propertyValue = connSubmodel1.getModelPropertyValue("dynamicExampleProperty");
 
 		
 		// Compare returned to expected values

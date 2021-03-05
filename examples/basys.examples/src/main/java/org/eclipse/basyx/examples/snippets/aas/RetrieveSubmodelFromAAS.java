@@ -10,7 +10,7 @@
 package org.eclipse.basyx.examples.snippets.aas;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 
 
@@ -28,9 +28,9 @@ public class RetrieveSubmodelFromAAS {
 	 * @param smIdentifier the Identifier of the requested Submodel
 	 * @return the requested Submodel
 	 */
-	public static ISubModel retrieveSubmodelFromAAS(IIdentifier smIdentifier, IAssetAdministrationShell aas) {
+	public static ISubmodel retrieveSubmodelFromAAS(IIdentifier smIdentifier, IAssetAdministrationShell aas) {
 		// Get the requested Submodel from the AAS
-		ISubModel submodel = aas.getSubmodel(smIdentifier);
+		ISubmodel submodel = aas.getSubmodel(smIdentifier);
 		return submodel;
 	}
 	

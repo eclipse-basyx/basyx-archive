@@ -89,7 +89,7 @@ public class DynamicPropertyLambda {
 		// Server connections
 		// - Connect to VAB object by ID. The connection manager looks up this ID in
 		//   its directory
-		VABElementProxy connSubModel1 = this.connManager.connectToVABElement("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
+		VABElementProxy connSubmodel1 = this.connManager.connectToVABElement("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
 
 		
 		// Create dynamic get/operation as Lambda expression, no set operation (null) is provided.
@@ -97,11 +97,11 @@ public class DynamicPropertyLambda {
 			return "dynamicExampleValue";
 		}, null);
 		// - Update property properties/dynamicExample with dynamic get/set operation
-		connSubModel1.createValue("dynamicExampleProperty", dynamicPropertyVal);
+		connSubmodel1.createValue("dynamicExampleProperty", dynamicPropertyVal);
 
 		// Read dynamicExample property
 		// - This will invoke the previously uploaded Lambda expression
-		Object propertyValue = connSubModel1.getModelPropertyValue("dynamicExampleProperty");
+		Object propertyValue = connSubmodel1.getModelPropertyValue("dynamicExampleProperty");
 		
 		
 		// Compare returned to expected values

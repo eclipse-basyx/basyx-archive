@@ -31,7 +31,7 @@ import org.apache.poi.openxml4j.opc.internal.MemoryPackagePart;
 import org.eclipse.basyx.aas.factory.xml.MetamodelToXMLConverter;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
@@ -83,7 +83,7 @@ public class AASXFactory {
 	 * @throws ParserConfigurationException
 	 */
 	public static void buildAASX(Collection<IAssetAdministrationShell> aasList, Collection<IAsset> assetList, 
-			Collection<IConceptDescription> conceptDescriptionList, Collection<ISubModel> submodelList, Collection<InMemoryFile> files, OutputStream os) throws IOException, TransformerException, ParserConfigurationException {
+			Collection<IConceptDescription> conceptDescriptionList, Collection<ISubmodel> submodelList, Collection<InMemoryFile> files, OutputStream os) throws IOException, TransformerException, ParserConfigurationException {
 		
 		prepareFilePaths(submodelList);
 		
@@ -111,10 +111,10 @@ public class AASXFactory {
 	 * @param rootPackage the OPCPackage
 	 * @param xmlPart the Part the files should be related to
 	 */
-	private static void storeFilesInAASX(Collection<ISubModel> submodelList, Collection<InMemoryFile> files,
+	private static void storeFilesInAASX(Collection<ISubmodel> submodelList, Collection<InMemoryFile> files,
 			OPCPackage rootPackage, PackagePart xmlPart) {
 		
-		for(ISubModel sm: submodelList) {
+		for(ISubmodel sm: submodelList) {
 			for(File file: findFileElements(sm.getSubmodelElements().values())) {
 				String filePath = file.getValue();
 				try {
@@ -201,7 +201,7 @@ public class AASXFactory {
 	 * Uses the MetamodelToXMLConverter to generate the XML
 	 */
 	private static String convertToXML(Collection<IAssetAdministrationShell> aasList, Collection<IAsset> assetList, 
-			Collection<IConceptDescription> conceptDescriptionList, Collection<ISubModel> submodelList) throws TransformerException, ParserConfigurationException {
+			Collection<IConceptDescription> conceptDescriptionList, Collection<ISubmodel> submodelList) throws TransformerException, ParserConfigurationException {
 		
 		StringWriter writer = new StringWriter();
 		MetamodelToXMLConverter.convertToXML(aasList, assetList, conceptDescriptionList, submodelList, new StreamResult(writer));
@@ -236,7 +236,7 @@ public class AASXFactory {
 	 * 
 	 * @param submodels the Submodels
 	 */
-	private static void prepareFilePaths(Collection<ISubModel> submodels) {
+	private static void prepareFilePaths(Collection<ISubmodel> submodels) {
 		submodels.stream()
 			.forEach(sm -> findFileElements(sm.getSubmodelElements().values()).stream().forEach(f -> f.setValue(preparePath(f.getValue()))));
 	}

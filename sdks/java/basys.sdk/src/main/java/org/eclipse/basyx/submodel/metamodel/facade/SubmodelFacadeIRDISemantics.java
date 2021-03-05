@@ -16,7 +16,7 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
@@ -34,7 +34,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
  * @author kuhn
  *
  */
-public class SubmodelFacadeIRDISemantics extends SubModel {
+public class SubmodelFacadeIRDISemantics extends Submodel {
 
 	/**
 	 * Constructor without arguments - create a sub model with all meta properties

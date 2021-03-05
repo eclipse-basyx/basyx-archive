@@ -29,7 +29,7 @@ import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelemen
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.event.ConnectedBasicEvent;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.operation.ConnectedOperation;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.relationship.ConnectedRelationshipElement;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
@@ -40,7 +40,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.rang
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.event.BasicEvent;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
@@ -85,9 +85,9 @@ public class TestConnectedSubmodelElementFactory {
 		
 		Map<String, Object> values = new HashMap<>();
 		
-		values.put(SubModel.SUBMODELELEMENT, submodelElements);
+		values.put(Submodel.SUBMODELELEMENT, submodelElements);
 		
-		proxy = new VABElementProxy("", new SubModelProvider(new TypeDestroyingProvider(new VABLambdaProvider(values))));
+		proxy = new VABElementProxy("", new SubmodelProvider(new TypeDestroyingProvider(new VABLambdaProvider(values))));
 	}
 	
 	/**
@@ -194,7 +194,7 @@ public class TestConnectedSubmodelElementFactory {
 	public void testGetSubmodelElements() {
 		Map<String, ISubmodelElement> submodelElements =
 				ConnectedSubmodelElementFactory.getConnectedSubmodelElements(
-						proxy, SubModel.SUBMODELELEMENT, SubModel.SUBMODELELEMENT);
+						proxy, Submodel.SUBMODELELEMENT, Submodel.SUBMODELELEMENT);
 		
 		assertEquals(10, submodelElements.size());
 		assertTrue(submodelElements.get(PROPERTY_ID) instanceof ConnectedProperty);

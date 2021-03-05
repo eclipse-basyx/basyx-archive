@@ -14,10 +14,10 @@ import static org.junit.Assert.assertEquals;
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.examples.snippets.AbstractSnippetTest;
 import org.eclipse.basyx.examples.support.ExampleComponentBuilder;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.junit.Test;
 
@@ -36,7 +36,7 @@ public class TestAddSubmodelToAAS extends AbstractSnippetTest {
 	public void testAddSubmodelToAAS() {
 		
 		// Get the example AAS and Submodel
-		SubModel submodel = ExampleComponentBuilder.buildExampleSubmodel(NEW_SM_ID_SHORT, NEW_SM_ID);
+		Submodel submodel = ExampleComponentBuilder.buildExampleSubmodel(NEW_SM_ID_SHORT, NEW_SM_ID);
 
 		// Get the Identifiers for the AAS and the Submodel
 		IIdentifier aasIdentifier = new Identifier(IdentifierType.CUSTOM, AAS_ID);
@@ -47,7 +47,7 @@ public class TestAddSubmodelToAAS extends AbstractSnippetTest {
 		
 		// Check if the Submodel was correctly added
 		ConnectedAssetAdministrationShellManager manager = getManager();
-		ISubModel remoteSM = manager.retrieveSubModel(aasIdentifier, smIdentifier);
+		ISubmodel remoteSM = manager.retrieveSubmodel(aasIdentifier, smIdentifier);
 		assertEquals(NEW_SM_ID_SHORT, remoteSM.getIdShort());
 		
 	}

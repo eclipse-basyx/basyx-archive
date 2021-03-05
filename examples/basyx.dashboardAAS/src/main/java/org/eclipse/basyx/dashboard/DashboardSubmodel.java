@@ -13,7 +13,7 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
@@ -27,7 +27,7 @@ import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProviderHelper;
  * @author espen
  *
  */
-public class DashboardSubmodel extends SubModel {
+public class DashboardSubmodel extends Submodel {
 	private int minValue;
 	private int maxValue;
 
@@ -56,7 +56,7 @@ public class DashboardSubmodel extends SubModel {
 		Key key = new Key(KeyElements.CONCEPTDESCRIPTION, true, "0112/2///61360_4#AAF891#001", KeyType.IRDI);
 		IReference refByIdentifier = new Reference(key);
 		temperatureProperty.setSemanticID(refByIdentifier);
-		addSubModelElement(temperatureProperty);
+		addSubmodelElement(temperatureProperty);
 	}
 
 	private void setDummyProperty() {
@@ -65,6 +65,6 @@ public class DashboardSubmodel extends SubModel {
 		dummyProperty.set(VABLambdaProviderHelper.createSimple(() -> {
 			return (Math.random() > 0.5);
 		}, null), PropertyValueTypeDef.Boolean);
-		addSubModelElement(dummyProperty);
+		addSubmodelElement(dummyProperty);
 	}
 }

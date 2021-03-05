@@ -54,23 +54,23 @@ public class SQLQueriesTest {
 	public void test() throws Exception {
 
 		// Connect to sub model "CfgFileTestAAS"
-		VABElementProxy connSubModel = this.connManager.connectToVABElement("SQLTestSubmodel");
+		VABElementProxy connSubmodel = this.connManager.connectToVABElement("SQLTestSubmodel");
 
 		
 		// Get sub model
-		Object value0A = connSubModel.getModelPropertyValue("/aas/submodels/SQLTestSubmodel");
+		Object value0A = connSubmodel.getModelPropertyValue("/aas/submodels/SQLTestSubmodel");
 
 		
 		// Get properties
-		Object value0B = connSubModel.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/dataElements");
+		Object value0B = connSubmodel.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/dataElements");
 
 		
 		// Get property value
-		Object value1 = connSubModel
+		Object value1 = connSubmodel
 				.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames/value");
 
 		// Get property value with meta data
-		Object value1a = connSubModel.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames");
+		Object value1a = connSubmodel.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames");
 
 		
 		// Create a new property
@@ -81,13 +81,13 @@ public class SQLQueriesTest {
 		Property p = new Property(newTableLine);
 		p.setIdShort("sensorNames");
 		// - Insert line into table
-		connSubModel.createValue("/aas/submodels/SQLTestSubmodel/dataElements", p);
+		connSubmodel.createValue("/aas/submodels/SQLTestSubmodel/dataElements", p);
 		
 		// Get property value again
-		Object value2 = connSubModel
+		Object value2 = connSubmodel
 				.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames/value");
 
-		Object value2a = connSubModel.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames");
+		Object value2a = connSubmodel.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames");
 
 		
 		// Update property value
@@ -97,11 +97,11 @@ public class SQLQueriesTest {
 			updatedTableLine.put("sensorname", "VS_0004");
 			updatedTableLine.put("sensorid", "033542");
 		// - Update table line
-		connSubModel.setModelPropertyValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames/value",
+		connSubmodel.setModelPropertyValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames/value",
 				updatedTableLine);
 
 		// Get property value again
-		Object value3 = connSubModel
+		Object value3 = connSubmodel
 				.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames/value");
 
 		
@@ -110,16 +110,16 @@ public class SQLQueriesTest {
 		Map<String, Object> removedTableLine = new HashMap<>();
 			removedTableLine.put("sensorid", "033542");
 		// - Delete sensor from table
-		connSubModel.deleteValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames/value", removedTableLine);
+		connSubmodel.deleteValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames/value", removedTableLine);
 		
 		// Get property value again
-		Object value4 = connSubModel
+		Object value4 = connSubmodel
 				.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames/value");
 
 		
 		
 		// Get property meta data value
-		Object value5 = connSubModel
+		Object value5 = connSubmodel
 				.getModelPropertyValue("/aas/submodels/SQLTestSubmodel/dataElements/sensorNames/category");
 	}
 }

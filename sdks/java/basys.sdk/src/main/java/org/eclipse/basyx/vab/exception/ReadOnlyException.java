@@ -21,7 +21,7 @@ public class ReadOnlyException extends Exception {
 	 */
 	public ReadOnlyException(String name) {
 		// Store message
-		message = "The SubModel "+name+" is frozen.";
+		message = "The Submodel "+name+" is frozen.";
 	}
 	
 	

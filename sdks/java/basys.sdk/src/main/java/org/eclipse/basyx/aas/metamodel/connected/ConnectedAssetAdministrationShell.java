@@ -26,23 +26,23 @@ import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.aas.metamodel.map.parts.ConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.map.parts.View;
 import org.eclipse.basyx.aas.metamodel.map.security.Security;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedElement;
-import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubModel;
+import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubmodel;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.reference.ReferenceHelper;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
@@ -151,22 +151,22 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, ISubModel> getSubModels() {
+	public Map<String, ISubmodel> getSubmodels() {
 		Collection<Map<String, Object>> submodelCollection = (Collection<Map<String, Object>>) getProxy().getModelPropertyValue(AssetAdministrationShell.SUBMODELS);
 
-		Map<String, ISubModel> ret = new HashMap<>();
+		Map<String, ISubmodel> ret = new HashMap<>();
 
 		for (Map<String, Object> m : submodelCollection) {
-			SubModel sm = SubModel.createAsFacade(m);
-			String path = VABPathTools.concatenatePaths(AssetAdministrationShell.SUBMODELS, sm.getIdShort(), SubModelProvider.SUBMODEL);
-			ret.put(sm.getIdShort(), new ConnectedSubModel(getProxy().getDeepProxy(path), sm));
+			Submodel sm = Submodel.createAsFacade(m);
+			String path = VABPathTools.concatenatePaths(AssetAdministrationShell.SUBMODELS, sm.getIdShort(), SubmodelProvider.SUBMODEL);
+			ret.put(sm.getIdShort(), new ConnectedSubmodel(getProxy().getDeepProxy(path), sm));
 		}
 
 		return ret;
 	}
 
 	@Override
-	public void addSubModel(SubModel subModel) {
+	public void addSubmodel(Submodel subModel) {
 		subModel.setParent(getReference());
 		Map<String, Object> convertedMap = SubmodelElementMapCollectionConverter.smToMap(subModel);
 		String accessPath = VABPathTools.concatenatePaths(AssetAdministrationShell.SUBMODELS, subModel.getIdShort());
@@ -226,16 +226,16 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 
 	@Override
 	public void removeSubmodel(IIdentifier id) {
-		ISubModel sm = getSubmodel(id);
+		ISubmodel sm = getSubmodel(id);
 
 		String path = VABPathTools.concatenatePaths(AssetAdministrationShell.SUBMODELS, sm.getIdShort());
 		getProxy().deleteValue(path);
 	}
 
 	@Override
-	public ISubModel getSubmodel(IIdentifier id) {
+	public ISubmodel getSubmodel(IIdentifier id) {
 		// FIXME: Change this when AAS API supports Submodel retrieval by Identifier
-		Optional<ISubModel> op = getSubModels().values().stream().filter(sm -> sm.getIdentification().getId().equals(id.getId())).findFirst();
+		Optional<ISubmodel> op = getSubmodels().values().stream().filter(sm -> sm.getIdentification().getId().equals(id.getId())).findFirst();
 		if (!op.isPresent()) {
 			throw new ResourceNotFoundException("AAS " + getIdentification() + " does not have a submodel with id " + id);
 		}

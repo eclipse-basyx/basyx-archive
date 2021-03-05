@@ -22,7 +22,7 @@ import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.extensions.aas.registration.mqtt.MqttAASRegistryService;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.testsuite.regression.extensions.shared.mqtt.MqttTestListener;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -84,7 +84,7 @@ public class TestMqttAASRegistryService {
 		AASDescriptor aasDescriptor = new AASDescriptor(shell, AASENDPOINT);
 		eventAPI.register(aasDescriptor);
 		
-		SubModel submodel = new SubModel(SUBMODELID, SUBMODELIDENTIFIER);
+		Submodel submodel = new Submodel(SUBMODELID, SUBMODELIDENTIFIER);
 		String submodelEndpoint = AASENDPOINT + "/submodels/" + SUBMODELID + "/submodel";
 		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(submodel, submodelEndpoint);
 		eventAPI.register(AASIDENTIFIER, submodelDescriptor);
@@ -116,7 +116,7 @@ public class TestMqttAASRegistryService {
 	public void testRegisterSubmodel() {
 		String submodelid = "submodelid2";
 		Identifier newSubmodelIdentifier = new Identifier(IdentifierType.IRI, submodelid);
-		SubModel submodel = new SubModel(submodelid, newSubmodelIdentifier);
+		Submodel submodel = new Submodel(submodelid, newSubmodelIdentifier);
 		String submodelEndpoint = AASENDPOINT + "/submodels/" + submodelid + "/submodel";
 		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(submodel, submodelEndpoint);
 		

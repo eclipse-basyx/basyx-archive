@@ -12,7 +12,7 @@ package org.eclipse.basyx.examples.snippets.manager;
 import static org.junit.Assert.assertEquals;
 
 import org.eclipse.basyx.examples.snippets.AbstractSnippetTest;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
@@ -35,7 +35,7 @@ public class TestRetrieveSubmodelFromAAS extends AbstractSnippetTest {
 		IIdentifier smIdentifier = new Identifier(IdentifierType.CUSTOM, SM_ID);
 		
 		// Get the Submodel from the server
-		ISubModel remoteSubmodel = RetrieveSubmodelFromAAS.retrieveSubmodelFromAAS(
+		ISubmodel remoteSubmodel = RetrieveSubmodelFromAAS.retrieveSubmodelFromAAS(
 				smIdentifier, aasIdentifier, registryComponent.getRegistryPath());
 		
 		// Check if the Submodel can be used correctly

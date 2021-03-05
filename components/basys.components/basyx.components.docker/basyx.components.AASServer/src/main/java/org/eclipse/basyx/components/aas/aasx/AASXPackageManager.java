@@ -37,7 +37,7 @@ import org.apache.poi.openxml4j.opc.PackageRelationshipCollection;
 import org.apache.poi.openxml4j.opc.PackagingURIHelper;
 import org.eclipse.basyx.components.configuration.BaSyxConfiguration;
 import org.eclipse.basyx.components.xml.XMLAASBundleFactory;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IFile;
@@ -156,7 +156,7 @@ public class AASXPackageManager {
 		
 		Set<AASBundle> bundles = retrieveAASBundles();
 		
-		List<ISubModel> submodels = new ArrayList<>();
+		List<ISubmodel> submodels = new ArrayList<>();
 		
 		// Get the Submodels from all AASBundles
 		for(AASBundle bundle: bundles) {
@@ -165,7 +165,7 @@ public class AASXPackageManager {
 		
 		List<String> paths = new ArrayList<String>();
 
-		for(ISubModel sm: submodels) {
+		for(ISubmodel sm: submodels) {
 			paths.addAll(parseElements(sm.getSubmodelElements().values()));
 		}
 		return paths;

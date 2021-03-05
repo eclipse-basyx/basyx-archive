@@ -23,7 +23,7 @@ import org.eclipse.basyx.components.registry.RegistryComponent;
 import org.eclipse.basyx.components.registry.configuration.BaSyxRegistryConfiguration;
 import org.eclipse.basyx.components.registry.configuration.RegistryBackend;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 
 /**
@@ -62,16 +62,16 @@ public class Server {
 		manager.createAAS(shell, AASSERVERPATH);
 		
 		// Create submodel
-		SubModel documentationSubmodel = new SubModel("documentationSm", DOCUSMID);
+		Submodel documentationSubmodel = new Submodel("documentationSm", DOCUSMID);
 
 		// - Create property
 		Property maxTemp = new Property(MAXTEMPID, 1000);
 
 		// Add the property to the Submodel
-		documentationSubmodel.addSubModelElement(maxTemp);
+		documentationSubmodel.addSubmodelElement(maxTemp);
 
 		// - Push the Submodel to the AAS server
-		manager.createSubModel(shell.getIdentification(), documentationSubmodel);
+		manager.createSubmodel(shell.getIdentification(), documentationSubmodel);
 	}
 
 	/**

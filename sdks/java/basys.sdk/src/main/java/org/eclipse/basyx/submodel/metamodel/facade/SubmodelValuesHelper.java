@@ -14,11 +14,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 
 /**
- * Helperclass for getting the /values Map from a SubModel.
+ * Helperclass for getting the /values Map from a Submodel.
  * 
  * @author conradi
  *
@@ -26,13 +26,13 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 public class SubmodelValuesHelper {
 
 	/**
-	 * Gets the Values from a SubModel
+	 * Gets the Values from a Submodel
 	 * 
-	 * @param sm the SubModel to get the values from.
+	 * @param sm the Submodel to get the values from.
 	 * @return A Map mapping idShort to the value of the SubmodelElement
 	 */
 	@SuppressWarnings("unchecked")
-	public static Map<String, Object> getSubmodelValue(SubModel sm) {
+	public static Map<String, Object> getSubmodelValue(Submodel sm) {
 		Map<String, ISubmodelElement> elements = sm.getSubmodelElements();
 		
 		return (Map<String, Object>) handleValue(elements.values());

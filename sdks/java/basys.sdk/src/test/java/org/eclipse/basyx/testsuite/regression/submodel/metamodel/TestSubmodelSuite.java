@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -35,7 +35,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangString;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
@@ -56,7 +56,7 @@ import org.junit.Test;
 
 /**
  * Abstract Submodel Testsuite to be reused by different implementations of
- * {@link ISubModel}
+ * {@link ISubmodel}
  * 
  * @author schnicke
  *
@@ -81,38 +81,38 @@ public abstract class TestSubmodelSuite {
 
 	private final static Reference testSemanticIdRef = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "testVal", IdentifierType.CUSTOM));
 
-	public SubModel getReferenceSubmodel() {
+	public Submodel getReferenceSubmodel() {
 
 		// Create a simple value property
 		Property propertyMeta = new Property(PROP, PropertyValueTypeDef.Integer);
 		propertyMeta.setValue(100);
 
-		// Create the SubModel using the created property and operation
+		// Create the Submodel using the created property and operation
 		IIdentifier submodelId = new ModelUrn("testUrn");
-		SubModel localSubmodel = new SubModel(ID, submodelId);
-		localSubmodel.addSubModelElement(propertyMeta);
+		Submodel localSubmodel = new Submodel(ID, submodelId);
+		localSubmodel.addSubmodelElement(propertyMeta);
 		localSubmodel.setSemanticId(testSemanticIdRef);
 
 		return localSubmodel;
 	}
 
-	protected abstract ISubModel getSubmodel();
+	protected abstract ISubmodel getSubmodel();
 
 	/**
-	 * Tests if a SubModel's id can be retrieved correctly
+	 * Tests if a Submodel's id can be retrieved correctly
 	 */
 	@Test
 	public void getIdTest() {
-		ISubModel submodel = getSubmodel();
+		ISubmodel submodel = getSubmodel();
 		assertEquals(ID, submodel.getIdShort());
 	}
 
 	/**
-	 * Tests if a SubModel's properties can be used correctly
+	 * Tests if a Submodel's properties can be used correctly
 	 */
 	@Test
 	public void propertiesTest() throws Exception {
-		ISubModel submodel = getSubmodel();
+		ISubmodel submodel = getSubmodel();
 		// Retrieve all properties
 		Map<String, IProperty> props = submodel.getProperties();
 
@@ -127,12 +127,12 @@ public abstract class TestSubmodelSuite {
 
 	@Test
 	public void saveAndLoadPropertyTest() throws Exception {
-		ISubModel submodel = getSubmodel();
+		ISubmodel submodel = getSubmodel();
 
-		// Get sample DataElements and save them into SubModel
+		// Get sample DataElements and save them into Submodel
 		Map<String, IProperty> testData = getTestDataProperty();
 		for (ISubmodelElement element : testData.values()) {
-			submodel.addSubModelElement(element);
+			submodel.addSubmodelElement(element);
 		}
 
 		// Load it
@@ -144,19 +144,19 @@ public abstract class TestSubmodelSuite {
 
 	@Test
 	public void saveAndLoadSubmodelElementTest() throws Exception {
-		ISubModel submodel = getSubmodel();
+		ISubmodel submodel = getSubmodel();
 
-		// Get sample DataElements and save them into SubModel
+		// Get sample DataElements and save them into Submodel
 		Map<String, IProperty> testDataElements = getTestDataProperty();
 		for (ISubmodelElement element : testDataElements.values()) {
-			submodel.addSubModelElement(element);
+			submodel.addSubmodelElement(element);
 		}
 
 
-		// Get sample SubmodelElements and save them into SubModel
+		// Get sample SubmodelElements and save them into Submodel
 		Map<String, ISubmodelElement> testSMElements = getTestSubmodelElements();
 		for (ISubmodelElement element : testSMElements.values()) {
-			submodel.addSubModelElement(element);
+			submodel.addSubmodelElement(element);
 		}
 
 		// Load it
@@ -173,7 +173,7 @@ public abstract class TestSubmodelSuite {
 	 */
 	@Test
 	public void semanticIdRetrievalTest() {
-		ISubModel submodel = getSubmodel();
+		ISubmodel submodel = getSubmodel();
 		IReference ref = submodel.getSemanticId();
 		assertEquals(testSemanticIdRef, ref);
 	}
@@ -183,11 +183,11 @@ public abstract class TestSubmodelSuite {
 	 * addition of parent reference to the submodel
 	 */
 	@Test
-	public void addSubModelElementTest() throws Exception {
-		ISubModel submodel = getSubmodel();
+	public void addSubmodelElementTest() throws Exception {
+		ISubmodel submodel = getSubmodel();
 		Property property = new Property("testProperty");
 		property.setIdShort("testIdShort");
-		submodel.addSubModelElement(property);
+		submodel.addSubmodelElement(property);
 
 		IProperty connectedProperty = (IProperty) submodel.getSubmodelElements().get("testIdShort");
 		assertEquals(property.getIdShort(), connectedProperty.getIdShort());
@@ -200,7 +200,7 @@ public abstract class TestSubmodelSuite {
 
 	@Test
 	public void testGetSubmodelElement() {
-		ISubModel submodel = getSubmodel();
+		ISubmodel submodel = getSubmodel();
 		ISubmodelElement element = submodel.getSubmodelElement(PROP);
 		assertEquals(PROP, element.getIdShort());
 	}
@@ -208,7 +208,7 @@ public abstract class TestSubmodelSuite {
 	@Test(expected = ResourceNotFoundException.class)
 	public void testDeleteSubmodelElement() {
 
-		ISubModel submodel = getSubmodel();
+		ISubmodel submodel = getSubmodel();
 		submodel.deleteSubmodelElement(PROP);
 		submodel.getSubmodelElement(PROP);
 	}
@@ -219,12 +219,12 @@ public abstract class TestSubmodelSuite {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testGetValues() {
-		ISubModel submodel = getSubmodel();
+		ISubmodel submodel = getSubmodel();
 
 		// Add elements to the Submodel
 		Map<String, ISubmodelElement> testSMElements = getTestSubmodelElements();
 		for (ISubmodelElement element : testSMElements.values()) {
-			submodel.addSubModelElement(element);
+			submodel.addSubmodelElement(element);
 		}
 
 		Map<String, Object> values = submodel.getValues();
@@ -398,11 +398,11 @@ public abstract class TestSubmodelSuite {
 	}
 
 	/**
-	 * This method tests deleteSubmodelElement method of SubModel class with non
+	 * This method tests deleteSubmodelElement method of Submodel class with non
 	 * existing element id
 	 */
 	@Test(expected = ResourceNotFoundException.class)
-	public void testDeleteSubModelElementNotExist() {
+	public void testDeleteSubmodelElementNotExist() {
 		getSubmodel().deleteSubmodelElement("Id_Which_Does_Not_Exist");
 	}
 }

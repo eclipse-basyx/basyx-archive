@@ -15,7 +15,7 @@ import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.examples.snippets.AbstractSnippetTest;
 import org.eclipse.basyx.examples.support.ExampleComponentBuilder;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
@@ -48,7 +48,7 @@ public class TestDeleteSubmodelElement extends AbstractSnippetTest {
 				new ConnectedAssetAdministrationShellManager(registryProxy);
 		
 		// Retrieve the Submodel from the server as a ConnectedSubmodel
-		ISubModel submodel = manager.retrieveSubModel(aasIdentifier, smIdentifier);
+		ISubmodel submodel = manager.retrieveSubmodel(aasIdentifier, smIdentifier);
 		
 		// Try to retrieve deleted SubmodelElement; should throw ResourceNotFoundException
 		try {

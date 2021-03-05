@@ -137,12 +137,12 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	 * @param elem
 	 * 
 	 * @deprecated
-	 * This method is deprecated. Use addSubModelElement instead
+	 * This method is deprecated. Use addSubmodelElement instead
 	 * which does the same work
 	 */
 	@Deprecated
 	public void addElement(ISubmodelElement elem) {
-		addSubModelElement(elem);
+		addSubmodelElement(elem);
 	}
 
 	/**
@@ -152,7 +152,7 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void addSubModelElement(ISubmodelElement elem) {
+	public void addSubmodelElement(ISubmodelElement elem) {
 		if (elem instanceof SubmodelElement) {
 			((SubmodelElement) elem).setParent(getReference());
 		}

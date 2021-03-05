@@ -19,9 +19,9 @@ import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.wrapper.provider.IWrapperProvider;
 import org.eclipse.basyx.wrapper.receiver.IPropertyWrapperService;
@@ -67,22 +67,22 @@ public class AASWrapperProvider implements IWrapperProvider {
 		AssetAdministrationShell aas = new WrapperAssetAdministrationShell();
 		Asset asset = new WrapperAsset();
 		aas.setAsset(asset);
-		SubModel sm = new WrapperSubmodel("Wrapper", new Identifier(IdentifierType.CUSTOM, "WrapperSubmodel"),
+		Submodel sm = new WrapperSubmodel("Wrapper", new Identifier(IdentifierType.CUSTOM, "WrapperSubmodel"),
 				wrapperService,
 				configs);
-		aas.addSubModel(sm);
+		aas.addSubmodel(sm);
 
 		provider = new VABMultiSubmodelProvider(new AASModelProvider(aas));
-		provider.addSubmodel(new SubModelProvider(sm));
+		provider.addSubmodel(new SubmodelProvider(sm));
 
 		// Register the aas
 		AASDescriptor desc = createDescriptor(aas, sm);
 		registerAAS(registry, desc);
 	}
 
-	private AASDescriptor createDescriptor(AssetAdministrationShell aas, SubModel... submodels) {
+	private AASDescriptor createDescriptor(AssetAdministrationShell aas, Submodel... submodels) {
 		AASDescriptor descriptor = new AASDescriptor(aas, "http://" + host + ":" + port + "/aas");
-		for (SubModel sm : submodels) {
+		for (Submodel sm : submodels) {
 			descriptor.addSubmodelDescriptor(
 					new SubmodelDescriptor(sm,
 							"http://" + host + ":" + port + "/aas/submodels/" + sm.getIdShort() + "/"));

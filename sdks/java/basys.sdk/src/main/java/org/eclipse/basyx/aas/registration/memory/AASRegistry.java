@@ -98,7 +98,7 @@ public class AASRegistry implements IAASRegistryService {
 			throw new ResourceNotFoundException(
 					"Could not delete submodel descriptor for AAS " + aasId.getId() + " since the AAS does not exist");
 		}
-		if (desc.getSubModelDescriptorFromIdentifierId(smIdString) == null) {
+		if (desc.getSubmodelDescriptorFromIdentifierId(smIdString) == null) {
 			throw new ResourceNotFoundException(
 					"Could not delete submodel descriptor for AAS " + aasId.getId() + " since the SM does not exist");
 		}
@@ -115,7 +115,7 @@ public class AASRegistry implements IAASRegistryService {
 			throw new ResourceNotFoundException("Could not look up submodels for AAS " + aasId + " since it does not exist");
 		}
 
-		return new ArrayList<>(desc.getSubModelDescriptors());
+		return new ArrayList<>(desc.getSubmodelDescriptors());
 	}
 
 	@Override
@@ -124,7 +124,7 @@ public class AASRegistry implements IAASRegistryService {
 		if (desc == null) {
 			throw new ResourceNotFoundException("Could not look up descriptor for SM " + smId + " of AAS " + aasId + " since the AAS does not exist");
 		}
-		SubmodelDescriptor smDesc = desc.getSubModelDescriptorFromIdentifierId(smId.getId());
+		SubmodelDescriptor smDesc = desc.getSubmodelDescriptorFromIdentifierId(smId.getId());
 		if (smDesc == null) {
 			throw new ResourceNotFoundException("Could not look up descriptor for SM " + smId + " of AAS " + aasId + " since the SM does not exist");
 		}

@@ -19,11 +19,11 @@ import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.restapi.SimpleAASSubmodel;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
@@ -55,7 +55,7 @@ public class MultiSubmodelProviderTest {
 		// set dummy aas
 		AssetAdministrationShell aas = new AssetAdministrationShell(AASIDSHORT, AASURN, new Asset("assetIdShort", new Identifier(IdentifierType.CUSTOM, "assetId"), AssetKind.INSTANCE));
 		provider.setAssetAdministrationShell(new AASModelProvider(aas));
-		provider.addSubmodel(new SubModelProvider(new SimpleAASSubmodel()));
+		provider.addSubmodel(new SubmodelProvider(new SimpleAASSubmodel()));
 		stub.addProvider(urn, "", provider);
 		proxy = stub.connectToVABElement(urn);
 	}
@@ -96,7 +96,7 @@ public class MultiSubmodelProviderTest {
 
 	@Test
 	public void createDeleteSubmodelTest() {
-		SubModel sm = new SimpleAASSubmodel("TestSM");
+		Submodel sm = new SimpleAASSubmodel("TestSM");
 		sm.setIdentification(IdentifierType.CUSTOM, "TestId");
 		proxy.setModelPropertyValue("/aas/submodels/" + sm.getIdShort(), sm);
 
@@ -125,11 +125,11 @@ public class MultiSubmodelProviderTest {
 	private void getTestRunner(String smId) {
 		// Get property value
 		Integer value = (Integer) proxy
-				.getModelPropertyValue("/aas/submodels/" + smId + "/" + SubModelProvider.SUBMODEL + "/" + MultiSubmodelElementProvider.ELEMENTS + "/integerProperty/value");
+				.getModelPropertyValue("/aas/submodels/" + smId + "/" + SubmodelProvider.SUBMODEL + "/" + MultiSubmodelElementProvider.ELEMENTS + "/integerProperty/value");
 		assertEquals(123, value.intValue());
 
 		// Get property value with /submodel suffix
-		value = (Integer) proxy.getModelPropertyValue("/aas/submodels/" + smId + "/" + SubModelProvider.SUBMODEL + "/" + MultiSubmodelElementProvider.ELEMENTS + "/integerProperty/value");
+		value = (Integer) proxy.getModelPropertyValue("/aas/submodels/" + smId + "/" + SubmodelProvider.SUBMODEL + "/" + MultiSubmodelElementProvider.ELEMENTS + "/integerProperty/value");
 		assertEquals(123, value.intValue());
 	}
 }

@@ -9,8 +9,8 @@
  ******************************************************************************/
 package org.eclipse.basyx.components.servlet.submodel;
 
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 
 /**
@@ -19,7 +19,7 @@ import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
  * @author kuhn
  *
  */
-public class SubmodelServlet extends VABHTTPInterface<SubModelProvider> {
+public class SubmodelServlet extends VABHTTPInterface<SubmodelProvider> {
 
 	/**
 	 * ID of serialized instances
@@ -31,14 +31,14 @@ public class SubmodelServlet extends VABHTTPInterface<SubModelProvider> {
 	 */
 	public SubmodelServlet() {
 		// Invoke base constructor
-		super(new SubModelProvider());
+		super(new SubmodelProvider());
 	}
 
 	/**
 	 * Constructor with a predefined submodel
 	 */
-	public SubmodelServlet(SubModel exportedModel) {
+	public SubmodelServlet(Submodel exportedModel) {
 		// Invoke base constructor
-		super(new SubModelProvider(exportedModel));
+		super(new SubmodelProvider(exportedModel));
 	}
 }

@@ -13,7 +13,7 @@ import org.eclipse.basyx.aas.metamodel.api.parts.asset.AssetKind;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
@@ -44,13 +44,13 @@ public class ExampleComponentBuilder {
 	 * @param idShort the idShort for the new Submodel
 	 * @return the new Submodel
 	 */
-	public static SubModel buildExampleSubmodel(String idShort, String id) {
-		SubModel submodel = new SubModel(idShort, new Identifier(IdentifierType.CUSTOM, id));
+	public static Submodel buildExampleSubmodel(String idShort, String id) {
+		Submodel submodel = new Submodel(idShort, new Identifier(IdentifierType.CUSTOM, id));
 		
 		// Add a Property to the Submodel
 		Property property = new Property(PROPERTY_ID, PropertyValueTypeDef.Int32);
 		property.setValue(PROPERTY_VALUE);
-		submodel.addSubModelElement(property);
+		submodel.addSubmodelElement(property);
 				
 		// Add a SubmodelElementCollection
 		SubmodelElementCollection collection = new SubmodelElementCollection(COLLECTION_ID);
@@ -58,8 +58,8 @@ public class ExampleComponentBuilder {
 		// Add a Property to the SubmodelElementCollection
 		Property property2 = new Property(COLLECTION_PROPERTY_ID, PropertyValueTypeDef.String);
 		property2.setValue(COLLECTION_PROPERTY_VALUE);
-		collection.addSubModelElement(property2);
-		submodel.addSubModelElement(collection);
+		collection.addSubmodelElement(property2);
+		submodel.addSubmodelElement(collection);
 		
 		return submodel;
 	}

@@ -21,7 +21,7 @@ import org.eclipse.basyx.components.aas.AASServerComponent;
 import org.eclipse.basyx.components.aas.configuration.AASServerBackend;
 import org.eclipse.basyx.components.aas.configuration.BaSyxAASServerConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
 import org.junit.AfterClass;
@@ -94,7 +94,7 @@ public class TestXMLAASServer {
 
 	@Test
 	public void testGetSingleSubmodel() throws Exception {
-		ISubModel subModel = getConnectedSubmodel();
+		ISubmodel subModel = getConnectedSubmodel();
 		assertEquals(smShortId, subModel.getIdShort());
 	}
 
@@ -114,8 +114,8 @@ public class TestXMLAASServer {
 	 * @return connected SM
 	 * @throws Exception
 	 */
-	private ISubModel getConnectedSubmodel() {
-		return manager.retrieveSubModel(aasId, smId);
+	private ISubmodel getConnectedSubmodel() {
+		return manager.retrieveSubmodel(aasId, smId);
 	}
 
 }

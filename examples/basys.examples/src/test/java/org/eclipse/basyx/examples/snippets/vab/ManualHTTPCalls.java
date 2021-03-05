@@ -79,7 +79,7 @@ public class ManualHTTPCalls {
 		// Server connections
 		// - Connect to VAB object by ID. The connection manager looks up this ID in
 		//   its directory
-		VABElementProxy connSubModel1 = this.connManager.connectToVABElement("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
+		VABElementProxy connSubmodel1 = this.connManager.connectToVABElement("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
 
 		int prop1Val = 7;
 		String prop2Val = "myStr";
@@ -88,9 +88,9 @@ public class ManualHTTPCalls {
 		//   properties "prop1" and "prop2". Container and properties lack the 
 		//   required properties for AAS and AAS sub models. They are therefore
 		//   not compliant to Asset Administration Shells.
-		connSubModel1.createValue("properties", new HashMap<String, Object>());
-		connSubModel1.createValue("properties/prop1", prop1Val);
-		connSubModel1.createValue("properties/prop2", prop2Val);
+		connSubmodel1.createValue("properties", new HashMap<String, Object>());
+		connSubmodel1.createValue("properties/prop1", prop1Val);
+		connSubmodel1.createValue("properties/prop2", prop2Val);
 		
 		
 		// Web service client 

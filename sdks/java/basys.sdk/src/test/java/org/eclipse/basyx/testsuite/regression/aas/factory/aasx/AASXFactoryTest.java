@@ -31,9 +31,9 @@ import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
@@ -53,11 +53,11 @@ public class AASXFactoryTest {
 	
 	
 	private AssetAdministrationShell aas;
-	private SubModel sm1;
-	private SubModel sm2;
+	private Submodel sm1;
+	private Submodel sm2;
 	
 	private List<IAssetAdministrationShell> aasList = new ArrayList<>();
-	private List<ISubModel> submodelList = new ArrayList<>();
+	private List<ISubmodel> submodelList = new ArrayList<>();
 	private List<IAsset> assetList = new ArrayList<>();
 	private List<IConceptDescription> conceptDescriptionList = new ArrayList<>();
 
@@ -70,8 +70,8 @@ public class AASXFactoryTest {
 		Asset asset = new Asset("asset-id", new ModelUrn("ASSET_IDENTIFICATION"), AssetKind.TYPE);
 		aas = new AssetAdministrationShell("aas-id", new ModelUrn("AAS_IDENTIFICATION"), asset);
 		
-		sm1 = new SubModel("sm1", new ModelUrn("SM1_ID"));
-		sm2 = new SubModel("sm2", new ModelUrn("SM2_ID"));
+		sm1 = new Submodel("sm1", new ModelUrn("SM1_ID"));
+		sm2 = new Submodel("sm2", new ModelUrn("SM2_ID"));
 		
 		File file1 = new File("http://localhost:8080/image.png", "image/png");
 		file1.setIdShort("file1");
@@ -83,14 +83,14 @@ public class AASXFactoryTest {
 		
 		
 		SubmodelElementCollection collection = new SubmodelElementCollection("collection");
-		collection.addSubModelElement(file2);
+		collection.addSubmodelElement(file2);
 		
-		sm1.addSubModelElement(file1);
-		sm1.addSubModelElement(collection);
-		sm2.addSubModelElement(file3);
+		sm1.addSubmodelElement(file1);
+		sm1.addSubmodelElement(collection);
+		sm2.addSubmodelElement(file3);
 		
-		aas.addSubModel(sm1);
-		aas.addSubModel(sm2);
+		aas.addSubmodel(sm1);
+		aas.addSubmodel(sm2);
 		
 		aasList.add(aas);
 		submodelList.add(sm1);

@@ -10,7 +10,7 @@
 package org.eclipse.basyx.examples.snippets.submodel;
 
 import org.eclipse.basyx.examples.snippets.manager.RetrieveSubmodelFromAAS;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 
@@ -34,7 +34,7 @@ public class RetrieveSubmodelElement {
 	public static ISubmodelElement retrieveSubmodelElement(String elementId, IIdentifier smIdentifier, IIdentifier aasIdentifier, String registryServerURL) {
 
 		// Get the ConnectedSubmodel
-		ISubModel submodel = RetrieveSubmodelFromAAS.retrieveSubmodelFromAAS(smIdentifier, aasIdentifier, registryServerURL);
+		ISubmodel submodel = RetrieveSubmodelFromAAS.retrieveSubmodelFromAAS(smIdentifier, aasIdentifier, registryServerURL);
 		
 		// Add the element to it
 		return submodel.getSubmodelElement(elementId);

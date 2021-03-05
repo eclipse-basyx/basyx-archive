@@ -131,7 +131,7 @@ public class ProductClassificationItem extends SubmodelElementCollection {
 	 * @param system
 	 */
 	public void setProductClassificationSystem(Property system) {
-		addSubModelElement(system);
+		addSubmodelElement(system);
 	}
 	
 	/**
@@ -165,7 +165,7 @@ public class ProductClassificationItem extends SubmodelElementCollection {
 	 * @param version
 	 */
 	public void setClassificationSystemVersion(Property version) {
-		addSubModelElement(version);
+		addSubmodelElement(version);
 	}
 	
 	/**
@@ -199,7 +199,7 @@ public class ProductClassificationItem extends SubmodelElementCollection {
 	 * @param id
 	 */
 	public void setProductClassId(Property id) {
-		addSubModelElement(id);
+		addSubmodelElement(id);
 	}
 	
 	/**

@@ -17,8 +17,8 @@ import java.util.Map;
 import org.eclipse.basyx.components.aas.mongodb.MongoDBAASAggregator;
 import org.eclipse.basyx.components.aas.mongodb.MongoDBSubmodelAPI;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
-import org.eclipse.basyx.testsuite.regression.submodel.restapi.SubModelProviderTest;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
+import org.eclipse.basyx.testsuite.regression.submodel.restapi.SubmodelProviderTest;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.TestsuiteDirectory;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -27,7 +27,7 @@ import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class TestMongoDBSubmodelProvider extends SubModelProviderTest {
+public class TestMongoDBSubmodelProvider extends SubmodelProviderTest {
 	private VABConnectionManager connManager;
 
 	@BeforeClass
@@ -44,8 +44,8 @@ public class TestMongoDBSubmodelProvider extends SubModelProviderTest {
 				protected IModelProvider createProvider(String addr) {
 					SimpleNoOpAASSubmodel submodel = new SimpleNoOpAASSubmodel();
 					MongoDBSubmodelAPI api = new MongoDBSubmodelAPI("mySubmodelId");
-					api.setSubModel(submodel);
-					IModelProvider smProvider = new SubModelProvider(api);
+					api.setSubmodel(submodel);
+					IModelProvider smProvider = new SubmodelProvider(api);
 					// Simple submodel for testing specific mappings for submodels
 					return smProvider;
 				}
@@ -99,7 +99,7 @@ public class TestMongoDBSubmodelProvider extends SubModelProviderTest {
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testReadSubModelElements() {
+	public void testReadSubmodelElements() {
 		VABElementProxy submodel = getConnectionManager().connectToVABElement(submodelAddr);
 		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) submodel
 				.getModelPropertyValue("/submodel/submodelElements");

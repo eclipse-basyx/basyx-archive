@@ -122,7 +122,7 @@ public class Phone extends SubmodelElementCollection {
 	 * @param telephoneNumber {@link MultiLanguageProperty}
 	 */
 	public void setTelephoneNumber(MultiLanguageProperty telephoneNumber) {
-		addSubModelElement(telephoneNumber);
+		addSubmodelElement(telephoneNumber);
 	}
 	
 	/**
@@ -141,7 +141,7 @@ public class Phone extends SubmodelElementCollection {
 	 * @param type {@link Property}
 	 */
 	public void setTypeOfTelephone(Property type) {
-		addSubModelElement(type);
+		addSubmodelElement(type);
 	}
 	
 	/**

@@ -10,7 +10,7 @@
 package org.eclipse.basyx.examples.snippets.submodel;
 
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 
 /**
@@ -31,16 +31,16 @@ public class CreateSubmodel {
 	 * @param propertyValue the value of the Property (see PropertyValueTypeDef for allowed value types)
 	 * @return the newly created Submodel
 	 */
-	public static SubModel createSubmodel(String idShort, IIdentifier smIdentifier, String propertyIdShort, Object propertyValue) {
+	public static Submodel createSubmodel(String idShort, IIdentifier smIdentifier, String propertyIdShort, Object propertyValue) {
 		
 		// Create a new Property with the given idShort and value
 		Property property = new Property(propertyIdShort, propertyValue);
 		
 		// Create a new Submodel object
-		SubModel sm = new SubModel(idShort, smIdentifier);
+		Submodel sm = new Submodel(idShort, smIdentifier);
 		
 		// Add the Property to the Submodel
-		sm.addSubModelElement(property);
+		sm.addSubmodelElement(property);
 		
 		return sm;
 	}

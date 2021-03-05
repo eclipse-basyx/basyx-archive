@@ -26,7 +26,7 @@ import org.eclipse.basyx.components.registry.configuration.BaSyxRegistryConfigur
 import org.eclipse.basyx.components.registry.configuration.RegistryBackend;
 import org.eclipse.basyx.components.servlet.submodel.SubmodelServlet;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 
@@ -109,11 +109,11 @@ public class CloudEdgeDeploymentScenario {
 		
 		
 		// Get the docuSubmodel from the ComponentBuilder
-		SubModel docuSubmodel = ComponentBuilder.getDocuSM();
+		Submodel docuSubmodel = ComponentBuilder.getDocuSM();
 		
 		// Push the docuSubmodel to the cloud
 		// The manager automatically registers it in the registry
-		aasManager.createSubModel(aasIdentifier, docuSubmodel);
+		aasManager.createSubmodel(aasIdentifier, docuSubmodel);
 		
 
 		// Add the already existing edgeSM to the descriptor of the aas
@@ -134,7 +134,7 @@ public class CloudEdgeDeploymentScenario {
 	}
 
 	/**
-	 * Startup a server responsible for hosting the "current_temp" edgeSubModel
+	 * Startup a server responsible for hosting the "current_temp" edgeSubmodel
 	 * at the endpoint "http://localhost:8082/oven/current_temp"
 	 * 
 	 * In this example this server is hosted close to the machine
@@ -148,7 +148,7 @@ public class CloudEdgeDeploymentScenario {
 		BaSyxContext context = contextConfig.createBaSyxContext();
 		
 		// Get the edgeSubmodel from the ComponentBuilder
-		SubModel edgeSubmodel = ComponentBuilder.createEdgeSubModel();
+		Submodel edgeSubmodel = ComponentBuilder.createEdgeSubmodel();
 		
 		// Create a new SubmodelServlet containing the edgeSubmodel
 		SubmodelServlet smServlet = new SubmodelServlet(edgeSubmodel);

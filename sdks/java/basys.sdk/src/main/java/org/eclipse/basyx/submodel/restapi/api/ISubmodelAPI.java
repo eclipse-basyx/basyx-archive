@@ -11,7 +11,7 @@ package org.eclipse.basyx.submodel.restapi.api;
 
 import java.util.Collection;
 
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 
@@ -28,7 +28,7 @@ public interface ISubmodelAPI {
 	 * 
 	 * @return the submodel
 	 */
-	public ISubModel getSubmodel();
+	public ISubmodel getSubmodel();
 
 	/**
 	 * Adds a submodelElement to the submodel

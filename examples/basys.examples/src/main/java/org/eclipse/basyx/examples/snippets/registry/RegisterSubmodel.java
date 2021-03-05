@@ -11,7 +11,7 @@ package org.eclipse.basyx.examples.snippets.registry;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 
 /**
@@ -30,7 +30,7 @@ public class RegisterSubmodel {
 	 * @param aasIdentifier the Identifier of the AAS the Submodel should be registered to
 	 * @param registryServerURL the address of the registry
 	 */
-	public static void registerSubmodel(ISubModel submodel, String smEndpoint, IIdentifier aasIdentifier, String registryServerURL) {
+	public static void registerSubmodel(ISubmodel submodel, String smEndpoint, IIdentifier aasIdentifier, String registryServerURL) {
 		
 		// Create a proxy pointing to the registry
 		AASRegistryProxy registryProxy = new AASRegistryProxy(registryServerURL);

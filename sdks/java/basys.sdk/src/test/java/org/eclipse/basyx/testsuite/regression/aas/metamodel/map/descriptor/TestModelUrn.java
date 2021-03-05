@@ -37,7 +37,7 @@ public class TestModelUrn {
 	public void testConstructor2() {
 		String legalEntity = "testLegalEntity";
 		String subUnit = "testSubUnit";
-		String subModel = "testSubModel";
+		String subModel = "testSubmodel";
 		String version = "1.0";
 		String revision = "5";
 		String elementId = "testId";
