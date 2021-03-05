@@ -312,7 +312,7 @@ public class TestAASXPackageManager {
 		assertEquals("PARAMETER", sele.getCategory());
 		assertTrue(sele.getModelingKind().name().equalsIgnoreCase("Instance"));
 		Property prop = (Property) sele;
-		assertEquals("Festo AG & Co. KG", prop.get());
+		assertEquals("Festo AG & Co. KG", prop.getValue());
 		assertEquals(ValueType.String, prop.getValueType());
 
 		// get semantic id
@@ -332,7 +332,7 @@ public class TestAASXPackageManager {
 		assertEquals("PARAMETER", sele.getCategory());
 		assertTrue(sele.getModelingKind().name().equalsIgnoreCase("Instance"));
 		prop = (Property) sele;
-		assertEquals("OVEL Vacuum generator", prop.get());
+		assertEquals("OVEL Vacuum generator", prop.getValue());
 		assertEquals(ValueType.String, prop.getValueType());
 
 		// get semantic id
@@ -367,11 +367,11 @@ public class TestAASXPackageManager {
 		assertEquals(5, smElemMap.size());
 		Property prop1 = (Property) smElemMap.get("CountryCode");
 		assertEquals("CountryCode", prop1.getIdShort());
-		assertEquals("DE", prop1.get());
+		assertEquals("DE", prop1.getValue());
 
 		Property prop2 = (Property) smElemMap.get("Street");
 		assertEquals("Street", prop2.getIdShort());
-		assertEquals("Ruiter Straße 82", prop2.get());
+		assertEquals("Ruiter Straße 82", prop2.getValue());
 	}
 	
 	

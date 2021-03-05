@@ -49,12 +49,12 @@ public class TestAASLambdaPropertyHelper {
 		
 		// Check value is correctly retrievable by property
 		testValue = 10;
-		assertEquals(testValue, connectedProperty.get());
+		assertEquals(testValue, connectedProperty.getValue());
 		
 		// Check value is correctly written by property
 		double expectedValue = 2.1;
 		connectedProperty.setValue(expectedValue);
-		assertEquals(expectedValue, connectedProperty.get());
+		assertEquals(expectedValue, connectedProperty.getValue());
 		assertEquals(expectedValue, testValue, 0);
 	}
 }

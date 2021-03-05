@@ -49,7 +49,7 @@ public class TestEmail {
 	
 	@Before
 	public void buildFax() {
-		emailAddress.set("test@muster-ag.de");
+		emailAddress.setValue("test@muster-ag.de");
 		publicKey.setValue(new LangStrings(new LangString("DE", "123456")));
 		typeOfEmailAddress.setValue(MailType.SECRETARY);
 		typeOfPublicKey.setValue(new LangStrings(new LangString("DE", "1234")));

@@ -18,7 +18,6 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueTypeHelper;
-import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
 /**
@@ -32,16 +31,6 @@ public class ConnectedProperty extends ConnectedDataElement implements IProperty
 
 	public ConnectedProperty(VABElementProxy proxy) {
 		super(proxy);
-	}
-
-	@Override
-	public Object get() throws Exception {
-		return getValue();
-	}
-
-	@Override
-	public void set(Object newValue) throws ProviderException {
-		getProxy().setModelPropertyValue(Property.VALUE, ValueTypeHelper.prepareForSerialization(newValue));
 	}
 
 	@Override
@@ -77,7 +66,7 @@ public class ConnectedProperty extends ConnectedDataElement implements IProperty
 	
 	@Override
 	public void setValue(Object value) {
-		this.set(value);
+		getProxy().setModelPropertyValue(Property.VALUE, ValueTypeHelper.prepareForSerialization(value));
 	}
 
 	@Override

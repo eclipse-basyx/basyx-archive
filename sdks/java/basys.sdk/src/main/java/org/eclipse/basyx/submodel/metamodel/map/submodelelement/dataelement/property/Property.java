@@ -79,7 +79,7 @@ public class Property extends DataElement implements IProperty {
 		
 		// Set the value for the Property
 		// set() also automatically sets the value type
-		set(value);
+		setValue(value);
 	}
 
 	/**
@@ -132,7 +132,7 @@ public class Property extends DataElement implements IProperty {
 		this();
 		// Put attributes
 		put(Property.VALUEID, null);
-		set(value);
+		setValue(value);
 	}
 
 	public Property(Object value, Referable referable, Reference semanticId, Qualifiable qualifiable) {
@@ -168,22 +168,6 @@ public class Property extends DataElement implements IProperty {
 		return Reference.createAsFacade((Map<String, Object>) get(VALUEID));
 	}
 
-	@Override
-	public void set(Object value) {
-		put(Property.VALUE, ValueTypeHelper.prepareForSerialization(value));
-		// Value type is only set if it is not set before
-		if(getValueType() == null) {
-			
-			// If valueType has not been set yet,
-			// a null can not be accepted as value, because valueType needs to be set
-			if(value == null) {
-				throw new RuntimeException("Can not set mandatory attribute 'valueType' with null as value");
-			}
-			
-			put(Property.VALUETYPE, ValueTypeHelper.getType(value).toString());
-		}
-	}
-
 	/**
 	 * Sets the value and explicitly specifies the type of this value.
 	 * 
@@ -194,15 +178,6 @@ public class Property extends DataElement implements IProperty {
 		setValueType(newType);
 	}
 
-	@Override
-	public Object get() {
-		Object value = get(Property.VALUE);
-		if(value instanceof String) {
-			return ValueTypeHelper.getJavaObject(value, getValueType());
-		}else {
-			return value;
-		}
-	}
 
 	@Override
 	public ValueType getValueType() {
@@ -233,12 +208,28 @@ public class Property extends DataElement implements IProperty {
 
 	@Override
 	public Object getValue() {
-		return get();
+		Object value = get(Property.VALUE);
+		if (value instanceof String) {
+			return ValueTypeHelper.getJavaObject(value, getValueType());
+		} else {
+			return value;
+		}
 	}
 	
 	@Override
 	public void setValue(Object value) {
-		set(value);
+		put(Property.VALUE, ValueTypeHelper.prepareForSerialization(value));
+		// Value type is only set if it is not set before
+		if (getValueType() == null) {
+
+			// If valueType has not been set yet,
+			// a null can not be accepted as value, because valueType needs to be set
+			if (value == null) {
+				throw new RuntimeException("Can not set mandatory attribute 'valueType' with null as value");
+			}
+
+			put(Property.VALUETYPE, ValueTypeHelper.getType(value).toString());
+		}
 	}
 
 	@Override

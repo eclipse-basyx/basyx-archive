@@ -191,7 +191,7 @@ public abstract class TestSubmodelSuite {
 
 		IProperty connectedProperty = (IProperty) submodel.getSubmodelElements().get("testIdShort");
 		assertEquals(property.getIdShort(), connectedProperty.getIdShort());
-		assertEquals(property.get(), connectedProperty.getValue());
+		assertEquals(property.getValue(), connectedProperty.getValue());
 
 		// creates an expected reference for assertion
 		IReference expected = submodel.getReference();

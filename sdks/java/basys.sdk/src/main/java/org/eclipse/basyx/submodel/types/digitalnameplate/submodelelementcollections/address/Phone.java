@@ -81,7 +81,7 @@ public class Phone extends SubmodelElementCollection {
 		}
 		
 		Phone phone = new Phone();
-		phone.setMap((Map<String, Object>)SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
+		phone.setMap(SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
 		return phone;
 	}
 	
@@ -97,7 +97,7 @@ public class Phone extends SubmodelElementCollection {
 		}
 		
 		Phone phone = new Phone();
-		phone.setMap((Map<String, Object>)SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
+		phone.setMap(SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
 		return phone;
 	}
 	
@@ -151,7 +151,7 @@ public class Phone extends SubmodelElementCollection {
 	public void setTypeOfTelephone(PhoneType type) {
 		Property phoneTypeProp = new Property(TYPEOFTELEPHONEID, ValueType.String);
 		phoneTypeProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO137#003", IdentifierType.IRDI)));
-		phoneTypeProp.set(type.toString());
+		phoneTypeProp.setValue(type.toString());
 		setTypeOfTelephone(phoneTypeProp);
 	}
 	

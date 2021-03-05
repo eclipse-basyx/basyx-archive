@@ -133,7 +133,7 @@ public class Address extends SubmodelElementCollection {
 		}
 
 		Address address = new Address();
-		address.setMap((Map<String, Object>)SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
+		address.setMap(SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
 		return address;
 	}
 	
@@ -149,7 +149,7 @@ public class Address extends SubmodelElementCollection {
 		}
 
 		Address address = new Address();
-		address.setMap((Map<String, Object>)SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
+		address.setMap(SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
 		return address;
 	}
 	
@@ -491,7 +491,7 @@ public class Address extends SubmodelElementCollection {
 	public void setAddressOfAdditionalLink(String addressOfAdditionalLink) {
 		Property addressOfAdditionalLinkProp = new Property(ADDRESSOFADDITIONALLINKID, ValueType.String);
 		addressOfAdditionalLinkProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAQ326#002", IdentifierType.IRDI)));
-		addressOfAdditionalLinkProp.set(addressOfAdditionalLink);
+		addressOfAdditionalLinkProp.setValue(addressOfAdditionalLink);
 		setAddressOfAdditionalLink(addressOfAdditionalLinkProp);
 	}
 

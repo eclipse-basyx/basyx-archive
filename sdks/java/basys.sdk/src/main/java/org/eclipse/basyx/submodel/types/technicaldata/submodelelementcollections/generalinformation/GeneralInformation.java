@@ -132,7 +132,7 @@ public class GeneralInformation extends SubmodelElementCollection{
 		}
 		
 		GeneralInformation generalInformation = new GeneralInformation();
-		generalInformation.setMap((Map<String, Object>)SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
+		generalInformation.setMap(SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
 		return generalInformation;
 	}
 	
@@ -148,7 +148,7 @@ public class GeneralInformation extends SubmodelElementCollection{
 		}
 		
 		GeneralInformation generalInformation = new GeneralInformation();
-		generalInformation.setMap((Map<String, Object>)SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
+		generalInformation.setMap(SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
 		return generalInformation;
 	}
 	
@@ -187,7 +187,7 @@ public class GeneralInformation extends SubmodelElementCollection{
 	public void setManufacturerName(String name) {
 		Property nameProp = new Property(MANUFACTURERNAMEID, ValueType.String);
 		nameProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ManufacturerName/1/1", IdentifierType.IRI)));
-		nameProp.set(name);
+		nameProp.setValue(name);
 		setManufacturerName(nameProp);
 	}
 	
@@ -275,7 +275,7 @@ public class GeneralInformation extends SubmodelElementCollection{
 	public void setManufacturerPartNumber(String partNumber) {
 		Property partNumberProp = new Property(MANUFACTURERPARTNUMBERID, ValueType.String);
 		partNumberProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ManufacturerPartNumber/1/1", IdentifierType.IRI)));
-		partNumberProp.set(partNumber);
+		partNumberProp.setValue(partNumber);
 		setManufacturerPartNumber(partNumberProp);
 	}
 	
@@ -307,7 +307,7 @@ public class GeneralInformation extends SubmodelElementCollection{
 	public void setManufacturerOrderCode(String orderCode) {
 		Property orderCodeProp = new Property(MANUFACTURERORDERCODEID, ValueType.String);
 		orderCodeProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ManufacturerOrderCode/1/1", IdentifierType.IRI)));
-		orderCodeProp.set(orderCode);
+		orderCodeProp.setValue(orderCode);
 		setManufacturerOrderCode(orderCodeProp);
 	}
 	

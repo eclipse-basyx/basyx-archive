@@ -175,7 +175,7 @@ public class SubmodelProviderTest {
 		// Check content of nested Collection
 		assertTrue(containerValue.containsKey("operationId"));
 		assertTrue(containerValue.containsKey("integerProperty"));
-		assertEquals(123, ((Property) containerValue.get("integerProperty")).get());
+		assertEquals(123, ((Property) containerValue.get("integerProperty")).getValue());
 
 		// Read nested property
 		String pathToNestedContainer = "/submodel/submodelElements/containerRoot/container";

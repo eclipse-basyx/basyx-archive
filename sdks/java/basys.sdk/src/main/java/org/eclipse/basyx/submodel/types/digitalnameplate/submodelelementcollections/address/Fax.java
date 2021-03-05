@@ -81,7 +81,7 @@ public class Fax extends SubmodelElementCollection {
 		}
 		
 		Fax fax = new Fax();
-		fax.setMap((Map<String, Object>)SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
+		fax.setMap(SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
 		return fax;
 	}
 	
@@ -97,7 +97,7 @@ public class Fax extends SubmodelElementCollection {
 		}
 		
 		Fax fax = new Fax();
-		fax.setMap((Map<String, Object>)SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
+		fax.setMap(SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
 		return fax;
 	}
 	
@@ -152,7 +152,7 @@ public class Fax extends SubmodelElementCollection {
 	public void setTypeOfFaxNumber(FaxType type) {
 		Property faxTypeProp = new Property(TYPEOFFAXID, ValueType.String);
 		faxTypeProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO196#003", IdentifierType.IRDI)));
-		faxTypeProp.set(type.toString());
+		faxTypeProp.setValue(type.toString());
 		setTypeOfFaxNumber(faxTypeProp);
 	}
 	

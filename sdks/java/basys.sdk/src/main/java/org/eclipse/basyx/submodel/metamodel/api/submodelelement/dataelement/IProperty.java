@@ -12,7 +12,6 @@ package org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement;
 import org.eclipse.basyx.submodel.metamodel.api.IElement;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
-import org.eclipse.basyx.vab.exception.provider.ProviderException;
 
 /**
  * Interface for IElement properties
@@ -21,25 +20,6 @@ import org.eclipse.basyx.vab.exception.provider.ProviderException;
  *
  */
 public interface IProperty extends IElement, IDataElement {
-	/**
-	 * Will be replaced by {@link #getValue() }<br>
-	 * Get property value
-	 * 
-	 * @return Property value
-	 * @throws Exception
-	 */
-	@Deprecated
-	public Object get() throws Exception;
-
-	/**
-	 * Will be replaced by {@link #setValue(Object)} <br>
-	 * Set property value
-	 * 
-	 * @throws ProviderException
-	 */
-	@Deprecated
-	public void set(Object newValue) throws ProviderException;
-
 	/**
 	 * Gets the data type of the value
 	 * 

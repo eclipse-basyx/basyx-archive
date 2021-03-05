@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
@@ -54,17 +53,6 @@ import org.eclipse.basyx.vab.modelprovider.VABPathTools;
  *
  */
 public class ConnectedAssetAdministrationShell extends ConnectedElement implements IAssetAdministrationShell {
-	/**
-	 * Constructor creating a ConnectedAAS pointing to the AAS represented by proxy
-	 * 
-	 * @param proxy
-	 * @param manager
-	 */
-	@Deprecated
-	public ConnectedAssetAdministrationShell(VABElementProxy proxy, ConnectedAssetAdministrationShellManager manager) {
-		super(proxy);
-	}
-
 	/**
 	 * Constructor creating a ConnectedAAS pointing to the AAS represented by proxy
 	 * 

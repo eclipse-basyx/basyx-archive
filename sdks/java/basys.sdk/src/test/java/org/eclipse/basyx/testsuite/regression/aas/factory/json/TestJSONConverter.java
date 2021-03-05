@@ -105,7 +105,7 @@ public class TestJSONConverter {
 		assertEquals(1, sm.getSubmodelElements().size());
 		
 		Property smElement = (Property) sm.getSubmodelElements().get("MaxRotationSpeed");
-		assertEquals("5000", smElement.get());
+		assertEquals("5000", smElement.getValue());
 	}
 	
 	private void checkAssets(List<Asset> assetList) {

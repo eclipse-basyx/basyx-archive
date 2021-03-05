@@ -85,7 +85,7 @@ public class GuidelineSpecificProperties extends SubmodelElementCollection {
 		}
 		
 		GuidelineSpecificProperties guidelineSpecificProperties = new GuidelineSpecificProperties();
-		guidelineSpecificProperties.setMap((Map<String, Object>)SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
+		guidelineSpecificProperties.setMap(SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
 		return guidelineSpecificProperties;
 	}
 	
@@ -101,7 +101,7 @@ public class GuidelineSpecificProperties extends SubmodelElementCollection {
 		}
 		
 		GuidelineSpecificProperties guidelineSpecificProperties = new GuidelineSpecificProperties();
-		guidelineSpecificProperties.setMap((Map<String, Object>)SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
+		guidelineSpecificProperties.setMap(SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
 		return guidelineSpecificProperties;
 	}
 	
@@ -150,7 +150,7 @@ public class GuidelineSpecificProperties extends SubmodelElementCollection {
 	public void setGuidelineForConformityDeclaration(String declaration) {
 		Property declarationProp = new Property(GUIDELINEFORCONFORMITYDECLARATIONID, ValueType.String);
 		declarationProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO856#002", IdentifierType.IRDI)));
-		declarationProp.set(declaration);
+		declarationProp.setValue(declaration);
 		setGuidelineForConformityDeclaration(declarationProp);
 	}
 	

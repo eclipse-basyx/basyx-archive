@@ -131,19 +131,6 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 		return MODELTYPE.equals(modelType) || (modelType == null
 				&& (map.containsKey(Property.VALUE) && map.containsKey(ORDERED) && map.containsKey(ALLOWDUPLICATES)));
 	}
-		
-	/**
-	 * Adds an element to the SubmodelElementCollection
-	 * @param elem
-	 * 
-	 * @deprecated
-	 * This method is deprecated. Use addSubmodelElement instead
-	 * which does the same work
-	 */
-	@Deprecated
-	public void addElement(ISubmodelElement elem) {
-		addSubmodelElement(elem);
-	}
 
 	/**
 	 * Adds an element to the SubmodelElementCollection

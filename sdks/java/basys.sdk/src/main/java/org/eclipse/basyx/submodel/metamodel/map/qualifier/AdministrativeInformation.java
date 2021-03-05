@@ -103,11 +103,10 @@ public class AdministrativeInformation extends VABModelMap<Object> implements IA
 	}
 
 	/**
-	 * @deprecated replaced by method {@link #setVersionInformation(String, String)}
+	 *
 	 * @param version
 	 */
-	@Deprecated
-	public void setVersion(String version) {
+	private void setVersion(String version) {
 		put(AdministrativeInformation.VERSION, version);
 	}
 
@@ -117,11 +116,10 @@ public class AdministrativeInformation extends VABModelMap<Object> implements IA
 	}
 
 	/**
-	 * @deprecated replaced by method {@link #setVersionInformation(String, String)}
+	 * 
 	 * @param revision
 	 */
-	@Deprecated
-	public void setRevision(String revision) {
+	private void setRevision(String revision) {
 		put(AdministrativeInformation.REVISION, revision);
 	}
 

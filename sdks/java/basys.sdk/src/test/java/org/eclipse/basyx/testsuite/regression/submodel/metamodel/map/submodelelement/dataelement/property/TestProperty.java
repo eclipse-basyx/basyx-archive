@@ -56,7 +56,7 @@ public class TestProperty {
 	
 	@Test
 	public void testConstructor1(){
-		assertEquals(VALUE, property.get());
+		assertEquals(VALUE, property.getValue());
 		assertNull(property.getValueId());
 		assertEquals(STRING_TYPE, property.getValueType());
 	} 
@@ -67,7 +67,7 @@ public class TestProperty {
 		Reference semanticId = new Reference(new Key(KeyElements.ASSET, true, "testValue", IdentifierType.IRI));
 		Qualifiable qualifiable = new Qualifiable(new Formula(Collections.singleton(new Reference(new Key(KeyElements.BLOB, true, "TestValue", IdentifierType.IRI)))));
 		Property property = new Property(VALUE, referable, semanticId, qualifiable);
-		assertEquals(VALUE, property.get());
+		assertEquals(VALUE, property.getValue());
 		assertNull(property.getValueId());
 		assertEquals(STRING_TYPE, property.getValueType());
 	} 
@@ -83,20 +83,19 @@ public class TestProperty {
 		Property booleanProp = new Property();
 		Boolean isSomething = true;
 		booleanProp.setValue(isSomething);
-		assertEquals(isSomething, booleanProp.get());
 		assertEquals(isSomething, booleanProp.getValue());
 		assertEquals(ValueType.Boolean, booleanProp.getValueType());
 
 		Byte byteNumber = new Byte("2");
 		Property byteProp = new Property();
 		byteProp.setValue(byteNumber);
-		assertEquals(byteNumber, byteProp.get());
+		assertEquals(byteNumber, byteProp.getValue());
 		assertEquals(ValueType.Int8, byteProp.getValueType());
 		
 		Duration duration = Duration.ofSeconds(10);
 		Property durationProp = new Property();
 		durationProp.setValue(duration);
-		assertEquals(duration, durationProp.get());
+		assertEquals(duration, durationProp.getValue());
 		assertEquals(ValueType.Duration, durationProp.getValueType());
 
 		Property periodProp = new Property();
@@ -104,20 +103,20 @@ public class TestProperty {
 		LocalDate birthday = LocalDate.of(1960, Month.JANUARY, 1);
 		Period p = Period.between(birthday, today);
 		periodProp.setValue(p);
-		assertEquals(p, periodProp.get());
+		assertEquals(p, periodProp.getValue());
 		assertEquals(ValueType.YearMonthDuration, periodProp.getValueType());
 
 		Property bigNumberProp = new Property();
 		BigInteger bignumber = new BigInteger("9223372036854775817");
 		bigNumberProp.setValue(bignumber);
-		assertEquals(bignumber, bigNumberProp.get());
+		assertEquals(bignumber, bigNumberProp.getValue());
 		assertEquals(ValueType.PositiveInteger, bigNumberProp.getValueType());
 	}
 
 	@Test
 	public void testSetCustom(){
 		property.set(null, ValueType.String);
-		assertEquals(null, property.get());
+		assertEquals(null, property.getValue());
 		assertEquals(ValueType.String, property.getValueType());
 	}
 

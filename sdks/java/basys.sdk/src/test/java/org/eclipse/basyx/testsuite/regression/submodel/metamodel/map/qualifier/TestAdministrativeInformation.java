@@ -64,22 +64,6 @@ public class TestAdministrativeInformation {
 		assertEquals(references, information.getDataSpecificationReferences());
 	}
 	
-	@SuppressWarnings("deprecation")
-	@Test
-	public void testSetVersion() {
-		String newVersionString = "2.0";
-		information.setVersion(newVersionString);
-		assertEquals(newVersionString, information.getVersion());
-	}
-	
-	@SuppressWarnings("deprecation")
-	@Test
-	public void testSetRevision() {
-		String newRevisionString = "2.0.1";
-		information.setRevision(newRevisionString);
-		assertEquals(newRevisionString, information.getRevision());
-	}
-	
 	@Test
 	public void testSetVersionInformation() {
 		String newVersionString = "2.0";

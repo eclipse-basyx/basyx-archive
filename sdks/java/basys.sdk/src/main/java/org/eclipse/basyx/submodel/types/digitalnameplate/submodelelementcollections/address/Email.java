@@ -83,7 +83,7 @@ public class Email extends SubmodelElementCollection {
 		}
 		
 		Email email = new Email();
-		email.setMap((Map<String, Object>)SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
+		email.setMap(SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
 		return email;
 	}
 	
@@ -99,7 +99,7 @@ public class Email extends SubmodelElementCollection {
 		}
 		
 		Email email = new Email();
-		email.setMap((Map<String, Object>)SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
+		email.setMap(SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
 		return email;
 	}
 	
@@ -134,7 +134,7 @@ public class Email extends SubmodelElementCollection {
 	public void setEmailAddress(String emailAddress) {
 		Property emailProp = new Property(EMAILADDRESSID, ValueType.String);
 		emailProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO198#002", IdentifierType.IRDI)));
-		emailProp.set(emailAddress);
+		emailProp.setValue(emailAddress);
 		setEmailAddress(emailProp);
 	}
 	
@@ -192,7 +192,7 @@ public class Email extends SubmodelElementCollection {
 	public void setTypeOfEmailAddress(MailType type) {
 		Property mailTypeProp = new Property(TYPEOFEMAILADDRESSID, ValueType.String);
 		mailTypeProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO199#003", IdentifierType.IRDI)));
-		mailTypeProp.set(type.toString());
+		mailTypeProp.setValue(type.toString());
 		setTypeOfEmailAddress(mailTypeProp);
 	}
 	

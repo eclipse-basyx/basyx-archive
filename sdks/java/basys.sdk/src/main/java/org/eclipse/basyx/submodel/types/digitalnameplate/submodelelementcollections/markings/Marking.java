@@ -92,7 +92,7 @@ public class Marking extends SubmodelElementCollection {
 		}
 		
 		Marking marking = new Marking();
-		marking.setMap((Map<String, Object>)SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
+		marking.setMap(SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
 		return marking;
 	}
 	
@@ -108,7 +108,7 @@ public class Marking extends SubmodelElementCollection {
 		}
 		
 		Marking marking = new Marking();
-		marking.setMap((Map<String, Object>)SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
+		marking.setMap(SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
 		return marking;
 	}
 	
@@ -149,7 +149,7 @@ public class Marking extends SubmodelElementCollection {
 	public void setMarkingName(String markingName) {
 		Property markingNameProp = new Property(MARKINGNAMEID, ValueType.String);
 		markingNameProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/zvei/nameplate/1/0/Nameplate/Markings/Marking/MarkingName", IdentifierType.IRDI)));
-		markingNameProp.set(markingName);
+		markingNameProp.setValue(markingName);
 		setMarkingName(markingNameProp);
 	}
 	

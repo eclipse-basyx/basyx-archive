@@ -83,11 +83,11 @@ public class WrapperSubmodel extends Submodel {
 		for (int i = data.size() - 1; i >= 0; i--) {
 			Property dateProp = new Property();
 			dateProp.setIdShort("time" + i);
-			dateProp.set(dates.get(i).toString());
+			dateProp.setValue(dates.get(i).toString());
 			elements.add(dateProp);
 			Property valueProp = new Property();
 			valueProp.setIdShort("value" + i);
-			valueProp.set(data.get(i));
+			valueProp.setValue(data.get(i));
 			elements.add(valueProp);
 		}
 		Operation setOperation = new Operation();

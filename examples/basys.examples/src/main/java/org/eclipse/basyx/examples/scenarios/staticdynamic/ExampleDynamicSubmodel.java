@@ -33,7 +33,7 @@ public class ExampleDynamicSubmodel extends Submodel {
 	public ExampleDynamicSubmodel() {
 		// Create Property
 		Property interval = new Property();
-		interval.set(PROPERTY_VALUE);
+		interval.setValue(PROPERTY_VALUE);
 		interval.setIdShort(PROPERTY_ID_SHORT);
 
 		// Add the property to the submodel

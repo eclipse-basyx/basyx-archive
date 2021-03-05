@@ -166,7 +166,7 @@ public class DigitalNameplateSubmodel extends Submodel {
 		}
 		
 		DigitalNameplateSubmodel ret = new DigitalNameplateSubmodel();
-		ret.setMap((Map<String, Object>)SubmodelElementMapCollectionConverter.mapToSM(obj));
+		ret.setMap(SubmodelElementMapCollectionConverter.mapToSM(obj));
 		return ret;
 	}
 	
@@ -182,7 +182,7 @@ public class DigitalNameplateSubmodel extends Submodel {
 		}
 		
 		DigitalNameplateSubmodel ret = new DigitalNameplateSubmodel();
-		ret.setMap((Map<String, Object>)SubmodelElementMapCollectionConverter.mapToSM(obj));
+		ret.setMap(SubmodelElementMapCollectionConverter.mapToSM(obj));
 		return ret;
 	}
 	
@@ -201,7 +201,7 @@ public class DigitalNameplateSubmodel extends Submodel {
 		return Submodel.isValid(obj)
 				&& MultiLanguageProperty.isValid((Map<String, Object>) submodel.getManufacturerName())
 				&& MultiLanguageProperty.isValid((Map<String, Object>) submodel.getManufacturerProductDesignation())
-				&& Address.isValid((Map<String, Object>) submodel.getAddress())
+				&& Address.isValid(submodel.getAddress())
 				&& MultiLanguageProperty.isValid((Map<String, Object>) submodel.getManufacturerProductFamily())
 				&& Property.isValid((Map<String, Object>) submodel.getYearOfConstruction());
 	}
@@ -359,7 +359,7 @@ public class DigitalNameplateSubmodel extends Submodel {
 	public void setSerialNumber(String serialNumber) {
 		Property serialNumberProp = new Property(SERIALNUMBERID, ValueType.String);
 		serialNumberProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAM556#002", IdentifierType.IRDI)));
-		serialNumberProp.set(serialNumber);
+		serialNumberProp.setValue(serialNumber);
 		setSerialNumber(serialNumberProp);
 	}
 	
@@ -390,7 +390,7 @@ public class DigitalNameplateSubmodel extends Submodel {
 	public void setYearOfConstruction(String yearsOfConstruction) {
 		Property yearsOfConstructionProp = new Property(YEARSOFCONSTRUCTIONID, ValueType.String);
 		yearsOfConstructionProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAP906#001", IdentifierType.IRDI)));
-		yearsOfConstructionProp.set(yearsOfConstruction);
+		yearsOfConstructionProp.setValue(yearsOfConstruction);
 		setYearOfConstruction(yearsOfConstructionProp);
 	}
 	

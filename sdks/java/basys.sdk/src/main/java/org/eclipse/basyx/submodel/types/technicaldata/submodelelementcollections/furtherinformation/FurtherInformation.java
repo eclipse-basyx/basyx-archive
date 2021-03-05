@@ -107,7 +107,7 @@ public class FurtherInformation extends SubmodelElementCollection {
 		}
 		
 		FurtherInformation furtherInformation = new FurtherInformation();
-		furtherInformation.setMap((Map<String, Object>)SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
+		furtherInformation.setMap(SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
 		return furtherInformation;
 	}
 	
@@ -123,7 +123,7 @@ public class FurtherInformation extends SubmodelElementCollection {
 		}
 		
 		FurtherInformation furtherInformation = new FurtherInformation();
-		furtherInformation.setMap((Map<String, Object>)SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
+		furtherInformation.setMap(SubmodelElementMapCollectionConverter.mapToSmECollection(obj));
 		return furtherInformation;
 	}
 	
@@ -205,7 +205,7 @@ public class FurtherInformation extends SubmodelElementCollection {
 	public void setValidDate(XMLGregorianCalendar validDate) {
 		Property validDateProp = new Property(VALIDDATEID, ValueType.DateTime);
 		validDateProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ValidDate/1/1", IdentifierType.IRI)));
-		validDateProp.set(validDate);
+		validDateProp.setValue(validDate);
 		setValidDate(validDateProp);
 	}
 	
