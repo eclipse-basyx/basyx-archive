@@ -43,7 +43,7 @@ public class TechnicalProperties extends SubmodelElementCollection {
 	public static final String SMENOTDESCRIBEDID = "https://admin-shell.io/SemanticIdNotAvailable/1/1";
 	public static final String MAINSECTIONID = "https://admin-shell.io/ZVEI/TechnicalData/MainSection/1/1";
 	public static final String SUBSECTIONID = "https://admin-shell.io/ZVEI/TechnicalData/SubSection/1/1";
-	public static final Reference SEMANTICID = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/TechnicalProperties/1/1", KeyType.IRI));
+	public static final Reference SEMANTICID = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "https://admin-shell.io/ZVEI/TechnicalData/TechnicalProperties/1/1", KeyType.IRI));
 
 	/**
 	 * Constructor with default idShort

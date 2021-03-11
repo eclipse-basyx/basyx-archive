@@ -24,12 +24,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
-import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
-import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
-import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 
 /**
  * Tests createAsFacade and isValid of {@link Markings} for their
@@ -50,7 +46,6 @@ public class TestMarkings {
 		TestMarking.markingFile.setIdShort(Marking.MARKINGFILEID);
 		TestMarking.markingName.setValue("0173-1#07-DAA603#004");
 		marking = new Marking(TestMarking.IDSHORT, TestMarking.markingName, TestMarking.markingFile);
-		marking.setParent(new Reference(new Key(KeyElements.SUBMODELELEMENTCOLLECTION, true, IDSHORT, IdentifierType.IRDI)));
 		markings = new ArrayList<Marking>();
 		markings.add(marking);
 		

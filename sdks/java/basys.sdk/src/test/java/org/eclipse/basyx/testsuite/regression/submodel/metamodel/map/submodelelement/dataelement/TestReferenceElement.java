@@ -29,7 +29,7 @@ import org.junit.Test;
  *
  */
 public class TestReferenceElement {
-	private static final Reference REFERENCE = new Reference(new Key(KeyElements.ASSET, true, "testValue", IdentifierType.IRI));
+	private static final Reference REFERENCE = new Reference(new Key(KeyElements.ASSET, "testValue", IdentifierType.IRI));
 	
 	private ReferenceElement referenceElement;
 	
@@ -46,7 +46,7 @@ public class TestReferenceElement {
 	
 	@Test
 	public void testSetValue() {
-		Reference newReference = new Reference(new Identifier(IdentifierType.IRI, "testId"), KeyElements.ASSET, true);
+		Reference newReference = new Reference(new Identifier(IdentifierType.IRI, "testId"), KeyElements.ASSET);
 		referenceElement.setValue(newReference);
 		assertEquals(newReference, referenceElement.getValue());
 	} 

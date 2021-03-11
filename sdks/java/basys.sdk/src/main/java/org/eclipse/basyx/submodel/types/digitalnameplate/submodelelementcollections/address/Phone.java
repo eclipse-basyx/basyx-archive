@@ -39,7 +39,7 @@ public class Phone extends SubmodelElementCollection {
 	public static final String TELEPHONENUMBERID = "TelephoneNumber";
 	public static final String TYPEOFTELEPHONEID = "TypeOfTelephone";
 	public static final String PHONEID = "Phone";
-	public static final Reference SEMANTICID = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAQ833#005", KeyType.IRDI));
+	public static final Reference SEMANTICID = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "0173-1#02-AAQ833#005", KeyType.IRDI));
 	
 	private Phone() {}
 	
@@ -131,7 +131,7 @@ public class Phone extends SubmodelElementCollection {
 	 */
 	public void setTelephoneNumber(LangString telephoneNumber) {
 		MultiLanguageProperty phoneProp = new MultiLanguageProperty(TELEPHONENUMBERID);
-		phoneProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO136#002", IdentifierType.IRDI)));
+		phoneProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "0173-1#02-AAO136#002", IdentifierType.IRDI)));
 		phoneProp.setValue(new LangStrings(telephoneNumber));
 		setTelephoneNumber(phoneProp);
 	}
@@ -150,7 +150,7 @@ public class Phone extends SubmodelElementCollection {
 	 */
 	public void setTypeOfTelephone(PhoneType type) {
 		Property phoneTypeProp = new Property(TYPEOFTELEPHONEID, ValueType.String);
-		phoneTypeProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO137#003", IdentifierType.IRDI)));
+		phoneTypeProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "0173-1#02-AAO137#003", IdentifierType.IRDI)));
 		phoneTypeProp.setValue(type.toString());
 		setTypeOfTelephone(phoneTypeProp);
 	}

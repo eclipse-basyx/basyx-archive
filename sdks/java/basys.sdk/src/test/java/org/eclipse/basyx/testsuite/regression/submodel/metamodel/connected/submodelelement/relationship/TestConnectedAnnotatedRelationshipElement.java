@@ -43,8 +43,8 @@ public class TestConnectedAnnotatedRelationshipElement {
 	
 	@Before
 	public void build() {
-		Reference ref1 = new Reference(new Key(KeyElements.BLOB, true, "1", IdentifierType.CUSTOM));
-		Reference ref2 = new Reference(new Key(KeyElements.FILE, false, "2", IdentifierType.IRDI));
+		Reference ref1 = new Reference(new Key(KeyElements.BLOB, "1", IdentifierType.CUSTOM));
+		Reference ref2 = new Reference(new Key(KeyElements.FILE, "2", IdentifierType.IRDI));
 		
 		Property property = new Property("PropertyId", 10);
 		List<IDataElement> annotations = new ArrayList<>();

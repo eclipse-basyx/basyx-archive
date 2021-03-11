@@ -16,11 +16,8 @@ import java.io.IOException;
 
 import org.eclipse.basyx.extensions.submodel.mqtt.MqttSubmodelAPI;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
-import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
-import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.restapi.vab.VABSubmodelAPI;
@@ -66,11 +63,9 @@ public class TestMqttSubmodelAPIEvents {
 
 		// Create submodel
 		Submodel sm = new Submodel(SUBMODELID, new Identifier(IdentifierType.CUSTOM, SUBMODELID));
-		Reference parentRef = new Reference(new Key(KeyElements.ASSETADMINISTRATIONSHELL, true, AASID, IdentifierType.IRDI));
-		sm.setParent(parentRef);
-		
+
 		VABSubmodelAPI vabAPI = new VABSubmodelAPI(new VABMapProvider(sm));
-		eventAPI = new MqttSubmodelAPI(vabAPI, "tcp://localhost:1884", "testClient");
+		eventAPI = new MqttSubmodelAPI(vabAPI, AASID, "tcp://localhost:1884", "testClient");
 	}
 
 	@AfterClass

@@ -39,11 +39,10 @@ public class TestConceptDescription {
 	private static final String ID_SHORT_STRING = "testIdShort";
 	private static final LangStrings DESCRIPTION = new LangStrings("Eng", "test");
 	private static final KeyElements KEY_ELEMENTS = KeyElements.ASSET;
-	private static final boolean IS_LOCAL = false;
 	private static final String VALUE = "testValue";
 	private static final IdentifierType ID_TYPE = IdentifierType.CUSTOM;
 	private static final Identifier IDENTIFIER = new Identifier(ID_TYPE, VALUE);
-	private static final Reference REFERENCE = new Reference(IDENTIFIER, KEY_ELEMENTS, IS_LOCAL);
+	private static final Reference REFERENCE = new Reference(IDENTIFIER, KEY_ELEMENTS);
 	
 	private ConceptDescription description;
 	
@@ -99,12 +98,6 @@ public class TestConceptDescription {
 	public void testSetDescription() {
 		description.setDescription(DESCRIPTION);
 		assertEquals(DESCRIPTION, description.getDescription());
-	}
-	
-	@Test
-	public void testSetParent() {
-		description.setParent(REFERENCE);
-		assertEquals(REFERENCE, description.getParent());
 	}
 	
 	@Test

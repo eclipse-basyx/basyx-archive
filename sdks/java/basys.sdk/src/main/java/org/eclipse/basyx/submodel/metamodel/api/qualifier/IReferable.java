@@ -45,12 +45,5 @@ public interface IReferable {
 	 */
 	public LangStrings getDescription();
 
-	/**
-	 * Gets the parent of the referable.
-	 * 
-	 * @return
-	 */
-	public IReference getParent();
-
 	public IReference getReference();
 }

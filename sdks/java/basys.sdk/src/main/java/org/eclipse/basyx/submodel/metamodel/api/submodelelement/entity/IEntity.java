@@ -10,9 +10,11 @@
 package org.eclipse.basyx.submodel.metamodel.api.submodelelement.entity;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.IdentifierKeyValuePair;
 
 /**
  * An entity is a submodel element that is used to model entities.
@@ -36,11 +38,18 @@ public interface IEntity extends ISubmodelElement {
 	 * @return
 	 */
 	EntityType getEntityType();
-
+	
 	/**
-	 * Gets the reference to the asset the entity is representing.
-	 * 
-	 * @return
+	 * gets global asset id
+	 * Reference to the asset the entity is representing.
+	 * Constraint AASd-014: Either the attribute globalAssetId or specificAssetId of an Entity must be set if Entity/entityType is set to “SelfManagedEntity”. They are not existing otherwise.
+	 * @return {@link IReference}
 	 */
-	IReference getAsset();
+	IReference getGlobalAssetId();
+	
+	/**
+	 * gets reference to an identifier key value pair representing a specific identifier of the asset represented by the asset administration shell.
+	 * @return {@link List<IdentifierKeyValuePair>}
+	 */
+	List<IdentifierKeyValuePair> getSpecificAssetId();
 }

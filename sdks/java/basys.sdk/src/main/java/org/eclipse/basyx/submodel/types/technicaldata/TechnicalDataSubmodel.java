@@ -40,7 +40,7 @@ public class TechnicalDataSubmodel extends Submodel {
 	public static final String PRODUCTCLASSIFICATIONSID = "ProductClassifications";
 	public static final String TECHNICALPROPERTIESID = "TechnicalProperties";
 	public static final String FURTHERINFORMATIONID = "FurtherInformation";
-	public static final Reference SEMANTICID = new Reference(Collections.singletonList(new Key(KeyElements.CONCEPTDESCRIPTION, false, "http://admin-shell.io/ZVEI/TechnicalData/Submodel/1/1", KeyType.IRI)));
+	public static final Reference SEMANTICID = new Reference(Collections.singletonList(new Key(KeyElements.CONCEPTDESCRIPTION, "http://admin-shell.io/ZVEI/TechnicalData/Submodel/1/1", KeyType.IRI)));
 	public static final String SUBMODELID = "TechnicalData";
 	
 	private TechnicalDataSubmodel() {}

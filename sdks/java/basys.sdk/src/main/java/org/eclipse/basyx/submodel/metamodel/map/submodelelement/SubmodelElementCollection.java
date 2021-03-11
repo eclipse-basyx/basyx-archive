@@ -140,9 +140,6 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	@SuppressWarnings("unchecked")
 	@Override
 	public void addSubmodelElement(ISubmodelElement elem) {
-		if (elem instanceof SubmodelElement) {
-			((SubmodelElement) elem).setParent(getReference());
-		}
 		((Map<String, ISubmodelElement>) get(Property.VALUE)).put(elem.getIdShort(), elem);
 	}
 

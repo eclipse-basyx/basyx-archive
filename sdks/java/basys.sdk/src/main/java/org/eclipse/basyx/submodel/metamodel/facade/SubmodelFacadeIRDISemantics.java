@@ -84,7 +84,7 @@ public class SubmodelFacadeIRDISemantics extends Submodel {
 			String version,
 			String revision) {
 		// Create sub model
-		super(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GLOBALREFERENCE, false, semantics, KeyType.IRDI)))), new Identifiable(version, revision, idShort, category, description, IdentifierType.CUSTOM, id),
+		super(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GLOBALREFERENCE, semantics, KeyType.IRDI)))), new Identifiable(version, revision, idShort, category, description, IdentifierType.CUSTOM, id),
 				new Qualifiable(constraint), 
 				dataSpecification,
 				new HasKind(kind));
@@ -127,7 +127,7 @@ public class SubmodelFacadeIRDISemantics extends Submodel {
 	public SubmodelFacadeIRDISemantics(String semantics, IdentifierType idType, String id, String idShort, String category, LangStrings description, Collection<Constraint> qualifier, Constraint constraint,
 			HasDataSpecification dataSpecification, ModelingKind kind, String version, String revision) {
 		// Create sub model
-		super(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GLOBALREFERENCE, false, semantics, KeyType.IRDI)))),
+		super(new HasSemantics(new Reference(Collections.singletonList(new Key(KeyElements.GLOBALREFERENCE, semantics, KeyType.IRDI)))),
 						new Identifiable(version, revision, idShort, category, description, idType, id), 
 						new Qualifiable(qualifier), 
 						dataSpecification, 

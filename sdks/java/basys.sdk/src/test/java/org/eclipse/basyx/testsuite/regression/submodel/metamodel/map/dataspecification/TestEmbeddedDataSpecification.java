@@ -44,12 +44,11 @@ public class TestEmbeddedDataSpecification {
 	private static final String SOURCE_OF_DEFINITION = "testSource";
 	private static final LangStrings DEFINITION = new LangStrings("DE", "testDefinition");
 	private static final KeyElements KEY_ELEMENTS = KeyElements.ASSET;
-	private static final boolean IS_LOCAL = false;
 	private static final String VALUE = "testValue";
 	private static final IdentifierType ID_TYPE = IdentifierType.CUSTOM;
 	private static final Identifier IDENTIFIER = new Identifier(ID_TYPE, VALUE);
-	private static final Reference UNIT_ID = new Reference(IDENTIFIER, KEY_ELEMENTS, IS_LOCAL);
-	private static final Reference VALUE_ID = new Reference(IDENTIFIER, KEY_ELEMENTS, IS_LOCAL);
+	private static final Reference UNIT_ID = new Reference(IDENTIFIER, KEY_ELEMENTS);
+	private static final Reference VALUE_ID = new Reference(IDENTIFIER, KEY_ELEMENTS);
 	private static final IValueReferencePair VALUEREFPAIR = new ValueReferencePair(VALUE, VALUE_ID);
 	private static final LevelType LEVELTYPE = LevelType.TYP;
 	

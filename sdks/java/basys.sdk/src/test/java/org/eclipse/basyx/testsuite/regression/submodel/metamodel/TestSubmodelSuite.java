@@ -79,7 +79,7 @@ public abstract class TestSubmodelSuite {
 	private final String PROPERTY_ID2 = "property_id2";
 	
 
-	private final static Reference testSemanticIdRef = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "testVal", IdentifierType.CUSTOM));
+	private final static Reference testSemanticIdRef = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "testVal", IdentifierType.CUSTOM));
 
 	public Submodel getReferenceSubmodel() {
 
@@ -192,10 +192,6 @@ public abstract class TestSubmodelSuite {
 		IProperty connectedProperty = (IProperty) submodel.getSubmodelElements().get("testIdShort");
 		assertEquals(property.getIdShort(), connectedProperty.getIdShort());
 		assertEquals(property.getValue(), connectedProperty.getValue());
-
-		// creates an expected reference for assertion
-		IReference expected = submodel.getReference();
-		assertEquals(expected, property.getParent());
 	}
 
 	@Test
@@ -308,8 +304,8 @@ public abstract class TestSubmodelSuite {
 		blob.setByteArrayValue(new byte[] { 1, 2, 3 });
 		ret.put(blob.getIdShort(), blob);
 
-		Reference first = new Reference(new Key(KeyElements.BASICEVENT, true, "testFirst", IdentifierType.CUSTOM));
-		Reference second = new Reference(new Key(KeyElements.BASICEVENT, true, "testSecond", IdentifierType.CUSTOM));
+		Reference first = new Reference(new Key(KeyElements.BASICEVENT, "testFirst", IdentifierType.CUSTOM));
+		Reference second = new Reference(new Key(KeyElements.BASICEVENT, "testSecond", IdentifierType.CUSTOM));
 		
 		RelationshipElement relElement = new RelationshipElement(RELATIONSHIP_ELEM_ID, first, second);
 		ret.put(relElement.getIdShort(), relElement);

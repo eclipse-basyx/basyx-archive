@@ -51,10 +51,10 @@ public class TestTechnicalProperties {
 	
 	@Before
 	public void init() {
-		mainSection.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, TechnicalProperties.MAINSECTIONID, IdentifierType.IRDI)));
-		subSection.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, TechnicalProperties.SUBSECTIONID, IdentifierType.IRDI)));
-		arbitrary1.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "anyid", IdentifierType.IRDI)));
-		arbitrary2.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, TechnicalProperties.SMENOTDESCRIBEDID, IdentifierType.IRDI)));
+		mainSection.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, TechnicalProperties.MAINSECTIONID, IdentifierType.IRDI)));
+		subSection.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, TechnicalProperties.SUBSECTIONID, IdentifierType.IRDI)));
+		arbitrary1.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "anyid", IdentifierType.IRDI)));
+		arbitrary2.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, TechnicalProperties.SMENOTDESCRIBEDID, IdentifierType.IRDI)));
 
 		List<ISubmodelElement> elements = new ArrayList<ISubmodelElement>();
 		elements.add(mainSection);

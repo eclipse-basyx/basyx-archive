@@ -30,9 +30,9 @@ public class EntityValue extends VABModelMap<Object> {
 
 	private EntityValue() {}
 	
-	public EntityValue(Collection<ISubmodelElement> statements, IReference asset) {
+	public EntityValue(Collection<ISubmodelElement> statements, IReference globalAssetId) {
 		put(Entity.STATEMENT, statements);
-		put(Entity.ASSET, asset);
+		put(Entity.GLOBALASSETID, globalAssetId);
 	}
 	
 	/**
@@ -63,7 +63,7 @@ public class EntityValue extends VABModelMap<Object> {
 		
 		// Given Map must contain all necessary Entries
 		if(!(map.get(Entity.STATEMENT) instanceof Collection<?> 
-				&& Reference.isReference(map.get(Entity.ASSET)))) {
+				&& Reference.isReference(map.get(Entity.GLOBALASSETID)))) {
 			return false;
 		}
 		
@@ -88,6 +88,6 @@ public class EntityValue extends VABModelMap<Object> {
 	
 	@SuppressWarnings("unchecked")
 	public IReference getAsset() {
-		return Reference.createAsFacade((Map<String, Object>) get(Entity.ASSET));
+		return Reference.createAsFacade((Map<String, Object>) get(Entity.GLOBALASSETID));
 	}
 }

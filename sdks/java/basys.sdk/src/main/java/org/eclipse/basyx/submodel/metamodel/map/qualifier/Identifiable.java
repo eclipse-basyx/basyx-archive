@@ -146,10 +146,4 @@ public class Identifiable extends Referable implements IIdentifiable {
 		// KeyType and IdentifierType are virtually the same, so convert them here
 		return KeyType.fromString(getIdentification().getIdType().toString());
 	}
-
-	@Override
-	protected boolean isLocal() {
-		return true;
-	}
-
 }

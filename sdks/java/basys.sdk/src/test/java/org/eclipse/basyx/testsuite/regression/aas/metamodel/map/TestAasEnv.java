@@ -20,6 +20,7 @@ import org.eclipse.basyx.aas.metamodel.api.parts.asset.AssetKind;
 import org.eclipse.basyx.aas.metamodel.map.AasEnv;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
+import org.eclipse.basyx.aas.metamodel.map.parts.AssetInformation;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
@@ -73,13 +74,15 @@ public class TestAasEnv {
 		Map<String, Object> asset = new HashMap<>();
 		asset.put(ModelType.MODELTYPE, Asset.MODELTYPE);
 		asset.put(Referable.IDSHORT, "TestAsset");
-		asset.put(Asset.KIND, AssetKind.INSTANCE);
 		asset.put(Identifiable.IDENTIFICATION, new Identifier(IdentifierType.IRI, "testAssetIdShort"));
+		
+		Map<String, Object> assetInformation = new HashMap<String, Object>();
+		assetInformation.put(AssetInformation.ASSETKIND, AssetKind.INSTANCE.toString());
 		
 		Map<String, Object> assetAdministrationShell = new HashMap<>();
 		assetAdministrationShell.put(ModelType.MODELTYPE, AssetAdministrationShell.MODELTYPE);
 		assetAdministrationShell.put(Referable.IDSHORT, "TestAssetAdministrationShell");
-		assetAdministrationShell.put(AssetAdministrationShell.ASSET, asset);
+		assetAdministrationShell.put(AssetAdministrationShell.ASSETINFORMATION, assetInformation);
 		assetAdministrationShell.put(Identifiable.IDENTIFICATION, new Identifier(IdentifierType.IRI, "testAASIdShort"));
 		
 		

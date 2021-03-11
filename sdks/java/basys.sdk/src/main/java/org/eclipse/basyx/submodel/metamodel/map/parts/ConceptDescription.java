@@ -154,10 +154,6 @@ public class ConceptDescription extends VABModelMap<Object> implements IConceptD
 	public LangStrings getDescription() {
 		return Referable.createAsFacade(this, getKeyElement()).getDescription();
 	}
-	@Override
-	public IReference getParent() {
-		return Referable.createAsFacade(this, getKeyElement()).getParent();
-	}
 
 	public void setIdShort(String idShort) {
 		Referable.createAsFacadeNonStrict(this, getKeyElement()).setIdShort(idShort);
@@ -171,10 +167,6 @@ public class ConceptDescription extends VABModelMap<Object> implements IConceptD
 
 	public void setDescription(LangStrings description) {
 		Referable.createAsFacade(this, getKeyElement()).setDescription(description);
-	}
-
-	public void setParent(IReference obj) {
-		Referable.createAsFacade(this, getKeyElement()).setParent(obj);
 	}
 	
 	private KeyElements getKeyElement() {

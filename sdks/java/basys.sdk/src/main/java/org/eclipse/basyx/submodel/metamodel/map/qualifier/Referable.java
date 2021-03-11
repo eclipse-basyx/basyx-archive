@@ -23,7 +23,6 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
-import org.eclipse.basyx.vab.model.VABModelMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +32,7 @@ import org.slf4j.LoggerFactory;
  * @author kuhn, schnicke
  *
  */
-public class Referable extends VABModelMap<Object> implements IReferable {
+public class Referable extends HasExtensions implements IReferable {
 	private static Logger logger = LoggerFactory.getLogger(Referable.class);
 
 	public static final String IDSHORT="idShort";
@@ -42,7 +41,7 @@ public class Referable extends VABModelMap<Object> implements IReferable {
 	
 	public static final String DESCRIPTION="description";
 	
-	public static final String PARENT="parent";
+	public static final String DISPLAYNAME = "displayName";
 
 	private KeyElements elem;
 
@@ -148,11 +147,10 @@ public class Referable extends VABModelMap<Object> implements IReferable {
 	public LangStrings getDescription() {
 		return LangStrings.createAsFacade((Collection<Map<String, Object>>) get(Referable.DESCRIPTION));
 	}
-
-	@Override
+	
 	@SuppressWarnings("unchecked")
-	public IReference getParent() {
-		return Reference.createAsFacade((Map<String, Object>) get(Referable.PARENT));
+	public LangStrings getDisplayName() {
+		return LangStrings.createAsFacade((Collection<Map<String, Object>>) get(Referable.DISPLAYNAME));
 	}
 
 	public void setIdShort(String idShort) {
@@ -176,17 +174,12 @@ public class Referable extends VABModelMap<Object> implements IReferable {
 		put(Referable.DESCRIPTION, description);
 	}
 
-	/**
-	 * Sets the parent and additionally updates the own reference
-	 * 
-	 * @param obj
-	 */
-	public void setParent(IReference obj) {
-		put(Referable.PARENT, obj);
-	}
-
 	protected void setElementType(KeyElements elem) {
 		this.elem = elem;
+	}
+	
+	public void setDisplayName(LangStrings displayName) {
+		put(Referable.DISPLAYNAME, displayName);
 	}
 
 	protected KeyType getKeyType() {
@@ -197,18 +190,10 @@ public class Referable extends VABModelMap<Object> implements IReferable {
 		return getIdShort();
 	}
 
-	protected boolean isLocal() {
-		return true;
-	}
-
 	@Override
 	public IReference getReference() {
 		List<IKey> keys = new ArrayList<>();
-		IReference parent = getParent();
-		if (parent != null) {
-			keys.addAll(parent.getKeys());
-		}
-		keys.add(new Key(elem, isLocal(), getId(), getKeyType()));
+		keys.add(new Key(elem, getId(), getKeyType()));
 		return new Reference(keys);
 	}
 

@@ -12,10 +12,9 @@ package org.eclipse.basyx.aas.metamodel.api;
 import java.util.Collection;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
-import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.api.security.ISecurity;
+import org.eclipse.basyx.aas.metamodel.map.parts.AssetInformation;
 import org.eclipse.basyx.submodel.metamodel.api.IElement;
 import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
@@ -83,11 +82,11 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHas
 	public IReference getDerivedFrom();
 
 	/**
-	 * Gets the asset the AAS is representing.
+	 * Gets the assetInformation the AAS is representing.
 	 * 
 	 * @return
 	 */
-	public IAsset getAsset();
+	public AssetInformation getAssetInformation();
 
 	/**
 	 * Gets the reference to the asset the AAS is representing.
@@ -105,14 +104,4 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHas
 	 * @return
 	 */
 	public Collection<IView> getViews();
-
-	/**
-	 * Gets the concept dictionaries associated with the AAS. <br/>
-	 * An AAS may have one or more concept dictionaries assigned to it. The concept
-	 * dictionaries typically contain only descriptions for elements that are also
-	 * used within the AAS (via HasSemantics).
-	 * 
-	 * @return
-	 */
-	public Collection<IConceptDictionary> getConceptDictionary();
 }

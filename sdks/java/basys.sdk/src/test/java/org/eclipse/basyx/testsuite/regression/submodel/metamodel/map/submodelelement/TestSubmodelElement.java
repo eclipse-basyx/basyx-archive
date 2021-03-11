@@ -38,8 +38,8 @@ import org.junit.Test;
  *
  */
 public class TestSubmodelElement {
-	private static final Reference REFERENCE = new Reference(new Identifier(IdentifierType.CUSTOM, "testValue"), KeyElements.ACCESSPERMISSIONRULE, false);
-	private static final Formula FORMULA = new Formula(Collections.singleton(new Reference(new Key(KeyElements.BLOB, true, "TestValue", IdentifierType.IRI))));
+	private static final Reference REFERENCE = new Reference(new Identifier(IdentifierType.CUSTOM, "testValue"), KeyElements.ACCESSPERMISSIONRULE);
+	private static final Formula FORMULA = new Formula(Collections.singleton(new Reference(new Key(KeyElements.BLOB, "TestValue", IdentifierType.IRI))));
 	
 	private SubmodelElement submodelElement;
 	
@@ -82,12 +82,6 @@ public class TestSubmodelElement {
 		LangStrings newDescriptionString = new LangStrings("DE", "newTest");
 		submodelElement.setDescription(newDescriptionString);
 		assertEquals(newDescriptionString, submodelElement.getDescription());
-	}
-	
-	@Test
-	public void testSetParent() {
-		submodelElement.setParent(REFERENCE);
-		assertEquals(REFERENCE, submodelElement.getParent());
 	}
 	
 	@Test

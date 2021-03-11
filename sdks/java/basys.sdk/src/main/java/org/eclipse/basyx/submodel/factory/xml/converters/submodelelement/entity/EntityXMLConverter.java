@@ -16,7 +16,6 @@ import java.util.Map;
 import org.eclipse.basyx.submodel.factory.xml.XMLHelper;
 import org.eclipse.basyx.submodel.factory.xml.converters.reference.ReferenceXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.SubmodelElementXMLConverter;
-import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.entity.EntityType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.entity.IEntity;
@@ -73,13 +72,6 @@ public class EntityXMLConverter extends SubmodelElementXMLConverter {
 		Element entityRoot = document.createElement(ENTITY);
 		
 		populateSubmodelElement(document, entityRoot, entity);
-		
-		IReference assetRef = entity.getAsset();
-		if(assetRef != null) {
-			Element assetRefRoot = document.createElement(ASSET_REF);
-			assetRefRoot.appendChild(ReferenceXMLConverter.buildReferenceXML(document, assetRef));
-			entityRoot.appendChild(assetRefRoot);
-		}
 		
 		Object entityTypeObj = entity.getEntityType();
 		String entityType = entityTypeObj == null ? null : entityTypeObj.toString();

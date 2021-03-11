@@ -34,7 +34,7 @@ import org.eclipse.basyx.submodel.types.helper.SubmodelElementRetrievalHelper;
  */
 public class Markings extends SubmodelElementCollection {
 	public static final String IDSHORT = "Markings";
-	public static final Reference SEMANTICID = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/zvei/nameplate/1/0/Nameplate/Markings", KeyType.IRI));
+	public static final Reference SEMANTICID = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "https://admin-shell.io/zvei/nameplate/1/0/Nameplate/Markings", KeyType.IRI));
 	public static final String MARKINGPREFIX = "Marking";
 	
 	private Markings() {

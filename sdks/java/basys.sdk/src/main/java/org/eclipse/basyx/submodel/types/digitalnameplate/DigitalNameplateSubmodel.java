@@ -49,7 +49,7 @@ public class DigitalNameplateSubmodel extends Submodel {
 	public static final String YEARSOFCONSTRUCTIONID = "YearOfConstruction";
 	public static final String MARKINGSID = "Markings";
 	public static final String ASSETSPECIFICPROPERTIESID = "AssetSpecificProperties";
-	public static final Reference SEMANTICID = new Reference(Collections.singletonList(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/zvei/nameplate/1/0/Nameplate", KeyType.IRI)));
+	public static final Reference SEMANTICID = new Reference(Collections.singletonList(new Key(KeyElements.CONCEPTDESCRIPTION, "https://admin-shell.io/zvei/nameplate/1/0/Nameplate", KeyType.IRI)));
 	public static final String SUBMODELID = "Nameplate";
 	
 	private DigitalNameplateSubmodel() {}
@@ -230,7 +230,7 @@ public class DigitalNameplateSubmodel extends Submodel {
 	 */
 	public void setManufacturerName(LangString manufacturerName) {
 		MultiLanguageProperty manufacturerNameProp = new MultiLanguageProperty(MANUFACTURERNAMEID);
-		manufacturerNameProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO677#002", IdentifierType.IRDI)));
+		manufacturerNameProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "0173-1#02-AAO677#002", IdentifierType.IRDI)));
 		manufacturerNameProp.setValue(new LangStrings(manufacturerName));
 		setManufacturerName(manufacturerNameProp);
 	}
@@ -268,7 +268,7 @@ public class DigitalNameplateSubmodel extends Submodel {
 	 */
 	public void setManufacturerProductDesignation(LangString manufacturerProductDesignation) {
 		MultiLanguageProperty manufacturerProductDesignationProp = new MultiLanguageProperty(MANUFACTURERPRODUCTDESIGNATIONID);
-		manufacturerProductDesignationProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAW338#001", IdentifierType.IRDI)));
+		manufacturerProductDesignationProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "0173-1#02-AAW338#001", IdentifierType.IRDI)));
 		manufacturerProductDesignationProp.setValue(new LangStrings(manufacturerProductDesignation));
 		setManufacturerProductDesignation(manufacturerProductDesignationProp);
 	}
@@ -326,7 +326,7 @@ public class DigitalNameplateSubmodel extends Submodel {
 	 */
 	public void setManufacturerProductFamily(LangString manufacturerProductFamily) {
 		MultiLanguageProperty manufacturerProductFamilyProp = new MultiLanguageProperty(MANUFACTURERPRODUCTFAMILYID);
-		manufacturerProductFamilyProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAU731#001", IdentifierType.IRDI)));
+		manufacturerProductFamilyProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "0173-1#02-AAU731#001", IdentifierType.IRDI)));
 		manufacturerProductFamilyProp.setValue(new LangStrings(manufacturerProductFamily));
 		setManufacturerProductFamily(manufacturerProductFamilyProp);
 	}
@@ -358,7 +358,7 @@ public class DigitalNameplateSubmodel extends Submodel {
 	 */
 	public void setSerialNumber(String serialNumber) {
 		Property serialNumberProp = new Property(SERIALNUMBERID, ValueType.String);
-		serialNumberProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAM556#002", IdentifierType.IRDI)));
+		serialNumberProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "0173-1#02-AAM556#002", IdentifierType.IRDI)));
 		serialNumberProp.setValue(serialNumber);
 		setSerialNumber(serialNumberProp);
 	}
@@ -389,7 +389,7 @@ public class DigitalNameplateSubmodel extends Submodel {
 	 */
 	public void setYearOfConstruction(String yearsOfConstruction) {
 		Property yearsOfConstructionProp = new Property(YEARSOFCONSTRUCTIONID, ValueType.String);
-		yearsOfConstructionProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAP906#001", IdentifierType.IRDI)));
+		yearsOfConstructionProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "0173-1#02-AAP906#001", IdentifierType.IRDI)));
 		yearsOfConstructionProp.setValue(yearsOfConstruction);
 		setYearOfConstruction(yearsOfConstructionProp);
 	}

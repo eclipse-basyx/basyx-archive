@@ -11,6 +11,7 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.entity;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
@@ -21,6 +22,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.entity.EntityTyp
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.entity.IEntity;
 import org.eclipse.basyx.submodel.metamodel.facade.submodelelement.SubmodelElementFacadeFactory;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.IdentifierKeyValuePair;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 
@@ -35,7 +37,8 @@ public class Entity extends SubmodelElement implements IEntity {
 	public static final String MODELTYPE = "Entity";
 	public static final String STATEMENT = "statement";
 	public static final String ENTITY_TYPE = "entityType";
-	public static final String ASSET = "asset";
+	public static final String GLOBALASSETID = "globalAssetId";
+	public static final String SPECIFICASSETID = "specificAssetId";
 	
 	public Entity() {
 		// Add model type
@@ -59,15 +62,11 @@ public class Entity extends SubmodelElement implements IEntity {
 		this();
 		setEntityType(entityType);
 		setStatements(statements);
-		setAsset(asset);
+		setGlobalAssetId(asset);
 	}
 	
 	public void setStatements(Collection<ISubmodelElement> statements) {
 		put(STATEMENT, statements);
-	}
-
-	public void setAsset(IReference asset) {
-		put(ASSET, asset);
 	}
 
 	public void setEntityType(EntityType entityType) {
@@ -125,12 +124,6 @@ public class Entity extends SubmodelElement implements IEntity {
 	public EntityType getEntityType() {
 		return EntityType.fromString((String) get(ENTITY_TYPE));
 	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public IReference getAsset() {
-		return Reference.createAsFacade((Map<String, Object>) get(ASSET));
-	}
 	
 	@Override
 	protected KeyElements getKeyElement() {
@@ -139,7 +132,7 @@ public class Entity extends SubmodelElement implements IEntity {
 
 	@Override
 	public EntityValue getValue() {
-		return new EntityValue(getStatements(), getAsset());
+		return new EntityValue(getStatements(), getGlobalAssetId());
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -148,7 +141,7 @@ public class Entity extends SubmodelElement implements IEntity {
 		if(EntityValue.isEntityValue(value)) {
 			EntityValue ev = EntityValue.createAsFacade((Map<String, Object>) value);
 			put(Entity.STATEMENT, ev.getStatement());
-			put(Entity.ASSET, ev.getAsset());
+			put(Entity.GLOBALASSETID, ev.getAsset());
 		}
 		else {
 			throw new IllegalArgumentException("Given Object is not an EntityValue");
@@ -161,5 +154,55 @@ public class Entity extends SubmodelElement implements IEntity {
 		Entity copy = new Entity();
 		copy.putAll(this);
 		return copy;
+	}
+	
+	/**
+	 * sets global asset id
+	 * Reference to the asset the entity is representing.
+	 * Constraint AASd-014: Either the attribute globalAssetId or specificAssetId of an Entity must be set if Entity/entityType is set to “SelfManagedEntity”. They are not existing otherwise.
+	 * @param assetId {@link IReference}
+	 */
+	public void setGlobalAssetId(IReference assetId) {
+		put(GLOBALASSETID, assetId);
+	}
+	
+	/**
+	 * gets global asset id
+	 * Reference to the asset the entity is representing.
+	 * Constraint AASd-014: Either the attribute globalAssetId or specificAssetId of an Entity must be set if Entity/entityType is set to “SelfManagedEntity”. They are not existing otherwise.
+	 * @return {@link IReference}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public IReference getGlobalAssetId() {
+		return Reference.createAsFacade((Map<String, Object>) get(GLOBALASSETID));
+	}
+	
+	/**
+	 * sets reference to an identifier key value pair representing a specific identifier of the asset represented by the asset administration shell.
+	 * 
+	 * @param assetIds {@link List<IdentifierKeyValuePair>}
+	 */
+	public void setSpecificAssetId(List<IdentifierKeyValuePair> assetIds) {
+		put(SPECIFICASSETID, assetIds);
+	}
+	
+	/**
+	 * gets reference to an identifier key value pair representing a specific identifier of the asset represented by the asset administration shell.
+	 * @return {@link List<IdentifierKeyValuePair>}
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<IdentifierKeyValuePair> getSpecificAssetId() {
+		List<IdentifierKeyValuePair> ret = new ArrayList<IdentifierKeyValuePair>();
+		List<Map<String, Object>> values = (List<Map<String, Object>>) get(SPECIFICASSETID);
+		
+		if (values != null && values.size() > 0) {
+			for (Map<String, Object> value : values) {
+				ret.add(IdentifierKeyValuePair.createAsFacade(value));
+			}
+		}
+		
+		return ret;
 	}
 }

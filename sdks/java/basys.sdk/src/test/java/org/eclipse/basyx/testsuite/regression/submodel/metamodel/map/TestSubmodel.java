@@ -19,11 +19,8 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
-import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
-import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.testsuite.regression.submodel.metamodel.TestSubmodelSuite;
@@ -51,10 +48,6 @@ public class TestSubmodel extends TestSubmodelSuite {
 		IIdentifier identifier = new ModelUrn("testId");
 		Submodel submodel = new Submodel("smIdShort", identifier);
 		submodel.addSubmodelElement(prop);
-		
-		// Create expected parent of the element for assertion
-		Reference expectedParent = new Reference(new Key(KeyElements.SUBMODEL, true, identifier.getId(), identifier.getIdType()));
-		assertEquals(expectedParent, prop.getParent());
 	} 
 
 	/**

@@ -29,8 +29,8 @@ import org.junit.Test;
  *
  */
 public class TestRelationshipElement {
-	private static final Reference FIRST = new Reference(new Key(KeyElements.ASSET, true, "firstValue", IdentifierType.IRI));
-	private static final Reference SECOND = new Reference(new Identifier(IdentifierType.CUSTOM, "secondId"), KeyElements.BLOB, false);
+	private static final Reference FIRST = new Reference(new Key(KeyElements.ASSET, "firstValue", IdentifierType.IRI));
+	private static final Reference SECOND = new Reference(new Identifier(IdentifierType.CUSTOM, "secondId"), KeyElements.BLOB);
 	
 	private RelationshipElement relationshipElement;
 	
@@ -47,14 +47,14 @@ public class TestRelationshipElement {
 	
 	@Test
 	public void testSetFirst() {
-		Reference newFirst = new Reference(new Key(KeyElements.CAPABILITY, false, "newFirst", IdentifierType.IRI));
+		Reference newFirst = new Reference(new Key(KeyElements.CAPABILITY, "newFirst", IdentifierType.IRI));
 		relationshipElement.setFirst(newFirst);
 		assertEquals(newFirst, relationshipElement.getFirst());
 	} 
 
 	@Test
 	public void testSetSecond() {
-		Reference newSecond = new Reference(new Key(KeyElements.CAPABILITY, false, "newFirst", IdentifierType.IRI));
+		Reference newSecond = new Reference(new Key(KeyElements.CAPABILITY, "newFirst", IdentifierType.IRI));
 		relationshipElement.setSecond(newSecond);
 		assertEquals(newSecond, relationshipElement.getSecond());
 	}

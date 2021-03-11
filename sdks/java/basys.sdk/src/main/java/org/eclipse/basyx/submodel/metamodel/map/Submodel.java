@@ -43,7 +43,6 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.vab.model.VABModelMap;
@@ -257,11 +256,6 @@ public class Submodel extends VABModelMap<Object> implements IElementContainer, 
 		return Referable.createAsFacade(this, getKeyElement()).getDescription();
 	}
 
-	@Override
-	public IReference getParent() {
-		return Referable.createAsFacade(this, getKeyElement()).getParent();
-	}
-
 	public void setCategory(String category) {
 		Referable.createAsFacade(this, getKeyElement()).setCategory(category);
 	}
@@ -270,19 +264,12 @@ public class Submodel extends VABModelMap<Object> implements IElementContainer, 
 		Referable.createAsFacade(this, getKeyElement()).setDescription(description);
 	}
 
-	public void setParent(IReference obj) {
-		Referable.createAsFacade(this, getKeyElement()).setParent(obj);
-	}
-
 	private KeyElements getKeyElement() {
 		return KeyElements.SUBMODEL;
 	}
 
 	@Override
 	public void addSubmodelElement(ISubmodelElement element) {
-		if (element instanceof SubmodelElement) {
-			((SubmodelElement) element).setParent(getReference());
-		}
 		getSubmodelElements().put(element.getIdShort(), element);
 	}
 

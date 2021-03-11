@@ -41,7 +41,7 @@ public class TestSecurity {
 	
 	@Test
 	public void testGetRequiredCertificateExtension() {
-		Reference reference = new Reference(new Key(KeyElements.ASSET, false, "testValue", IdentifierType.IRI));
+		Reference reference = new Reference(new Key(KeyElements.ASSET, "testValue", IdentifierType.IRI));
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put(Security.REQUIREDCERTIFICATEEXTENSION, reference);
 		Security security = Security.createAsFacade(map);

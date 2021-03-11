@@ -155,11 +155,6 @@ public class View extends VABModelMap<Object> implements IView {
 		return Referable.createAsFacade(this, getKeyElement()).getDescription();
 	}
 
-	@Override
-	public IReference getParent() {
-		return Referable.createAsFacade(this, getKeyElement()).getParent();
-	}
-
 	public void setIdShort(String idShort) {
 		Referable.createAsFacadeNonStrict(this, getKeyElement()).setIdShort(idShort);
 	}
@@ -170,10 +165,6 @@ public class View extends VABModelMap<Object> implements IView {
 
 	public void setDescription(LangStrings description) {
 		Referable.createAsFacade(this, getKeyElement()).setDescription(description);
-	}
-
-	public void setParent(IReference obj) {
-		Referable.createAsFacade(this, getKeyElement()).setParent(obj);
 	}
 	
 	private KeyElements getKeyElement() {

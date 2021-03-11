@@ -112,11 +112,6 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubmodel {
 	public LangStrings getDescription() {
 		return Referable.createAsFacade(getElem(), getKeyElement()).getDescription();
 	}
-
-	@Override
-	public IReference getParent() {
-		return Referable.createAsFacade(getElem(), getKeyElement()).getParent();
-	}
 	
 	@Override
 	public Collection<IConstraint> getQualifiers() {
@@ -129,8 +124,6 @@ public class ConnectedSubmodel extends ConnectedElement implements ISubmodel {
 		String path = VABPathTools.concatenatePaths(MultiSubmodelElementProvider.ELEMENTS, element.getIdShort());
 
 		if (element instanceof SubmodelElement) {
-			((SubmodelElement) element).setParent(getReference());
-			
 			// Convert "value" in SubmodelElementCollection from Map to Collection
 			if (element instanceof SubmodelElementCollection) {
 				Map<String, Object> converted = SubmodelElementMapCollectionConverter.smElementToMap((Map<String, Object>) element);

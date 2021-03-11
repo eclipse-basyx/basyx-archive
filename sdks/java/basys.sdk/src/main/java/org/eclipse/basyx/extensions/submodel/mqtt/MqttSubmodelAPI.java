@@ -11,13 +11,10 @@ package org.eclipse.basyx.extensions.submodel.mqtt;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.basyx.extensions.shared.mqtt.MqttEventService;
 import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
-import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
-import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPI;
@@ -50,6 +47,9 @@ public class MqttSubmodelAPI extends MqttEventService implements ISubmodelAPI {
 	// Submodel Element whitelist for filtering
 	protected boolean useWhitelist = false;
 	protected Set<String> whitelist = new HashSet<>();
+	
+	// TODO: remove extra aasId when we can get the parent id from submodel
+	private String aasId;
 
 	/**
 	 * Constructor for adding this MQTT extension on top of another SubmodelAPI
@@ -57,11 +57,22 @@ public class MqttSubmodelAPI extends MqttEventService implements ISubmodelAPI {
 	 * @param observedAPI The underlying submodelAPI
 	 * @throws MqttException
 	 */
-	public MqttSubmodelAPI(ISubmodelAPI observedAPI, String serverEndpoint, String clientId) throws MqttException {
+	public MqttSubmodelAPI(ISubmodelAPI observedAPI, String aasId, String serverEndpoint, String clientId) throws MqttException {
 		super(serverEndpoint, clientId);
 		logger.info("Create new MQTT submodel for endpoint " + serverEndpoint);
 		this.observedAPI = observedAPI;
+		setAasId(aasId);
 		sendMqttMessage(TOPIC_CREATESUBMODEL, observedAPI.getSubmodel().getIdentification().getId());
+	}
+	
+	/**
+	 * Constructor for adding this MQTT extension on top of another SubmodelAPI
+	 * 
+	 * @param observedAPI The underlying submodelAPI
+	 * @throws MqttException
+	 */
+	public MqttSubmodelAPI(ISubmodelAPI observedAPI, String serverEndpoint, String clientId) throws MqttException {
+		this(observedAPI, "", serverEndpoint, clientId);
 	}
 
 	/**
@@ -70,12 +81,18 @@ public class MqttSubmodelAPI extends MqttEventService implements ISubmodelAPI {
 	 * @param observedAPI The underlying submodelAPI
 	 * @throws MqttException
 	 */
-	public MqttSubmodelAPI(ISubmodelAPI observedAPI, String serverEndpoint, String clientId, String user, char[] pw)
+	public MqttSubmodelAPI(ISubmodelAPI observedAPI, String aasId, String serverEndpoint, String clientId, String user, char[] pw)
 			throws MqttException {
 		super(serverEndpoint, clientId, user, pw);
 		logger.info("Create new MQTT submodel for endpoint " + serverEndpoint);
 		this.observedAPI = observedAPI;
+		setAasId(aasId);
 		sendMqttMessage(TOPIC_CREATESUBMODEL, observedAPI.getSubmodel().getIdentification().getId());
+	}
+	
+	public MqttSubmodelAPI(ISubmodelAPI observedAPI, String serverEndpoint, String clientId, String user, char[] pw)
+			throws MqttException {
+		this(observedAPI, "", serverEndpoint, clientId, user, pw);
 	}
 
 	/**
@@ -85,10 +102,15 @@ public class MqttSubmodelAPI extends MqttEventService implements ISubmodelAPI {
 	 * @param client      An already connected mqtt client
 	 * @throws MqttException 
 	 */
-	public MqttSubmodelAPI(ISubmodelAPI observedAPI, MqttClient client) throws MqttException {
+	public MqttSubmodelAPI(ISubmodelAPI observedAPI, String aasId, MqttClient client) throws MqttException {
 		super(client);
 		this.observedAPI = observedAPI;
+		setAasId(aasId);
 		sendMqttMessage(TOPIC_CREATESUBMODEL, observedAPI.getSubmodel().getIdentification().getId());
+	}
+	
+	public MqttSubmodelAPI(ISubmodelAPI observedAPI, MqttClient client) throws MqttException {
+		this(observedAPI, "", client);
 	}
 
 	/**
@@ -128,6 +150,14 @@ public class MqttSubmodelAPI extends MqttEventService implements ISubmodelAPI {
 	 */
 	public void enableWhitelist() {
 		useWhitelist = true;
+	}
+
+	/**
+	 * Sets parent aasId
+	 * @param aasId
+	 */
+	public void setAasId(String aasId) {
+		this.aasId = aasId;
 	}
 
 	@Override
@@ -218,14 +248,6 @@ public class MqttSubmodelAPI extends MqttEventService implements ISubmodelAPI {
 	}
 	
 	private String getAASId() {
-		ISubmodel submodel = getSubmodel();
-		IReference parentReference = submodel.getParent();
-		if (parentReference != null) {
-			List<IKey> keys = parentReference.getKeys();
-			if (keys != null && keys.size() > 0) {
-				return keys.get(0).getValue();
-			}
-		}
-		return null;
+		return aasId;
 	}
 }

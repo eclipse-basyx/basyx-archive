@@ -39,7 +39,7 @@ public class ProductClassificationItem extends SubmodelElementCollection {
 	public static final String PRODUCTCLASSIFICATIONSYSTEMID = "ProductClassificationSystem";
 	public static final String CLASSIFICATIONSYSTEMVERSIONID = "ClassificationSystemVersion";
 	public static final String PRODUCTCLASSID = "ProductClassId";
-	public static final Reference SEMANTICID = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ProductClassificationItem/1/1", KeyType.IRI));
+	public static final Reference SEMANTICID = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "https://admin-shell.io/ZVEI/TechnicalData/ProductClassificationItem/1/1", KeyType.IRI));
 	
 	private ProductClassificationItem() {
 	}
@@ -142,7 +142,7 @@ public class ProductClassificationItem extends SubmodelElementCollection {
 	 */
 	public void setProductClassificationSystem(String system) {
 		Property productClassificationSystemProp = new Property(PRODUCTCLASSIFICATIONSYSTEMID, ValueType.String);
-		productClassificationSystemProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ProductClassificationSystem/1/1", IdentifierType.IRI)));
+		productClassificationSystemProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "https://admin-shell.io/ZVEI/TechnicalData/ProductClassificationSystem/1/1", IdentifierType.IRI)));
 		productClassificationSystemProp.setValue(system);
 		setProductClassificationSystem(productClassificationSystemProp);
 	}
@@ -176,7 +176,7 @@ public class ProductClassificationItem extends SubmodelElementCollection {
 	 */
 	public void setClassificationSystemVersion(String version) {
 		Property versionProp = new Property(CLASSIFICATIONSYSTEMVERSIONID, ValueType.String);
-		versionProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ClassificationSystemVersion/1/1", IdentifierType.IRI)));
+		versionProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "https://admin-shell.io/ZVEI/TechnicalData/ClassificationSystemVersion/1/1", IdentifierType.IRI)));
 		versionProp.setValue(version);
 		setClassificationSystemVersion(versionProp);
 	}
@@ -210,7 +210,7 @@ public class ProductClassificationItem extends SubmodelElementCollection {
 	 */
 	public void setProductClassId(String id) {
 		Property idProp = new Property(PRODUCTCLASSID, ValueType.String);
-		idProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ProductClassId/1/1", IdentifierType.IRI)));
+		idProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "https://admin-shell.io/ZVEI/TechnicalData/ProductClassId/1/1", IdentifierType.IRI)));
 		idProp.setValue(id);
 		setProductClassId(idProp);
 	}

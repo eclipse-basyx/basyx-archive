@@ -10,14 +10,9 @@
 package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.qualifier;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
-import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
-import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -45,7 +40,6 @@ public class TestReferable {
 		assertEquals(CATE_STRING, referable.getCategory());
 		assertEquals(ID_SHORT_STRING, referable.getIdShort());
 		assertEquals(DESCRIPTION, referable.getDescription());
-		assertNull(referable.getParent());
 	}
 	
 	@Test
@@ -70,9 +64,9 @@ public class TestReferable {
 	}
 	
 	@Test
-	public void testSetParent() {
-		Reference parent = new Reference(new Identifier(IdentifierType.IRDI, "testNewId"), KeyElements.ASSET, true);
-		referable.setParent(parent);
-		assertEquals(parent, referable.getParent());
+	public void testDisplayName() {
+		LangStrings displayName = new LangStrings("EN", "Display Name");
+		referable.setDisplayName(displayName);
+		assertEquals(displayName, referable.getDisplayName());
 	}
 }

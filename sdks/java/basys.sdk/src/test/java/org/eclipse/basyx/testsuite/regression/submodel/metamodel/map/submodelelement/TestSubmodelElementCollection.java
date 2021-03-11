@@ -23,7 +23,6 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
-import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
@@ -50,7 +49,7 @@ import org.junit.Test;
  *
  */
 public class TestSubmodelElementCollection {
-	private static final Reference REFERENCE = new Reference(new Identifier(IdentifierType.CUSTOM, "testValue"), KeyElements.ACCESSPERMISSIONRULE, false);
+	private static final Reference REFERENCE = new Reference(new Identifier(IdentifierType.CUSTOM, "testValue"), KeyElements.ACCESSPERMISSIONRULE);
 	private static final String OPERATION_ID = "testOpID";
 	private static final String PROPERTY_ID = "testPropID";
 
@@ -126,7 +125,7 @@ public class TestSubmodelElementCollection {
 	@Test
 	public void testSetElements() {
 		String idShort = "testIdShort";
-		Key key = new Key(KeyElements.BLOB, true, "TestValue", IdentifierType.IRI);
+		Key key = new Key(KeyElements.BLOB, "TestValue", IdentifierType.IRI);
 		Reference reference = new Reference(key);
 		Formula formula = new Formula(Collections.singleton(reference));
 		Qualifiable qualifiable = new Qualifiable(formula);
@@ -163,7 +162,6 @@ public class TestSubmodelElementCollection {
 		String newIdShort = "newIdShort";
 		property.put(Referable.IDSHORT, newIdShort);
 		collection.addSubmodelElement(property);
-		assertEquals(new Reference(new Key(KeyElements.SUBMODELELEMENTCOLLECTION, true, smCollIdShort, KeyType.IDSHORT)), property.getParent());
 		Map<String, ISubmodelElement> submodelElements = new HashMap<String, ISubmodelElement>();
 		submodelElements.put(PROPERTY_ID, getProperty());
 		submodelElements.put(OPERATION_ID, getOperation());
@@ -204,9 +202,9 @@ public class TestSubmodelElementCollection {
 	 */
 	private Property getProperty() {
 		Referable referable = new Referable(PROPERTY_ID, "testCategory", new LangStrings("DE", "test"));
-		Reference semanticId = new Reference(new Key(KeyElements.ASSET, true, "testValue", IdentifierType.IRI));
+		Reference semanticId = new Reference(new Key(KeyElements.ASSET, "testValue", IdentifierType.IRI));
 		Qualifiable qualifiable = new Qualifiable(new Formula(Collections
-				.singleton(new Reference(new Key(KeyElements.BLOB, true, "TestValue", IdentifierType.IRI)))));
+				.singleton(new Reference(new Key(KeyElements.BLOB, "TestValue", IdentifierType.IRI)))));
 		Property property = new Property("testValue", referable, semanticId, qualifiable);
 		return property;
 	}

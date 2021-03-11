@@ -53,8 +53,8 @@ public class Reference extends VABModelMap<Object> implements IReference {
 	 * @param keyElement
 	 * @param local
 	 */
-	public Reference(IIdentifiable identifiable, KeyElements keyElement, boolean local) {
-		this(identifiable.getIdentification(), keyElement, local);
+	public Reference(IIdentifiable identifiable, KeyElements keyElement) {
+		this(identifiable.getIdentification(), keyElement);
 	}
 
 	/**
@@ -63,10 +63,9 @@ public class Reference extends VABModelMap<Object> implements IReference {
 	 * 
 	 * @param identifiable
 	 * @param keyElement
-	 * @param local
 	 */
-	public Reference(IIdentifier identifier, KeyElements keyElement, boolean local) {
-		this(new Key(keyElement, local, identifier.getId(), identifier.getIdType()));
+	public Reference(IIdentifier identifier, KeyElements keyElement) {
+		this(new Key(keyElement, identifier.getId(), identifier.getIdType()));
 	}
 
 	/**
@@ -177,7 +176,7 @@ public class Reference extends VABModelMap<Object> implements IReference {
 		// Copy the key list to make sure an actual hashmap is put inside this map
 		List<IKey> copy = new ArrayList<>();
 		for (IKey key : keys) {
-			copy.add(new Key(key.getType(), key.isLocal(), key.getValue(), key.getIdType()));
+			copy.add(new Key(key.getType(), key.getValue(), key.getIdType()));
 		}
 		put(Reference.KEY, copy);
 	}

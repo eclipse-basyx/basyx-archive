@@ -32,11 +32,10 @@ import org.junit.Test;
  */
 public class TestFormula {
 	private static final KeyElements KEY_ELEMENTS = KeyElements.ASSET;
-	private static final boolean IS_LOCAL = false;
 	private static final String VALUE = "testValue";
 	private static final IdentifierType ID_TYPE = IdentifierType.CUSTOM;
 	private static final Identifier IDENTIFIER = new Identifier(ID_TYPE, VALUE);
-	private static final Reference REFERENCE = new Reference(IDENTIFIER, KEY_ELEMENTS, IS_LOCAL);
+	private static final Reference REFERENCE = new Reference(IDENTIFIER, KEY_ELEMENTS);
 	
 	private Formula formula;
 	
@@ -53,7 +52,7 @@ public class TestFormula {
 	
 	@Test
 	public void testSetDependsOn() {
-		Reference reference = new Reference(new Identifier(IdentifierType.IRDI, "newId"), KeyElements.BLOB, true);
+		Reference reference = new Reference(new Identifier(IdentifierType.IRDI, "newId"), KeyElements.BLOB);
 		Collection<IReference> references = Collections.singleton(reference);
 		formula.setDependsOn(references);
 		assertEquals(references, formula.getDependsOn());

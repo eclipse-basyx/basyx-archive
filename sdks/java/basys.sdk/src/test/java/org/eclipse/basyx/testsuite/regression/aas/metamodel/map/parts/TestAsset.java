@@ -14,7 +14,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.eclipse.basyx.aas.metamodel.api.parts.asset.AssetKind;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
@@ -36,18 +35,19 @@ import org.junit.Test;
  *
  */
 public class TestAsset {
-	private static final Reference REFERENCE = new Reference(new Identifier(IdentifierType.CUSTOM, "testValue"), KeyElements.ASSET, false);
-	
+	private static final Reference REFERENCE = new Reference(new Identifier(IdentifierType.CUSTOM, "testValue"), KeyElements.ASSET);
+	private static final String ID = "testId";
+	private static final Identifier IDENTIFIER = new Identifier(IdentifierType.CUSTOM, ID);
 	private Asset asset;
 	
 	@Before
 	public void buildAsset() {
-		asset = new Asset(REFERENCE);
+		asset = new Asset(ID, IDENTIFIER);
 	}
 	
 	@Test
 	public void testConstructor() {
-		assertEquals(REFERENCE, asset.getAssetIdentificationModel());
+		assertEquals(IDENTIFIER, asset.getIdentification());
 	}
 	
 	@Test
@@ -66,13 +66,6 @@ public class TestAsset {
 	}
 	
 	@Test
-	public void testAssetKind() {
-		AssetKind kind = AssetKind.INSTANCE;
-		asset.setAssetKind(kind);
-		assertEquals(kind, asset.getAssetKind());
-	}
-	
-	@Test
 	public void testSetAdministration() {
 		AdministrativeInformation information = new AdministrativeInformation("1.0", "5");
 		asset.setAdministration(information);
@@ -86,13 +79,7 @@ public class TestAsset {
 		asset.setIdentification(idType, newIdString);
 		assertEquals(new Identifier(idType, newIdString), asset.getIdentification());
 	}
-	
-	@Test
-	public void testSetAssetIdentificationModel() {
-		asset.setAssetIdentificationModel(REFERENCE);
-		assertEquals(REFERENCE, asset.getAssetIdentificationModel());
-	}
-	
+
 	@Test
 	public void testSetIdShort() {
 		String newIdString = "newId";
@@ -113,17 +100,4 @@ public class TestAsset {
 		asset.setDescription(newDescriptionString);
 		assertEquals(newDescriptionString, asset.getDescription());
 	}
-	
-	@Test
-	public void testSetParent() {
-		Reference parent = new Reference(new Identifier(IdentifierType.IRDI, "testNewId"), KeyElements.ASSET, true);
-		asset.setParent(parent);
-		assertEquals(parent, asset.getParent());
-	}
-	
-	@Test
-	public void testSetBillOfMaterial() {
-		asset.setBillOfMaterial(REFERENCE);
-		assertEquals(REFERENCE, asset.getBillOfMaterial());
-	} 
 }

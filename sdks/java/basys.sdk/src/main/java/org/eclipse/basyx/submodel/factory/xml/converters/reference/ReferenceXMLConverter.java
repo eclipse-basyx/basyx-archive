@@ -104,9 +104,8 @@ public class ReferenceXMLConverter {
 		String text = XMLHelper.getString(xmlObject.get(XMLHelper.TEXT));
 		String idType = XMLHelper.getString(xmlObject.get(IDTYPE));
 		String type = XMLHelper.getString(xmlObject.get(TYPE));
-		boolean local = Boolean.parseBoolean(XMLHelper.getString(xmlObject.get(LOCAL)));
 	
-		return new Key(KeyElements.fromString(type), local, text, KeyType.fromString(idType));
+		return new Key(KeyElements.fromString(type), text, KeyType.fromString(idType));
 	}
 	
 	/**
@@ -185,7 +184,6 @@ public class ReferenceXMLConverter {
 		Element xmlKey = document.createElement(keyTagName);
 		xmlKey.appendChild(document.createTextNode(key.getValue()));
 		xmlKey.setAttribute(IDTYPE, key.getIdType().toString());
-		xmlKey.setAttribute(LOCAL, String.valueOf(key.isLocal()));
 		xmlKey.setAttribute(TYPE, key.getType().toString());
 		
 		return xmlKey;

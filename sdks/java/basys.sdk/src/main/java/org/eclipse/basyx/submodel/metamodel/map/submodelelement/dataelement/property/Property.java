@@ -197,7 +197,7 @@ public class Property extends DataElement implements IProperty {
 	 *            the description to refer
 	 */
 	public void addConceptDescription(IConceptDescription description) {
-		Reference ref = new Reference(description, KeyElements.CONCEPTDESCRIPTION, true);
+		Reference ref = new Reference(description, KeyElements.CONCEPTDESCRIPTION);
 		setSemanticId(ref);
 	}
 

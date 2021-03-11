@@ -59,7 +59,7 @@ public class AASDescriptor extends ModelDescriptor {
 	 * @param endpoint
 	 */
 	public AASDescriptor(IAssetAdministrationShell assetAdministrationShell, String endpoint) {
-		this(assetAdministrationShell.getIdShort(), assetAdministrationShell.getIdentification(), assetAdministrationShell.getAsset(), endpoint);
+		this(assetAdministrationShell.getIdShort(), assetAdministrationShell.getIdentification(), new Asset(assetAdministrationShell.getAssetInformation()), endpoint);
 	}
 
 

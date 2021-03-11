@@ -26,7 +26,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 public class DataSpecificationIEC61360 extends EmbeddedDataSpecification {
 	public static final String TEMPLATE_IRI = "www.admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360";
 	public static final Reference TEMPLATE_REFERENCE = new Reference(
-			new Key(KeyElements.GLOBALREFERENCE, false, TEMPLATE_IRI, KeyType.IRI));
+			new Key(KeyElements.GLOBALREFERENCE, TEMPLATE_IRI, KeyType.IRI));
 
 	/**
 	 * Creates an empty DataSpecificationIEC61360

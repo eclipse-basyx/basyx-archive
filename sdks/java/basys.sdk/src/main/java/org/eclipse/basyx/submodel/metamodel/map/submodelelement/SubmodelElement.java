@@ -120,11 +120,6 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 		return Referable.createAsFacade(this, getKeyElement()).getDescription();
 	}
 
-	@Override
-	public IReference getParent() {
-		return Referable.createAsFacade(this, getKeyElement()).getParent();
-	}
-
 	public void setIdShort(String idShort) {
 		if (SubmodelElementIdShortBlacklist.isBlacklisted(idShort)) {
 			throw new RuntimeException("The passed idShort " + idShort + " is blacklisted.");
@@ -139,10 +134,6 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 
 	public void setDescription(LangStrings description) {
 		Referable.createAsFacade(this, getKeyElement()).setDescription(description);
-	}
-
-	public void setParent(IReference obj) {
-		Referable.createAsFacade(this, getKeyElement()).setParent(obj);
 	}
 
 	public void setQualifiers(Collection<IConstraint> qualifiers) {

@@ -12,13 +12,13 @@ package org.eclipse.basyx.aas.metamodel.map.parts;
 import java.util.Collection;
 import java.util.Map;
 
-import org.eclipse.basyx.aas.metamodel.api.parts.asset.AssetKind;
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
+import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
@@ -27,7 +27,6 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
-import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.vab.model.VABModelMap;
 
 /**
@@ -42,10 +41,7 @@ import org.eclipse.basyx.vab.model.VABModelMap;
  */
 
 public class Asset extends VABModelMap<Object> implements IAsset {
-	public static String ASSETIDENTIFICATIONMODEL = "assetIdentificationModel";
 	public static String MODELTYPE = "Asset";
-	public static final String KIND = "kind";
-	public static final String BILLOFMATERIAL = "billOfMaterial";
 
 	/**
 	 * Constructor
@@ -57,34 +53,26 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 		// Add qualifiers
 		putAll(new HasDataSpecification());
 		putAll(new Identifiable());
-
-		// Default values
-		setAssetKind(AssetKind.INSTANCE);
 	}
 	
 	/**
 	 * Constructor accepting only mandatory attributes
 	 * @param idShort
 	 * @param identification
-	 * @param kind
 	 */
-	public Asset(String idShort, IIdentifier identification, AssetKind kind) {
+	public Asset(String idShort, IIdentifier identification) {
 		this();
 		setIdentification(identification);
 		setIdShort(idShort);
-		setAssetKind(kind);
 	}
-
-	/**
-	 * 
-	 * @param submodel
-	 *            A reference to a Submodel that defines the handling of additional
-	 *            domain specific (proprietary) Identifiers for the asset like e.g.
-	 *            serial number etc.
-	 */
-	public Asset(Reference submodel) {
+	
+	public Asset(AssetInformation information) {
 		this();
-		put(ASSETIDENTIFICATIONMODEL, submodel);
+		IReference ref = information.getGlobalAssetId();
+		if (ref != null && ref.getKeys() != null && ref.getKeys().size() > 0) {
+			IKey key = ref.getKeys().get(ref.getKeys().size() - 1);
+			setIdentification(IdentifierType.fromString(key.getIdType().toString()), key.getValue());
+		}
 	}
 
 	/**
@@ -114,8 +102,7 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 	 * @return true/false
 	 */
 	public static boolean isValid(Map<String, Object> map) {
-		return Identifiable.isValid(map) && 
-				map.containsKey(Asset.KIND);
+		return Identifiable.isValid(map);
 	}
 
 	@Override
@@ -134,15 +121,6 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 
 	public void setEmbeddedDataSpecifications(Collection<IEmbeddedDataSpecification> embeddedDataSpecifications) {
 		HasDataSpecification.createAsFacade(this).setEmbeddedDataSpecifications(embeddedDataSpecifications);
-	}
-
-	@Override
-	public AssetKind getAssetKind() {
-		return AssetKind.fromString((String) get(Asset.KIND));
-	}
-
-	public void setAssetKind(AssetKind kind) {
-		put(Asset.KIND, kind.toString());
 	}
 
 	@Override
@@ -168,15 +146,6 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public IReference getAssetIdentificationModel() {
-		return Reference.createAsFacade((Map<String, Object>) get(Asset.ASSETIDENTIFICATIONMODEL));
-	}
-
-	public void setAssetIdentificationModel(IReference submodel) {
-		put(Asset.ASSETIDENTIFICATIONMODEL, submodel);
-	}
-	@Override
 	public String getIdShort() {
 		return Referable.createAsFacade(this, getKeyElement()).getIdShort();
 	}
@@ -191,11 +160,6 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 		return Referable.createAsFacade(this, getKeyElement()).getDescription();
 	}
 
-	@Override
-	public IReference getParent() {
-		return Referable.createAsFacade(this, getKeyElement()).getParent();
-	}
-
 	public void setIdShort(String idShort) {
 		Referable.createAsFacadeNonStrict(this, getKeyElement()).setIdShort(idShort);
 	}
@@ -206,20 +170,6 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 
 	public void setDescription(LangStrings description) {
 		Referable.createAsFacade(this, getKeyElement()).setDescription(description);
-	}
-
-	public void setParent(IReference obj) {
-		Referable.createAsFacade(this, getKeyElement()).setParent(obj);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public IReference getBillOfMaterial() {
-		return Reference.createAsFacade((Map<String, Object>) get(Asset.BILLOFMATERIAL));
-	}
-
-	public void setBillOfMaterial(Reference reference) {
-		put(Asset.BILLOFMATERIAL, reference);
 	}
 	
 	private KeyElements getKeyElement() {

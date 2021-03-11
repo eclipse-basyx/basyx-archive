@@ -24,10 +24,8 @@ import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
-import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.junit.After;
 import org.junit.Before;
@@ -70,10 +68,8 @@ public abstract class TestRegistryProviderSuite {
 	@Before
 	public void setUp() {
 		// Create assets
-		asset1 = new Asset(new Reference(new Identifier(IdentifierType.CUSTOM, "asset001"), KeyElements.ASSET, false));
-		asset1.setIdentification(IdentifierType.CUSTOM, "asset001");
-		asset1.setIdShort("asset001");
-		asset2 = new Asset(new Reference(new Identifier(IdentifierType.CUSTOM, "asset002"), KeyElements.ASSET, false));
+		asset1 = new Asset("asset001", new Identifier(IdentifierType.CUSTOM, "asset001"));
+		asset2 = new Asset("asset002", new Identifier(IdentifierType.CUSTOM, "asset002"));
 		asset2.setIdentification(IdentifierType.CUSTOM, "asset002");
 		asset2.setIdShort("asset002");
 		// Create descriptors for AAS and submodels

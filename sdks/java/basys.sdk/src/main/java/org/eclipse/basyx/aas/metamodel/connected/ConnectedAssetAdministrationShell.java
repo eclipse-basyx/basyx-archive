@@ -16,13 +16,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
-import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.api.security.ISecurity;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
-import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
-import org.eclipse.basyx.aas.metamodel.map.parts.ConceptDictionary;
+import org.eclipse.basyx.aas.metamodel.map.parts.AssetInformation;
 import org.eclipse.basyx.aas.metamodel.map.parts.View;
 import org.eclipse.basyx.aas.metamodel.map.security.Security;
 import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
@@ -117,24 +114,10 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public IAsset getAsset() {
-		return Asset.createAsFacade((Map<String, Object>) getElem().getPath(AssetAdministrationShell.ASSET));
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
 	public Collection<IView> getViews() {
 		Collection<Map<String, Object>> coll = (Collection<Map<String, Object>>) getElem()
 				.getPath(AssetAdministrationShell.VIEWS);
 		return coll.stream().map(View::createAsFacade).collect(Collectors.toSet());
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public Collection<IConceptDictionary> getConceptDictionary() {
-		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) getElem()
-				.getPath(AssetAdministrationShell.CONCEPTDICTIONARY);
-		return set.stream().map(ConceptDictionary::createAsFacade).collect(Collectors.toSet());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -155,7 +138,6 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 
 	@Override
 	public void addSubmodel(Submodel subModel) {
-		subModel.setParent(getReference());
 		Map<String, Object> convertedMap = SubmodelElementMapCollectionConverter.smToMap(subModel);
 		String accessPath = VABPathTools.concatenatePaths(AssetAdministrationShell.SUBMODELS, subModel.getIdShort());
 		getProxy().setValue(accessPath, convertedMap);
@@ -174,12 +156,6 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 	@Override
 	public LangStrings getDescription() {
 		return Referable.createAsFacade(getElem(), getKeyElement()).getDescription();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public IReference getParent() {
-		return Reference.createAsFacade((Map<String, Object>) getElem().getPath(Referable.PARENT));
 	}
 
 	@Override
@@ -228,5 +204,11 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 			throw new ResourceNotFoundException("AAS " + getIdentification() + " does not have a submodel with id " + id);
 		}
 		return op.get();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public AssetInformation getAssetInformation() {
+		return AssetInformation.createAsFacade((Map<String, Object>) getElem().getPath(AssetAdministrationShell.ASSETINFORMATION));
 	}
 }

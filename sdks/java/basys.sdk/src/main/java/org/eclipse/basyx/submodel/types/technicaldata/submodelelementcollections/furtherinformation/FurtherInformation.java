@@ -42,7 +42,7 @@ import org.eclipse.basyx.submodel.types.helper.SubmodelElementRetrievalHelper;
  */
 public class FurtherInformation extends SubmodelElementCollection {
 	public static final String IDSHORT = "FurtherInformation";
-	public static final Reference SEMANTICID = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/FurtherInformation/1/1", KeyType.IRI));
+	public static final Reference SEMANTICID = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "https://admin-shell.io/ZVEI/TechnicalData/FurtherInformation/1/1", KeyType.IRI));
 	public static final String TEXTSTATEMENTPREFIX = "TextStatement";
 	public static final String VALIDDATEID = "ValidDate";
 	
@@ -204,7 +204,7 @@ public class FurtherInformation extends SubmodelElementCollection {
 	 */
 	public void setValidDate(XMLGregorianCalendar validDate) {
 		Property validDateProp = new Property(VALIDDATEID, ValueType.DateTime);
-		validDateProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ValidDate/1/1", IdentifierType.IRI)));
+		validDateProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "https://admin-shell.io/ZVEI/TechnicalData/ValidDate/1/1", IdentifierType.IRI)));
 		validDateProp.setValue(validDate);
 		setValidDate(validDateProp);
 	}

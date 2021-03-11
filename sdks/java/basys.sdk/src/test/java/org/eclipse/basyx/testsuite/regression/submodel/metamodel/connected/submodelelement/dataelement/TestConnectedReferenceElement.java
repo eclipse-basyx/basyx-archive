@@ -38,7 +38,7 @@ public class TestConnectedReferenceElement {
 	@Before
 	public void build() {
 		
-		Reference ref = new Reference(new Key(KeyElements.BLOB, true, "", IdentifierType.CUSTOM));
+		Reference ref = new Reference(new Key(KeyElements.BLOB, "", IdentifierType.CUSTOM));
 		
 		refElem = new ReferenceElement(ref);
 		

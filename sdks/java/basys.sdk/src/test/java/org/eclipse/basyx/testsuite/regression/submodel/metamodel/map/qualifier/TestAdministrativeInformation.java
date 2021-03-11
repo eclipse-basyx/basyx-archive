@@ -37,11 +37,10 @@ public class TestAdministrativeInformation {
 	private static final String VERSION = "1.0";
 	private static final String REVISION = "5";
 	private static final KeyElements KEY_ELEMENTS = KeyElements.ASSET;
-	private static final boolean IS_LOCAL = false;
 	private static final String VALUE = "testValue";
 	private static final IdentifierType ID_TYPE = IdentifierType.CUSTOM;
 	private static final Identifier IDENTIFIER = new Identifier(ID_TYPE, VALUE);
-	private static final Reference REFERENCE = new Reference(IDENTIFIER, KEY_ELEMENTS, IS_LOCAL);
+	private static final Reference REFERENCE = new Reference(IDENTIFIER, KEY_ELEMENTS);
 	
 	private AdministrativeInformation information;
 	

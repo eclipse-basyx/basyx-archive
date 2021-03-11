@@ -60,11 +60,6 @@ public abstract class ConnectedSubmodelElement extends ConnectedElement implemen
 	}
 
 	@Override
-	public IReference getParent() {
-		return Referable.createAsFacade(getElem(), getKeyElement()).getParent();
-	}
-
-	@Override
 	public Collection<IConstraint> getQualifiers() {
 		return Qualifiable.createAsFacade(getElem()).getQualifiers();
 	}

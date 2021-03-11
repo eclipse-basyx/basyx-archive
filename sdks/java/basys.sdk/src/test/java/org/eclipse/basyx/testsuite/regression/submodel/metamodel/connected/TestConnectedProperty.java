@@ -38,7 +38,7 @@ public class TestConnectedProperty {
 
 	IProperty prop;
 	private static final int VALUE = 10;
-	private static final Reference VALUEID = new Reference(new Key(KeyElements.ACCESSPERMISSIONRULE, true, "testValue", IdentifierType.CUSTOM));
+	private static final Reference VALUEID = new Reference(new Key(KeyElements.ACCESSPERMISSIONRULE, "testValue", IdentifierType.CUSTOM));
 
 	@Before
 	public void build() {

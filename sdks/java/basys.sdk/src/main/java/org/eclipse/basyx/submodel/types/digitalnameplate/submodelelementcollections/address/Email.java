@@ -40,7 +40,7 @@ public class Email extends SubmodelElementCollection {
 	public static final String PUBLICKEYID = "PublicKey";
 	public static final String TYPEOFEMAILADDRESSID = "TypeOfEmailAddress";
 	public static final String TYPEOFPUBLICKEYID = "TypeOfPublickKey";
-	public static final Reference SEMANTICID = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAQ836#005", KeyType.IRDI));
+	public static final Reference SEMANTICID = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "0173-1#02-AAQ836#005", KeyType.IRDI));
 	
 	private Email() {
 	}
@@ -133,7 +133,7 @@ public class Email extends SubmodelElementCollection {
 	 */
 	public void setEmailAddress(String emailAddress) {
 		Property emailProp = new Property(EMAILADDRESSID, ValueType.String);
-		emailProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO198#002", IdentifierType.IRDI)));
+		emailProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "0173-1#02-AAO198#002", IdentifierType.IRDI)));
 		emailProp.setValue(emailAddress);
 		setEmailAddress(emailProp);
 	}
@@ -161,7 +161,7 @@ public class Email extends SubmodelElementCollection {
 	 */
 	public void setPublicKey(LangString key) {
 		MultiLanguageProperty publicKey = new MultiLanguageProperty(PUBLICKEYID);
-		publicKey.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO200#002", IdentifierType.IRDI)));
+		publicKey.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "0173-1#02-AAO200#002", IdentifierType.IRDI)));
 		publicKey.setValue(new LangStrings(key));
 		setPublicKey(publicKey);
 	}
@@ -191,7 +191,7 @@ public class Email extends SubmodelElementCollection {
 	 */
 	public void setTypeOfEmailAddress(MailType type) {
 		Property mailTypeProp = new Property(TYPEOFEMAILADDRESSID, ValueType.String);
-		mailTypeProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO199#003", IdentifierType.IRDI)));
+		mailTypeProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "0173-1#02-AAO199#003", IdentifierType.IRDI)));
 		mailTypeProp.setValue(type.toString());
 		setTypeOfEmailAddress(mailTypeProp);
 	}
@@ -220,7 +220,7 @@ public class Email extends SubmodelElementCollection {
 	 */
 	public void setTypeOfPublicKey(LangString key) {
 		MultiLanguageProperty typeOfPublicKey = new MultiLanguageProperty(TYPEOFPUBLICKEYID);
-		typeOfPublicKey.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO201#002", IdentifierType.IRDI)));
+		typeOfPublicKey.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "0173-1#02-AAO201#002", IdentifierType.IRDI)));
 		typeOfPublicKey.setValue(new LangStrings(key));
 		setTypeOfPublicKey(typeOfPublicKey);
 	}

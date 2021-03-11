@@ -39,7 +39,7 @@ public class TestConnectedMultiLanguageProperty {
 	@Before
 	public void build() {
 		
-		Reference ref = new Reference(new Key(KeyElements.BLOB, true, "", IdentifierType.CUSTOM));
+		Reference ref = new Reference(new Key(KeyElements.BLOB, "", IdentifierType.CUSTOM));
 		LangStrings langStrings = new LangStrings("de", "TestBeschreibung");
 		
 		MLP = new MultiLanguageProperty(ref, langStrings);

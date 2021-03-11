@@ -64,8 +64,8 @@ public class TestProperty {
 	@Test
 	public void testConstructor2(){
 		Referable referable = new Referable("testIdShort", "testCategory", new LangStrings("DE", "test"));
-		Reference semanticId = new Reference(new Key(KeyElements.ASSET, true, "testValue", IdentifierType.IRI));
-		Qualifiable qualifiable = new Qualifiable(new Formula(Collections.singleton(new Reference(new Key(KeyElements.BLOB, true, "TestValue", IdentifierType.IRI)))));
+		Reference semanticId = new Reference(new Key(KeyElements.ASSET, "testValue", IdentifierType.IRI));
+		Qualifiable qualifiable = new Qualifiable(new Formula(Collections.singleton(new Reference(new Key(KeyElements.BLOB, "TestValue", IdentifierType.IRI)))));
 		Property property = new Property(VALUE, referable, semanticId, qualifiable);
 		assertEquals(VALUE, property.getValue());
 		assertNull(property.getValueId());
@@ -122,8 +122,8 @@ public class TestProperty {
 
 	@Test
 	public void testSetId() {
-		IReference ref = new Reference(new Key(KeyElements.PROPERTY, true, "custom", IdentifierType.CUSTOM));
-		IReference ref2 = new Reference(new Key(KeyElements.PROPERTY, true, "custom", IdentifierType.CUSTOM));
+		IReference ref = new Reference(new Key(KeyElements.PROPERTY, "custom", IdentifierType.CUSTOM));
+		IReference ref2 = new Reference(new Key(KeyElements.PROPERTY, "custom", IdentifierType.CUSTOM));
 		property.setValueId(ref);
 		assertEquals(ref2, property.getValueId());
 	}
@@ -134,7 +134,7 @@ public class TestProperty {
 		ConceptDescription description = new ConceptDescription(id, new Identifier(IdentifierType.IRDI, id));
 		Property property = new Property(VALUE);
 		property.addConceptDescription(description);
-		assertEquals(new Reference(description, KeyElements.CONCEPTDESCRIPTION, true), property.getSemanticId());
+		assertEquals(new Reference(description, KeyElements.CONCEPTDESCRIPTION), property.getSemanticId());
 	}
 	
 	@Test

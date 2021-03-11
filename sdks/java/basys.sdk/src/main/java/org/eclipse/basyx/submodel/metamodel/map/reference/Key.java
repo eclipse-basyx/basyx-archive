@@ -28,7 +28,6 @@ import org.eclipse.basyx.vab.model.VABModelMap;
  */
 public class Key extends VABModelMap<Object> implements IKey {
 	public static final String TYPE = "type";
-	public static final String LOCAL = "local";
 	public static final String VALUE = "value";
 	public static final String IDTYPE = "idType";
 
@@ -36,18 +35,14 @@ public class Key extends VABModelMap<Object> implements IKey {
 	 * 
 	 * @param type
 	 *            Denote which kind of entity is referenced.
-	 * @param local
-	 *            Denotes if the key references a model element of the same AAS
-	 *            (=true) or not (=false).
 	 * @param value
 	 *            The key value, for example an IRDI if the idType=IRDI.
 	 * @param idType
 	 *            Type of the key value. In case of idType = idShort local shall be
 	 *            true. In case type=GlobalReference idType shall not be IdShort.
 	 */
-	public Key(KeyElements type, boolean local, String value, KeyType idType) {
+	public Key(KeyElements type, String value, KeyType idType) {
 		put(TYPE, type.toString());
-		put(LOCAL, local);
 		put(VALUE, value);
 		put(IDTYPE, idType.toString());
 	}
@@ -62,8 +57,8 @@ public class Key extends VABModelMap<Object> implements IKey {
 	 * @param value
 	 * @param idType
 	 */
-	public Key(KeyElements type, boolean local, String value, IdentifierType idType) {
-		this(type, local, value, KeyType.fromString(idType.toString()));
+	public Key(KeyElements type, String value, IdentifierType idType) {
+		this(type, value, KeyType.fromString(idType.toString()));
 	}
 
 	/**
@@ -102,7 +97,6 @@ public class Key extends VABModelMap<Object> implements IKey {
 	public static boolean isValid(Map<String, Object> map) {
 		return map != null &&
 				map.containsKey(TYPE) &&
-				map.containsKey(LOCAL) &&
 				map.containsKey(VALUE) &&
 				map.containsKey(IDTYPE);
 	}
@@ -115,7 +109,7 @@ public class Key extends VABModelMap<Object> implements IKey {
 		
 		Map<String, Object> map = (Map<String, Object>) value;
 		
-		if(!(map.get(LOCAL) instanceof Boolean && map.get(VALUE) instanceof String
+		if(!(map.get(VALUE) instanceof String
 				&& map.get(IDTYPE) instanceof String && map.get(TYPE) instanceof String)) {
 			return false;
 		}
@@ -138,11 +132,6 @@ public class Key extends VABModelMap<Object> implements IKey {
 	}
 
 	@Override
-	public boolean isLocal() {
-		return (boolean) get(Key.LOCAL);
-	}
-
-	@Override
 	public String getValue() {
 		return (String) get(Key.VALUE);
 	}
@@ -156,10 +145,6 @@ public class Key extends VABModelMap<Object> implements IKey {
 		put(Key.TYPE, type.toString());
 	}
 
-	public void setLocal(boolean local) {
-		put(Key.LOCAL, local);
-	}
-
 	public void setValue(String value) {
 		put(Key.VALUE, value);
 	}
@@ -170,6 +155,6 @@ public class Key extends VABModelMap<Object> implements IKey {
 
 	@Override
 	public String toString() {
-		return "Key [getType()=" + getType() + ", isLocal()=" + isLocal() + ", getValue()=" + getValue() + ", getIdType()=" + getIdType() + "]";
+		return "Key [getType()=" + getType() + ", getValue()=" + getValue() + ", getIdType()=" + getIdType() + "]";
 	}
 }

@@ -49,15 +49,14 @@ public class TestSubmodelDescriptor {
 		ModelingKind modelingKind = ModelingKind.INSTANCE;
 		HasKind hasKind = new HasKind(modelingKind);
 		KeyElements keyElements = KeyElements.ASSET;
-		boolean isLocal = false;
-		Reference reference = new Reference(IDENTIFIER, keyElements, isLocal);
+		Reference reference = new Reference(IDENTIFIER, keyElements);
 		HasSemantics hasSemantics = new HasSemantics(reference);
 		String version = "1.0";
 		String revision = "5";
 		String category = "testCategory";
 		LangStrings description = new LangStrings("Eng", "test");
 		Identifiable identifiable = new Identifiable(version, revision, ID_SHORT_STRING, category, description, ID_TYPE, ID_SHORT_STRING);
-		Formula formula = new Formula(Collections.singleton(new Reference(new Key(KeyElements.BLOB, true, "TestValue", IdentifierType.IRI))));
+		Formula formula = new Formula(Collections.singleton(new Reference(new Key(KeyElements.BLOB, "TestValue", IdentifierType.IRI))));
 		Qualifiable qualifiable = new Qualifiable(formula);
 		HasDataSpecification hasDataSpecification = new HasDataSpecification(new ArrayList<>(), Collections.singleton(reference));
 		Submodel subModel = new Submodel(hasSemantics, identifiable, qualifiable, hasDataSpecification, hasKind);

@@ -45,12 +45,11 @@ public class TestDataSpecificationIEC61360 {
 	private static final String SOURCE_OF_DEFINITION = "testSource";
 	private static final LangStrings DEFINITION = new LangStrings("DE", "testDefinition");
 	private static final KeyElements KEY_ELEMENTS = KeyElements.ASSET;
-	private static final boolean IS_LOCAL = false;
 	private static final String VALUE = "testValue";
 	private static final IdentifierType ID_TYPE = IdentifierType.CUSTOM;
 	private static final Identifier IDENTIFIER = new Identifier(ID_TYPE, VALUE);
-	private static final Reference UNIT_ID = new Reference(IDENTIFIER, KEY_ELEMENTS, IS_LOCAL);
-	private static final Reference VALUE_ID = new Reference(IDENTIFIER, KEY_ELEMENTS, IS_LOCAL);
+	private static final Reference UNIT_ID = new Reference(IDENTIFIER, KEY_ELEMENTS);
+	private static final Reference VALUE_ID = new Reference(IDENTIFIER, KEY_ELEMENTS);
 	private static final IValueReferencePair VALUEREFPAIR = new ValueReferencePair(VALUE, VALUE_ID);
 	private static final LevelType LEVELTYPE = LevelType.TYP;
 	
@@ -106,12 +105,11 @@ public class TestDataSpecificationIEC61360 {
 	
 	@Test
 	public void testSetUnitId() {
-		boolean isLocal = true;
 		KeyElements keyElements = KeyElements.BLOB;
 		String valueString = "newValue";
 		IdentifierType identifierType = IdentifierType.IRI;
 		Identifier identifier = new Identifier(identifierType, valueString);
-		Reference unitIdReference = new Reference(identifier, keyElements, isLocal);
+		Reference unitIdReference = new Reference(identifier, keyElements);
 		specification.setUnitId(unitIdReference);
 		TypeDestroyer.destroyType(specification);
 		assertEquals(unitIdReference, specification.getUnitId());
@@ -162,12 +160,11 @@ public class TestDataSpecificationIEC61360 {
 
 	@Test
 	public void testSetValueId() {
-		boolean isLocal = true;
 		KeyElements keyElements = KeyElements.BLOB;
 		String valueString = "newValueId";
 		IdentifierType identifierType = IdentifierType.IRI;
 		Identifier identifier = new Identifier(identifierType, valueString);
-		Reference valueIdReference = new Reference(identifier, keyElements, isLocal);
+		Reference valueIdReference = new Reference(identifier, keyElements);
 		specification.setValueId(valueIdReference);
 		TypeDestroyer.destroyType(specification);
 		assertEquals(valueIdReference, specification.getValueId());
@@ -175,12 +172,11 @@ public class TestDataSpecificationIEC61360 {
 
 	@Test
 	public void testSetValuePair() {
-		boolean isLocal = true;
 		KeyElements keyElements = KeyElements.PROPERTY;
 		String valueString = "newValueIdPair";
 		IdentifierType identifierType = IdentifierType.CUSTOM;
 		Identifier identifier = new Identifier(identifierType, valueString);
-		Reference valueIdReference = new Reference(identifier, keyElements, isLocal);
+		Reference valueIdReference = new Reference(identifier, keyElements);
 		String newValueString = "newValuePair";
 		ValueReferencePair newPair = new ValueReferencePair(newValueString, valueIdReference);
 		specification.setValueList(Arrays.asList(newPair));

@@ -80,7 +80,7 @@ public class TestOperation extends TestOperationSuite {
 	@Test
 	public void testSetDataSpecificationReferences() {
 		Operation operation = new Operation(IN, OUT, INOUT, FUNC);
-		Collection<IReference> references = Collections.singleton(new Reference(new Key(KeyElements.ASSET, true, KEY_VALUE, IdentifierType.IRI)));
+		Collection<IReference> references = Collections.singleton(new Reference(new Key(KeyElements.ASSET, KEY_VALUE, IdentifierType.IRI)));
 		operation.setDataSpecificationReferences(references);
 		
 		Collection<IReference> newReferences = operation.getDataSpecificationReferences();

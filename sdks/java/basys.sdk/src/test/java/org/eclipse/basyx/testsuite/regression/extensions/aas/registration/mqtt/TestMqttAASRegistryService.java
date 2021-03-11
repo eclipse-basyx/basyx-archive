@@ -17,7 +17,7 @@ import org.eclipse.basyx.aas.metamodel.api.parts.asset.AssetKind;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
+import org.eclipse.basyx.aas.metamodel.map.parts.AssetInformation;
 import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.extensions.aas.registration.mqtt.MqttAASRegistryService;
@@ -80,7 +80,7 @@ public class TestMqttAASRegistryService {
 	
 	@Before
 	public void setUp() {
-		AssetAdministrationShell shell = new AssetAdministrationShell(AASID, AASIDENTIFIER, new Asset("assetid1", new Identifier(IdentifierType.IRI, "assetid1"), AssetKind.INSTANCE));
+		AssetAdministrationShell shell = new AssetAdministrationShell(AASID, AASIDENTIFIER, new AssetInformation(AssetKind.INSTANCE));
 		AASDescriptor aasDescriptor = new AASDescriptor(shell, AASENDPOINT);
 		eventAPI.register(aasDescriptor);
 		
@@ -102,7 +102,7 @@ public class TestMqttAASRegistryService {
 	public void testRegisterAAS() {
 		String newAASId = "aasid2";
 		Identifier newIdentifier = new Identifier(IdentifierType.IRI, newAASId);
-		AssetAdministrationShell shell = new AssetAdministrationShell(newAASId, newIdentifier, new Asset("assetid1", new Identifier(IdentifierType.IRI, "assetid2"), AssetKind.INSTANCE));
+		AssetAdministrationShell shell = new AssetAdministrationShell(newAASId, newIdentifier, new AssetInformation(AssetKind.INSTANCE));
 		String aasEndpoint = "http://localhost:8080/aasList/" + newAASId + "/aas";
 		
 		AASDescriptor aasDescriptor = new AASDescriptor(shell, aasEndpoint);

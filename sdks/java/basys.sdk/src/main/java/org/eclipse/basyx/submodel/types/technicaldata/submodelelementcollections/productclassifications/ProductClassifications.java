@@ -34,7 +34,7 @@ import org.eclipse.basyx.submodel.types.helper.SubmodelElementRetrievalHelper;
  */
 public class ProductClassifications extends SubmodelElementCollection {
 	public static final String IDSHORT = "ProductClassifications";
-	public static final Reference SEMANTICID = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/ZVEI/TechnicalData/ProductClassifications/1/1", KeyType.IRI));
+	public static final Reference SEMANTICID = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "https://admin-shell.io/ZVEI/TechnicalData/ProductClassifications/1/1", KeyType.IRI));
 	public static final String PRODUCTCLASSIFICATIONITEMPREFIX = "ProductClassificationItem";
 	
 	/**

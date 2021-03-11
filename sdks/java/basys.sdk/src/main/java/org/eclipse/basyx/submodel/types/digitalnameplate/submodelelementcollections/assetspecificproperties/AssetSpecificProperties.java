@@ -33,7 +33,7 @@ import org.eclipse.basyx.submodel.types.helper.SubmodelElementRetrievalHelper;
 public class AssetSpecificProperties extends SubmodelElementCollection {
 	public static final String ASSETSPECIFICPROPERTIESID = "AssetSpecificProperties";
 	public static final String GUIDELINESPECIFICPROPERTYPREFIX = "GuidelineSpecificProperties";
-	public static final Reference SEMANTICID = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://admin-shell.io/zvei/nameplate/1/0/Nameplate/AssetSpecificProperties", KeyType.IRI));
+	public static final Reference SEMANTICID = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "https://admin-shell.io/zvei/nameplate/1/0/Nameplate/AssetSpecificProperties", KeyType.IRI));
 	
 	private AssetSpecificProperties() {
 	}

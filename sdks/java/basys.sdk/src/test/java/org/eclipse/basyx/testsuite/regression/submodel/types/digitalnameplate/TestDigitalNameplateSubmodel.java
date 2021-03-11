@@ -19,7 +19,6 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
@@ -28,8 +27,6 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangString;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
-import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
-import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
@@ -76,7 +73,6 @@ public class TestDigitalNameplateSubmodel {
 		TestMarking.markingFile.setIdShort(Marking.MARKINGFILEID);
 		TestMarking.markingName.setValue("0173-1#07-DAA603#004");
 		TestMarkings.marking = new Marking(TestMarking.IDSHORT, TestMarking.markingName, TestMarking.markingFile);
-		TestMarkings.marking.setParent(new Reference(new Key(KeyElements.SUBMODELELEMENTCOLLECTION, true, Markings.IDSHORT, IdentifierType.IRDI)));
 		TestMarkings.markings = new ArrayList<Marking>();
 		TestMarkings.markings.add(TestMarkings.marking);
 		markings = new Markings(TestMarkings.markings);

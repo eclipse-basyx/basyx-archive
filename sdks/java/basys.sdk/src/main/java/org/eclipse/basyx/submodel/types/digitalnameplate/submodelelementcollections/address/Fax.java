@@ -38,7 +38,7 @@ import org.eclipse.basyx.submodel.types.digitalnameplate.enums.FaxType;
 public class Fax extends SubmodelElementCollection {
 	public static final String FAXNUMBERID = "FaxNumber";
 	public static final String TYPEOFFAXID = "TypeOfFaxNumber";
-	public static final Reference SEMANTICID = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAQ834#005", KeyType.IRDI));
+	public static final Reference SEMANTICID = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "0173-1#02-AAQ834#005", KeyType.IRDI));
 	
 	private Fax() {
 	}
@@ -132,7 +132,7 @@ public class Fax extends SubmodelElementCollection {
 	 */
 	public void setFaxNumber(LangString faxNumber) {
 		MultiLanguageProperty faxProp = new MultiLanguageProperty(FAXNUMBERID);
-		faxProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO195#002", IdentifierType.IRDI)));
+		faxProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "0173-1#02-AAO195#002", IdentifierType.IRDI)));
 		faxProp.setValue(new LangStrings(faxNumber));
 		setFaxNumber(faxProp);
 	}
@@ -151,7 +151,7 @@ public class Fax extends SubmodelElementCollection {
 	 */
 	public void setTypeOfFaxNumber(FaxType type) {
 		Property faxTypeProp = new Property(TYPEOFFAXID, ValueType.String);
-		faxTypeProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO196#003", IdentifierType.IRDI)));
+		faxTypeProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "0173-1#02-AAO196#003", IdentifierType.IRDI)));
 		faxTypeProp.setValue(type.toString());
 		setTypeOfFaxNumber(faxTypeProp);
 	}

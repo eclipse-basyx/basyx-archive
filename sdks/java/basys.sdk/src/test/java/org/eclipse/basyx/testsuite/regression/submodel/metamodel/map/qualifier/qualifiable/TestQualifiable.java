@@ -32,8 +32,8 @@ import org.junit.Test;
  *
  */
 public class TestQualifiable {
-	private static final Formula FORMULA1 = new Formula(Collections.singleton(new Reference(new Key(KeyElements.BLOB, true, "TestValue", IdentifierType.IRI))));
-	private static final Formula FORMULA2 = new Formula(Collections.singleton(new Reference(new Key(KeyElements.ANNOTATEDRELATIONSHIPELEMENT, true, "TestValue2", IdentifierType.IRDI))));
+	private static final Formula FORMULA1 = new Formula(Collections.singleton(new Reference(new Key(KeyElements.BLOB, "TestValue", IdentifierType.IRI))));
+	private static final Formula FORMULA2 = new Formula(Collections.singleton(new Reference(new Key(KeyElements.ANNOTATEDRELATIONSHIPELEMENT, "TestValue2", IdentifierType.IRDI))));
 	
 	@Test
 	public void testConstructor1() {

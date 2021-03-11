@@ -39,7 +39,6 @@ import org.junit.Test;
  */
 public class TestReference {
 	private static final KeyElements KEY_ELEMENTS = KeyElements.ASSET;
-	private static final boolean IS_LOCAL = false;
 	private static final String VALUE = "testValue";
 	private static final KeyType KEY_TYPE = KeyType.IRDI;
 	private static final IdentifierType ID_TYPE = IdentifierType.CUSTOM;
@@ -47,24 +46,24 @@ public class TestReference {
 	@Test
 	public void testConstructor1() {	
 		Identifiable identifiable = new Identifiable("2.0", "5", "testIDShort", "testCategory", new LangStrings("Eng", "test"), IdentifierType.IRI, "newId");
-		Collection<IKey> keys = Collections.singletonList(new Key(KEY_ELEMENTS, IS_LOCAL, identifiable.getIdentification().getId(), identifiable.getIdentification().getIdType()));
-		Reference reference = new Reference(identifiable, KEY_ELEMENTS, IS_LOCAL);
+		Collection<IKey> keys = Collections.singletonList(new Key(KEY_ELEMENTS, identifiable.getIdentification().getId(), identifiable.getIdentification().getIdType()));
+		Reference reference = new Reference(identifiable, KEY_ELEMENTS);
 		assertEquals(keys, reference.getKeys());
 	}
 	
 	@Test
 	public void testConstructor2() {
 		Identifier identifier = new Identifier(ID_TYPE, VALUE);
-		Reference reference = new Reference(identifier, KEY_ELEMENTS, IS_LOCAL);
-		Collection<IKey> keys = Collections.singletonList(new Key(KEY_ELEMENTS, IS_LOCAL, identifier.getId(), identifier.getIdType()));
+		Reference reference = new Reference(identifier, KEY_ELEMENTS);
+		Collection<IKey> keys = Collections.singletonList(new Key(KEY_ELEMENTS, identifier.getId(), identifier.getIdType()));
 		assertEquals(keys, reference.getKeys());
 	}
 	
 	@Test
 	public void testConstructor3() {
 		List<IKey> keysList = new ArrayList<IKey>();
-		keysList.add(new Key(KEY_ELEMENTS, IS_LOCAL, VALUE, ID_TYPE));
-		keysList.add(new Key(KEY_ELEMENTS, IS_LOCAL, VALUE, KEY_TYPE));
+		keysList.add(new Key(KEY_ELEMENTS, VALUE, ID_TYPE));
+		keysList.add(new Key(KEY_ELEMENTS, VALUE, KEY_TYPE));
 		
 		Reference reference = new Reference(keysList);
 		assertEquals(keysList, reference.getKeys());
@@ -72,7 +71,7 @@ public class TestReference {
 	
 	@Test
 	public void testConstructor4() {
-		Key key = new Key(KEY_ELEMENTS, IS_LOCAL, VALUE, ID_TYPE);
+		Key key = new Key(KEY_ELEMENTS, VALUE, ID_TYPE);
 		
 		Reference reference = new Reference(key);
 		assertEquals(Collections.singletonList(key), reference.getKeys());
@@ -81,10 +80,10 @@ public class TestReference {
 	@Test
 	public void testSetKeys() {
 		List<IKey> keysList = new ArrayList<IKey>();
-		keysList.add(new Key(KEY_ELEMENTS, IS_LOCAL, VALUE, ID_TYPE));
-		keysList.add(new Key(KEY_ELEMENTS, IS_LOCAL, VALUE, KEY_TYPE));
+		keysList.add(new Key(KEY_ELEMENTS, VALUE, ID_TYPE));
+		keysList.add(new Key(KEY_ELEMENTS, VALUE, KEY_TYPE));
 		
-		Reference reference = new Reference(new Identifier(ID_TYPE, VALUE), KEY_ELEMENTS, IS_LOCAL);
+		Reference reference = new Reference(new Identifier(ID_TYPE, VALUE), KEY_ELEMENTS);
  		reference.setKeys(keysList);
 		assertEquals(keysList, reference.getKeys());
 	}
@@ -92,7 +91,7 @@ public class TestReference {
 	@Test
 	public void testIsReference() {
 		Identifiable identifiable = new Identifiable("2.0", "5", "testIDShort", "testCategory", new LangStrings("Eng", "test"), IdentifierType.IRI, "newId");
-		Reference reference = new Reference(identifiable, KEY_ELEMENTS, IS_LOCAL);
+		Reference reference = new Reference(identifiable, KEY_ELEMENTS);
 		
 		assertTrue(Reference.isReference(reference));
 		

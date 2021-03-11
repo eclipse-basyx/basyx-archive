@@ -35,8 +35,8 @@ import org.junit.Test;
  *
  */
 public class TestView {
-	private static final Reference REFERENCE = new Reference(new Identifier(IdentifierType.CUSTOM, "testValue"), KeyElements.ASSET, false);
-	private static final Reference REFERENCE2 = new Reference(new Identifier(IdentifierType.IRDI, "testNewId"), KeyElements.ASSET, true);
+	private static final Reference REFERENCE = new Reference(new Identifier(IdentifierType.CUSTOM, "testValue"), KeyElements.ASSET);
+	private static final Reference REFERENCE2 = new Reference(new Identifier(IdentifierType.IRDI, "testNewId"), KeyElements.ASSET);
 	
 	private View view;
 	private Collection<IReference> references;
@@ -100,11 +100,5 @@ public class TestView {
 		LangStrings newDescriptionString = new LangStrings("DE", "newTest");
 		view.setDescription(newDescriptionString);
 		assertEquals(newDescriptionString, view.getDescription());
-	}
-	
-	@Test
-	public void testSetParent() {
-		view.setParent(REFERENCE2);
-		assertEquals(REFERENCE2, view.getParent());
 	}
 }

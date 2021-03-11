@@ -12,11 +12,9 @@ package org.eclipse.basyx.submodel.factory.xml.converters.qualifier;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.factory.xml.XMLHelper;
-import org.eclipse.basyx.submodel.factory.xml.converters.reference.ReferenceXMLConverter;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IReferable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
-import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -42,14 +40,12 @@ public class ReferableXMLConverter {
 	 * @param xmlObject the XML map containing the tag relevant for IReferable
 	 * @param referable the Referable object to be populated
 	 */
-	@SuppressWarnings("unchecked")
 	public static void populateReferable(Map<String, Object> xmlObject, Referable referable) {
 		String idShort = XMLHelper.getString(xmlObject.get(ID_SHORT));
 		String category = XMLHelper.getString(xmlObject.get(CATEGORY));
 		
 		LangStrings description = parseDescription(xmlObject);
 		
-		Reference parent = ReferenceXMLConverter.parseReference((Map<String, Object>) xmlObject.get(PARENT));
 		if (Strings.isNullOrEmpty(idShort)) {
 			throw new RuntimeException("Invalid XML of Referable. No valid idShort is present. " + xmlObject.toString());
 		}
@@ -60,9 +56,6 @@ public class ReferableXMLConverter {
 		}
 		if (description != null) {
 			referable.setDescription(description);
-		}
-		if (parent != null) {
-			referable.setParent(parent);
 		}
 	}
 	
@@ -113,13 +106,6 @@ public class ReferableXMLConverter {
 			Element descriptionRoot = document.createElement(DESCRIPTION);
 			LangStringsXMLConverter.buildLangStringsXML(document, descriptionRoot, referable.getDescription());
 			root.appendChild(descriptionRoot);
-		}
-		
-		if(referable.getParent() != null) {
-			Element xmlParent = ReferenceXMLConverter.buildReferenceXML(document, referable.getParent());
-			Element parentElem = document.createElement(PARENT);
-			parentElem.appendChild(xmlParent);
-			root.appendChild(parentElem);
 		}
 		
 	}	

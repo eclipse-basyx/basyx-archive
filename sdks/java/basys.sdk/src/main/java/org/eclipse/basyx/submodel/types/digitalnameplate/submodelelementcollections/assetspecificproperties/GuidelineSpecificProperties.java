@@ -36,7 +36,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.prop
  */
 public class GuidelineSpecificProperties extends SubmodelElementCollection {
 	public static final String GUIDELINEFORCONFORMITYDECLARATIONID = "GuidelineForConformityDeclaration";
-	public static final Reference SEMANTICID = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "https://adminshell.io/zvei/nameplate/1/0/Nameplate/AssetSpecificProperties/GuidelineSpecificProperties", KeyType.IRI));
+	public static final Reference SEMANTICID = new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "https://adminshell.io/zvei/nameplate/1/0/Nameplate/AssetSpecificProperties/GuidelineSpecificProperties", KeyType.IRI));
 	
 	private GuidelineSpecificProperties() {
 	}
@@ -149,7 +149,7 @@ public class GuidelineSpecificProperties extends SubmodelElementCollection {
 	 */
 	public void setGuidelineForConformityDeclaration(String declaration) {
 		Property declarationProp = new Property(GUIDELINEFORCONFORMITYDECLARATIONID, ValueType.String);
-		declarationProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, false, "0173-1#02-AAO856#002", IdentifierType.IRDI)));
+		declarationProp.setSemanticId(new Reference(new Key(KeyElements.CONCEPTDESCRIPTION, "0173-1#02-AAO856#002", IdentifierType.IRDI)));
 		declarationProp.setValue(declaration);
 		setGuidelineForConformityDeclaration(declarationProp);
 	}

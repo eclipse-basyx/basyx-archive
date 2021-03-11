@@ -28,15 +28,6 @@ public interface IKey {
 	public KeyElements getType();
 
 	/**
-	 * Gets if the key references a model element of the same AAS (=true) or not
-	 * (=false). In case of local = false the key may reference a model element of
-	 * another AAS or an entity outside any AAS that has a global unique id.
-	 * 
-	 * @return
-	 */
-	public boolean isLocal();
-
-	/**
 	 * Gets the key value, for example an IRDI if the idType=IRDI.
 	 * 
 	 * @return

@@ -101,8 +101,6 @@ public class ConnectedSubmodelElementCollection extends ConnectedSubmodelElement
 	@Override
 	public void addSubmodelElement(ISubmodelElement element) {
 		if (element instanceof SubmodelElement) {
-			((SubmodelElement) element).setParent(getReference());
-
 			// Convert "value" in SubmodelElementCollection from Map to Collection
 			if (element instanceof SubmodelElementCollection) {
 				Map<String, Object> converted = SubmodelElementMapCollectionConverter.smElementToMap((Map<String, Object>) element);

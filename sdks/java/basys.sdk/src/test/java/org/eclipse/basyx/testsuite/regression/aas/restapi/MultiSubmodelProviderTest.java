@@ -5,6 +5,7 @@ package org.eclipse.basyx.testsuite.regression.aas.restapi;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Collection;
@@ -14,13 +15,12 @@ import org.eclipse.basyx.aas.metamodel.api.parts.asset.AssetKind;
 import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
-import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
+import org.eclipse.basyx.aas.metamodel.map.parts.AssetInformation;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
 import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
-import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
@@ -53,7 +53,7 @@ public class MultiSubmodelProviderTest {
 		MultiSubmodelProvider provider = new MultiSubmodelProvider();
 
 		// set dummy aas
-		AssetAdministrationShell aas = new AssetAdministrationShell(AASIDSHORT, AASURN, new Asset("assetIdShort", new Identifier(IdentifierType.CUSTOM, "assetId"), AssetKind.INSTANCE));
+		AssetAdministrationShell aas = new AssetAdministrationShell(AASIDSHORT, AASURN, new AssetInformation(AssetKind.INSTANCE));
 		provider.setAssetAdministrationShell(new AASModelProvider(aas));
 		provider.addSubmodel(new SubmodelProvider(new SimpleAASSubmodel()));
 		stub.addProvider(urn, "", provider);
@@ -121,7 +121,7 @@ public class MultiSubmodelProviderTest {
 		ConnectedAssetAdministrationShell shell = new ConnectedAssetAdministrationShell(proxy.getDeepProxy("/aas"));
 		Collection<IReference> refs = shell.getSubmodelReferences();
 		assertEquals(2, refs.size());
-		assertEquals(sm.getReference(), refs.iterator().next());
+		assertTrue(refs.contains(sm.getReference()));
 
 		proxy.deleteValue("/aas/submodels/TestSM");
 

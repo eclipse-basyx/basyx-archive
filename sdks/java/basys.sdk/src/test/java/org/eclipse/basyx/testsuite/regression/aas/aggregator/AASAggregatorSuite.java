@@ -20,7 +20,7 @@ import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.AssetKind;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
-import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
+import org.eclipse.basyx.aas.metamodel.map.parts.AssetInformation;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
@@ -54,11 +54,11 @@ public abstract class AASAggregatorSuite {
 	// initializing dummy test data
 	@Before
 	public void initAASDummies() {
-		aas1 = new AssetAdministrationShell(aas1Id, new Identifier(IdentifierType.CUSTOM, aas1Id), new Asset("asset1IdShort", new Identifier(IdentifierType.CUSTOM, "asset1"), AssetKind.INSTANCE));
+		aas1 = new AssetAdministrationShell(aas1Id, new Identifier(IdentifierType.CUSTOM, aas1Id), new AssetInformation(AssetKind.INSTANCE));
 		aas1.setDescription(description1);
 		aas1.setCategory(aas1Category);
 		
-		aas2 = new AssetAdministrationShell(aas2Id, new Identifier(IdentifierType.CUSTOM, aas2Id), new Asset("asset2IdShort", new Identifier(IdentifierType.CUSTOM, "asset2"), AssetKind.INSTANCE));
+		aas2 = new AssetAdministrationShell(aas2Id, new Identifier(IdentifierType.CUSTOM, aas2Id), new AssetInformation(AssetKind.INSTANCE));
 		aas2.setDescription(description2);
 		aas2.setCategory(aas2Category);
 	}

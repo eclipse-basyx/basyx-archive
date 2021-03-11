@@ -34,8 +34,8 @@ import org.junit.Test;
  *
  */
 public class TestAnnotatedRelationshipElement {
-	private static final Reference FIRST = new Reference(new Key(KeyElements.ASSET, true, "firstValue", IdentifierType.IRI));
-	private static final Reference SECOND = new Reference(new Identifier(IdentifierType.CUSTOM, "secondId"), KeyElements.BLOB, false);
+	private static final Reference FIRST = new Reference(new Key(KeyElements.ASSET, "firstValue", IdentifierType.IRI));
+	private static final Reference SECOND = new Reference(new Identifier(IdentifierType.CUSTOM, "secondId"), KeyElements.BLOB);
 	
 	private AnnotatedRelationshipElement element;
 	
@@ -56,14 +56,14 @@ public class TestAnnotatedRelationshipElement {
 	
 	@Test
 	public void testSetFirst() {
-		Reference newFirst = new Reference(new Key(KeyElements.CAPABILITY, false, "newFirst", IdentifierType.IRI));
+		Reference newFirst = new Reference(new Key(KeyElements.CAPABILITY, "newFirst", IdentifierType.IRI));
 		element.setFirst(newFirst);
 		assertEquals(newFirst, element.getFirst());
 	} 
 
 	@Test
 	public void testSetSecond() {
-		Reference newSecond = new Reference(new Key(KeyElements.CAPABILITY, false, "newFirst", IdentifierType.IRI));
+		Reference newSecond = new Reference(new Key(KeyElements.CAPABILITY, "newFirst", IdentifierType.IRI));
 		element.setSecond(newSecond);
 		assertEquals(newSecond, element.getSecond());
 	}
