@@ -15,6 +15,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionC
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
@@ -99,7 +100,12 @@ public class SubmodelElementCollectionProvider implements IModelProvider {
 
 		if (pathElements.length == 1) {
 			String valuePath = VABPathTools.concatenatePaths(MultiSubmodelElementProvider.VALUE, path);
-			proxy.createValue(valuePath, newEntity);
+			// It is allowed to overwrite existing properties inside of collections
+			try {
+				proxy.setValue(valuePath, newEntity);
+			} catch (ResourceNotFoundException e) {
+				proxy.createValue(valuePath, newEntity);
+			}
 		} else {
 			// Directly access an element inside of the collection
 			String idShort = pathElements[0];

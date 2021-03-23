@@ -17,6 +17,7 @@ import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionC
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
@@ -132,7 +133,12 @@ public class MultiSubmodelElementProvider implements IModelProvider {
 		}
 
 		if (pathElements.length == 2) {
-			modelProvider.createValue(pathElements[1], newEntity);
+			// It is allowed to overwrite existing properties inside of a submodel
+			try {
+				modelProvider.setValue(pathElements[1], newEntity);
+			} catch (ResourceNotFoundException e) {
+				modelProvider.createValue(pathElements[1], newEntity);
+			}
 		} else {
 			IModelProvider elementProxy = getElementProxy(pathElements);
 			new SubmodelElementProvider(elementProxy).createValue(subPath, newEntity);
