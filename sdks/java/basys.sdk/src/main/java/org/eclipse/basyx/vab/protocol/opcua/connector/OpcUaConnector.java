@@ -60,6 +60,7 @@ public class OpcUaConnector implements IModelProvider {
             clientRunner.run();
         } catch (Exception e) {
         	logger.error("Exception in getModelPropertyValue", e);
+        	throw new RuntimeException(e);
         }
         return opcUaRead(translateBrowsePathToNodeId(servicePath)[1]);
     }
@@ -70,8 +71,8 @@ public class OpcUaConnector implements IModelProvider {
             clientRunner = new BaSyxOpcUaClientRunner(address);
             clientRunner.run();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
         	logger.error("Exception in setModelPropertyValue", e);
+        	throw new RuntimeException(e);
         }
         opcUaWrite(translateBrowsePathToNodeId(servicePath)[1], newValue);
     }
@@ -98,6 +99,7 @@ public class OpcUaConnector implements IModelProvider {
             clientRunner.run();
         } catch (Exception e) {
         	logger.error("Exception in invokeOperation", e);
+        	throw new RuntimeException(e);
         }
         return opcUaMethodCall(translateBrowsePathToNodeId(servicePath), parameters);
     }
