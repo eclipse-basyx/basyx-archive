@@ -79,6 +79,8 @@ public class AASModelProvider implements IModelProvider {
 		if (path.equals("submodels")) {
 			Map<String, Object> smMap = (Map<String, Object>) newEntity;
 			Submodel sm = Submodel.createAsFacade(smMap);
+			// It is allowed to overwrite existing submodels
+			aasApi.removeSubmodel(sm.getIdentification().getId());
 			aasApi.addSubmodel(sm.getReference());
 		} else {
 			throw new MalformedRequestException("Path " + path + " is not supported");

@@ -95,6 +95,21 @@ public class MultiSubmodelProviderTest {
 	}
 
 	@Test
+	public void updateSubmodelTest() {
+		Submodel sm = new SimpleAASSubmodel("TestSM");
+		sm.setIdentification(IdentifierType.CUSTOM, "TestId");
+		proxy.setValue("/aas/submodels/" + sm.getIdShort(), sm);
+
+		Submodel sm2 = new SimpleAASSubmodel("TestSM");
+		sm2.setIdentification(IdentifierType.CUSTOM, "TestId2");
+		proxy.setValue("/aas/submodels/" + sm.getIdShort(), sm2);
+
+		ConnectedAssetAdministrationShell shell = new ConnectedAssetAdministrationShell(proxy.getDeepProxy("/aas"));
+		String newId = shell.getSubmodels().get("TestSM").getIdentification().getId();
+		assertEquals("TestId2", newId);
+	}
+
+	@Test
 	public void createDeleteSubmodelTest() {
 		Submodel sm = new SimpleAASSubmodel("TestSM");
 		sm.setIdentification(IdentifierType.CUSTOM, "TestId");
