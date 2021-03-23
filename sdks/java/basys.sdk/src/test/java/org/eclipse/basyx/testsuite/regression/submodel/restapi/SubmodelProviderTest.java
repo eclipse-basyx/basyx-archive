@@ -99,6 +99,27 @@ public class SubmodelProviderTest {
 	}
 
 	/**
+	 * Test updating a full property
+	 */
+	@Test
+	public void testUpdateFullProperty() {
+		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
+
+		// Create element
+		Property prop = new Property("newProperty", 500);
+		submodelElement.setValue("/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/newProperty", prop);
+		
+		// Update element
+		Property updatedProp = new Property("newProperty", 400);
+		submodelElement.setValue("/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/newProperty", updatedProp);
+
+		// Read back value
+		Integer result = (Integer) submodelElement
+				.getValue("/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/newProperty/value");
+		assertEquals(400, result.intValue());
+	}
+
+	/**
 	 * Test creating single property
 	 */
 	@Test
@@ -122,6 +143,26 @@ public class SubmodelProviderTest {
 		result = (Integer) submodelElement
 				.getValue("/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/containerRoot/container/newProperty/value");
 		assertEquals(500, result.intValue());
+	}
+
+	@Test
+	public void testUpdatePropertyInCollection() {
+		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
+
+		// Create element
+		Property prop = new Property("newProperty", 500);
+		submodelElement.setValue(
+				"/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/containerRoot/container/newProperty", prop);
+
+		// Update element
+		Property prop2 = new Property("newProperty", 400);
+		submodelElement.setValue(
+				"/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/containerRoot/container/newProperty", prop2);
+
+		// Read back value
+		Integer result = (Integer) submodelElement.getValue(
+				"/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/containerRoot/container/newProperty/value");
+		assertEquals(400, result.intValue());
 	}
 
 	/**

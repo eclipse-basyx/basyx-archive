@@ -221,9 +221,21 @@ public class MultiSubmodelProvider implements IModelProvider {
 	@SuppressWarnings("unchecked")
 	public void addSubmodel(SubmodelProvider modelContentProvider) {
 		Submodel sm = Submodel.createAsFacade((Map<String, Object>) modelContentProvider.getValue("/"));
-		submodel_providers.put(sm.getIdShort(), modelContentProvider);
+		addSubmodel(sm, modelContentProvider);
+	}
 
+	@SuppressWarnings("unchecked")
+	private void createSubmodel(Object newSM) throws ProviderException {
 		// Adds a new submodel to the registered AAS
+		Submodel sm = Submodel.createAsFacade((Map<String, Object>) newSM);
+
+		ISubmodelAPI smApi = smApiProvider.getSubmodelAPI(sm);
+		addSubmodel(sm, new SubmodelProvider(smApi));
+	}
+
+	private void addSubmodel(Submodel sm, SubmodelProvider modelContentProvider) {
+		String smIdShort = sm.getIdShort();
+		submodel_providers.put(smIdShort, modelContentProvider);
 		aas_provider.createValue("/submodels", sm);
 	}
 
@@ -347,10 +359,10 @@ public class MultiSubmodelProvider implements IModelProvider {
 			createAssetAdministrationShell(newValue);
 		} else if (!path.startsWith("aas/submodels")) {
 			throw new MalformedRequestException("Access to MultiSubmodelProvider always has to start with \"aas/submodels\", was " + path);
-		}
-
-		IModelProvider provider;
-		try {
+		} else if (propertyPath.isEmpty()) {
+			createSubmodel(newValue);
+		} else {
+			IModelProvider provider;
 			if (isSubmodelLocal(pathElements[2])) {
 				provider = submodel_providers.get(pathElements[2]);
 			} else {
@@ -358,8 +370,6 @@ public class MultiSubmodelProvider implements IModelProvider {
 				provider = getModelProvider(pathElements[2]);
 			}
 			provider.setValue(propertyPath, newValue);
-		} catch (ResourceNotFoundException e) {
-			createSubmodel(newValue);
 		}
 	}
 
@@ -375,15 +385,6 @@ public class MultiSubmodelProvider implements IModelProvider {
 		AssetAdministrationShell shell = AssetAdministrationShell.createAsFacade(aas);
 		IAASAPI aasApi = aasApiProvider.getAASApi(shell);
 		aas_provider = new AASModelProvider(aasApi);
-	}
-
-	@SuppressWarnings("unchecked")
-	private void createSubmodel(Object newSM) throws ProviderException {
-		// Adds a new submodel to the registered AAS
-		Submodel sm = Submodel.createAsFacade((Map<String, Object>) newSM);
-
-		ISubmodelAPI smApi = smApiProvider.getSubmodelAPI(sm);
-		addSubmodel(new SubmodelProvider(smApi));
 	}
 
 

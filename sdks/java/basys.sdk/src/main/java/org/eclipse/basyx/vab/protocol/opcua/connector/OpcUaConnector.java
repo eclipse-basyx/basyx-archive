@@ -60,6 +60,7 @@ public class OpcUaConnector implements IModelProvider {
             clientRunner.run();
         } catch (Exception e) {
         	logger.error("Exception in getModelPropertyValue", e);
+        	throw new RuntimeException(e);
         }
         return opcUaRead(translateBrowsePathToNodeId(servicePath)[1]);
     }
@@ -70,8 +71,8 @@ public class OpcUaConnector implements IModelProvider {
             clientRunner = new BaSyxOpcUaClientRunner(address);
             clientRunner.run();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
         	logger.error("Exception in setModelPropertyValue", e);
+        	throw new RuntimeException(e);
         }
         opcUaWrite(translateBrowsePathToNodeId(servicePath)[1], newValue);
     }
@@ -98,6 +99,7 @@ public class OpcUaConnector implements IModelProvider {
             clientRunner.run();
         } catch (Exception e) {
         	logger.error("Exception in invokeOperation", e);
+        	throw new RuntimeException(e);
         }
         return opcUaMethodCall(translateBrowsePathToNodeId(servicePath), parameters);
     }
@@ -191,19 +193,19 @@ public class OpcUaConnector implements IModelProvider {
             CompletableFuture<TranslateBrowsePathsToNodeIdsResponse> result_parent = clientRunner
                     .translate(bp_parent_list);
             if (result_node.get().getResults().length == 0) {
-                logger.warn("TranslateBrowsePathsToNodeIdsResponse result size = 0, checkthe browse path!");
+                logger.warn("TranslateBrowsePathsToNodeIdsResponse result size = 0, check the browse path!");
                 return null;
             }
             if (result_node.get().getResults().length > 1) {
             	logger.warn("TranslateBrowsePathsToNodeIdsResponse result size > 1, the method returns only the first one!");
             }
+			if (result_node.get().getResults()[0].getTargets() == null || result_node.get().getResults()[0].getTargets().length == 0) {
+            	logger.warn("TranslateBrowsePathsToNodeIdsResponse targets size = 0, check the browse path!");
+				logger.trace(result_node.get().getResults()[0].getStatusCode().toString());
+				return null;
+            }
             if (result_node.get().getResults()[0].getTargets().length > 1) {
             	logger.warn("TranslateBrowsePathsToNodeIdsResponse targets size > 1, the method returns only the first one!");
-            }
-            if (result_node.get().getResults()[0].getTargets().length == 0) {
-            	logger.warn("TranslateBrowsePathsToNodeIdsResponse targets size = 0, check the browse path!");
-                logger.trace(result_node.get().getResults()[0].getStatusCode().toString());
-                return null;
             }
             Object nodeIdentifier = result_node.get().getResults()[0].getTargets()[0].getTargetId().getIdentifier();
             Object parentIdentifier = result_parent.get().getResults()[0].getTargets()[0].getTargetId().getIdentifier();

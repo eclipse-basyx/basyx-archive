@@ -124,7 +124,7 @@ public class BaSyxOpcUaClientRunner {
 
                 try {
                     Thread.sleep(1000);
-                    System.exit(0);
+                    throw new RuntimeException("Could not disconnect from server '" + endpointUrl + "'");
                 } catch (InterruptedException e) {
                 	logger.error("Exception in run", e);
                 }
@@ -137,7 +137,7 @@ public class BaSyxOpcUaClientRunner {
 
             try {
                 Thread.sleep(1000);
-                System.exit(0);
+                throw new RuntimeException("Could not connect to server '" + endpointUrl + "'");
             } catch (InterruptedException e) {
             	logger.error("Exception in run", e);
             }
