@@ -11,6 +11,7 @@
 	
 	<artifactId>basyx.components.registry</artifactId>
 	<name>BaSyx Registry</name>
+	<version>1.0.2</version>
 	
 	<properties>
 		<basyx.components.executable>org.eclipse.basyx.components.registry.executable.RegistryExecutable</basyx.components.executable>
