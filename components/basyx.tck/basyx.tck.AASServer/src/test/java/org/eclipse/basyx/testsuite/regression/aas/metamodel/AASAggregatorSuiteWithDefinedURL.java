@@ -10,6 +10,7 @@
 package org.eclipse.basyx.testsuite.regression.aas.metamodel;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -122,7 +123,16 @@ public class AASAggregatorSuiteWithDefinedURL extends AASAggregatorSuite {
 		IAssetAdministrationShell expected = aasMap.get(aasid);
 
 		// compare the both aas
-		assertEquals(expected, remoteAas.getLocalCopy());
+		AssetAdministrationShell localCopy = remoteAas.getLocalCopy();
+		
+		assertEquals(expected.getIdentification(), localCopy.getIdentification());
+		assertEquals(expected.getAsset(), localCopy.getAsset());
+		assertEquals(expected.getIdShort(), localCopy.getIdShort());
+		assertEquals(expected.getIdentification(), localCopy.getIdentification());
+		assertEquals(expected.getDescription(), localCopy.getDescription());
+		
+		// References can be built in different ways, therefore a direct comparison is not possible
+		assertEquals(expected.getSubmodelReferences().size(), localCopy.getSubmodelReferences().size());
 
 		// Get submodels from bundle
 		AASBundle aasBundle = aasBundles.stream().filter(b -> b.getAAS().getIdentification().getId().equals(aasIdentifier.getId())).findFirst().get();
@@ -131,13 +141,32 @@ public class AASAggregatorSuiteWithDefinedURL extends AASAggregatorSuite {
 				// get submodel from remote
 				ConnectedSubmodel remote = (ConnectedSubmodel) sms.get(expectedSm.getIdShort());
 				// compare the both submodels
-				assertEquals(expectedSm, remote.getLocalCopy());
+				checkSM(expectedSm, remote.getLocalCopy());
 			});
 
 		
 		// Delete the AAS
 		aasAggregator.deleteAAS(aasIdentifier);
 
+	}
+	
+	/**
+	 * Checks whether two Submodels are equal
+	 * 
+	 * @param expected
+	 * @param actual
+	 */
+	private void checkSM(ISubmodel expected, ISubmodel actual) {
+		assertEquals(expected.getIdShort(), actual.getIdShort());
+		assertEquals(expected.getIdentification(), actual.getIdentification());
+		assertEquals(expected.getDescription(), actual.getDescription());
+		assertEquals(expected.getReference(), actual.getReference());
+		assertEquals(expected.getQualifiers(), actual.getQualifiers());
+		assertEquals(expected.getSubmodelElements().size(), actual.getSubmodelElements().size());
+		
+		for(String id: expected.getSubmodelElements().keySet()) {
+			assertTrue(actual.getSubmodelElements().containsKey(id));
+		}
 	}
 
 
