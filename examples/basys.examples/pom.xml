@@ -111,7 +111,7 @@
 		<dependency>
 			<groupId>org.eclipse.basyx</groupId>
 			<artifactId>basyx.components.registry</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.2</version>
 		</dependency>
 				
 		<!-- Add explicit AAS Server component dependency -->
