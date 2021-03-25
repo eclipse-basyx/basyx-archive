@@ -99,9 +99,9 @@ public class ITRegistryRaw {
 
 	@Before
 	public void setUp() {
-		// Post serialized descriptor to register it
-		client.post(registryUrl, serializedDescriptor1);
-		client.post(registryUrl, serializedDescriptor2);
+		// Put serialized descriptor to register it
+		client.put(aasUrl1, serializedDescriptor1);
+		client.put(aasUrl2, serializedDescriptor2);
 	}
 
 	@After
@@ -191,7 +191,7 @@ public class ITRegistryRaw {
 		} catch(NotFoundException e) {}
 
 		// Create new AAS registration
-		client.post(registryUrl, serializedDescriptor2);
+		client.put(aasUrl2, serializedDescriptor2);
 
 		// Get a known AAS by its ID
 		AASDescriptor result2 = new AASDescriptor((Map<String, Object>) getResult(client.get(aasUrl2)));
