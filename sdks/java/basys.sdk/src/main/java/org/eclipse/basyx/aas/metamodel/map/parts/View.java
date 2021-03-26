@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.aas.metamodel.map.parts;
 
 import java.util.Collection;
@@ -6,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
@@ -38,12 +48,19 @@ public class View extends VABModelMap<Object> implements IView {
 		putAll(new ModelType(MODELTYPE));
 
 		// Add qualifiers
-		putAll(new HasSemantics());
 		putAll(new HasDataSpecification());
-		putAll(new Referable());
 
 		// Default values
 		put(CONTAINEDELEMENT, new HashSet<Reference>());
+	}
+	
+	/**
+	 * Constructor accepting only mandatory attribute
+	 * @param idShort
+	 */
+	public View(String idShort) {
+		this();
+		setIdShort(idShort);
 	}
 
 	/**
@@ -67,10 +84,23 @@ public class View extends VABModelMap<Object> implements IView {
 		if (map == null) {
 			return null;
 		}
-
+		
+		if (!isValid(map)) {
+			throw new MetamodelConstructionException(View.class, map);
+		}
+		
 		View ret = new View();
 		ret.setMap(map);
 		return ret;
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	public static boolean isValid(Map<String, Object> map) {
+		return Referable.isValid(map);
 	}
 
 	public void setContainedElement(Collection<IReference> references) {
@@ -88,7 +118,7 @@ public class View extends VABModelMap<Object> implements IView {
 	}
 
 	public void setSemanticId(IReference ref) {
-		HasSemantics.createAsFacade(this).setSemanticID(ref);
+		HasSemantics.createAsFacade(this).setSemanticId(ref);
 
 	}
 
@@ -131,7 +161,7 @@ public class View extends VABModelMap<Object> implements IView {
 	}
 
 	public void setIdShort(String idShort) {
-		Referable.createAsFacade(this, getKeyElement()).setIdShort(idShort);
+		Referable.createAsFacadeNonStrict(this, getKeyElement()).setIdShort(idShort);
 	}
 
 	public void setCategory(String category) {

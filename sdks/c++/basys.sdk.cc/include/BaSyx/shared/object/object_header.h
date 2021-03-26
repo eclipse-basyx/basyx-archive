@@ -5,8 +5,8 @@
  *      Author: psota
  */
 
-#ifndef BASYX_object_object_header_H
-#define BASYX_object_object_header_H
+#ifndef BASYX_SHARED_OBJECT_OBJECT_HEADER_H
+#define BASYX_SHARED_OBJECT_OBJECT_HEADER_H
 
 #include <cstddef>
 #include <memory>
@@ -223,4 +223,4 @@ namespace std
 	};
 };
 
-#endif /* BASYX_object_object_H */
+#endif /* BASYX_SHARED_OBJECT_OBJECT_HEADER_H */

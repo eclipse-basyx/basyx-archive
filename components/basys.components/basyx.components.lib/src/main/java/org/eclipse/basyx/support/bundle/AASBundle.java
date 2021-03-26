@@ -1,9 +1,18 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.support.bundle;
 
 import java.util.Set;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 
 /**
  * Helper class to bundle an AAS with its corresponding submodels, e.g. for
@@ -14,9 +23,9 @@ import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
  */
 public class AASBundle {
 	private IAssetAdministrationShell aas;
-	private Set<ISubModel> submodels;
+	private Set<ISubmodel> submodels;
 
-	public AASBundle(IAssetAdministrationShell aas, Set<ISubModel> submodels) {
+	public AASBundle(IAssetAdministrationShell aas, Set<ISubmodel> submodels) {
 		super();
 		this.aas = aas;
 		this.submodels = submodels;
@@ -26,7 +35,7 @@ public class AASBundle {
 		return aas;
 	}
 
-	public Set<ISubModel> getSubmodels() {
+	public Set<ISubmodel> getSubmodels() {
 		return submodels;
 	}
 

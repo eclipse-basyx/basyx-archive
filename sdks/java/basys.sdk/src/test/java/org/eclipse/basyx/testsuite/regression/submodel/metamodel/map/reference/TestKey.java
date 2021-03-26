@@ -1,6 +1,16 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.reference;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -82,5 +92,14 @@ public class TestKey {
 		KeyType type = KeyType.IRI;
 		key.setIdType(type);
 		assertEquals(type, key.getIdType());
+	}
+	
+	@Test
+	public void testIsKey() {
+		assertTrue(Key.isKey(key));
+		
+		key.put(Key.IDTYPE, "nonsense");
+		
+		assertFalse(Key.isKey(key));
 	}
 }

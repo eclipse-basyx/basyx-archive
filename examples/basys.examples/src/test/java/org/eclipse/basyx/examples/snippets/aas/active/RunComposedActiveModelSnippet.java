@@ -1,8 +1,17 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.examples.snippets.aas.active;
 
 import org.eclipse.basyx.examples.snippets.aas.active.tasks.AverageTask;
 import org.eclipse.basyx.examples.snippets.aas.active.tasks.IncrementTask;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.tools.aas.active.ActiveModel;
 import org.eclipse.basyx.tools.aas.active.VABModelTaskGroup;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
@@ -26,7 +35,7 @@ public class RunComposedActiveModelSnippet {
 	@Ignore
 	public void snippet() throws Exception {
 		// Create the model provider for the active model
-		IModelProvider modelProvider = new SubModelProvider();
+		IModelProvider modelProvider = new SubmodelProvider();
 		modelProvider.createValue("count", 0);
 		modelProvider.createValue("temperature", VABLambdaProviderHelper.createSimple(() -> {
 			return 30d + (Math.random() * 10d - 5d);
@@ -46,8 +55,8 @@ public class RunComposedActiveModelSnippet {
 
 		// Runs a task group with a single task (1x per second)
 		VABModelTaskGroup printerGroup = activeModel.runTask(1000, model -> {
-			logger.debug("Current count: " + model.getModelPropertyValue("/count"));
-			logger.debug("Current average: " + model.getModelPropertyValue("/average"));
+			logger.debug("Current count: " + model.getValue("/count"));
+			logger.debug("Current average: " + model.getValue("/average"));
 		});
 
 		// Adds an additional task to the existing task group

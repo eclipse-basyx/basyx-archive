@@ -9,7 +9,7 @@ using namespace basyx::submodel;
 
 using enum_pair_t = std::pair<const char*, KeyElements>;
 
-static const std::array<enum_pair_t, 26> string_to_enum = 
+static const std::array<enum_pair_t, 27> string_to_enum = 
 {
     std::make_pair("GlobalReference",  KeyElements::GlobalReference),
     std::make_pair("FragmentReference", KeyElements::FragmentReference),
@@ -25,6 +25,7 @@ static const std::array<enum_pair_t, 26> string_to_enum =
     std::make_pair("File", KeyElements::File),
     std::make_pair("MultiLanguageProperty", KeyElements::MultiLanguageProperty),
     std::make_pair("Operation", KeyElements::Operation),
+    std::make_pair("OperationVariable", KeyElements::OperationVariable),
     std::make_pair("Property", KeyElements::Property),
     std::make_pair("Range", KeyElements::Range),
     std::make_pair("ReferenceElement", KeyElements::ReferenceElement),

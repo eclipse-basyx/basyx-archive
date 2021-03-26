@@ -1,11 +1,18 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.aas.metamodel.map;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -14,11 +21,12 @@ import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.api.security.ISecurity;
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.aas.metamodel.map.parts.ConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.map.parts.View;
 import org.eclipse.basyx.aas.metamodel.map.security.Security;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
@@ -26,7 +34,7 @@ import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
@@ -35,6 +43,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.reference.ReferenceHelper;
+import org.eclipse.basyx.vab.exception.FeatureNotImplementedException;
 import org.eclipse.basyx.vab.model.VABModelMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,18 +69,29 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	public static final String CONCEPTDICTIONARY = "conceptDictionary";
 	public static final String TYPE = "type";
 	public static final String ADDRESS = "address";
-	public static final String ENDPOINTS = "endpoints";
-	public static final String MODELTYPE = "AssetAdministationShell";
+	public static final String MODELTYPE = "AssetAdministrationShell";
 
 	/**
 	 * Constructor
 	 */
 	public AssetAdministrationShell() {
-		this(null, null, new Asset(), new HashSet<SubModel>(), new HashSet<IConceptDictionary>(), new HashSet<IView>());
+		this(null, null, new Asset(), new HashSet<Submodel>(), new HashSet<IConceptDictionary>(), new HashSet<IView>());
+	}
+	
+	/**
+	 * Constructor accepting only mandatory attributes
+	 * @param idShort
+	 * @param identification
+	 * @param asset
+	 */
+	public AssetAdministrationShell(String idShort, IIdentifier identification, Asset asset) {
+		this(null, null, asset, new HashSet<Submodel>(), new HashSet<IConceptDictionary>(), new HashSet<IView>());
+		setIdentification(identification);
+		setIdShort(idShort);
 	}
 
 	public AssetAdministrationShell(Reference derivedFrom, Security security, Asset asset,
-			Collection<SubModel> submodels, Collection<IConceptDictionary> dictionaries, Collection<IView> views) {
+			Collection<Submodel> submodels, Collection<IConceptDictionary> dictionaries, Collection<IView> views) {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
 		
@@ -85,7 +105,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		setSecurity(security);
 		setDerivedFrom(derivedFrom);
 		setAsset(asset);
-		setSubModels(submodels);
+		setSubmodels(submodels);
 
 		setViews(views);
 		setConceptDictionary(dictionaries);
@@ -103,30 +123,30 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		if (map == null) {
 			return null;
 		}
+		
+		if (!isValid(map)) {
+			throw new MetamodelConstructionException(AssetAdministrationShell.class, map);
+		}
+					
+		if (!map.containsKey(SUBMODELS)) {
+			map.put(SUBMODELS, new ArrayList<>());
+		}
 
 		AssetAdministrationShell ret = new AssetAdministrationShell();
 		ret.setMap(map);
-		return ret;
+		return ret;	
 	}
-
+	
 	/**
-	 * Sets the endpoint of the AAS
-	 * 
-	 * @param endpoint
-	 *            is expected to end with "/aas"
-	 * @param endpointType
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
 	 */
-	public void setEndpoint(String endpoint, String endpointType) {
-		HashMap<String, String> endpointWrapper = new HashMap<String, String>();
-		endpointWrapper.put(TYPE, endpointType);
-		endpointWrapper.put(ADDRESS, endpoint);
-
-		put(ENDPOINTS, Arrays.asList(endpointWrapper));
-	}
-
 	@SuppressWarnings("unchecked")
-	public List<HashMap<String, String>> getEndpoints() {
-		return (List<HashMap<String, String>>) get(ENDPOINTS);
+	public static boolean isValid(Map<String, Object> map) {
+		return Identifiable.isValid(map) &&
+				map.containsKey(AssetAdministrationShell.ASSET) &&
+				Asset.isValid((Map<String, Object>)map.get(AssetAdministrationShell.ASSET));
 	}
 
 	@Override
@@ -148,7 +168,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	public void setIdentification(IdentifierType idType, String id) {
-		Identifiable.createAsFacade(this, getKeyElement()).setIdentification(idType, id);
+		Identifiable.createAsFacadeNonStrict(this, getKeyElement()).setIdentification(idType, id);
 	}
 
 	@Override
@@ -170,7 +190,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	public void setIdShort(String id) {
-		Referable.createAsFacade(this, getKeyElement()).setIdShort(id);
+		Referable.createAsFacadeNonStrict(this, getKeyElement()).setIdShort(id);
 	}
 
 	public void setSecurity(ISecurity security) {
@@ -214,7 +234,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	@SuppressWarnings("unchecked")
-	public void setSubModels(Collection<SubModel> submodels) {
+	public void setSubmodels(Collection<Submodel> submodels) {
 		setSubmodelParent(submodels);
 
 		// Clear submodel references and add new keys
@@ -246,8 +266,8 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	@Override
-	public Map<String, ISubModel> getSubModels() {
-		throw new RuntimeException("getSubModels on local copy is not supported");
+	public Map<String, ISubmodel> getSubmodels() {
+		throw new RuntimeException("getSubmodels on local copy is not supported");
 	}
 
 	@Override
@@ -283,10 +303,17 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	}
 
 	@Override
-	public void addSubModel(SubModel submodel) {
+	public void addSubmodel(Submodel submodel) {
 		logger.trace("adding Submodel", submodel.getIdentification().getId());
 		setSubmodelParent(Collections.singletonList(submodel));
 		addSubmodelReferences(submodel);
+	}
+
+
+	@Override
+	public void removeSubmodel(IIdentifier id) {
+		// Currently not implemented since future of Submodel References in AAS is not clear
+		throw new FeatureNotImplementedException();
 	}
 
 	/**
@@ -298,7 +325,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	public void addConceptDescription(IConceptDescription description) {
 		Collection<IConceptDictionary> dictionaries = (Collection<IConceptDictionary>) get(AssetAdministrationShell.CONCEPTDICTIONARY);
 		if (dictionaries.isEmpty()) {
-			dictionaries.add(new ConceptDictionary());
+			dictionaries.add(new ConceptDictionary("defaultConceptDictionary"));
 		}
 		ConceptDictionary dictionary = (ConceptDictionary) dictionaries.iterator().next();
 		dictionary.addConceptDescription(description);
@@ -319,22 +346,22 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 		smReferences.add(reference);
 	}
 
-	private void addSubmodelReferences(SubModel submodel) {
+	private void addSubmodelReferences(Submodel submodel) {
 		addSubmodelReference(submodel.getReference());
 	}
-	
+
 	private KeyElements getKeyElement() {
 		return KeyElements.ASSETADMINISTRATIONSHELL;
 	}
 	
 	/**
-	 * Set reference of current AAS to each SubModel of a collection
+	 * Set reference of current AAS to each Submodel of a collection
 	 * as a parent reference
 	 * 
 	 * @param submodels collection of Submodels
 	 */
-	private void setSubmodelParent(Collection<SubModel> submodels) {
-		for (SubModel submodel : submodels) {
+	private void setSubmodelParent(Collection<Submodel> submodels) {
+		for (Submodel submodel : submodels) {
 			submodel.setParent(getReference());
 		}
 	}
@@ -342,4 +369,10 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	public IReference getReference() {
 		return Identifiable.createAsFacade(this, getKeyElement()).getReference();
 	}
+
+	@Override
+	public ISubmodel getSubmodel(IIdentifier id) {
+		throw new RuntimeException("getSubmodel on local copy is not supported");
+	}
+
 }

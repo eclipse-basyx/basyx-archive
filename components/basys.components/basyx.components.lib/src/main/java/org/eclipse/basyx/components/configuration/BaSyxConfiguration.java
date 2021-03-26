@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.components.configuration;
 
 import java.io.FileInputStream;
@@ -5,8 +14,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -49,6 +60,29 @@ public class BaSyxConfiguration {
 			logger.error("Configuration file not found: '" + filePath + "'", e);
 		} catch (IOException e) {
 			logger.error("Configuration io error: '" + filePath + "'", e);
+		}
+	}
+
+	/**
+	 * Load the configuration from a path relative to the current folder
+	 * 
+	 * @param filePath Path to the resource in the application folder
+	 */
+	public void loadFileOrDefaultResource(String fileKey, String defaultResource) {
+		// Try to load property that points to the configuration file (e.g. java -DfileKey=yx.properties [...])
+		String configFilePath = System.getProperty(fileKey);
+		if ( configFilePath == null || configFilePath.isEmpty() ) {
+			// Try to load environment variable that points to the configuration file
+			configFilePath = System.getenv(fileKey);
+		}
+
+		// Load context configuration
+		if (configFilePath != null && !configFilePath.isEmpty()) {
+			// file path available? => load configs from file
+			loadFromFile(configFilePath);
+		} else {
+			// fallback: load default configs (by resource)
+			loadFromResource(defaultResource);
 		}
 	}
 
@@ -105,6 +139,26 @@ public class BaSyxConfiguration {
 	}
 
 	/**
+	 * Method for subclasses to read specific environment variables
+	 * 
+	 * @param prefix     The prefix of each of the environment variables
+	 * @param properties The name of the properties in the config and environment (with prefix)
+	 */
+	protected void loadFromEnvironmentVariables(String prefix, String... properties) {
+		try {
+			for (String propName : properties) {
+				String result = System.getenv(prefix + propName);
+				if (result != null) {
+					logger.info("Environment - " + propName + ": " + result);
+					setProperty(propName, result);
+				}
+			}
+		} catch (SecurityException e) {
+			logger.info("Reading configs from environment is not permitted");
+		}
+	}
+
+	/**
 	 * Sets a property, if it is contained in this configuration
 	 * 
 	 * @param name  The name of the property
@@ -112,6 +166,16 @@ public class BaSyxConfiguration {
 	 */
 	public void setProperty(String name, String value) {
 		values.put(name, value);
+	}
+
+	/**
+	 * Returns all contained properties that begin with a specific prefix
+	 * 
+	 * @param prefix The filtered prefix (e.g. "aas.")
+	 * @return The list of all contained properties that begin with the prefix
+	 */
+	public List<String> getProperties(String prefix) {
+		return values.keySet().stream().filter(key -> key.startsWith(prefix)).collect(Collectors.toList());
 	}
 
 	/**

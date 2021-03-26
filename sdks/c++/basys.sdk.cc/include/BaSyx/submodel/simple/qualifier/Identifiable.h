@@ -21,7 +21,7 @@ public:
 
 	// Constructors
 	Identifiable(const std::string & idShort, const Identifier & identifier);
-  explicit Identifiable(const api::IIdentifiable & other);
+	explicit Identifiable(const api::IIdentifiable & other);
 
 	bool hasAdministrativeInformation() const noexcept override;
 
@@ -31,7 +31,7 @@ public:
 
 	Identifier getIdentification() const override;
 
-  void setAdministrativeInformation(const AdministrativeInformation & administrativeInformation);
+	void setAdministrativeInformation(const AdministrativeInformation & administrativeInformation);
 };
 
 }

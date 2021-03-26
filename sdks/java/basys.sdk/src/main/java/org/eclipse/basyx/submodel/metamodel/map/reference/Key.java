@@ -1,7 +1,17 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.map.reference;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
@@ -74,10 +84,52 @@ public class Key extends VABModelMap<Object> implements IKey {
 		if (map == null) {
 			return null;
 		}
-
+		
+		if (!isValid(map)) {
+			throw new MetamodelConstructionException(Key.class, map);
+		}
+		
 		Key ret = new Key();
 		ret.setMap(map);
 		return ret;
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	public static boolean isValid(Map<String, Object> map) {
+		return map != null &&
+				map.containsKey(TYPE) &&
+				map.containsKey(LOCAL) &&
+				map.containsKey(VALUE) &&
+				map.containsKey(IDTYPE);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static boolean isKey(Object value) {
+		if(!(value instanceof Map<?, ?>)) {
+			return false;
+		}
+		
+		Map<String, Object> map = (Map<String, Object>) value;
+		
+		if(!(map.get(LOCAL) instanceof Boolean && map.get(VALUE) instanceof String
+				&& map.get(IDTYPE) instanceof String && map.get(TYPE) instanceof String)) {
+			return false;
+		}
+		
+		try {
+			// Try to convert the Strings to Enum-Types
+			// If that fails an Exception is thrown
+			KeyType.fromString((String) map.get(IDTYPE));
+			KeyElements.fromString((String) map.get(TYPE));
+		} catch (IllegalArgumentException e) {
+			return false;
+		}
+		
+		return true;
 	}
 
 	@Override

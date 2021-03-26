@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.aas.factory.xml;
 
 import java.io.IOException;
@@ -13,7 +22,7 @@ import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.submodel.factory.xml.api.parts.ConceptDescriptionXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.SubmodelXMLConverter;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.vab.factory.xml.XmlParser;
 import org.xml.sax.SAXException;
@@ -80,15 +89,15 @@ public class XMLToMetamodelConverter {
 
 	
 	/**
-	 * Parses the SubModels form the XML
+	 * Parses the Submodels form the XML
 	 * 
-	 * @return the SubModels parsed form the XML
+	 * @return the Submodels parsed form the XML
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
-	public List<ISubModel> parseSubmodels() {
+	public List<ISubmodel> parseSubmodels() {
 		Map<String, Object> xmlSubmodels = (Map<String, Object>) root.get(SubmodelXMLConverter.SUBMODELS);		
 		return SubmodelXMLConverter.parseSubmodels(xmlSubmodels);		
 	}

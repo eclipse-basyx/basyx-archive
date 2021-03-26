@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.regression.processengineconnector;
 
 import static org.junit.Assert.assertEquals;
@@ -10,19 +19,19 @@ import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
-import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
 import org.eclipse.basyx.components.processengine.connector.DeviceServiceExecutor;
 import org.eclipse.basyx.regression.support.processengine.aas.DeviceAdministrationShellFactory;
 import org.eclipse.basyx.regression.support.processengine.stubs.CoilcarStub;
 import org.eclipse.basyx.regression.support.processengine.submodel.DeviceSubmodelFactory;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.testsuite.regression.vab.gateway.ConnectorProviderStub;
 import org.junit.Before;
 import org.junit.Test;
@@ -76,19 +85,19 @@ public class TestAASServicecall {
 		coilcar = new CoilcarStub();
 		
 		// Create the submodel of services provided by the coilcar with id "submodel1"
-		SubModel sm = new DeviceSubmodelFactory().create(SUBMODEL_ID, coilcar);
+		Submodel sm = new DeviceSubmodelFactory().create(SUBMODEL_ID, coilcar);
 		
 		// Create VAB multi-submodel provider for holding the sub-models
-		VABMultiSubmodelProvider provider = new VABMultiSubmodelProvider();
+		MultiSubmodelProvider provider = new MultiSubmodelProvider();
 		
 		// Add sub-model to the provider
-		provider.addSubmodel(SUBMODEL_ID, new SubModelProvider(sm));
+		provider.addSubmodel(new SubmodelProvider(sm));
 		
 		// Add aas to the provider
 		provider.setAssetAdministrationShell(new AASModelProvider(aas));
 		
 		// Create registry for aas
-		IAASRegistryService registry = new InMemoryRegistry();
+		IAASRegistry registry = new InMemoryRegistry();
 		
 		// Create aas descriptor
 		IIdentifier id = new Identifier(IdentifierType.CUSTOM, AAS_ID);
@@ -96,7 +105,7 @@ public class TestAASServicecall {
 		
 		// create submodel descriptor
 		IIdentifier smId = new Identifier(IdentifierType.CUSTOM, SUBMODEL_ID);
-		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1Name", smId, "/aas/submodels/"+SUBMODEL_ID);
+		SubmodelDescriptor smDescriptor = new SubmodelDescriptor("submodel1Name", smId, "/aas/submodels/" + SUBMODEL_ID + "/submodel");
 		
 		// Add submodel descriptor to aas descriptor
 		aasDescriptor.addSubmodelDescriptor(smDescriptor);

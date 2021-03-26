@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.aas.metamodel.map.descriptor;
 
 import java.util.Collection;
@@ -23,7 +32,7 @@ import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
  *
  */
 public class AASDescriptor extends ModelDescriptor {
-	public static final String MODELTYPE = "AASDescriptor";
+	public static final String MODELTYPE = "AssetAdministrationShellDescriptor";
 	public static final String ASSET = "asset";
 	
 	/**
@@ -32,6 +41,9 @@ public class AASDescriptor extends ModelDescriptor {
 	public AASDescriptor(Map<String, Object> map) {
 		super(map);
 		validate(map);
+
+		// Set map again
+		putAll(map);
 	}
 
 	protected AASDescriptor() {
@@ -98,6 +110,7 @@ public class AASDescriptor extends ModelDescriptor {
 		
 		// Add new sub model descriptor to list
 		submodelDescriptors.add(desc);
+		put(AssetAdministrationShell.SUBMODELS, submodelDescriptors);
 
 		// Enable method chaining
 		return this;
@@ -105,7 +118,18 @@ public class AASDescriptor extends ModelDescriptor {
 
 	@SuppressWarnings("unchecked")
 	public void removeSubmodelDescriptor(String idShort) {
-		Optional<SubmodelDescriptor> toRemove = getSubModelDescriptors().stream().filter(x -> x.getIdShort().equals(idShort)).findAny();
+		Optional<SubmodelDescriptor> toRemove = getSubmodelDescriptors().stream().filter(x -> x.getIdShort().equals(idShort)).findAny();
+
+		// TODO: Exception in else case
+		if (toRemove.isPresent()) {
+			// Don't use getSubmodelDescriptors here since it returns a copy
+			((Collection<Object>) get(AssetAdministrationShell.SUBMODELS)).remove(toRemove.get());
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public void removeSubmodelDescriptor(IIdentifier id) {
+		Optional<SubmodelDescriptor> toRemove = getSubmodelDescriptors().stream().filter(x -> x.getIdentifier().getId().equals(id.getId())).findAny();
 
 		// TODO: Exception in else case
 		if (toRemove.isPresent()) {
@@ -122,7 +146,7 @@ public class AASDescriptor extends ModelDescriptor {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public SubmodelDescriptor getSubModelDescriptorFromIdentifierId(String subModelId) {
+	public SubmodelDescriptor getSubmodelDescriptorFromIdentifierId(String subModelId) {
 		// Sub model descriptors are stored in a list
 		Collection<Map<String, Object>> smDescriptorMaps = (Collection<Map<String, Object>>) get(
 				AssetAdministrationShell.SUBMODELS);
@@ -147,14 +171,14 @@ public class AASDescriptor extends ModelDescriptor {
 	 * @return
 	 */
 	public SubmodelDescriptor getSubmodelDescriptorFromIdShort(String idShort) {
-		return getSubModelDescriptors().stream().filter(x -> x.getIdShort().equals(idShort)).findAny().orElse(null); // TODO: Exception
+		return getSubmodelDescriptors().stream().filter(x -> x.getIdShort().equals(idShort)).findAny().orElse(null); // TODO: Exception
 	}
 
 	/**
 	 * Get a specific sub model descriptor from a ModelUrn
 	 */
-	public SubmodelDescriptor getSubModelDescriptor(ModelUrn submodelUrn) {
-		return getSubModelDescriptorFromIdentifierId(submodelUrn.getURN());
+	public SubmodelDescriptor getSubmodelDescriptor(ModelUrn submodelUrn) {
+		return getSubmodelDescriptorFromIdentifierId(submodelUrn.getURN());
 	}
 
 	/**
@@ -163,7 +187,7 @@ public class AASDescriptor extends ModelDescriptor {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public Collection<SubmodelDescriptor> getSubModelDescriptors() {
+	public Collection<SubmodelDescriptor> getSubmodelDescriptors() {
 		Collection<Map<String, Object>> descriptors = (Collection<Map<String, Object>>) get(AssetAdministrationShell.SUBMODELS);
 		return descriptors.stream().map(SubmodelDescriptor::new).collect(Collectors.toSet());
 	}
@@ -185,8 +209,11 @@ public class AASDescriptor extends ModelDescriptor {
 	@Override
 	public void validate(Map<String, Object> map) {
 		super.validate(map);
-		if (!map.containsKey(AssetAdministrationShell.SUBMODELS) || !(map.get(AssetAdministrationShell.SUBMODELS) instanceof Collection<?>))
-			throw new MalformedRequestException(getModelType() + " is missing endpoints entry");
+		if (!map.containsKey(AssetAdministrationShell.SUBMODELS)) {
+			map.put(AssetAdministrationShell.SUBMODELS, new HashSet<>());
+		} else if (map.containsKey(AssetAdministrationShell.SUBMODELS) && !(map.get(AssetAdministrationShell.SUBMODELS) instanceof Collection<?>)) {
+			throw new MalformedRequestException("Passed entry for " + AssetAdministrationShell.SUBMODELS + " is not a list of submodelDescriptors!");
+		}
 	}
 }
 

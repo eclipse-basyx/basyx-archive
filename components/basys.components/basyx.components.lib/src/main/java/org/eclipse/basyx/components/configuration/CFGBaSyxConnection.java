@@ -1,7 +1,16 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.components.configuration;
 
-import org.eclipse.basyx.vab.directory.api.IVABDirectoryService;
-import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorFactory;
+import org.eclipse.basyx.vab.registry.api.IVABRegistryService;
 
 
 
@@ -69,7 +78,7 @@ public class CFGBaSyxConnection {
 	/**
 	 * Create protocol provider
 	 */
-	public IConnectorProvider createConnectorProvider() {
+	public IConnectorFactory createConnectorProvider() {
 		// Create connector provider instance
 		return protocol.createInstance();
 	}
@@ -78,14 +87,14 @@ public class CFGBaSyxConnection {
 	/**
 	 * Instantiate the directory class
 	 */
-	public IVABDirectoryService createDirectoryInstance() {
+	public IVABRegistryService createDirectoryInstance() {
 		// Try to create instance
 		try {
 			// Get Java class by name
 			Class<?> clazz = Class.forName(directoryProviderName);
 		
 			// Instantiate class
-			IVABDirectoryService directoryService = (IVABDirectoryService) clazz.newInstance();
+			IVABRegistryService directoryService = (IVABRegistryService) clazz.newInstance();
 			
 			// Return directory service instance
 			return directoryService;

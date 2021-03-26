@@ -1,5 +1,5 @@
-#ifndef BASYX_MAP_V2_SDK_DATASPECIFICATION
-#define BASYX_MAP_V2_SDK_DATASPECIFICATION
+#ifndef BASYX_SUBMODEL_MAP_V2_DATASPECIFICATION_DATASPECIFICATION_H
+#define BASYX_SUBMODEL_MAP_V2_DATASPECIFICATION_DATASPECIFICATION_H
 
 #include <BaSyx/submodel/api_v2/dataspecification/IDataSpecification.h>
 #include <BaSyx/submodel/map_v2/dataspecification/DataSpecificationContent.h>
@@ -17,6 +17,11 @@ class DataSpecification :
     public virtual Identifiable,
     public virtual vab::ElementMap
 {
+public:
+  struct Path {
+    static constexpr char DataSpecificationContent[] = "dataSpecificationContent";
+  };
+
 private:
   std::unique_ptr<DataSpecificationContent> content;
 public:
@@ -26,9 +31,10 @@ public:
   api::IDataSpecificationContent & getContent() override;
 
   void setContent(std::unique_ptr<DataSpecificationContent> content);
+  virtual KeyElements getKeyElementType() const override { return KeyElements::Unknown; };
 };
 
 }
 }
 }
-#endif //BASYX_MAP_V2_SDK_DATASPECIFICATION_H
+#endif /* BASYX_SUBMODEL_MAP_V2_DATASPECIFICATION_DATASPECIFICATION_H */

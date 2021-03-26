@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.map.qualifier;
 
 import java.util.Collection;
@@ -7,6 +16,8 @@ import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataS
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.vab.model.VABModelMap;
+
+import com.google.common.base.Strings;
 
 /**
  * AdministrativeInformation class
@@ -26,9 +37,6 @@ public class AdministrativeInformation extends VABModelMap<Object> implements IA
 		// Add qualifier
 		putAll(new HasDataSpecification());
 
-		// Default values
-		put(VERSION, "");
-		put(REVISION, "");
 	}
 
 	/**
@@ -38,9 +46,7 @@ public class AdministrativeInformation extends VABModelMap<Object> implements IA
 		// Add qualifier
 		putAll(new HasDataSpecification());
 
-		// Default values
-		put(VERSION, version);
-		put(REVISION, revision);
+		setVersionInformation(version, revision);
 	}
 
 	/**
@@ -78,8 +84,29 @@ public class AdministrativeInformation extends VABModelMap<Object> implements IA
 	public void setEmbeddedDataSpecifications(Collection<IEmbeddedDataSpecification> embeddedDataSpecifications) {
 		HasDataSpecification.createAsFacade(this).setEmbeddedDataSpecifications(embeddedDataSpecifications);
 	}
+	
+	/**
+	 * Sets version and revision
+	 * @param version
+	 * @param revision 
+	 * 
+	 * @throws RuntimeException when revision is given without a valid version
+	 */
+	public void setVersionInformation(String version, String revision) {
+		setVersion(version);
+		if (!Strings.isNullOrEmpty(revision)) {
+			if (Strings.isNullOrEmpty(version)) {
+				throw new RuntimeException("revision cannot be set while version is not set");
+			}
+		}
+		setRevision(revision);
+	}
 
-	public void setVersion(String version) {
+	/**
+	 *
+	 * @param version
+	 */
+	private void setVersion(String version) {
 		put(AdministrativeInformation.VERSION, version);
 	}
 
@@ -88,7 +115,11 @@ public class AdministrativeInformation extends VABModelMap<Object> implements IA
 		return (String) get(AdministrativeInformation.VERSION);
 	}
 
-	public void setRevision(String revision) {
+	/**
+	 * 
+	 * @param revision
+	 */
+	private void setRevision(String revision) {
 		put(AdministrativeInformation.REVISION, revision);
 	}
 

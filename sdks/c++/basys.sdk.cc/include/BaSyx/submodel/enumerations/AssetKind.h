@@ -1,5 +1,5 @@
-#ifndef BASYX_SUBMODEL_ENUM_AssetKind_H
-#define BASYX_SUBMODEL_ENUM_AssetKind_H
+#ifndef BASYX_SUBMODEL_ENUMERATIONS_ASSETKIND_H
+#define BASYX_SUBMODEL_ENUMERATIONS_ASSETKIND_H
 
 #include <string>
 
@@ -23,4 +23,4 @@ public:
 }
 }
 
-#endif
+#endif /* BASYX_SUBMODEL_ENUMERATIONS_ASSETKIND_H */

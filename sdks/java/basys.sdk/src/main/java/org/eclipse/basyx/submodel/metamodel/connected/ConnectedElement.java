@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.connected;
 
 import java.util.Map;
@@ -16,7 +25,7 @@ import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 public class ConnectedElement implements IElement {
 
 	private VABElementProxy proxy;
-	private VABModelMap<Object> cached;
+	protected VABModelMap<Object> cached;
 
 	public VABElementProxy getProxy() {
 		return proxy;
@@ -35,8 +44,8 @@ public class ConnectedElement implements IElement {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	protected VABModelMap<Object> getElemLive() {
-		VABModelMap<Object> map = new VABModelMap<>((Map<String, Object>) getProxy().getModelPropertyValue(""));
+	public VABModelMap<Object> getElemLive() {
+		VABModelMap<Object> map = new VABModelMap<>((Map<String, Object>) getProxy().getValue(""));
 		// update cache
 		cached = map;
 		return map;
@@ -49,12 +58,17 @@ public class ConnectedElement implements IElement {
 	 * 
 	 * @return
 	 */
-	protected VABModelMap<Object> getElem() {
+	public VABModelMap<Object> getElem() {
 		if (cached == null) {
 			return getElemLive();
 		} else {
 			return cached;
 		}
+	}
+
+	@Override
+	public String toString() {
+		return getElemLive().toString();
 	}
 
 	protected void throwNotSupportedException() {

@@ -54,6 +54,7 @@ class Generator:
             for line_template in line_templates:
                 line = line_template + "\n"
                 line = line.replace("$ENUM_CLASS$", self.enum_class)
+                line = line.replace("$ENUM_CLASS_CAP$", self.enum_class.upper())
                 line = line.replace("$SIZE$", str(self.size))
                 for constant in self.constants.keys():
                     line = line.replace(constant, self.constants[constant])

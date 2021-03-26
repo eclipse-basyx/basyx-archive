@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.vab.modelprovider;
 
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
@@ -47,10 +56,10 @@ public class VABElementProxy implements IModelProvider {
 	 * Read VAB element value
 	 */
 	@Override
-	public Object getModelPropertyValue(String elementPath) throws ProviderException {
+	public Object getValue(String elementPath) throws ProviderException {
 		// Get element from server
 		try {
-			return provider.getModelPropertyValue(constructPath(elementPath));
+			return provider.getValue(constructPath(elementPath));
 		} catch (ProviderException e) {
 			throw e;
 		} catch (Exception e) {
@@ -65,11 +74,11 @@ public class VABElementProxy implements IModelProvider {
 	 * If the element does not exist it will be created<br />
 	 */
 	@Override
-	public void setModelPropertyValue(String elementPath, Object newValue) throws ProviderException {
+	public void setValue(String elementPath, Object newValue) throws ProviderException {
 		// Set property value
 		try {
 			// Change element on server
-			provider.setModelPropertyValue(constructPath(elementPath), newValue);
+			provider.setValue(constructPath(elementPath), newValue);
 		} catch (ProviderException e) {
 			throw e;
 		} catch (Exception e) {

@@ -5,7 +5,7 @@ using namespace basyx::submodel;
 
 
 ConceptDescription::ConceptDescription(const std::string & idShort, const Identifier & identifier)
-	: Identifiable{idShort, identifier}
+	: identifiable(idShort, identifier)
 {}
 
 const api::IElementContainer<api::IDataSpecification> & ConceptDescription::getEmbeddedDataSpecification() const
@@ -38,3 +38,64 @@ const std::vector<Reference> ConceptDescription::getDataSpecificationReference()
 {
 	return this->dataSpec.getDataSpecificationReference();
 }
+
+
+const std::string & ConceptDescription::getIdShort() const
+{
+	return this->identifiable.getIdShort();
+}
+
+const std::string * const ConceptDescription::getCategory() const
+{
+	return this->identifiable.getCategory();
+};
+
+void ConceptDescription::setCategory(const std::string & category)
+{
+	this->identifiable.setCategory(category);
+}
+
+LangStringSet & ConceptDescription::getDescription()
+{
+	return this->identifiable.getDescription();
+}
+
+const LangStringSet & ConceptDescription::getDescription() const
+{
+	return this->identifiable.getDescription();
+}
+
+api::IReferable * ConceptDescription::getParent() const
+{
+	return this->identifiable.getParent();
+}
+
+void ConceptDescription::setParent(api::IReferable * parent)
+{
+	this->identifiable.setParent(parent);
+}
+
+const AdministrativeInformation & ConceptDescription::getAdministrativeInformation() const
+{
+	return this->identifiable.getAdministrativeInformation();
+}
+
+AdministrativeInformation & ConceptDescription::getAdministrativeInformation()
+{
+	return this->identifiable.getAdministrativeInformation();
+}
+
+Identifier ConceptDescription::getIdentification() const
+{
+	return this->identifiable.getIdentification();
+}
+
+bool ConceptDescription::hasAdministrativeInformation() const
+{
+	return this->identifiable.hasAdministrativeInformation();
+};
+
+simple::Reference ConceptDescription::getReference() const
+{
+	return this->identifiable.getReference();
+};

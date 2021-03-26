@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.aas.metamodel.map.descriptor;
 
 import static org.junit.Assert.assertEquals;
@@ -9,7 +18,7 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
@@ -31,7 +40,7 @@ import org.junit.Test;
  */
 public class TestSubmodelDescriptor {
 	private static final IdentifierType ID_TYPE = IdentifierType.CUSTOM;
-	private static final String HTTP_ENDPOINT = "testEnd";
+	private static final String HTTP_ENDPOINT = "testEnd/submodel";
 	private static final String ID_SHORT_STRING = "testIdShort";
 	private static final Identifier IDENTIFIER = new Identifier(ID_TYPE, ID_SHORT_STRING);
 	
@@ -51,7 +60,7 @@ public class TestSubmodelDescriptor {
 		Formula formula = new Formula(Collections.singleton(new Reference(new Key(KeyElements.BLOB, true, "TestValue", IdentifierType.IRI))));
 		Qualifiable qualifiable = new Qualifiable(formula);
 		HasDataSpecification hasDataSpecification = new HasDataSpecification(new ArrayList<>(), Collections.singleton(reference));
-		SubModel subModel = new SubModel(hasSemantics, identifiable, qualifiable, hasDataSpecification, hasKind);
+		Submodel subModel = new Submodel(hasSemantics, identifiable, qualifiable, hasDataSpecification, hasKind);
 		
 		SubmodelDescriptor descriptor = new SubmodelDescriptor(subModel, HTTP_ENDPOINT);
 		assertEquals(HTTP_ENDPOINT, descriptor.getFirstEndpoint());

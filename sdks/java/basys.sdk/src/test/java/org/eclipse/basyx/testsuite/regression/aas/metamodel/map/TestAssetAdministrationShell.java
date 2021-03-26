@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.aas.metamodel.map;
 
 import static org.junit.Assert.assertEquals;
@@ -6,7 +15,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -20,12 +28,14 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.dataspecification.EmbeddedDataSpecification;
+import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.testsuite.regression.aas.metamodel.AssetAdministrationShellSuite;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,17 +70,6 @@ public class TestAssetAdministrationShell extends AssetAdministrationShellSuite 
 	@Override
 	public void testGetSubmodel() throws Exception {
 		// Overwritten because getting submodels on local AAS is not supported
-	}
-	
-	@Test
-	public void testSetEndpoint() {
-		String endpoint = "testEndpoint.com";
-		String endpointType = "http";
-		shell.setEndpoint(endpoint, endpointType);
-		List<HashMap<String, String>> endPoints = shell.getEndpoints();
-		HashMap<String, String> map = endPoints.iterator().next();
-		assertTrue(map.containsValue(endpoint));
-		assertTrue(map.containsValue(endpointType));
 	}
 	
 	@Test
@@ -111,6 +110,7 @@ public class TestAssetAdministrationShell extends AssetAdministrationShellSuite 
 		shell.addConceptDescription(description);
 		Collection<IConceptDictionary> dictionaries = new HashSet<IConceptDictionary>();
 		ConceptDictionary dictionary = new ConceptDictionary();
+		dictionary.setIdShort("defaultConceptDictionary");
 		dictionary.addConceptDescription(description);
 		dictionaries.add(dictionary);
 		assertEquals(dictionaries, shell.getConceptDictionary());
@@ -119,19 +119,22 @@ public class TestAssetAdministrationShell extends AssetAdministrationShellSuite 
 	@Test
 	public void testSetSubmodels() {
 		// Create submodels
-		SubModel subModel1 = new SubModel(Collections.singletonList(new Property("testProperty1")));
-		subModel1.setIdShort("newSubmodelId1");
-		subModel1.setIdentification(IdentifierType.CUSTOM, "smId1");
-		SubModel subModel2 = new SubModel(Collections.singletonList(new Property("testProperty2")));
-		subModel2.setIdShort("newSubmodelId2");
-		subModel2.setIdentification(IdentifierType.CUSTOM, "smId2");
+		Submodel subModel1 = new Submodel("newSubmodelId1", new Identifier(IdentifierType.CUSTOM, "smId1"));
+		Property prop1 = new Property("prop1Id", ValueType.String);
+		prop1.setValue("testProperty1");
+		subModel1.addSubmodelElement(prop1);
+
+		Submodel subModel2 = new Submodel("newSubmodelId2", new Identifier(IdentifierType.CUSTOM, "smId2"));
+		Property prop2 = new Property("prop2Id", ValueType.String);
+		prop2.setValue("testProperty2");
+		subModel2.addSubmodelElement(prop2);
 		
 		// create a collection of descriptors and add the above descriptors
-		Collection<SubModel> submodels = new ArrayList<SubModel>();
+		Collection<Submodel> submodels = new ArrayList<Submodel>();
 		submodels.add(subModel1);
 		submodels.add(subModel2);
 
-		shell.setSubModels(submodels);
+		shell.setSubmodels(submodels);
 
 		// expect references to be set according to the descriptors
 		Collection<IReference> smReferences = shell.getSubmodelReferences();

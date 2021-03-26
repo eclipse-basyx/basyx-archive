@@ -1,12 +1,24 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IQualifier;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueTypeHelper;
 
 /**
  * Qualifier class
@@ -33,24 +45,20 @@ public class Qualifier extends Constraint implements IQualifier {
 	public Qualifier() {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
-
-		// Add all attributes from HasSemantics
-		this.putAll(new HasSemantics());
-
-		// Default values
-		put(TYPE, "");
-		put(VALUE, null);
-		put(VALUEID, null);
-		put(VALUETYPE, "");
+	}
+	
+	/**
+	 * Constructor accepting mandatory attributes
+	 * @param type
+	 * @param valueType
+	 */
+	public Qualifier(String type, String valueType) {
+		this(type, null, valueType, null);
 	}
 
 	public Qualifier(String type, String value, String valueType, Reference valueId) {
-		// Add all attributes from HasSemantics
-		this.putAll(new HasSemantics());
-
-		// Default values
 		put(TYPE,type);
-		put(VALUE, value);
+		put(VALUE, ValueTypeHelper.prepareForSerialization(value));
 		put(VALUEID, valueId);
 		put(VALUETYPE, valueType);
 	}
@@ -66,10 +74,25 @@ public class Qualifier extends Constraint implements IQualifier {
 		if (map == null) {
 			return null;
 		}
-
+		
+		if (!isValid(map)) {
+			throw new MetamodelConstructionException(Qualifier.class, map);
+		}
+		
 		Qualifier ret = new Qualifier();
 		ret.setMap(map);
 		return ret;
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	public static boolean isValid(Map<String, Object> map) {
+		return map != null &&
+				map.containsKey(TYPE) &&
+				map.containsKey(VALUETYPE);
 	}
 
 	public void setType(String obj) {
@@ -81,13 +104,22 @@ public class Qualifier extends Constraint implements IQualifier {
 		return (String) get(Qualifier.TYPE);
 	}
 
-	public void setValue(String obj) {
-		put(Qualifier.VALUE, obj);
+	public void setValue(Object obj) {
+		put(Qualifier.VALUE, ValueTypeHelper.prepareForSerialization(obj));
+		// Value type is only set if it is not set before
+		if(getValueType() == null) {
+			put(Qualifier.VALUETYPE, ValueTypeHelper.getType(obj).toString());
+		}
 	}
 
 	@Override
-	public String getValue() {
-		return (String) get(Qualifier.VALUE);
+	public Object getValue() {
+		Object value = get(Qualifier.VALUE);
+		if(value instanceof String) {
+			return ValueTypeHelper.getJavaObject(value, getValueType());
+		}else {
+			return value;
+		}
 	}
 
 	public void setValueId(IReference obj) {
@@ -100,13 +132,13 @@ public class Qualifier extends Constraint implements IQualifier {
 		return Reference.createAsFacade((Map<String, Object>) get(Qualifier.VALUEID));
 	}
 
-	public void setValueType(String obj) {
-		put(Qualifier.VALUETYPE, obj);
+	public void setValueType(ValueType obj) {
+		put(Qualifier.VALUETYPE, obj.toString());
 	}
 	
 	@Override
-	public String getValueType() {
-		return (String) get(Qualifier.VALUETYPE);
+	public ValueType getValueType() {
+		return ValueTypeHelper.readTypeDef(get(Qualifier.VALUETYPE));
 	}
 
 	@Override
@@ -114,7 +146,7 @@ public class Qualifier extends Constraint implements IQualifier {
 		return HasSemantics.createAsFacade(this).getSemanticId();
 	}
 
-	public void setSemanticID(IReference ref) {
-		HasSemantics.createAsFacade(this).setSemanticID(ref);
+	public void setSemanticId(IReference ref) {
+		HasSemantics.createAsFacade(this).setSemanticId(ref);
 	}
 }

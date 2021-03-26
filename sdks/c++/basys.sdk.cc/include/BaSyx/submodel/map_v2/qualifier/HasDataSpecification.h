@@ -1,5 +1,5 @@
-#ifndef BASYX_SUBMODEL_METAMODEL_MAPv2_QUALIFIER_HASDATASPECIFICATION_H_
-#define BASYX_SUBMODEL_METAMODEL_MAPv2_QUALIFIER_HASDATASPECIFICATION_H_
+#ifndef BASYX_SUBMODEL_MAP_V2_QUALIFIER_HASDATASPECIFICATION_H
+#define BASYX_SUBMODEL_MAP_V2_QUALIFIER_HASDATASPECIFICATION_H
 
 #include <BaSyx/submodel/api_v2/qualifier/IHasDataSpecification.h>
 
@@ -13,6 +13,11 @@ class HasDataSpecification :
 	public virtual api::IHasDataSpecification,
 	public virtual vab::ElementMap
 {
+public:
+  struct Path {
+    static constexpr char DataSpecification[] = "dataSpecification";
+  };
+
 private:
 	basyx::object::object_list_t dataSpecification;
 public:
@@ -28,4 +33,4 @@ public:
 }
 }
 
-#endif
+#endif /* BASYX_SUBMODEL_MAP_V2_QUALIFIER_HASDATASPECIFICATION_H */

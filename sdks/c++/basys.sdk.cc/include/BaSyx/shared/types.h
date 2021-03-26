@@ -4,8 +4,8 @@
  * Define type IDs
  * ************************************************************************************************/
 
-#ifndef BASYX_TYPES_H
-#define BASYX_TYPES_H
+#ifndef BASYX_SHARED_TYPES_H
+#define BASYX_SHARED_TYPES_H
 
 #include <set>
 #include <unordered_map>
@@ -51,4 +51,4 @@ enum class BaSyxCommand : uint8_t {
 #define BASYX_FRAMESIZE_SIZE 4
 #define BASYX_STRINGSIZE_SIZE 4
 
-#endif /* BASYX_TYPES_H */
+#endif /* BASYX_SHARED_TYPES_H */

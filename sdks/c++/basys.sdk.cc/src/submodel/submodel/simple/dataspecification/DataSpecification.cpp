@@ -36,9 +36,14 @@ const simple::LangStringSet & DataSpecification::getDescription() const
 	return this->ident.getDescription();
 }
 
-const IReferable * const DataSpecification::getParent() const
+IReferable * DataSpecification::getParent() const
 {
 	return this->ident.getParent();
+}
+
+void DataSpecification::setParent(IReferable * parent)
+{
+	this->setParent(parent);
 }
 
 const AdministrativeInformation & DataSpecification::getAdministrativeInformation() const
@@ -70,6 +75,11 @@ void DataSpecification::setCategory(const std::string &category)
 {
   this->ident.setCategory(category);
 }
+
+simple::Reference DataSpecification::getReference() const
+{
+	return this->ident.getReference();
+};
 
 
 }

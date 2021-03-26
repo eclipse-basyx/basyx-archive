@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.vab.coder.json;
 
 import static org.junit.Assert.assertEquals;
@@ -7,6 +16,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
@@ -37,7 +47,7 @@ import com.google.gson.JsonPrimitive;
  */
 public class TestJson {
 
-	GSONTools tools = new GSONTools(new DefaultTypeFactory());
+	GSONTools tools = new GSONTools(new DefaultTypeFactory(), false, false);
 
 	/**
 	 * Tests if a double is correctly (de-)serialized
@@ -59,6 +69,13 @@ public class TestJson {
 
 		JsonPrimitive primitive = new JsonPrimitive(12);
 		assertEquals(primitive.toString(), tools.serialize(12));
+	}
+
+	@Test
+	public void testBigInteger() {
+		BigInteger dec = new BigInteger("10000000000000000000000000000000000000");
+		BigInteger deserialized = (BigInteger) tools.deserialize(tools.serialize(dec));
+		assertEquals(dec, deserialized);
 	}
 
 	/**
@@ -300,6 +317,32 @@ public class TestJson {
 		Function<Integer, Integer> deserialized = (Function<Integer, Integer>) tools.deserialize(functionObject.toString());
 
 		assertEquals(testFunction.apply(5), deserialized.apply(5));
+	}
+	
+	/**
+	 * Tests if null values and empty arrays are getting removed successfully
+	 * with remove flag on
+	 * 
+	 */
+	@Test
+	public void testSerializeWithRemoveFlagsOn() throws IOException {
+		GSONTools toolWithRemoveFlagOn = new GSONTools(new DefaultTypeFactory(), true, true);
+		Map<String, Object> expected = new HashMap<>();
+		Map<String, Object> a = new HashMap<>();
+		a.put("x", 123);
+		expected.put("a", a);
+		expected.put("b", "123");
+		expected.put("c", null);
+		expected.put("d", new ArrayList<String>());
+		
+		JsonObject aObj = new JsonObject();
+		aObj.add("x", new JsonPrimitive(123));
+		
+		JsonObject expectedObj = new JsonObject();
+		expectedObj.add("a", aObj);
+		expectedObj.add("b", new JsonPrimitive("123"));
+
+		assertEquals(expectedObj.toString(), toolWithRemoveFlagOn.serialize(expected));
 	}
 
 	/**

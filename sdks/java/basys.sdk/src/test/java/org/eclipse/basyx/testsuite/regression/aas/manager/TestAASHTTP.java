@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.aas.manager;
 
 import static org.junit.Assert.assertEquals;
@@ -10,15 +19,15 @@ import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.testsuite.regression.aas.restapi.StubAASServlet;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
-import org.eclipse.basyx.vab.directory.memory.InMemoryDirectory;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
+import org.eclipse.basyx.vab.registry.memory.VABInMemoryRegistry;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -49,10 +58,10 @@ public class TestAASHTTP {
 	@Before
 	public void build() {
 		// Fill directory stub
-		InMemoryDirectory directory = new InMemoryDirectory();
+		VABInMemoryRegistry directory = new VABInMemoryRegistry();
 		directory.addMapping(StubAASServlet.AASURN.getId(), "http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas");
 		directory.addMapping(StubAASServlet.SMURN.getId(),
-				"http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas/submodels/" + StubAASServlet.SMIDSHORT);
+				"http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas/submodels/" + StubAASServlet.SMIDSHORT + "/submodel");
 
 		InMemoryRegistry registry = new InMemoryRegistry();
 
@@ -62,7 +71,7 @@ public class TestAASHTTP {
 
 		// Create the submodel descriptor
 		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(StubAASServlet.SMIDSHORT, StubAASServlet.SMURN,
-				"http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas/submodels/" + StubAASServlet.SMIDSHORT);
+				"http://localhost:8080/basys.sdk/Testsuite/StubAAS/aas/submodels/" + StubAASServlet.SMIDSHORT + "/submodel");
 
 		// add submodel descriptor to the aas descriptor
 		aasDescriptor.addSubmodelDescriptor(submodelDescriptor);
@@ -71,7 +80,7 @@ public class TestAASHTTP {
 		registry.register(aasDescriptor);
 		
 		// Create manager using the directory stub an the HTTPConnectorProvider
-		manager = new ConnectedAssetAdministrationShellManager(registry, new HTTPConnectorProvider());
+		manager = new ConnectedAssetAdministrationShellManager(registry, new HTTPConnectorFactory());
 	}
 
 	/**
@@ -88,7 +97,7 @@ public class TestAASHTTP {
 		assertEquals(StubAASServlet.AASIDSHORT, shell.getIdShort());
 
 		// Retrieve submodels
-		Map<String, ISubModel> submodels = shell.getSubModels();
+		Map<String, ISubmodel> submodels = shell.getSubmodels();
 
 		// Check content of submodels
 		assertEquals(1, submodels.size());
@@ -101,9 +110,9 @@ public class TestAASHTTP {
 	 * @throws Exception
 	 */
 	@Test
-	public void testSubModel() throws Exception {
-		// Retrieve SubModel
-		ISubModel sm = manager.retrieveSubModel(StubAASServlet.AASURN, StubAASServlet.SMURN);
+	public void testSubmodel() throws Exception {
+		// Retrieve Submodel
+		ISubmodel sm = manager.retrieveSubmodel(StubAASServlet.AASURN, StubAASServlet.SMURN);
 
 		// Check id
 		assertEquals(StubAASServlet.SMIDSHORT, sm.getIdShort());
@@ -112,10 +121,9 @@ public class TestAASHTTP {
 		// - retrieve properties and operations
 
 		Map<String, IProperty> properties = sm.getProperties();
-		// 2 properties -> SMElementCollections don't count
 		assertEquals(3, properties.size());
 		IProperty prop = properties.get("integerProperty");
-		assertEquals(123, prop.get());
+		assertEquals(123, prop.getValue());
 
 		Map<String, IOperation> operations = sm.getOperations();
 		assertEquals(4, operations.size());

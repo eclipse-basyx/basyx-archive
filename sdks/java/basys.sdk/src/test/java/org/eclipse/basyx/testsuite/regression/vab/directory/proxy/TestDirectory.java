@@ -1,11 +1,20 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.vab.directory.proxy;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-import org.eclipse.basyx.vab.directory.api.IVABDirectoryService;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
+import org.eclipse.basyx.vab.registry.api.IVABRegistryService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +28,7 @@ import org.junit.Test;
  */
 public abstract class TestDirectory {
 	// The registry proxy that is used to access the backend
-	protected final IVABDirectoryService registry = getRegistry();
+	protected final IVABRegistryService registry = getRegistry();
 
 	// Ids and endpoints for registered elements
 	protected String elem1 = "elem1";
@@ -33,7 +42,7 @@ public abstract class TestDirectory {
 	 * Getter for the tested registry provider. Tests for actual registry provider
 	 * have to realize this method.
 	 */
-	protected abstract IVABDirectoryService getRegistry();
+	protected abstract IVABRegistryService getRegistry();
 
 	/**
 	 * During setup of the tests, new entries are created in the registry using a

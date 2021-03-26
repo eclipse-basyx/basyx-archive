@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.vab.protocol.http;
 
 import static org.junit.Assert.assertEquals;
@@ -16,7 +25,7 @@ import org.eclipse.basyx.testsuite.regression.vab.support.RecordingProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 import org.junit.Rule;
@@ -30,7 +39,7 @@ import org.junit.Test;
  */
 public class TestVABHTTP extends TestProvider {
 	protected VABConnectionManager connManager = new VABConnectionManager(new TestsuiteDirectory(),
-			new HTTPConnectorProvider());
+			new HTTPConnectorFactory());
 
 	private RecordingProvider recorder = new RecordingProvider(new VABMapProvider(new HashMap<>()));
 

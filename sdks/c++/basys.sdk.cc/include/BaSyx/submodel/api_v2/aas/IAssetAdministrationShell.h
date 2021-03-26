@@ -38,5 +38,4 @@ inline IAssetAdministrationShell::~IAssetAdministrationShell() = default;
 }
 }
 
-
 #endif /* BASYX_SUBMODEL_API_V2_AAS_IASSETADMINISTRATIONSHELL_H */

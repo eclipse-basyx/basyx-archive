@@ -17,12 +17,15 @@ public:
     using container_t = std::vector<elementPtr_t>;
 private:
     container_t container;
+	api::IReferable * parent;
 public:
-	ElementContainer() = default;
+	ElementContainer(api::IReferable * parent = nullptr) : parent(parent) {};
 	virtual ~ElementContainer() = default;
 public:
 	// Inherited via IElementContainer
 	virtual std::size_t size() const override;
+	virtual api::IReferable * getParent() const override;
+
 	virtual IElementType * const getElement(const std::string & idShort) const override;
 	virtual IElementType * const getElement(std::size_t n) const override;
 	virtual void addElement(elementPtr_t element) override;
@@ -42,6 +45,12 @@ template<typename IElementType>
 std::size_t ElementContainer<IElementType>::size() const
 {
 	return this->container.size();
+};
+
+template<typename IElementType>
+api::IReferable * ElementContainer<IElementType>::getParent() const
+{
+	return this->parent;
 };
 
 template<typename IElementType>

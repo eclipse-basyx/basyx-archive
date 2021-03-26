@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.vab.modelprovider;
 
 import static org.junit.Assert.assertEquals;
@@ -37,7 +46,7 @@ public class Exceptions {
 
 		// Non-existing parent element
 		try {
-			connVABElement.getModelPropertyValue("unknown/x");
+			connVABElement.getValue("unknown/x");
 			fail();
 		} catch (ResourceNotFoundException e) {
 			Result result = new Result(e);
@@ -58,7 +67,7 @@ public class Exceptions {
 
 		// Invoke unsupported functional interface
 		try {
-			connVABElement.invokeOperation("operations/supplier");
+			connVABElement.invokeOperation("operations/supplier/invoke");
 			fail();
 		} catch (MalformedRequestException e) {
 			// this is for FileSystemProvider that does not support invoke

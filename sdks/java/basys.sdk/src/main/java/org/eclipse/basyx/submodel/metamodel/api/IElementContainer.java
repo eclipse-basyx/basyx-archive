@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.api;
 
 import java.util.Map;
@@ -18,7 +27,7 @@ public interface IElementContainer {
 	 * 
 	 * @param element
 	 */
-	public void addSubModelElement(ISubmodelElement element);
+	public void addSubmodelElement(ISubmodelElement element);
 
 	/**
 	 * Gets all contained submodel elements
@@ -41,4 +50,16 @@ public interface IElementContainer {
 	 */
 	public Map<String, IOperation> getOperations();
 	
+	/**
+	 * Gets a submodel element by name
+	 * @param id
+	 * @return submodel element
+	 */
+	ISubmodelElement getSubmodelElement(String id);
+	
+	/**
+	 * Deletes a submodel element by name
+	 * @param id
+	 */
+	void deleteSubmodelElement(String id);
 }

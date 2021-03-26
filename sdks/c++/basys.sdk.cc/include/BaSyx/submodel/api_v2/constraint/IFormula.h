@@ -1,5 +1,5 @@
-#ifndef BASYX_SUBMODEL_API_V2_QUALIFIER_IFORMULA_H
-#define BASYX_SUBMODEL_API_V2_QUALIFIER_IFORMULA_H
+#ifndef BASYX_SUBMODEL_API_V2_CONSTRAINT_IFORMULA_H
+#define BASYX_SUBMODEL_API_V2_CONSTRAINT_IFORMULA_H
 
 #include <BaSyx/submodel/api_v2/constraint/IConstraint.h>
 #include <BaSyx/submodel/simple/reference/Reference.h>
@@ -26,4 +26,4 @@ inline IFormula::~IFormula() = default;
 }
 }
 
-#endif /* BASYX_SUBMODEL_API_V2_QUALIFIER_IFORMULA_H */
+#endif /* BASYX_SUBMODEL_API_V2_CONSTRAINT_IFORMULA_H */

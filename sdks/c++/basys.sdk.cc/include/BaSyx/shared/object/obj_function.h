@@ -1,5 +1,5 @@
-#ifndef OBJ_FUNCTION_H
-#define OBJ_FUNCTION_H
+#ifndef BASYX_SHARED_OBJECT_OBJ_FUNCTION_H
+#define BASYX_SHARED_OBJECT_OBJ_FUNCTION_H
 
 #include <functional>
 
@@ -32,6 +32,18 @@ public:
 	basyx::object invoke(basyx::object & obj) const
 	{
 		return func(&obj);
+	};
+
+	// Wrap void function with no arguments
+	static functionWrapper wrap_func(std::function<void(void)> f)
+	{
+		functionWrapper fw;
+		fw.func = [f](basyx::object*)
+		{
+			f();
+			return basyx::object::make_null();
+		};
+		return fw;
 	};
 
 	// Wrap function with no arguments
@@ -109,4 +121,4 @@ static void to_json(nlohmann::json & json, const functionWrapper &)
 }
 
 
-#endif /* OBJ_FUNCTION_H */
+#endif /* BASYX_SHARED_OBJECT_OBJ_FUNCTION_H */

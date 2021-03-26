@@ -4,46 +4,41 @@ using namespace basyx::submodel;
 using namespace basyx::submodel::map;
 using namespace basyx::submodel::api;
 
-struct IdentifierPath {
-	static constexpr char IdType[] = "idType";
-	static constexpr char Id[] = "id";
-  static constexpr char AdministrativeInformation[] = "AdministrativeInformation";
-};
-
-constexpr char IdentifierPath::IdType[];
-constexpr char IdentifierPath::Id[];
-constexpr char IdentifierPath::AdministrativeInformation[];
+constexpr char Identifiable::Path::IdType[];
+constexpr char Identifiable::Path::Id[];
+constexpr char Identifiable::Path::AdministrativeInformation[];
+constexpr char Identifiable::Path::Identifier[];
 
 Identifiable::Identifiable(const std::string & idShort, const simple::Identifier & identifier)
 	: Referable(idShort)
 	, vab::ElementMap()
 {
 	auto identifierMap = basyx::object::make_map();
-	identifierMap.insertKey(IdentifierPath::Id, identifier.getId());
-	identifierMap.insertKey(IdentifierPath::IdType, IdentifierType_::to_string(identifier.getIdType()));
-	this->map.insertKey("identifier", identifierMap);
+	identifierMap.insertKey(Path::Id, identifier.getId());
+	identifierMap.insertKey(Path::IdType, IdentifierType_::to_string(identifier.getIdType()));
+	this->map.insertKey(Path::Identifier, identifierMap);
 }
 
 bool Identifiable::hasAdministrativeInformation() const noexcept
 {
-  return not this->map.getProperty(IdentifierPath::AdministrativeInformation).IsNull();
+  return not this->map.getProperty(Path::AdministrativeInformation).IsNull();
 };
 
 simple::Identifier Identifiable::getIdentification() const
 {
-	auto identifierMap = this->map.getProperty("identifier");
+	auto identifierMap = this->map.getProperty(Path::Identifier);
 	return simple::Identifier{
-		IdentifierType_::from_string(identifierMap.getProperty(IdentifierPath::IdType).Get<std::string&>()),
-		identifierMap.getProperty(IdentifierPath::Id).Get<std::string&>()
+		IdentifierType_::from_string(identifierMap.getProperty(Path::IdType).Get<std::string&>()),
+		identifierMap.getProperty(Path::Id).Get<std::string&>()
 	};
 }
 
-const AdministrativeInformation & Identifiable::getAdministrativeInformation() const
+const api::IAdministrativeInformation & Identifiable::getAdministrativeInformation() const
 {
 	return this->administrativeInformation;
 }
 
-AdministrativeInformation & Identifiable::getAdministrativeInformation()
+api::IAdministrativeInformation & Identifiable::getAdministrativeInformation()
 {
 	return this->administrativeInformation;
 }
@@ -51,5 +46,5 @@ AdministrativeInformation & Identifiable::getAdministrativeInformation()
 void Identifiable::setAdministrativeInformation(const AdministrativeInformation &administrativeInformation)
 {
   this->administrativeInformation = administrativeInformation;
-  this->map.insertKey(IdentifierPath::AdministrativeInformation, this->administrativeInformation.getMap());
+  this->map.insertKey(Path::AdministrativeInformation, this->administrativeInformation.getMap());
 }

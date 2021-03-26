@@ -5,36 +5,36 @@
  *      Author: cgries
  */
 
-#ifndef ABSTRACTION_UNIX_THREAD_BASYXTHREAD_H_
-#define ABSTRACTION_UNIX_THREAD_BASYXTHREAD_H_
+#ifndef BASYX_ABSTRACTION_IMPL_WINDOWS_THREAD_THREAD_IMPL_H
+#define BASYX_ABSTRACTION_IMPL_WINDOWS_THREAD_THREAD_IMPL_H
 
 #include <process.h>
 #include <windows.h>
 
 namespace basyx {
-	namespace detail {
+namespace detail {
 
-		class thread_impl {
+class thread_impl 
+{
+public:
+    thread_impl(unsigned int(__stdcall*)(void*), void*);
+    ~thread_impl();
 
-		public:
-			thread_impl(unsigned int (__stdcall *)(void*), void*);
-			~thread_impl();
+    int run();
+    int join();
+    int detach();
 
-			int run();
-			int join();
-			int detach();
+private:
+    HANDLE threadDesc;
+    unsigned int threadID;
+    unsigned int(__stdcall* threadFn)(void*);
+    void* threadArg;
 
-		private:
-			HANDLE threadDesc;
-			unsigned int threadID;
-			unsigned int (__stdcall *threadFn) (void*);
-			void* threadArg;
-		public:
-			static int getCurrentThreadId();
-		};
-	}
+public:
+    static int getCurrentThreadId();
+};
+
+}
 }
 
-
-
-#endif /* ABSTRACTION_UNIX_THREAD_BASYXTHREAD_H_ */
+#endif /* BASYX_ABSTRACTION_IMPL_WINDOWS_THREAD_THREAD_IMPL_H */

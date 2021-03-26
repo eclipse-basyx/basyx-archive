@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.factory.xml.converters;
 
 import java.util.ArrayList;
@@ -12,14 +21,20 @@ import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.IdentifiableX
 import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.haskind.HasKindXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.qualifiable.QualifiableXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.SubmodelElementXMLConverter;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- * Handles the conversion between ISubModel objects and the XML tag &lt;aas:submodels&gt; in both directions
+ * Handles the conversion between ISubmodel objects and the XML tag &lt;aas:submodels&gt; in both directions
  * 
  * @author conradi
  *
@@ -30,28 +45,28 @@ public class SubmodelXMLConverter {
 	public static final String SUBMODEL = "aas:submodel";
 	
 	/**
-	 * Parses &lt;aas:submodels&gt; and builds the SubModel objects from it
+	 * Parses &lt;aas:submodels&gt; and builds the Submodel objects from it
 	 * 
 	 * @param xmlObject a Map containing the content of the XML tag &lt;aas:submodels&gt;
-	 * @return a List of ISubModel objects parsed form the given XML Map
+	 * @return a List of ISubmodel objects parsed form the given XML Map
 	 */
-	public static List<ISubModel> parseSubmodels(Map<String, Object> xmlObject) {
+	public static List<ISubmodel> parseSubmodels(Map<String, Object> xmlObject) {
 		List<Map<String, Object>> xmlSubmodels = XMLHelper.getList(xmlObject.get(SUBMODEL));
-		List<ISubModel> submodels = new ArrayList<>();
+		List<ISubmodel> submodels = new ArrayList<>();
 		
 		for (Map<String, Object> xmlSubmodel : xmlSubmodels) {
-			SubModel submodel = new SubModel();
+			Submodel submodel = new Submodel();
 			
-			IdentifiableXMLConverter.populateIdentifiable(xmlSubmodel, submodel);
-			HasSemanticsXMLConverter.populateHasSemantics(xmlSubmodel, submodel);
-			HasDataSpecificationXMLConverter.populateHasDataSpecification(xmlSubmodel, submodel);
-			QualifiableXMLConverter.populateQualifiable(xmlSubmodel, submodel);
-			HasKindXMLConverter.populateHasKind(xmlSubmodel, submodel);
+			IdentifiableXMLConverter.populateIdentifiable(xmlSubmodel, Identifiable.createAsFacadeNonStrict(submodel, KeyElements.SUBMODEL));
+			HasSemanticsXMLConverter.populateHasSemantics(xmlSubmodel, HasSemantics.createAsFacade(submodel));
+			HasDataSpecificationXMLConverter.populateHasDataSpecification(xmlSubmodel, HasDataSpecification.createAsFacade(submodel));
+			QualifiableXMLConverter.populateQualifiable(xmlSubmodel, Qualifiable.createAsFacade(submodel));
+			HasKindXMLConverter.populateHasKind(xmlSubmodel, HasKind.createAsFacade(submodel));
 						
 			List<ISubmodelElement> submodelElements = SubmodelElementXMLConverter.parseSubmodelElements(xmlSubmodel);
 						
 			for (ISubmodelElement submdoElement : submodelElements) {
-				submodel.addSubModelElement(submdoElement);
+				submodel.addSubmodelElement(submdoElement);
 			}
 			
 			submodels.add(submodel);
@@ -63,17 +78,17 @@ public class SubmodelXMLConverter {
 	
 	
 	/**
-	 * Builds &lt;aas:submodels&gt; from a given Collection of ISubModel objects
+	 * Builds &lt;aas:submodels&gt; from a given Collection of ISubmodel objects
 	 * 
 	 * @param document the XML document
-	 * @param subModels a Collection of ISubModel objects to build the XML for
-	 * @return the &lt;aas:submodels&gt; XML tag for the given ISubModel objects
+	 * @param subModels a Collection of ISubmodel objects to build the XML for
+	 * @return the &lt;aas:submodels&gt; XML tag for the given ISubmodel objects
 	 */
-	public static Element buildSubmodelsXML(Document document, Collection<ISubModel> subModels) {
+	public static Element buildSubmodelsXML(Document document, Collection<ISubmodel> subModels) {
 		Element root = document.createElement(SUBMODELS);
 		
 		List<Element> xmlSubmodelList = new ArrayList<>();
-		for(ISubModel subModel: subModels) {
+		for(ISubmodel subModel: subModels) {
 			Element subModelRoot = document.createElement(SUBMODEL);
 
 			IdentifiableXMLConverter.populateIdentifiableXML(document, subModelRoot, subModel);

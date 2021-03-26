@@ -1,8 +1,16 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.vab.protocol.basyx.server;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SocketChannel;
@@ -81,8 +89,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 	 */
 	public void processInputFrame(byte[] rxFrame) throws IOException {
 		// Create output streams
-		ByteArrayOutputStream byteArrayOutput = new ByteArrayOutputStream();
-		PrintWriter output = new PrintWriter(byteArrayOutput);
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
 
 		// Get command
 		switch (rxFrame[0]) {
@@ -107,7 +114,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 
 			// Send response frame
 			output.flush();
-			sendResponseFrame(byteArrayOutput);
+			sendResponseFrame(output);
 
 			break;
 		}
@@ -133,7 +140,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 
 			// Send response frame
 			output.flush();
-			sendResponseFrame(byteArrayOutput);
+			sendResponseFrame(output);
 
 			break;
 		}
@@ -159,7 +166,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 
 			// Send response frame
 			output.flush();
-			sendResponseFrame(byteArrayOutput);
+			sendResponseFrame(output);
 
 			break;
 		}
@@ -194,7 +201,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 
 			// Send response frame
 			output.flush();
-			sendResponseFrame(byteArrayOutput);
+			sendResponseFrame(output);
 
 			break;
 		}
@@ -219,7 +226,7 @@ public class VABBaSyxTCPInterface<ModelProvider extends IModelProvider> extends 
 
 			// Send response frame
 			output.flush();
-			sendResponseFrame(byteArrayOutput);
+			sendResponseFrame(output);
 
 			break;
 		}

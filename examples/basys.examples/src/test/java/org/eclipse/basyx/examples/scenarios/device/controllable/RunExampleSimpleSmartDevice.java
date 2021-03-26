@@ -1,18 +1,29 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.examples.scenarios.device.controllable;
 
 import static org.junit.Assert.assertTrue;
 
-import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory;
+import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
-import org.eclipse.basyx.examples.examplescenario.BaSyxExampleScenario;
 import org.eclipse.basyx.examples.mockup.application.ReceiveDeviceDashboardStatusApplication;
 import org.eclipse.basyx.examples.mockup.device.SmartBaSyxTCPDeviceMockup;
+import org.eclipse.basyx.examples.scenarios.device.BaSyxExampleScenario;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
+import org.eclipse.basyx.models.controlcomponent.ControlComponent;
 import org.eclipse.basyx.models.controlcomponent.ExecutionState;
 import org.eclipse.basyx.vab.coder.json.connector.JSONConnector;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
+import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnector;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -28,7 +39,7 @@ public class RunExampleSimpleSmartDevice extends BaSyxExampleScenario {
 	/**
 	 * VAB connection manager backend
 	 */
-	protected VABConnectionManager connManager = new VABConnectionManager(new ExamplesPreconfiguredDirectory(), new HTTPConnectorProvider());
+	protected VABConnectionManager connManager = new VABConnectionManager(new ExamplesPreconfiguredDirectory(), new HTTPConnectorFactory());
 
 	
 	/**
@@ -53,7 +64,7 @@ public class RunExampleSimpleSmartDevice extends BaSyxExampleScenario {
 	public static BaSyxDeployment context = new BaSyxDeployment(
 				// BaSyx infrastructure
 				// - BaSys topology with one AAS Server and one SQL directory
-			new BaSyxExamplesContext_1MemoryAASServer_1SQLDirectory(),
+				new BaSyxExamplesContext(),
 				
 				// Device mockups
 				new SmartBaSyxTCPDeviceMockup(9997).setName("Device"),
@@ -87,7 +98,7 @@ public class RunExampleSimpleSmartDevice extends BaSyxExampleScenario {
 		
 		
 		// Change device operation mode
-		toControlComponent.setModelPropertyValue("status/opMode", "RegularMilling");
+		toControlComponent.setValue(VABPathTools.concatenatePaths(ControlComponent.STATUS, ControlComponent.OP_MODE), "RegularMilling");
 		// - Validate device control component operation mode
 		waitfor( () -> ((SmartBaSyxTCPDeviceMockup) context.getRunnable("Device")).getControlComponent().getOperationMode().equals("RegularMilling") );
 
@@ -96,7 +107,7 @@ public class RunExampleSimpleSmartDevice extends BaSyxExampleScenario {
 
 
 		// Start device service
-		toControlComponent.setModelPropertyValue("cmd", "start");
+		toControlComponent.setValue("cmd", "start");
 		// - Validate control component status
 		waitfor( () -> ((SmartBaSyxTCPDeviceMockup) context.getRunnable("Device")).getControlComponent().getExecutionState().equals(ExecutionState.EXECUTE.getValue()) );
 		// - Indicate service end
@@ -106,7 +117,7 @@ public class RunExampleSimpleSmartDevice extends BaSyxExampleScenario {
 
 		
 		// Reset device to enable subsequent service calls
-		toControlComponent.setModelPropertyValue("cmd", "reset");
+		toControlComponent.setValue("cmd", "reset");
 		// - Device finishes reset and moves to idle state
 		((SmartBaSyxTCPDeviceMockup) context.getRunnable("Device")).resetCompleted();
 		

@@ -1,14 +1,25 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.map.submodelelement;
 
 import java.util.Collection;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.SubmodelElementIdShortBlacklist;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
@@ -31,12 +42,16 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 	protected SubmodelElement() {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
+		setModelingKind(ModelingKind.INSTANCE);
+	}
 
-		putAll(new HasDataSpecification());
-		putAll(new Referable());
-		putAll(new Qualifiable());
-		putAll(new HasSemantics());
-		putAll(new HasKind());
+	/**
+	 * Constructor with only mandatory attribute
+	 * @param idShort
+	 */
+	protected SubmodelElement(String idShort) {
+		this();
+		setIdShort(idShort);
 	}
 	
 	/**
@@ -46,9 +61,26 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 	 * @return a SubmodelElement object, that behaves like a facade for the given map
 	 */
 	public static SubmodelElement createAsFacade(Map<String, Object> obj) {
+		if (obj == null) {
+			return null;
+		}
+		
+		if (!isValid(obj)) {
+			throw new MetamodelConstructionException(SubmodelElement.class, obj);	
+		}
+
 		SubmodelElement ret = new SubmodelElement();
 		ret.setMap(obj);
 		return ret;
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	public static boolean isValid(Map<String, Object> obj) {
+		return Referable.isValid(obj);
 	}
 
 	@Override
@@ -94,7 +126,11 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 	}
 
 	public void setIdShort(String idShort) {
-		Referable.createAsFacade(this, getKeyElement()).setIdShort(idShort);
+		if (SubmodelElementIdShortBlacklist.isBlacklisted(idShort)) {
+			throw new RuntimeException("The passed idShort " + idShort + " is blacklisted.");
+		}
+
+		Referable.createAsFacadeNonStrict(this, getKeyElement()).setIdShort(idShort);
 	}
 
 	public void setCategory(String category) {
@@ -109,13 +145,13 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 		Referable.createAsFacade(this, getKeyElement()).setParent(obj);
 	}
 
-	public void setQualifier(Collection<IConstraint> qualifiers) {
-		Qualifiable.createAsFacade(this).setQualifier(qualifiers);
+	public void setQualifiers(Collection<IConstraint> qualifiers) {
+		Qualifiable.createAsFacade(this).setQualifiers(qualifiers);
 	}
 
 	@Override
-	public Collection<IConstraint> getQualifier() {
-		return Qualifiable.createAsFacade(this).getQualifier();
+	public Collection<IConstraint> getQualifiers() {
+		return Qualifiable.createAsFacade(this).getQualifiers();
 	}
 
 	@Override
@@ -123,8 +159,8 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 		return HasSemantics.createAsFacade(this).getSemanticId();
 	}
 
-	public void setSemanticID(IReference ref) {
-		HasSemantics.createAsFacade(this).setSemanticID(ref);
+	public void setSemanticId(IReference ref) {
+		HasSemantics.createAsFacade(this).setSemanticId(ref);
 	}
 
 	@Override
@@ -145,5 +181,22 @@ public class SubmodelElement extends VABModelMap<Object> implements ISubmodelEle
 	@Override
 	public IReference getReference() {
 		return Referable.createAsFacade(this, getKeyElement()).getReference();
+	}
+	
+	@Override
+	public Object getValue() {
+		throw new UnsupportedOperationException("getValue is only possible in specific Element");
+	}
+	
+	@Override
+	public void setValue(Object value) {
+		throw new UnsupportedOperationException("setValue is only possible in specific Element");
+	}
+
+	public SubmodelElement getLocalCopy() {
+		// Return a shallow copy
+		SubmodelElement copy = new SubmodelElement();
+		copy.putAll(this);
+		return copy;
 	}
 }

@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.regression.xml;
 
 import static org.junit.Assert.assertTrue;
@@ -10,7 +19,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.basyx.components.configuration.BaSyxConfiguration;
 import org.eclipse.basyx.components.xml.XMLAASBundleFactory;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.support.bundle.AASBundle;
 import org.junit.Test;
 import org.xml.sax.SAXException;
@@ -51,11 +60,11 @@ public class TestXMLAASBundleFactory {
 		AASBundle minimalAASBundle = minimalBundleOptional.get();
 
 		// Check full AAS
-		Set<ISubModel> fullAASSM = fullAASBundle.getSubmodels();
+		Set<ISubmodel> fullAASSM = fullAASBundle.getSubmodels();
 		assertTrue(fullAASSM.stream().anyMatch(s -> s.getIdentification().getId().equals("http://www.zvei.de/demo/submodel/12345679")));
 
 		// Check minimal AAS
-		Set<ISubModel> minimalAASSM = minimalAASBundle.getSubmodels();
+		Set<ISubmodel> minimalAASSM = minimalAASBundle.getSubmodels();
 		assertTrue(minimalAASSM.isEmpty());
 	}
 }

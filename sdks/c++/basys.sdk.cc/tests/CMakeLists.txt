@@ -24,8 +24,8 @@ diagnostics_print(tests_main)
 
 add_subdirectory(regression/util)
 add_subdirectory(regression/vab)
-add_subdirectory(regression/aas)
 add_subdirectory(regression/submodel)
+add_subdirectory(regression/controlcomponent)
 
 ### Integration tests ###
 

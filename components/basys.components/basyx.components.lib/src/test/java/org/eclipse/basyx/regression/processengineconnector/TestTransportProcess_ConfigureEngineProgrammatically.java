@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.regression.processengineconnector;
 
 import java.io.File;
@@ -22,7 +31,7 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.AASHTTPServerResource;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -92,7 +101,7 @@ public class TestTransportProcess_ConfigureEngineProgrammatically {
 		
 		// register the aas
 		registry.register(ccDescriptor);
-		manager = new ConnectedAssetAdministrationShellManager(registry, new HTTPConnectorProvider());
+		manager = new ConnectedAssetAdministrationShellManager(registry, new HTTPConnectorFactory());
 		
 		
 	}

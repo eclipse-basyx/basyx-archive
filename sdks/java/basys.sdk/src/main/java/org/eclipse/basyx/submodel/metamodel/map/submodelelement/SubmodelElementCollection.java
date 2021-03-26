@@ -1,18 +1,30 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.map.submodelelement;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
+import org.eclipse.basyx.submodel.metamodel.api.IElementContainer;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
-import org.eclipse.basyx.submodel.metamodel.facade.submodelelement.SubmodelElementFacadeFactory;
+import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
+import org.eclipse.basyx.submodel.metamodel.map.helper.ElementContainerHelper;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
@@ -27,7 +39,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operat
  * @author schnicke
  *
  */
-public class SubmodelElementCollection extends SubmodelElement implements ISubmodelElementCollection {
+public class SubmodelElementCollection extends SubmodelElement implements ISubmodelElementCollection, IElementContainer {
 	public static final String ORDERED = "ordered";
 	public static final String ALLOWDUPLICATES = "allowDuplicates";
 	public static final String MODELTYPE = "SubmodelElementCollection";
@@ -41,9 +53,24 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 		putAll(new ModelType(MODELTYPE));
 
 		// Put attributes
-		put(Property.VALUE, new ArrayList<>());
+		put(Property.VALUE, new HashMap<>());
 		put(ORDERED, true);
 		put(ALLOWDUPLICATES, true);
+	}
+	
+	/**
+	 * Constructor with only mandatory attribute
+	 * @param idShort
+	 */
+	public SubmodelElementCollection(String idShort) {
+		super(idShort);
+		// Add model type
+		putAll(new ModelType(MODELTYPE));
+
+		// Put attributes
+		setValue(new ArrayList<>());
+		setOrdered(true);
+		setAllowDuplicates(true);
 	}
 
 	/**
@@ -63,7 +90,7 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 		putAll(new ModelType(MODELTYPE));
 		
 		// Put attributes
-		put(Property.VALUE, value);
+		put(Property.VALUE, SubmodelElementMapCollectionConverter.convertCollectionToIDMap(value));
 		put(ORDERED, ordered);
 		put(ALLOWDUPLICATES, allowDuplicates);
 	}
@@ -75,9 +102,24 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	 * @return a SubmodelElementCollection object, that behaves like a facade for the given map
 	 */
 	public static SubmodelElementCollection createAsFacade(Map<String, Object> obj) {
-		SubmodelElementCollection ret = new SubmodelElementCollection();
-		ret.setMap(obj);
-		return ret;
+		if (obj == null) {
+			return null;
+		}
+		
+		if (!isValid(obj)) {
+			throw new MetamodelConstructionException(SubmodelElementCollection.class, obj);
+		}
+		
+		return SubmodelElementMapCollectionConverter.mapToSmECollection(obj);
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	public static boolean isValid(Map<String, Object> obj) {
+		return SubmodelElement.isValid(obj);
 	}
 	
 	/**
@@ -86,8 +128,8 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	public static boolean isSubmodelElementCollection(Map<String, Object> map) {
 		String modelType = ModelType.createAsFacade(map).getName();
 		// Either model type is set or the element type specific attributes are contained (fallback)
-		return MODELTYPE.equals(modelType)
-				|| (map.containsKey(Property.VALUE) && map.containsKey(ORDERED) && map.containsKey(ALLOWDUPLICATES));
+		return MODELTYPE.equals(modelType) || (modelType == null
+				&& (map.containsKey(Property.VALUE) && map.containsKey(ORDERED) && map.containsKey(ALLOWDUPLICATES)));
 	}
 
 	/**
@@ -96,11 +138,12 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	 * @param elem
 	 */
 	@SuppressWarnings("unchecked")
-	public void addElement(ISubmodelElement elem) {
+	@Override
+	public void addSubmodelElement(ISubmodelElement elem) {
 		if (elem instanceof SubmodelElement) {
 			((SubmodelElement) elem).setParent(getReference());
 		}
-		((List<Object>) get(Property.VALUE)).add(elem);
+		((Map<String, ISubmodelElement>) get(Property.VALUE)).put(elem.getIdShort(), elem);
 	}
 
 	@Override
@@ -129,20 +172,14 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 		return Referable.createAsFacade(this, getKeyElement()).getDescription();
 	}
 
-	public void setValue(Collection<ISubmodelElement> value) {
-		put(Property.VALUE, value);
+	@Override
+	public void setValue(Object value) {
+		put(Property.VALUE, SubmodelElementMapCollectionConverter.convertCollectionToIDMap(value));
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Collection<ISubmodelElement> getValue() {
-		Collection<ISubmodelElement> ret = new ArrayList<>();
-		Collection<Object> smElems = (ArrayList<Object>) get(Property.VALUE);
-		for(Object smElemO: smElems) {
-			Map<String, Object> smElem = (Map<String, Object>) smElemO;
-			ret.add(SubmodelElementFacadeFactory.createSubmodelElement(smElem));
-		}
-		return ret;
+		return Collections.unmodifiableList(new ArrayList<>((getSubmodelElements()).values()));
 	}
 
 	public void setOrdered(boolean value) {
@@ -164,38 +201,31 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	}
 
 	public void setElements(Map<String, ISubmodelElement> value) {
-		put(Property.VALUE, value.values());
-	}
-
-	public void setElements(Collection<ISubmodelElement> value) {
 		put(Property.VALUE, value);
 	}
 
-	@Override
+	public void setElements(Collection<ISubmodelElement> value) {
+		put(Property.VALUE, SubmodelElementMapCollectionConverter.convertCollectionToIDMap(value));
+	}
+
 	@SuppressWarnings("unchecked")
+	@Override
 	public Map<String, ISubmodelElement> getSubmodelElements() {
-		Map<String, ISubmodelElement> ret = new HashMap<>();
-		Collection<Object> smElems = (Collection<Object>) get(Property.VALUE);
-		for(Object smElemO: smElems) {
-			Map<String, Object> smElem = (Map<String, Object>) smElemO;
-			ret.put((String) smElem.get(Referable.IDSHORT), SubmodelElementFacadeFactory.createSubmodelElement(smElem));
-		}
-		return ret;
+		return (Map<String, ISubmodelElement>) get(Property.VALUE);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, IProperty> getProperties() {
 		Map<String, IProperty> ret = new HashMap<>();
-		Collection<Object> smElems = (Collection<Object>) get(Property.VALUE);
-		for (Object smElemO : smElems) {
-			Map<String, Object> smElem = (Map<String, Object>) smElemO;
-			if (Property.isProperty(smElem)) {
-				String idShort = Referable.createAsFacade(smElem, KeyElements.DATAELEMENT).getIdShort();
-				IProperty dataElement = (IProperty) SubmodelElementFacadeFactory.createSubmodelElement(smElem);
-				ret.put(idShort, dataElement);
+		Map<String, ISubmodelElement> smElems = (Map<String, ISubmodelElement>) get(Property.VALUE);
+		
+		for(ISubmodelElement smElement: smElems.values()) {
+			if (Property.isProperty((Map<String, Object>) smElement)) {
+				ret.put(smElement.getIdShort(), (IProperty) smElement);
 			}
 		}
+
 		return ret;
 	}
 
@@ -203,19 +233,56 @@ public class SubmodelElementCollection extends SubmodelElement implements ISubmo
 	@Override
 	public Map<String, IOperation> getOperations() {
 		Map<String, IOperation> ret = new HashMap<>();
-		Collection<Object> smElems = (Collection<Object>) get(Property.VALUE);
-		for (Object smElemO : smElems) {
-			Map<String, Object> smElem = (Map<String, Object>) smElemO;
-			if (Operation.isOperation(smElem)) {
-				String idShort = Referable.createAsFacade(smElem, KeyElements.OPERATION).getIdShort();
-				ret.put(idShort, Operation.createAsFacade(smElem));
+		Map<String, ISubmodelElement> smElems = (Map<String, ISubmodelElement>) get(Property.VALUE);
+		
+		for(ISubmodelElement smElement: smElems.values()) {
+			if (Operation.isOperation(smElement)) {
+				ret.put(smElement.getIdShort(), (IOperation) smElement);
 			}
 		}
+
 		return ret;
+	}
+
+	/**
+	 * Retrieves an element from element collection
+	 * @param id
+	 * @return retrieved element
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public ISubmodelElement getSubmodelElement(String id) {
+		Map<String, ISubmodelElement> submodelElems = (Map<String, ISubmodelElement>) get(Property.VALUE);
+		return ElementContainerHelper.getElementById(submodelElems, id);
+	}
+
+	/**
+	 * Deletes an element from element collection
+	 * @param id
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public void deleteSubmodelElement(String id) {
+		Map<String, ISubmodelElement> submodelElems = (Map<String, ISubmodelElement>) get(Property.VALUE);
+		ElementContainerHelper.removeElementById(submodelElems, id);
 	}
 	
 	@Override
 	protected KeyElements getKeyElement() {
 		return KeyElements.SUBMODELELEMENTCOLLECTION;
+	}
+
+	@Override
+	public SubmodelElementCollection getLocalCopy() {
+		// Create a shallow copy
+		SubmodelElementCollection copy = new SubmodelElementCollection();
+		copy.putAll(this);
+		// Then clone all submodelElements
+		Collection<ISubmodelElement> value = getValue();
+		Collection<ISubmodelElement> clonedValue = new ArrayList<>();
+		value.forEach(element -> clonedValue.add(element.getLocalCopy()));
+		// And return this copy with the cloned values
+		copy.setValue(clonedValue);
+		return copy;
 	}
 }

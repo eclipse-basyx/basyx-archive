@@ -1,17 +1,36 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.operation;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
+import org.eclipse.basyx.submodel.restapi.operation.InvocationRequest;
+import org.eclipse.basyx.submodel.restapi.operation.InvocationResponse;
+import org.eclipse.basyx.vab.exception.provider.WrongNumberOfParametersException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
 /**
@@ -21,6 +40,9 @@ import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
  *
  */
 public class ConnectedOperation extends ConnectedSubmodelElement implements IOperation {
+	// Default timeout for asynchronous operation calls
+	public static final int DEFAULT_ASYNC_TIMEOUT = Operation.DEFAULT_ASYNC_TIMEOUT;
+
 	public ConnectedOperation(VABElementProxy proxy) {
 		super(proxy);
 	}
@@ -41,28 +63,105 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 	}
 
 	/**
-	 * Invoke a remote operation TODO C# includes idShort
+	 * Invoke a remote operation
 	 */
+	@Override
+	public Object invoke(Object... params) {
+		// Wrap simple params
+		SubmodelElement[] wrapper = createElementWrapper(params);
+
+		// Invoke with submodel elements
+		SubmodelElement[] result = invoke(wrapper);
+
+		// Unwrap result wrapper
+		return unwrapResult(result);
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object invoke(Object... params) throws Exception {
+	public SubmodelElement[] invoke(SubmodelElement... elems) {
+		// Create request
+		InvocationRequest request = createInvocationRequest(DEFAULT_ASYNC_TIMEOUT, elems);
 
-		// Wrap parameter with valuetype information
+		// Invoke the operation
+		Object responseObj = getProxy().invokeOperation(Operation.INVOKE, request);
+		InvocationResponse response = InvocationResponse.createAsFacade((Map<String, Object>) responseObj);
+
+		// Extract the output elements
+		Collection<IOperationVariable> outputArguments = response.getOutputArguments();
+		List<ISubmodelElement> elements = outputArguments.stream().map(IOperationVariable::getValue)
+				.collect(Collectors.toList());
+
+		// Cast them to an array
+		SubmodelElement[] result = new SubmodelElement[elements.size()];
+		elements.toArray(result);
+		return result;
+	}
+
+	private InvocationRequest createInvocationRequest(int timeout, SubmodelElement... elems) {
+		// Wrap parameters in operation variables
+		Collection<IOperationVariable> inputArguments = Arrays.asList(elems).stream().map(OperationVariable::new)
+				.collect(Collectors.toList());
+		// Generate random request id
+		String requestId = UUID.randomUUID().toString();
+
+		// Create invokation request
+		return new InvocationRequest(requestId, new ArrayList<>(), inputArguments, timeout);
+	}
+
+	private SubmodelElement[] createElementWrapper(Object... params) {
+		Collection<IOperationVariable> inputVariables = getInputVariables();
+		if (inputVariables.size() != params.length) {
+			throw new WrongNumberOfParametersException(getIdShort(), inputVariables, params);
+		}
+
+		// Copy parameter values into SubmodelElements according to InputVariables
+		SubmodelElement[] ret = new SubmodelElement[params.length];
+		Iterator<IOperationVariable> iterator = inputVariables.iterator();
 		int i = 0;
-		for (Object param : params) {
-			HashMap<String, Object> valueWrapper = new HashMap<>();
-			valueWrapper.put(Property.VALUETYPE, PropertyValueTypeDefHelper.getTypeWrapperFromObject(param));
-			valueWrapper.put(Property.VALUE, param);
-
-			params[i] = valueWrapper;
+		while (iterator.hasNext()) {
+			IOperationVariable matchedInput = iterator.next();
+			ISubmodelElement inputElement = matchedInput.getValue();
+			SubmodelElement copy = inputElement.getLocalCopy();
+			copy.setValue(params[i]);
+			ret[i] = copy;
 			i++;
 		}
 
-		// Invoke operation passing an empty string, since the used proxy already points
-		// to the operation
-		Object result = getProxy().invokeOperation("", params);
+		return ret;
+	}
 
-		// Unwrap result value
+	@Override
+	public ConnectedAsyncInvocation invokeAsync(Object... params) {
+		SubmodelElement[] smElements = createElementWrapper(params);
+		InvocationRequest request = createInvocationRequest(DEFAULT_ASYNC_TIMEOUT, smElements);
+		return new ConnectedAsyncInvocation(getProxy(), getIdShort(), request);
+	}
+	
+	@Override
+	public ConnectedAsyncInvocation invokeAsyncWithTimeout(int timeout, Object... params) {
+		SubmodelElement[] smElements = createElementWrapper(params);
+		InvocationRequest request = createInvocationRequest(timeout, smElements);
+		return new ConnectedAsyncInvocation(getProxy(), getIdShort(), request);
+	}
+
+	@Override
+	protected KeyElements getKeyElement() {
+		return KeyElements.OPERATION;
+	}
+	
+	@Override
+	public Object getValue() {
+		throw new UnsupportedOperationException("An Operation has no value");
+	}
+
+	@Override
+	public void setValue(Object value) {
+		throw new UnsupportedOperationException("An Operation has no value");
+	}
+	
+	@SuppressWarnings("unchecked")
+	private Object unwrapResult(Object result) {
 		if (result instanceof Collection<?>) {
 			Collection<Object> coll = (Collection<Object>) result;
 			if (coll.isEmpty()) {
@@ -72,16 +171,20 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 			if (resultWrapper instanceof Map<?, ?>) {
 				Map<String, Object> map = (Map<String, Object>) resultWrapper;
 				if (map.get(Referable.IDSHORT).equals("Response") && map.get(Property.VALUE) != null) {
-					result = map.get(Property.VALUE);
+					return map.get(Property.VALUE);
 				}
 			}
+		} else if (result instanceof SubmodelElement[]) {
+			SubmodelElement[] arr = (SubmodelElement[]) result;
+			if (arr.length > 0 && arr[0] instanceof Map<?, ?>) {
+				return arr[0].getValue();
+			}
 		}
-
 		return result;
 	}
-	
+
 	@Override
-	protected KeyElements getKeyElement() {
-		return KeyElements.OPERATION;
+	public Operation getLocalCopy() {
+		return Operation.createAsFacade(getElem()).getLocalCopy();
 	}
 }

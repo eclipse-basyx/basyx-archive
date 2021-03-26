@@ -41,6 +41,16 @@ bool Key::operator!=(const Key & other) const
 		&& this->value != other.value;
 };
 
+bool Key::isModelKey() const noexcept
+{
+	return this->idType != basyx::submodel::KeyType::IdShort;
+};
+
+bool Key::isGlobalKey() const noexcept
+{
+	return this->type != basyx::submodel::KeyElements::GlobalReference;
+};
+
 }
 }
 }

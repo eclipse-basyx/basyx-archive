@@ -1,5 +1,5 @@
-#ifndef BASYX_MAP_V2_SDK_CONCEPTDESCRIPTION_H
-#define BASYX_MAP_V2_SDK_CONCEPTDESCRIPTION_H
+#ifndef BASYX_SUBMODEL_MAP_V2_PARTS_CONCEPTDESCRIPTION_H
+#define BASYX_SUBMODEL_MAP_V2_PARTS_CONCEPTDESCRIPTION_H
 
 #include <BaSyx/vab/ElementMap.h>
 #include <BaSyx/submodel/api_v2/parts/IConceptDescription.h>
@@ -40,9 +40,11 @@ public:
   //not inherited
   void addIsCaseOf(std::unique_ptr<Reference> reference);
   void addEmbeddedDataSpecification(std::unique_ptr<DataSpecification> data_specification);
+
+  virtual KeyElements getKeyElementType() const override { return KeyElements::ConceptDescription; };
 };
 
 }
 }
 }
-#endif //BASYX_MAP_V2_SDK_CONCEPTDESCRIPTION_H
+#endif /* BASYX_SUBMODEL_MAP_V2_PARTS_CONCEPTDESCRIPTION_H */

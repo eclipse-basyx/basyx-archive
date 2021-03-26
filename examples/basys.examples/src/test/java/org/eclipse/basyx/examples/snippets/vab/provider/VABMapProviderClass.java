@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.examples.snippets.vab.provider;
 
 import static org.junit.Assert.assertEquals;
@@ -48,13 +57,13 @@ public class VABMapProviderClass {
 		IModelProvider provider = new VABMapProvider(rootElement);
 
 		// Child elements can now be accessed with a path that is mapped to actual data structure
-		assertEquals("myElement", provider.getModelPropertyValue("/name"));
-		assertEquals("boolean", provider.getModelPropertyValue("/data/type"));
-		assertEquals(true, provider.getModelPropertyValue("/data/value"));
+		assertEquals("myElement", provider.getValue("/name"));
+		assertEquals("boolean", provider.getValue("/data/type"));
+		assertEquals(true, provider.getValue("/data/value"));
 
 		// Future modifications are now applied using the IModelProvider interface.
-		provider.setModelPropertyValue("/name", "yourElement");
-		assertEquals("yourElement", provider.getModelPropertyValue("/name"));
+		provider.setValue("/name", "yourElement");
+		assertEquals("yourElement", provider.getValue("/name"));
 
 		// The creation of nested elements within an existing provider is also possible
 		// HashMaps and Collections are supported for this purpose
@@ -64,6 +73,6 @@ public class VABMapProviderClass {
 		provider.createValue("/description", description);
 
 		// The path is again mapped to the HashMap structure
-		assertEquals("This is a generic VAB element", provider.getModelPropertyValue("/description/EN"));
+		assertEquals("This is a generic VAB element", provider.getValue("/description/EN"));
 	}
 }

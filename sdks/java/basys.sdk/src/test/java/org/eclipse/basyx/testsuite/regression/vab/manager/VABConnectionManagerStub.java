@@ -1,9 +1,18 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.vab.manager;
 
 import org.eclipse.basyx.testsuite.regression.vab.gateway.ConnectorProviderStub;
-import org.eclipse.basyx.vab.directory.memory.InMemoryDirectory;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
+import org.eclipse.basyx.vab.registry.memory.VABInMemoryRegistry;
 
 /**
  * A VABConnectionManager stub which automatically creates the directory entries
@@ -16,7 +25,7 @@ public class VABConnectionManagerStub extends VABConnectionManager {
 
 	public VABConnectionManagerStub() {
 		// Create Stub with default DirectoryStub/ConnectorProviderStub
-		super(new InMemoryDirectory(), new ConnectorProviderStub());
+		super(new VABInMemoryRegistry(), new ConnectorProviderStub());
 	}
 
 	/**
@@ -31,12 +40,12 @@ public class VABConnectionManagerStub extends VABConnectionManager {
 		getDirectoryService().addMapping("", "");
 	}
 
-	private InMemoryDirectory getDirectoryService() {
-		return (InMemoryDirectory) directoryService;
+	private VABInMemoryRegistry getDirectoryService() {
+		return (VABInMemoryRegistry) directoryService;
 	}
 
 	private ConnectorProviderStub getConnectorProvider() {
-		return (ConnectorProviderStub) connectorProvider;
+		return (ConnectorProviderStub) connectorFactory;
 	}
 
 	/**

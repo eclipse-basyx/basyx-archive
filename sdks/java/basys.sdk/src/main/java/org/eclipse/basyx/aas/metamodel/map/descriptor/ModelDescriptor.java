@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.aas.metamodel.map.descriptor;
 
 import java.util.ArrayList;
@@ -25,6 +34,7 @@ import org.eclipse.basyx.vab.model.VABModelMap;
  *
  */
 public abstract class ModelDescriptor extends VABModelMap<Object> {
+	public static final String ENDPOINTS = "endpoints";
 
 	protected ModelDescriptor() {
 		putAll(new ModelType(getModelType()));
@@ -56,7 +66,7 @@ public abstract class ModelDescriptor extends VABModelMap<Object> {
 		HashMap<String, String> endpointWrapper = new HashMap<>();
 		endpointWrapper.put(AssetAdministrationShell.TYPE, "http");
 		endpointWrapper.put(AssetAdministrationShell.ADDRESS, httpEndpoint);
-		put(AssetAdministrationShell.ENDPOINTS, Arrays.asList(endpointWrapper));
+		put(ENDPOINTS, Arrays.asList(endpointWrapper));
 	}
 
 	/**
@@ -78,7 +88,7 @@ public abstract class ModelDescriptor extends VABModelMap<Object> {
 	 */
 	@SuppressWarnings("unchecked")
 	public String getFirstEndpoint() {
-		Object e = get(AssetAdministrationShell.ENDPOINTS);
+		Object e = get(ENDPOINTS);
 		// Extract String from endpoint for set or list representations of the endpoint wrappers
 		if (e instanceof Collection<?>) {
 			Collection<Map<?, ?>> endpoints = (Collection<Map<?, ?>>) e;
@@ -98,7 +108,7 @@ public abstract class ModelDescriptor extends VABModelMap<Object> {
 	 */
 	@SuppressWarnings("unchecked")
 	public Collection<Map<String, Object>> getEndpoints() {
-		Object endpoints = get(AssetAdministrationShell.ENDPOINTS);
+		Object endpoints = get(ENDPOINTS);
 		// Extract String from endpoint for set or list representations of the endpoint wrappers
 		if (endpoints instanceof Collection<?>) {
 			return (Collection<Map<String, Object>>) endpoints;
@@ -117,7 +127,7 @@ public abstract class ModelDescriptor extends VABModelMap<Object> {
 			throw new MalformedRequestException(getModelType() + " is missing idShort entry");
 		if (!map.containsKey(Identifiable.IDENTIFICATION) || !(map.get(Identifiable.IDENTIFICATION) instanceof Map<?, ?>))
 			throw new MalformedRequestException(getModelType() + " is missing identification entry");
-		if (!map.containsKey(AssetAdministrationShell.ENDPOINTS) || !(map.get(AssetAdministrationShell.ENDPOINTS) instanceof Collection<?>))
+		if (!map.containsKey(ENDPOINTS) || !(map.get(ENDPOINTS) instanceof Collection<?>))
 			throw new MalformedRequestException(getModelType() + " is missing endpoints entry");
 	}
 

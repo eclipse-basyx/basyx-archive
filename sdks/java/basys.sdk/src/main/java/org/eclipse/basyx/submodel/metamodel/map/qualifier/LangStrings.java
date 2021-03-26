@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.map.qualifier;
 
 import java.util.Collection;
@@ -64,6 +73,17 @@ public class LangStrings extends HashSet<LangString> {
 			ret.add(langString);
 		}
 		return ret;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static boolean isLangStrings(Object value) {
+		if(!(value instanceof Collection<?>)) {
+			return false;
+		}
+		
+		Collection<Map<String, Object>> collection = (Collection<Map<String, Object>>) value;
+		
+		return collection.stream().allMatch(LangString::isLangString);
 	}
 
 	/**

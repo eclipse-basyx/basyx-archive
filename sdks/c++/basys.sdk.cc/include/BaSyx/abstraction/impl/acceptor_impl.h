@@ -1,12 +1,5 @@
-/*
- * Socket.h
- *
- *  Created on: 06.11.2018
- *      Author: schnicke
- */
-
-#ifndef ABSTRACTION_ACCEPTOR_IMPL_H_
-#define ABSTRACTION_ACCEPTOR_IMPL_H_
+#ifndef BASYX_ABSTRACTION_IMPL_ACCEPTOR_IMPL_H
+#define BASYX_ABSTRACTION_IMPL_ACCEPTOR_IMPL_H
 
 #include <cstdlib>
 
@@ -18,34 +11,34 @@
 #include <BaSyx/log/log.h>
 
 namespace basyx {
-	namespace net {
-		namespace impl {
+namespace net {
+namespace impl {
 
-			// Forward declarations
-			class socket_impl;
+// Forward declarations
+class socket_impl;
 
-			class acceptor_impl 
-			{
-			public:
-				acceptor_impl()
-					: log{ "AcceptorImpl" } {};
-				~acceptor_impl();
-			public:
-				int listen(const std::string & port);
+class acceptor_impl {
+public:
+    acceptor_impl()
+        : log { "AcceptorImpl" } {};
+    ~acceptor_impl();
 
-				std::unique_ptr<socket_impl> accept();
-				int shutdown(enum SocketShutdownDir how);
-				int close();
+public:
+    int listen(const std::string& port);
 
-				int getErrorCode();
-			private:
-				native_socket_type socketDesc = 0;
-				basyx::log log;
-			};
+    std::unique_ptr<socket_impl> accept();
+    int shutdown(enum SocketShutdownDir how);
+    int close();
 
+    int getErrorCode();
 
-		}
-	}
+private:
+    native_socket_type socketDesc = 0;
+    basyx::log log;
+};
+
+}
+}
 }
 
-#endif /* ABSTRACTION_ACCEPTOR_IMPL_H_ */
+#endif /* BASYX_ABSTRACTION_IMPL_ACCEPTOR_IMPL_H */

@@ -32,14 +32,14 @@ Reference::Reference(const IReference & other)
 {
 };
 
-Reference Reference::FromIdentifiable(KeyElements keyElementType, const IIdentifiable & identifiable)
-{
-	return Reference(
-		Key(keyElementType,
-			true,
-			static_cast<KeyType>(identifiable.getIdentification().getIdType()),
-			identifiable.getIdentification().getId()) );
-};
+//Reference Reference::FromIdentifiable(KeyElements keyElementType, const IIdentifiable & identifiable)
+//{
+//	return Reference(
+//		Key(keyElementType,
+//			true,
+//			static_cast<KeyType>(identifiable.getIdentification().getIdType()),
+//			identifiable.getIdentification().getId()) );
+//};
 
 std::vector<Key> Reference::getKeys() const
 {

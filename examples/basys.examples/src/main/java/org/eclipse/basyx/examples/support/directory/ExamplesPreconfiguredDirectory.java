@@ -1,6 +1,15 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.examples.support.directory;
 
-import org.eclipse.basyx.vab.directory.memory.InMemoryDirectory;
+import org.eclipse.basyx.vab.registry.memory.VABInMemoryRegistry;
 
 /**
  * Implement the examples directory service with pre-configured directory entries
@@ -8,7 +17,7 @@ import org.eclipse.basyx.vab.directory.memory.InMemoryDirectory;
  * @author kuhn
  *
  */
-public class ExamplesPreconfiguredDirectory extends InMemoryDirectory {
+public class ExamplesPreconfiguredDirectory extends VABInMemoryRegistry {
 
 	
 	/**
@@ -20,6 +29,6 @@ public class ExamplesPreconfiguredDirectory extends InMemoryDirectory {
 
 		// Define mappings
 		// - AAS server mapping
-		addMapping("AASServer", "http://localhost:8080/basys.examples/Components/BaSys/1.0/aasServer/");
+		addMapping("AASServer", "http://localhost:8080/basys.examples/Components/AasServer/");
 	}	
 }

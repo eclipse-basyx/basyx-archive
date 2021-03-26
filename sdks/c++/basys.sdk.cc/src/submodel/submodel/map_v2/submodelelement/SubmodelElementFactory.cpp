@@ -11,10 +11,12 @@ using namespace basyx::submodel;
 using namespace basyx::submodel::api;
 using namespace basyx::submodel::map;
 
+constexpr char SubmodelElementFactory::Path::Value[];
+
 std::unique_ptr<ISubmodelElement> SubmodelElementFactory::CreateProperty(const vab::ElementMap & elementMap)
 {
 	auto object = elementMap.getMap();
-	auto value = object.getProperty("value");
+	auto value = object.getProperty(Path::Value);
 	auto type = value.GetValueType();
 
 	switch (type)

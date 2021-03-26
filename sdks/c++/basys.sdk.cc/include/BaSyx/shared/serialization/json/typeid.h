@@ -1,5 +1,5 @@
-#ifndef BASYX_JSON_TYPEID_H
-#define BASYX_JSON_TYPEID_H
+#ifndef BASYX_SHARED_SERIALIZATION_JSON_TYPEID_H
+#define BASYX_SHARED_SERIALIZATION_JSON_TYPEID_H
 
 #include <string>
 
@@ -54,4 +54,4 @@ namespace serialization {
 template <typename T>
 constexpr char basyx::serialization::basysType<T>::string[];
 
-#endif /* BASYX_JSON_TYPEID_H */
+#endif /* BASYX_SHARED_SERIALIZATION_JSON_TYPEID_H */

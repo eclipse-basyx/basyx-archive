@@ -16,7 +16,10 @@ set_target_properties(${BASYX_ABSTRACTION_LIB_SUFFIX} PROPERTIES SOVERSION ${BAS
 set_target_properties(${BASYX_ABSTRACTION_LIB_SUFFIX} PROPERTIES PREFIX "${CMAKE_STATIC_LIBRARY_PREFIX}${PROJECT_SHORTNAME}")
 target_include_directories(${BASYX_ABSTRACTION_LIB_SUFFIX}
 INTERFACE ${CMAKE_INSTALL_PREFIX}/include
-       ${CMAKE_INSTALL_PREFIX}/include/${PROJECT_SHORTNAME})
+	PUBLIC 
+	    $<BUILD_INTERFACE:${BASYX_INCLUDE_DIR}>  
+		$<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>
+)
 
 ## basyx::thread sources ##
 
@@ -91,7 +94,15 @@ target_link_libraries(${BASYX_ABSTRACTION_LIB_SUFFIX}
 add_library(basyx::abstraction ALIAS ${BASYX_ABSTRACTION_LIB_SUFFIX})
 add_library(${PROJECT_SHORTNAME}::${BASYX_ABSTRACTION_LIB_SUFFIX} ALIAS ${BASYX_ABSTRACTION_LIB_SUFFIX})
 
-diagnostics_print(${BASYX_ABSTRACTION_LIB_SUFFIX})
+if(BASYX_IS_SUBMODULE)
+	set_target_properties(${BASYX_ABSTRACTION_LIB_SUFFIX} PROPERTIES FOLDER BaSyx)
+endif()
+
+if(BASYX_VERBOSE_CMAKE_OUTPUT)
+	diagnostics_print(${BASYX_ABSTRACTION_LIB_SUFFIX})
+endif()
+
+build_source_group(${BASYX_ABSTRACTION_LIB_SUFFIX})
 
 ###############################################
 ###           Install section               ###

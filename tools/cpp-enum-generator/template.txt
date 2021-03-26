@@ -3,6 +3,7 @@
 ; at the end of the file. i.e.: "$FILE_ENDING cpp". If $FILE_ENDING$ is not set, ".hpp" will be used.
 ; Other tags that can be used are:
 ; $ENUM_CLASS$  : Class name of enum, obtained from file name
+; $ENUM_CLASS_CAP$ : Class name of enum in uppercase
 ; $FIRST_ENUM$  : The first enum in the list of enums
 ; $MIDDLE_ENUM$ : All enums that are in between first and last enum.
 ; $LAST_ENUM$   : The last enum in the list of enums
@@ -11,8 +12,8 @@
 ;
 ;
 $CONSTANT$ NAMESPACE submodel
-#ifndef BASYX_SUBMODEL_ENUM_$ENUM_CLASS$_H
-#define BASYX_SUBMODEL_ENUM_$ENUM_CLASS$_H
+#ifndef BASYX_SUBMODEL_ENUMERATIONS_$ENUM_CLASS_CAP$_H
+#define BASYX_SUBMODEL_ENUMERATIONS_$ENUM_CLASS_CAP$_H
 
 #include <string>
 
@@ -36,7 +37,7 @@ public:
 }
 }
 
-#endif
+#endif /* BASYX_SUBMODEL_ENUMERATIONS_$ENUM_CLASS_CAP$_H */
 $FILE_ENDING$ h
 #include <BaSyx/$NAMESPACE$/enumerations/$ENUM_CLASS$.h>
 

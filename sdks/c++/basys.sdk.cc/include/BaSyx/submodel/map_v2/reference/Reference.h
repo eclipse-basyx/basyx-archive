@@ -15,9 +15,13 @@ class Reference :
 	public virtual vab::ElementMap
 {
 public:
-	struct Path	{
-		static constexpr char Keys[] = "keys";
-	};
+  struct Path {
+    static constexpr char IdType[] = "idType";
+    static constexpr char Type[] = "type";
+    static constexpr char Value[] = "value";
+    static constexpr char Local[] = "local";
+    static constexpr char Keys[] = "keys";
+  };
 public:
 	Reference();
 public:

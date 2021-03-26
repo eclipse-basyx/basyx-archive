@@ -1,8 +1,18 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.vab.coder.json.connector;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.UUID;
 
+import org.eclipse.basyx.submodel.restapi.operation.InvocationRequest;
 import org.eclipse.basyx.vab.coder.json.metaprotocol.IMetaProtocolHandler;
 import org.eclipse.basyx.vab.coder.json.metaprotocol.MetaprotocolHandler;
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
@@ -12,6 +22,8 @@ import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.protocol.api.IBaSyxConnector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -24,6 +36,9 @@ import org.eclipse.basyx.vab.protocol.api.IBaSyxConnector;
  */
 public class JSONConnector implements IModelProvider {
 
+	private static final Logger LOGGER_DEFAULT = LoggerFactory.getLogger(JSONConnector.class);
+	private static final Logger LOGGER_COMMUNICATION = LoggerFactory.getLogger(LOGGER_DEFAULT.getName() + ".MALFORMED");
+	
 	
 	/**
 	 * Reference to Connector backend
@@ -76,24 +91,34 @@ public class JSONConnector implements IModelProvider {
 	
 
 	@Override
-	public Object getModelPropertyValue(String path) throws ProviderException {
+	public Object getValue(String path) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 
 		// Get element from server
-		String message = provider.getModelPropertyValue(path);
+		String message = provider.getValue(path);
 
 		// De-serialize and verify
-		return metaProtocolHandler.deserialize(message);
+		try {
+			return metaProtocolHandler.deserialize(message);
+		} catch (ProviderException e) {
+			throw e;
+		} catch (RuntimeException e) {
+			String messageCorrelation = UUID.randomUUID().toString();
+			String msg = "Failed to deserialize request for '" + provider.getEndpointRepresentation(path) + "' (" + messageCorrelation + ")";
+			LOGGER_DEFAULT.warn(msg);
+			LOGGER_COMMUNICATION.warn(msg + ": " + message);
+			throw new ProviderException(msg, e);
+		}
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
+	public void setValue(String path, Object newValue) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 
 		// Serialize value Object
 		String jsonString = serializer.serialize(newValue);
 
-		String message = provider.setModelPropertyValue(path, jsonString);
+		String message = provider.setValue(path, jsonString);
 
 		// De-serialize and verify
 		metaProtocolHandler.deserialize(message);
@@ -140,12 +165,12 @@ public class JSONConnector implements IModelProvider {
 		VABPathTools.checkPathForNull(path);
 
 		// Serialize parameter
-		List<Object> params = new ArrayList<>();
-		for (Object o : parameter) {
-			params.add(o);
+		String jsonString;
+		if (parameter.length == 1 && parameter[0] instanceof InvocationRequest) {
+			jsonString = serializer.serialize(parameter[0]);
+		} else {
+			jsonString = serializer.serialize(Arrays.asList(parameter));
 		}
-
-		String jsonString = serializer.serialize(params);
 
 		String message = provider.invokeOperation(path, jsonString);
 

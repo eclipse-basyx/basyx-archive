@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.vab.gateway;
 
 import static org.junit.Assert.assertEquals;
@@ -5,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 import org.eclipse.basyx.testsuite.regression.vab.modelprovider.IModelProviderStub;
 import org.eclipse.basyx.vab.gateway.DelegatingModelProvider;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorFactory;
 import org.junit.Test;
 
 /**
@@ -31,7 +40,7 @@ public class TestDelegatingModelProvider {
 
 		// Create DelegatingModelProvider with a stub writing the address and returning
 		// the IModelProviderStub
-		DelegatingModelProvider provider = new DelegatingModelProvider(new IConnectorProvider() {
+		DelegatingModelProvider provider = new DelegatingModelProvider(new IConnectorFactory() {
 
 			@Override
 			public IModelProvider getConnector(String addr) {
@@ -41,7 +50,7 @@ public class TestDelegatingModelProvider {
 		});
 
 		// Get a value based on path
-		provider.getModelPropertyValue(basyx + "//" + rest);
+		provider.getValue(basyx + "//" + rest);
 
 		// Assert that correct address was given to IConnectorProvider
 		assertEquals(address, basyx);

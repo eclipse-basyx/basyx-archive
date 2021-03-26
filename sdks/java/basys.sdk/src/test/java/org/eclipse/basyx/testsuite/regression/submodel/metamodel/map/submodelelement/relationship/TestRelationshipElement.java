@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.submodelelement.relationship;
 
 import static org.junit.Assert.assertEquals;
@@ -8,6 +17,7 @@ import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElementValue;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -47,6 +57,13 @@ public class TestRelationshipElement {
 		Reference newSecond = new Reference(new Key(KeyElements.CAPABILITY, false, "newFirst", IdentifierType.IRI));
 		relationshipElement.setSecond(newSecond);
 		assertEquals(newSecond, relationshipElement.getSecond());
-	} 
+	}
+	
+	@Test
+	public void testGetValue() {
+		RelationshipElementValue value = relationshipElement.getValue();
+		assertEquals(FIRST.getKeys().get(0).getValue(), value.getFirst().getKeys().get(0).getValue());
+		assertEquals(SECOND.getKeys().get(0).getValue(), value.getSecond().getKeys().get(0).getValue());
+	}
 	
 }

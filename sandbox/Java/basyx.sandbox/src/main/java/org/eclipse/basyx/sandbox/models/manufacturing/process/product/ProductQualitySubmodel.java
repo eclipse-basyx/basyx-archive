@@ -36,7 +36,7 @@ public class ProductQualitySubmodel extends SubModel {
 		this.setIdShort(id);
 		
 		// Add quality data property
-		getDataElements().put("qualityData", new Property(qualityData));
+		getProperties().put("qualityData", new Property(qualityData));
 		
 		// Add access operations for quality data
 		// - Add a quality data entry

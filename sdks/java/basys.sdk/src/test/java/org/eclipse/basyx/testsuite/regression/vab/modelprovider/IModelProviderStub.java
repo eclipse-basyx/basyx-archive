@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.vab.modelprovider;
 
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
@@ -9,14 +18,14 @@ public class IModelProviderStub implements IModelProvider {
 	private Object value;
 
 	@Override
-	public Object getModelPropertyValue(String path) {
+	public Object getValue(String path) {
 		value = null;
 		this.path = path;
 		return null;
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
+	public void setValue(String path, Object newValue) throws ProviderException {
 		value = newValue;
 		this.path = path;
 	}

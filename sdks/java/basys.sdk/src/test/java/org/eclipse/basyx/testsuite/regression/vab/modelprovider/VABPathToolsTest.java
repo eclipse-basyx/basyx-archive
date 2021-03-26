@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.vab.modelprovider;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -169,15 +178,63 @@ public class VABPathToolsTest {
 
 	@Test
 	public void testIsOperationPath() {
-		String[] positive = { "operations", "operations/", "/operations", "operations/", "operations/test/",
-				"operations/test", "/operations/test", "operations/test/" };
-		String[] negative = { "", "/operationX/", "/myOperation/", "/operationsFake/", "/operationsFake/operationX/" };
+		String[] positive = { "submodelElements/id/invoke", "submodelElements/id/invoke/",
+				"operations/id/invoke", "operations/id/invoke/", "operations/test", "elem/operations/id" };
+		String[] negative = { "", "/submodelElementsX/", "/myoperations/", "/submodelElementsFake/",
+				"/submodelElementsFake/operationX/", "submodelElements/id/" };
 		for (String test : positive) {
-			assertTrue(test, VABPathTools.isOperationPath(test));
+			assertTrue(test, VABPathTools.isOperationInvokationPath(test));
 		}
 		for (String test : negative) {
-			assertFalse(test, VABPathTools.isOperationPath(test));
+			assertFalse(test, VABPathTools.isOperationInvokationPath(test));
 		}
-		assertFalse(VABPathTools.isOperationPath(null));
+		assertFalse(VABPathTools.isOperationInvokationPath(null));
+	}
+	
+	@Test
+	public void testStripInvokeFromPath() {
+		assertEquals("id", VABPathTools.stripInvokeFromPath("id/invoke"));
+		assertEquals("", VABPathTools.stripInvokeFromPath("invoke"));
+		assertEquals("", VABPathTools.stripInvokeFromPath("/invoke"));
+		assertEquals("id/value", VABPathTools.stripInvokeFromPath("id/value"));
+		assertEquals("", VABPathTools.stripInvokeFromPath(""));
+	}
+	
+	@Test
+	public void testGetPathFromURL() {
+		
+		String[] urls = {"http://localhost:8080/test/elem.aasx", "http://localhost/test/elem.aasx",
+				"basyx://127.0.0.1:4000//http://localhost:8080/test/elem.aasx", "/test/elem.aasx", "test/elem.aasx"};
+		
+		for(String url: urls) {
+			assertEquals("/test/elem.aasx", VABPathTools.getPathFromURL(url));
+		}
+	}
+
+	@Test
+	public void testHarmonizePathWithSuffix() {
+		String expected = "http://localhost:8080/server/subserver/suffix";
+		String[] toTest = { expected, 
+							"http://localhost:8080/server/subserver/suffix/", 
+							"http://localhost:8080/server/subserver/", 
+				"http://localhost:8080/server/subserver", };
+
+		for (String t : toTest) {
+			String harmonized = VABPathTools.harmonizePathWithSuffix(t, "suffix");
+			assertEquals(expected, harmonized);
+
+			// Check also for suffixes with a leading slash
+			String harmonizedLeadingSlash = VABPathTools.harmonizePathWithSuffix(t, "/suffix");
+			assertEquals(expected, harmonizedLeadingSlash);
+
+			// Check also for suffixes with a ending slash
+			String harmonizedEndingSlash = VABPathTools.harmonizePathWithSuffix(t, "suffix/");
+			assertEquals(expected, harmonizedEndingSlash);
+		}
+
+		// Check for edge case where a path is ending with the suffix, but not on its
+		// own
+		String edgeCaseExpected = "http://localhost:8080/server/subserversuffix/suffix";
+		assertEquals(edgeCaseExpected, VABPathTools.harmonizePathWithSuffix("http://localhost:8080/server/subserversuffix/", "suffix"));
 	}
 }

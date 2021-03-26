@@ -1,9 +1,18 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.vab.manager;
 
-import org.eclipse.basyx.vab.directory.api.IVABDirectoryService;
 import org.eclipse.basyx.vab.factory.java.ModelProxyFactory;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
-import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorFactory;
+import org.eclipse.basyx.vab.registry.api.IVABRegistryService;
 
 
 
@@ -18,13 +27,13 @@ public class VABConnectionManager {
 	/**
 	 * Directory service reference
 	 */
-	protected IVABDirectoryService directoryService = null;
+	protected IVABRegistryService directoryService = null;
 
 	
 	/**
 	 * Store connection providers
 	 */
-	protected IConnectorProvider connectorProvider = null;
+	protected IConnectorFactory connectorFactory = null;
 	
 	/**
 	 * Factory for creating proxies for addresses with multiple endpoints
@@ -38,12 +47,12 @@ public class VABConnectionManager {
 	 * @param providerProvider
 	 *            used to get the appropriate connector for the selected address
 	 */
-	public VABConnectionManager(IVABDirectoryService networkDirectoryService, IConnectorProvider providerProvider) {
+	public VABConnectionManager(IVABRegistryService networkDirectoryService, IConnectorFactory providerProvider) {
 		// Set directory service reference
 		directoryService = networkDirectoryService;
 
 		// Set connector reference
-		this.connectorProvider = providerProvider;
+		this.connectorFactory = providerProvider;
 		
 		// Set proxy factory
 		this.proxyFactory = new ModelProxyFactory(providerProvider);

@@ -22,7 +22,7 @@ namespace native {
 
     class NativeConnector : public IBaSyxConnector {
     public:
-        static constexpr std::size_t default_buffer_length = 4096;
+        static constexpr std::size_t default_buffer_length = 8192;
 	private:
 		basyx::net::tcp::Socket socket;
 		std::array<char, default_buffer_length> buffer;

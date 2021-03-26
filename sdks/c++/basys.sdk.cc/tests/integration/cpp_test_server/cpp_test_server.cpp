@@ -25,7 +25,7 @@ public:
 
 int main(int argc, char* argv[])
 {
-    int port = 7001;
+    int port = 6000;
 
     if (argc > 1)
         port = std::atoi(argv[1]);

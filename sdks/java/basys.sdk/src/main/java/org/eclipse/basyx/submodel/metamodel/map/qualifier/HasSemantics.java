@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.map.qualifier;
 
 import java.util.Map;
@@ -19,16 +28,13 @@ public class HasSemantics extends VABModelMap<Object> implements IHasSemantics {
 	/**
 	 * Constructor
 	 */
-	public HasSemantics() {
-		// Default values
-		put(SEMANTICID, null);
-	}
+	public HasSemantics() {}
 
 	/**
 	 * Constructor
 	 */
 	public HasSemantics(IReference ref) {
-		this.setSemanticID(ref);
+		this.setSemanticId(ref);
 	}
 
 	/**
@@ -54,7 +60,7 @@ public class HasSemantics extends VABModelMap<Object> implements IHasSemantics {
 		return Reference.createAsFacade((Map<String, Object>) get(HasSemantics.SEMANTICID));
 	}
 
-	public void setSemanticID(IReference ref) {
+	public void setSemanticId(IReference ref) {
 		put(HasSemantics.SEMANTICID, ref);
 	}
 }

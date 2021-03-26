@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.vab.modelprovider.consistency;
 
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
@@ -50,14 +59,14 @@ public class ConsistencyProvider<T extends IModelProvider> implements IModelProv
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) throws ProviderException {
+	public Object getValue(String path) throws ProviderException {
 
 		if (path.endsWith("/frozen")) {
 			return this.frozen;
 		} else if (path.endsWith("/clock")) {
 			return this.clock;
 		} else {
-			return providerBackend.getModelPropertyValue(path);
+			return providerBackend.getValue(path);
 		}
 	}
 
@@ -70,7 +79,7 @@ public class ConsistencyProvider<T extends IModelProvider> implements IModelProv
 	 * @throws Exception
 	 */
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
+	public void setValue(String path, Object newValue) throws ProviderException {
 
 		if (path.endsWith("/frozen")) {
 
@@ -83,7 +92,7 @@ public class ConsistencyProvider<T extends IModelProvider> implements IModelProv
 			incrementClock();
 
 			// Set the value of the element
-			providerBackend.setModelPropertyValue(path, newValue);
+			providerBackend.setValue(path, newValue);
 
 		} else {
 			throw new ProviderException("Value " + path + " is read only");

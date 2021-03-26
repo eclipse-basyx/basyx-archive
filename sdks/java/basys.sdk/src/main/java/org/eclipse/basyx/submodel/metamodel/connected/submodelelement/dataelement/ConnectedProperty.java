@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement;
 
 import java.util.Map;
@@ -6,10 +15,9 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
-import org.eclipse.basyx.vab.exception.provider.ProviderException;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueTypeHelper;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
 /**
@@ -26,31 +34,19 @@ public class ConnectedProperty extends ConnectedDataElement implements IProperty
 	}
 
 	@Override
-	public Object get() throws Exception {
-		return retrieveObject();
-	}
-
-	@Override
-	public void set(Object newValue) throws ProviderException {
-		getProxy().setModelPropertyValue(Property.VALUE, newValue);
-	}
-
-	@SuppressWarnings({ "unchecked" })
-	@Override
-	public String getValueType() {
-		Object o = getProxy().getModelPropertyValue("");
-		return PropertyValueTypeDefHelper.readTypeDef(((Map<String, Object>) o).get(Property.VALUETYPE)).toString();
+	public ValueType getValueType() {
+		return ValueTypeHelper.readTypeDef(getElem().getPath(Property.VALUETYPE));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public IReference getValueId() {
-		return Reference.createAsFacade((Map<String, Object>) getProxy().getModelPropertyValue(MultiLanguageProperty.VALUEID));
+		return Reference.createAsFacade((Map<String, Object>) getElem().getPath(Property.VALUEID));
 	}
 
 	@SuppressWarnings("unchecked")
 	protected <T> T retrieveObject() {
-		return (T) ((Map<String, Object>) getProxy().getModelPropertyValue(Property.VALUE)).get(Property.VALUE);
+		return (T) getProxy().getValue(Property.VALUE);
 	}
 	
 	@Override
@@ -58,4 +54,23 @@ public class ConnectedProperty extends ConnectedDataElement implements IProperty
 		return KeyElements.PROPERTY;
 	}
 
+	@Override
+	public Object getValue() {
+		Object value =  retrieveObject();
+		if(value instanceof String) {
+			return ValueTypeHelper.getJavaObject(value, getValueType());
+		}else {
+			return value;
+		}
+	}
+	
+	@Override
+	public void setValue(Object value) {
+		getProxy().setValue(Property.VALUE, ValueTypeHelper.prepareForSerialization(value));
+	}
+
+	@Override
+	public Property getLocalCopy() {
+		return Property.createAsFacade(getElem()).getLocalCopy();
+	}
 }

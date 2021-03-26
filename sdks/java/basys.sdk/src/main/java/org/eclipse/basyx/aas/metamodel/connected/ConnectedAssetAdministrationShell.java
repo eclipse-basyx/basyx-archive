@@ -1,10 +1,20 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.aas.metamodel.connected;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.api.parts.IView;
@@ -15,43 +25,52 @@ import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.aas.metamodel.map.parts.ConceptDictionary;
 import org.eclipse.basyx.aas.metamodel.map.parts.View;
 import org.eclipse.basyx.aas.metamodel.map.security.Security;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.connected.ConnectedElement;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.connected.ConnectedSubmodel;
+import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.reference.ReferenceHelper;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
+import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 
 /**
  * "Connected" implementation of IAssetAdministrationShell
  * 
- * @author rajashek, Zai Zhang
+ * @author rajashek, Zai Zhang, schnicke
  *
  */
 public class ConnectedAssetAdministrationShell extends ConnectedElement implements IAssetAdministrationShell {
-
-	ConnectedAssetAdministrationShellManager manager;
+	/**
+	 * Constructor creating a ConnectedAAS pointing to the AAS represented by proxy
+	 * 
+	 * @param proxy
+	 */
+	public ConnectedAssetAdministrationShell(VABElementProxy proxy) {
+		super(proxy);
+	}
 
 	/**
 	 * Constructor creating a ConnectedAAS pointing to the AAS represented by proxy
-	 * and path
+	 * and an already cached local copy
 	 * 
-	 * @param path
 	 * @param proxy
-	 * @param manager
+	 * @param localCopy
 	 */
-	public ConnectedAssetAdministrationShell(VABElementProxy proxy, ConnectedAssetAdministrationShellManager manager) {
+	public ConnectedAssetAdministrationShell(VABElementProxy proxy, AssetAdministrationShell localCopy) {
 		super(proxy);
-		this.manager = manager;
 	}
 
 	/**
@@ -118,15 +137,28 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 		return set.stream().map(ConceptDictionary::createAsFacade).collect(Collectors.toSet());
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, ISubModel> getSubModels() {
-		return manager.retrieveSubmodels(getIdentification());
+	public Map<String, ISubmodel> getSubmodels() {
+		Collection<Map<String, Object>> submodelCollection = (Collection<Map<String, Object>>) getProxy().getValue(AssetAdministrationShell.SUBMODELS);
+
+		Map<String, ISubmodel> ret = new HashMap<>();
+
+		for (Map<String, Object> m : submodelCollection) {
+			Submodel sm = Submodel.createAsFacade(m);
+			String path = VABPathTools.concatenatePaths(AssetAdministrationShell.SUBMODELS, sm.getIdShort(), SubmodelProvider.SUBMODEL);
+			ret.put(sm.getIdShort(), new ConnectedSubmodel(getProxy().getDeepProxy(path), sm));
+		}
+
+		return ret;
 	}
 
 	@Override
-	public void addSubModel(SubModel subModel) {
+	public void addSubmodel(Submodel subModel) {
 		subModel.setParent(getReference());
-		getProxy().createValue("/submodels", subModel);
+		Map<String, Object> convertedMap = SubmodelElementMapCollectionConverter.smToMap(subModel);
+		String accessPath = VABPathTools.concatenatePaths(AssetAdministrationShell.SUBMODELS, subModel.getIdShort());
+		getProxy().setValue(accessPath, convertedMap);
 	}
 
 	@Override
@@ -168,5 +200,33 @@ public class ConnectedAssetAdministrationShell extends ConnectedElement implemen
 	@Override
 	public IReference getReference() {
 		return Identifiable.createAsFacade(getElem(), getKeyElement()).getReference();
+	}
+
+	/**
+	 * Returns a local copy of the AAS, i.e. a snapshot of the current state. <br>
+	 * No changes of this copy are reflected in the remote AAS
+	 * 
+	 * @return the local copy
+	 */
+	public AssetAdministrationShell getLocalCopy() {
+		return AssetAdministrationShell.createAsFacade(getElem());
+	}
+
+	@Override
+	public void removeSubmodel(IIdentifier id) {
+		ISubmodel sm = getSubmodel(id);
+
+		String path = VABPathTools.concatenatePaths(AssetAdministrationShell.SUBMODELS, sm.getIdShort());
+		getProxy().deleteValue(path);
+	}
+
+	@Override
+	public ISubmodel getSubmodel(IIdentifier id) {
+		// FIXME: Change this when AAS API supports Submodel retrieval by Identifier
+		Optional<ISubmodel> op = getSubmodels().values().stream().filter(sm -> sm.getIdentification().getId().equals(id.getId())).findFirst();
+		if (!op.isPresent()) {
+			throw new ResourceNotFoundException("AAS " + getIdentification() + " does not have a submodel with id " + id);
+		}
+		return op.get();
 	}
 }

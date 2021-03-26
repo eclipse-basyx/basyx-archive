@@ -15,12 +15,14 @@ private:
 	std::string idShort;
 	std::string category;
 	LangStringSet description;
-	const IReferable * const parent;
+	IReferable * parent;
+
+	KeyElements keyElementType;
 public:
 	virtual ~Referable() = default;
 
 	// Constructors
-	Referable(const std::string & idShort, const Referable * parent = nullptr);
+	Referable(const std::string & idShort, Referable * parent = nullptr);
 	Referable(const IReferable & other);
 
 	// Inherited via IReferable
@@ -29,7 +31,8 @@ public:
 	virtual LangStringSet & getDescription() override;
 	virtual const LangStringSet & getDescription() const override;
 
-	virtual const IReferable * const getParent() const override;
+	virtual void setParent(IReferable * parent) override;
+	virtual IReferable * getParent() const override;
 
 	// not inherited
 	void setIdShort(const std::string & shortID);
@@ -38,6 +41,11 @@ public:
 	bool hasParent() const noexcept;
 	bool hasDescription() const noexcept;
 	bool hasCategory() const noexcept;
+
+	simple::Reference getReference() const override;
+	simple::Key getKey(bool local = true) const override;
+
+	KeyElements getKeyElementType() const override;
 };
 
 

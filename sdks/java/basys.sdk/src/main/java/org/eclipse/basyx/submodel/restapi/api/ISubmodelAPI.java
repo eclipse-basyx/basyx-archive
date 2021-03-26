@@ -1,11 +1,18 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.restapi.api;
 
 import java.util.Collection;
-import java.util.List;
 
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 
 /**
@@ -21,39 +28,43 @@ public interface ISubmodelAPI {
 	 * 
 	 * @return the submodel
 	 */
-	public ISubModel getSubmodel();
+	public ISubmodel getSubmodel();
 
 	/**
-	 * Returns all submodel elements contained by the submodel
-	 * 
-	 * @return the submodel elements
-	 */
-	public Collection<ISubmodelElement> getElements();
-
-	/**
-	 * Adds a submodel element to the submodel
+	 * Adds a submodelElement to the submodel
 	 * 
 	 * @param elem
-	 *            the element to be added
+	 *            the submodelElement to be added
 	 */
 	public void addSubmodelElement(ISubmodelElement elem);
 
 	/**
-	 * Retrieves a submodel element
+	 * Adds a submodelElement to the submodel
 	 * 
-	 * @param idShort
-	 *            of the submodel element
-	 * @return the submodel element
+	 * @param idShortPath
+	 *            the idShort path to the submodelElement
+	 * @param  elem
+	 *            the submodelElement to be added
 	 */
-	public ISubmodelElement getSubmodelElement(String idShort);
+	public void addSubmodelElement(String idShortPath, ISubmodelElement elem);
 
 	/**
-	 * Removes a submodel element from the submodel
+	 * Retrieves a submodelElement
 	 * 
-	 * @param idShort
-	 *            of the element to be removed
+	 * @param idShortPath
+	 *            the idShort Path to the submodelElement
+	 * @return the submodelElement
 	 */
-	public void deleteSubmodelElement(String idShort);
+	public ISubmodelElement getSubmodelElement(String idShortPath);
+
+	/**
+	 * Removes a submodelElement from the submodel
+	 * 
+	 * @param idShortPath
+	 *            the idShort path to the submodelElement, which is to be removed
+	 */
+	public void deleteSubmodelElement(String idShortPath);
+
 
 	/**
 	 * Helper function for quick access of operations
@@ -63,56 +74,64 @@ public interface ISubmodelAPI {
 	public Collection<IOperation> getOperations();
 
 	/**
-	 * Helper function for quick access of properties
+	 * Helper function for quick access of submodelElements
 	 * 
-	 * @return all properties contained by the submodel
+	 * @return all submodelElements contained by the submodel
 	 */
-	public Collection<IProperty> getProperties();
+	public Collection<ISubmodelElement> getSubmodelElements();
 
 	/**
-	 * Updates the value of a property
+	 * Updates the value of a submodelElement
 	 * 
-	 * @param idShort
-	 *            of the property
+	 * @param idShortPath
+	 *            the idShort path to the submodelElement
 	 * @param newValue
-	 *            new value of the property
+	 *            new value of the submodelElement
 	 */
-	public void updateProperty(String idShort, Object newValue);
+	public void updateSubmodelElement(String idShortPath, Object newValue);
 
 	/**
-	 * Retrieves the value of a property
+	 * Retrieves the value of a submodelElement
 	 * 
-	 * @param idShort
-	 *            of the property
-	 * @return property value
+	 * @param idShortPath
+	 *            the idShort path to the submodelElement
+	 * @return submodelElement value
 	 */
-	public Object getPropertyValue(String idShort);
+	public Object getSubmodelElementValue(String idShortPath);
 
-	/**
-	 * Retrieves the value of a property nested inside a SubmodelElementCollection.
-	 * 
-	 * @param idShorts
-	 *            the idShort path to the property
-	 */
-	public Object getNestedPropertyValue(List<String> idShorts);
-
-	/**
-	 * Retrieves a submodel element nested inside a SubmodelElementCollection
-	 * 
-	 * @param idShorts
-	 *            the idShort path to the property
-	 * @return
-	 */
-	public ISubmodelElement getNestedSubmodelElement(List<String> idShorts);
 
 	/**
 	 * Invokes an operation
 	 * 
-	 * @param idShort
-	 *            of the operation
+	 * @param idShortPath
+	 *            the idShort path to the operation
 	 * @param params
 	 *            to be passed to the operation
 	 * @return the result of the operation
 	 */
-	public Object invokeOperation(String idShort, Object... params);
+	public Object invokeOperation(String idShortPath, Object... params);
+
+	
+	/**
+	 * Invoke an operation asynchronously
+	 * 
+	 * @param idShortPath
+	 * 			the idShort path to the operation
+	 * @param params
+	 * 			to be passed to the operation
+	 * @return the requestId of the invocation
+	 */
+	public Object invokeAsync(String idShortPath, Object... params);
+	
+	/**
+	 * Gets the result of an asynchronously invoked operation
+	 * 
+	 * @param idShort 
+	 *            of the operation
+	 * @param requestId
+	 *            the requestId of the invocation
+	 * @return the result of the Operation or a Message that it is not finished yet
+	 */
+	public Object getOperationResult(String idShort, String requestId);
+
 }

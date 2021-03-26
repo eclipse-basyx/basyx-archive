@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.connected.submodelelement;
 
 
@@ -19,17 +28,19 @@ import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelemen
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedReferenceElement;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.event.ConnectedBasicEvent;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.operation.ConnectedOperation;
+import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.relationship.ConnectedAnnotatedRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.relationship.ConnectedRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Range;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.ReferenceElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.Range;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.event.BasicEvent;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.AnnotatedRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
@@ -56,7 +67,7 @@ public class ConnectedSubmodelElementFactory {
 			String collectionPath, String elementPath) {
 		// Query the whole list of elements
 		Collection<Map<String, Object>> mapElemList = (Collection<Map<String, Object>>) rootProxy
-				.getModelPropertyValue(collectionPath);
+				.getValue(collectionPath);
 		// Get the type and idShort for each element and create the corresponding connected variant
 		Map<String, ISubmodelElement> ret = new HashMap<>();
 		for (Map<String, Object> node : mapElemList) {
@@ -80,7 +91,7 @@ public class ConnectedSubmodelElementFactory {
 			String collectionPath, String elementPath) {
 		// Query the whole list of elements
 		Collection<Map<String, Object>> mapElemList = (Collection<Map<String, Object>>) rootProxy
-				.getModelPropertyValue(collectionPath);
+				.getValue(collectionPath);
 		// Get the type and idShort for each element and create the corresponding connected variant
 		Collection<ISubmodelElement> ret = new ArrayList<>();
 		for (Map<String, Object> node : mapElemList) {
@@ -99,7 +110,7 @@ public class ConnectedSubmodelElementFactory {
 	 * @param elementPath    path in the proxy for accessing single elements by short ids
 	 * @return The connected variant of the requested submodel element
 	 */
-	private static ISubmodelElement getConnectedSubmodelElement(VABElementProxy rootProxy,
+	public static ISubmodelElement getConnectedSubmodelElement(VABElementProxy rootProxy,
 			String elementPath, String idShort, Map<String, Object> mapContent) {
 		String subPath = VABPathTools.concatenatePaths(elementPath, idShort);
 		VABElementProxy proxy = rootProxy.getDeepProxy(subPath);
@@ -117,6 +128,8 @@ public class ConnectedSubmodelElementFactory {
 			return new ConnectedRange(proxy);
 		} else if(ReferenceElement.isReferenceElement(mapContent)) {
 			return new ConnectedReferenceElement(proxy);
+		} else if (AnnotatedRelationshipElement.isAnnotatedRelationshipElement(mapContent)) {
+			return new ConnectedAnnotatedRelationshipElement(proxy);
 		} else if (RelationshipElement.isRelationshipElement(mapContent)) {
 			return new ConnectedRelationshipElement(proxy);
 		} else if (Operation.isOperation(mapContent)) {
@@ -141,7 +154,7 @@ public class ConnectedSubmodelElementFactory {
 			String elementPath) {
 		// Query the whole list of elements
 		Collection<Map<String, Object>> mapElemList = (Collection<Map<String, Object>>) rootProxy
-				.getModelPropertyValue(collectionPath);
+				.getValue(collectionPath);
 
 		// Get the type and idShort for each operation and create the corresponding connected variant
 		Map<String, IOperation> ret = new HashMap<>();
@@ -169,7 +182,7 @@ public class ConnectedSubmodelElementFactory {
 			String elementPath) {
 		// Query the whole list of elements
 		Collection<Map<String, Object>> mapElemList = (Collection<Map<String, Object>>) rootProxy
-				.getModelPropertyValue(collectionPath);
+				.getValue(collectionPath);
 
 		// Get the type and idShort for each operation and create the corresponding connected variant
 		Map<String, IDataElement> ret = new HashMap<>();
@@ -206,7 +219,7 @@ public class ConnectedSubmodelElementFactory {
 	public static Map<String, IProperty> getProperties(VABElementProxy rootProxy, String collectionPath,
 			String elementPath) {
 		// Query the whole list of elements
-		Collection<Map<String, Object>> mapElemList = (Collection<Map<String, Object>>) rootProxy.getModelPropertyValue(collectionPath);
+		Collection<Map<String, Object>> mapElemList = (Collection<Map<String, Object>>) rootProxy.getValue(collectionPath);
 
 		// Get the type and idShort for each operation and create the corresponding
 		// connected variant

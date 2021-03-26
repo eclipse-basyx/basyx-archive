@@ -1,5 +1,5 @@
-#ifndef BASYX_MAP_V2_SDK_CONCEPTDICTIONARY_H
-#define BASYX_MAP_V2_SDK_CONCEPTDICTIONARY_H
+#ifndef BASYX_SUBMODEL_MAP_V2_PARTS_CONCEPTDICTIONARY_H
+#define BASYX_SUBMODEL_MAP_V2_PARTS_CONCEPTDICTIONARY_H
 
 #include <BaSyx/submodel/api_v2/parts/IConceptDictionary.h>
 #include <BaSyx/submodel/map_v2/qualifier/Referable.h>
@@ -16,8 +16,14 @@ class ConceptDictionary
     , public virtual Referable
     , public virtual vab::ElementMap
 {
+public:
+  struct Path {
+    static constexpr char ConceptDescriptions[] = "conceptDescriptions";
+  };
+
 private:
   ElementContainer<api::IConceptDescription> concept_descriptions;
+
 public:
   ConceptDictionary(const std::string & idShort);
 
@@ -26,9 +32,12 @@ public:
 
   // not inherited
   void addConceptDescription(std::unique_ptr<ConceptDescription> description);
+
+  virtual KeyElements getKeyElementType() const override { return KeyElements::ConceptDictionary; };
+
 };
 
 }
 }
 }
-#endif //BASYX_MAP_V2_SDK_CONCEPTDICTIONARY_H
+#endif /* BASYX_SUBMODEL_MAP_V2_PARTS_CONCEPTDICTIONARY_H */

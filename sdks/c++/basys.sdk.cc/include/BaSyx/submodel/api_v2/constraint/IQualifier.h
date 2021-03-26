@@ -1,5 +1,5 @@
-#ifndef BASYX_SUBMODEL_API_V2_QUALIFIER_IQUALIFIER_H
-#define BASYX_SUBMODEL_API_V2_QUALIFIER_IQUALIFIER_H
+#ifndef BASYX_SUBMODEL_API_V2_CONSTRAINT_IQUALIFIER_H
+#define BASYX_SUBMODEL_API_V2_CONSTRAINT_IQUALIFIER_H
 
 #include <BaSyx/submodel/api_v2/constraint/IConstraint.h>
 #include <BaSyx/submodel/api_v2/qualifier/IHasSemantics.h>
@@ -36,4 +36,4 @@ inline IQualifier::~IQualifier() = default;
 }
 }
 
-#endif /* BASYX_SUBMODEL_API_V2_QUALIFIER_IQUALIFIER_H */
+#endif /* BASYX_SUBMODEL_API_V2_CONSTRAINT_IQUALIFIER_H */

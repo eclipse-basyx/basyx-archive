@@ -11,6 +11,10 @@ namespace map {
 
 class SubmodelElementFactory
 {
+public:
+  struct Path {
+    static constexpr char Value[] = "value";
+  };
 private:
 	static std::unique_ptr<api::ISubmodelElement> CreateProperty(const vab::ElementMap & elementMap);
 public:

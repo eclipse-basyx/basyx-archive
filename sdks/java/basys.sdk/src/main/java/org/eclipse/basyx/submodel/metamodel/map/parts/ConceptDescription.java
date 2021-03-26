@@ -1,9 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.map.parts;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
@@ -42,6 +52,17 @@ public class ConceptDescription extends VABModelMap<Object> implements IConceptD
 		// Add attributes
 		put(ISCASEOF, new HashSet<Reference>());
 	}
+	
+	/**
+	 * Constructor accepting only mandatory attribute
+	 * @param idShort
+	 * @param identification
+	 */
+	public ConceptDescription(String idShort, IIdentifier identification) {
+		this();
+		setIdentification(identification.getIdType(), identification.getId());
+		setIdShort(idShort);
+	}
 
 	/**
 	 * Creates a DataSpecificationIEC61360 object from a map
@@ -55,10 +76,23 @@ public class ConceptDescription extends VABModelMap<Object> implements IConceptD
 		if (map == null) {
 			return null;
 		}
-
+		
+		if (!isValid(map)) {
+			throw new MetamodelConstructionException(ConceptDescription.class, map);
+		}
+		
 		ConceptDescription ret = new ConceptDescription();
 		ret.setMap(map);
-		return ret;
+		return ret;	
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	public static boolean isValid(Map<String, Object> map) {
+		return Identifiable.isValid(map);
 	}
 
 	@Override
@@ -94,7 +128,7 @@ public class ConceptDescription extends VABModelMap<Object> implements IConceptD
 	}
 
 	public void setIdentification(IdentifierType idType, String id) {
-		Identifiable.createAsFacade(this, getKeyElement()).setIdentification(idType, id);
+		Identifiable.createAsFacadeNonStrict(this, getKeyElement()).setIdentification(idType, id);
 	}
 
 	@Override
@@ -126,7 +160,7 @@ public class ConceptDescription extends VABModelMap<Object> implements IConceptD
 	}
 
 	public void setIdShort(String idShort) {
-		Referable.createAsFacade(this, getKeyElement()).setIdShort(idShort);
+		Referable.createAsFacadeNonStrict(this, getKeyElement()).setIdShort(idShort);
 
 	}
 

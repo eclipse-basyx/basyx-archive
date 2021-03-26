@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.aas.factory.xml.converters;
 
 import java.util.ArrayList;
@@ -22,6 +31,9 @@ import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -62,8 +74,8 @@ public class AssetAdministrationShellXMLConverter {
 		for(Map<String, Object> xmlAAS: xmlAASs) {
 			AssetAdministrationShell adminShell = new AssetAdministrationShell();
 			
-			IdentifiableXMLConverter.populateIdentifiable(xmlAAS, adminShell);
-			HasDataSpecificationXMLConverter.populateHasDataSpecification(xmlAAS, adminShell);
+			IdentifiableXMLConverter.populateIdentifiable(xmlAAS, Identifiable.createAsFacadeNonStrict(adminShell, KeyElements.ASSETADMINISTRATIONSHELL));
+			HasDataSpecificationXMLConverter.populateHasDataSpecification(xmlAAS, HasDataSpecification.createAsFacade(adminShell));
 			
 			Collection<IView> views = ViewXMLConverter.parseViews(xmlAAS);
 			Collection<IConceptDictionary> conceptDictionary = parseConceptDictionaries(xmlAAS, conceptDescriptions);
@@ -133,7 +145,7 @@ public class AssetAdministrationShellXMLConverter {
 		List<Map<String, Object>> xmlConceptDictionaryList = XMLHelper.getList(xmlConceptDictionaries.get(CONCEPT_DICTIONARY));
 		for (Map<String, Object> xmlConceptDictionary : xmlConceptDictionaryList) {
 			ConceptDictionary conceptDictionary = new ConceptDictionary();
-			ReferableXMLConverter.populateReferable(xmlConceptDictionary, conceptDictionary);
+			ReferableXMLConverter.populateReferable(xmlConceptDictionary, Referable.createAsFacadeNonStrict(conceptDictionary, KeyElements.CONCEPTDICTIONARY));
 			
 			Map<String, Object> xmlConceptDescriptionRefs = (Map<String, Object>) xmlConceptDictionary.get(CONCEPT_DESCRIPTION_REFS);
 			HashSet<IReference> referenceSet = new HashSet<>();

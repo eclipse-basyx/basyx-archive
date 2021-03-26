@@ -1,8 +1,10 @@
 #include <BaSyx/submodel/simple/aas/AssetAdministrationShell.h>
 #include <BaSyx/submodel/simple/reference/Reference.h>
+#include <BaSyx/submodel/enumerations/ModelTypes.h>
 
-using namespace basyx::submodel::simple;
+using namespace basyx::submodel;
 using namespace basyx::submodel::api;
+using namespace basyx::submodel::simple;
 
 AssetAdministrationShell::AssetAdministrationShell(const std::string & idShort, const Identifier & identifier, const Asset & asset)
 	: identifiable(idShort, identifier)
@@ -10,7 +12,6 @@ AssetAdministrationShell::AssetAdministrationShell(const std::string & idShort, 
 {
 	
 };
-
 
 ElementContainer<IConceptDescription> & AssetAdministrationShell::getConceptDictionary()
 {
@@ -63,17 +64,23 @@ const LangStringSet & AssetAdministrationShell::getDescription() const
 	return this->identifiable.getDescription();
 }
 
-const IReferable * const AssetAdministrationShell::getParent() const
+IReferable * AssetAdministrationShell::getParent() const
 {
 	return this->identifiable.getParent();
 }
 
-const AdministrativeInformation & AssetAdministrationShell::getAdministrativeInformation() const
+void AssetAdministrationShell::setParent(IReferable * parent)
+{
+	this->identifiable.setParent(parent);
+}
+
+
+const api::IAdministrativeInformation & AssetAdministrationShell::getAdministrativeInformation() const
 {
 	return this->identifiable.getAdministrativeInformation();
 }
 
-AdministrativeInformation & AssetAdministrationShell::getAdministrativeInformation()
+api::IAdministrativeInformation & AssetAdministrationShell::getAdministrativeInformation()
 {
 	return this->identifiable.getAdministrativeInformation();
 }
@@ -98,3 +105,19 @@ const std::vector<Reference> AssetAdministrationShell::getDataSpecificationRefer
 {
 	return this->dataSpecification.getDataSpecificationReference();
 }
+
+simple::Reference AssetAdministrationShell::getReference() const
+{
+	return this->identifiable.getReference();
+};
+
+
+ModelTypes AssetAdministrationShell::GetModelType() const
+{
+	return ModelTypes::AssetAdministrationShell;
+}
+
+simple::Key AssetAdministrationShell::getKey(bool local) const
+{
+	return this->identifiable.getKey();
+};

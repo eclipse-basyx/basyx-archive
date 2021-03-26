@@ -2,7 +2,6 @@
 #define BASYX_SUBMODEL_SIMPLE_REFERENCE_REFERENCE_H
 
 #include <BaSyx/submodel/api_v2/reference/IReference.h>
-#include <BaSyx/submodel/api_v2/qualifier/IIdentifiable.h>
 
 #include <BaSyx/submodel/simple/reference/Key.h>
 
@@ -43,8 +42,6 @@ public:
 	void addKey(const Key & key) override;
 
 	bool empty() const override;
-public:
-	static Reference FromIdentifiable(KeyElements keyElementType, const api::IIdentifiable & identifiable);
 };
 
 }

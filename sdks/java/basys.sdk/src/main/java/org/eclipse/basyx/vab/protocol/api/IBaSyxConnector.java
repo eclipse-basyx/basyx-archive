@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.vab.protocol.api;
 
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
@@ -19,7 +28,7 @@ public interface IBaSyxConnector {
 	 * @return Property value. Object type is assumed to be [Integer | ... |
 	 *         Collection]
 	 */
-	public String getModelPropertyValue(String path) throws ProviderException;
+	public String getValue(String path) throws ProviderException;
 
 	/**
 	 * Sets or overrides existing property, operation or event.
@@ -29,7 +38,7 @@ public interface IBaSyxConnector {
 	 * @param newValue
 	 *            Updated value
 	 */
-	public String setModelPropertyValue(String path, String newValue) throws ProviderException;
+	public String setValue(String path, String newValue) throws ProviderException;
 
 	/**
 	 * Create a new property, operation, event submodel or aas under the given path
@@ -67,4 +76,11 @@ public interface IBaSyxConnector {
 	 * @return Return value
 	 */
 	public String invokeOperation(String path, String jsonObject) throws ProviderException;
+	
+	/**
+	 * Get string representation of endpoint for given path for debugging. 
+	 * @param path Requested path
+	 * @return String representing requested endpoint
+	 */
+	public String getEndpointRepresentation(String path);
 }

@@ -261,7 +261,7 @@ public class XMLXQuerySubModelProvider extends BaseConfiguredProvider {
 	 * Create (insert) a value into the SQL table
 	 */
 	@Override
-	public void createValue(String propertyName, Object arg1) throws Exception {
+	public void createValue(String propertyName, Object arg1) {
 		// Indicate exception
 		throw new OperationNotImplementedException();
 	}
@@ -272,7 +272,7 @@ public class XMLXQuerySubModelProvider extends BaseConfiguredProvider {
 	 * Delete a value from the SQL table
 	 */
 	@Override
-	public void deleteValue(String arg0) throws Exception {
+	public void deleteValue(String arg0) {
 		// Indicate exception
 		throw new OperationNotImplementedException();
 	}
@@ -283,7 +283,7 @@ public class XMLXQuerySubModelProvider extends BaseConfiguredProvider {
 	 * Delete a value from the SQL table
 	 */
 	@Override
-	public void deleteValue(String propertyName, Object arg1) throws Exception {
+	public void deleteValue(String propertyName, Object arg1) {
 		// Indicate exception
 		throw new OperationNotImplementedException();
 	}
@@ -313,7 +313,7 @@ public class XMLXQuerySubModelProvider extends BaseConfiguredProvider {
 	 * Invoke operation with given parameter list
 	 */
 	@Override
-	public Object invokeOperation(String propertyName, Object... parameter) throws Exception {
+	public Object invokeOperation(String propertyName, Object... parameter) {
 		// Indicate exception
 		throw new OperationNotImplementedException();
 	}
@@ -324,7 +324,7 @@ public class XMLXQuerySubModelProvider extends BaseConfiguredProvider {
 	 * Invoke set operation with given parameter
 	 */
 	@Override
-	public void setModelPropertyValue(String propertyName, Object arg1) throws Exception {
+	public void setModelPropertyValue(String propertyName, Object arg1) {
 		// Indicate exception
 		throw new OperationNotImplementedException();
 	}
@@ -334,7 +334,7 @@ public class XMLXQuerySubModelProvider extends BaseConfiguredProvider {
 	/**
 	 * Invoke set operation with given parameter list
 	 */
-	public void setModelPropertyValue(String propertyName, Object... parameter) throws Exception {
+	public void setModelPropertyValue(String propertyName, Object... parameter) {
 		// Indicate exception
 		throw new OperationNotImplementedException();
 	}

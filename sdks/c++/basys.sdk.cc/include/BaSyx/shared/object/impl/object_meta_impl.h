@@ -1,5 +1,5 @@
-#ifndef SHARED_BASYX_OBJECT_IMPL_OBJECT_META_IMPL_H
-#define SHARED_BASYX_OBJECT_IMPL_OBJECT_META_IMPL_H
+#ifndef BASYX_SHARED_OBJECT_IMPL_OBJECT_META_IMPL_H
+#define BASYX_SHARED_OBJECT_IMPL_OBJECT_META_IMPL_H
 
 template <typename T>
 bool basyx::object::operator!=(const T& rhs) const
@@ -17,4 +17,4 @@ bool basyx::object::operator==(const T& rhs) const
 }
 
 
-#endif /* SHARED_BASYX_OBJECT_IMPL_OBJECT_META_IMPL_H */
+#endif /* BASYX_SHARED_OBJECT_IMPL_OBJECT_META_IMPL_H */

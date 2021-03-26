@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.submodel.metamodel.connected.submodelelement;
 
 import static org.junit.Assert.assertEquals;
@@ -20,19 +29,19 @@ import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelemen
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.event.ConnectedBasicEvent;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.operation.ConnectedOperation;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.relationship.ConnectedRelationshipElement;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Range;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.ReferenceElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.Range;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.event.BasicEvent;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
-import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
+import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.support.TypeDestroyingProvider;
@@ -76,11 +85,9 @@ public class TestConnectedSubmodelElementFactory {
 		
 		Map<String, Object> values = new HashMap<>();
 		
-		values.put(SubmodelElementProvider.PROPERTIES, dataElements);
-		values.put(SubmodelElementProvider.OPERATIONS, operations);
-		values.put(SubModel.SUBMODELELEMENT, submodelElements);
+		values.put(Submodel.SUBMODELELEMENT, submodelElements);
 		
-		proxy = new VABElementProxy("", new SubModelProvider(new TypeDestroyingProvider(new VABLambdaProvider(values))));
+		proxy = new VABElementProxy("", new SubmodelProvider(new TypeDestroyingProvider(new VABLambdaProvider(values))));
 	}
 	
 	/**
@@ -161,7 +168,7 @@ public class TestConnectedSubmodelElementFactory {
 	public void testGetProperties() {
 		Map<String, IProperty> properties =
 				ConnectedSubmodelElementFactory.getProperties(
-						proxy, SubmodelElementProvider.PROPERTIES, SubmodelElementProvider.PROPERTIES);
+						proxy, MultiSubmodelElementProvider.ELEMENTS, MultiSubmodelElementProvider.ELEMENTS);
 		
 		assertEquals(1, properties.size());
 		assertTrue(properties.get(PROPERTY_ID) instanceof ConnectedProperty);
@@ -174,7 +181,7 @@ public class TestConnectedSubmodelElementFactory {
 	public void testGetOperations() {
 		Map<String, IOperation> operations =
 				ConnectedSubmodelElementFactory.getOperations(
-						proxy, SubmodelElementProvider.OPERATIONS, SubmodelElementProvider.OPERATIONS);
+						proxy, MultiSubmodelElementProvider.ELEMENTS, MultiSubmodelElementProvider.ELEMENTS);
 		
 		assertEquals(1, operations.size());
 		assertTrue(operations.get(OPERATION_ID) instanceof ConnectedOperation);
@@ -187,7 +194,7 @@ public class TestConnectedSubmodelElementFactory {
 	public void testGetSubmodelElements() {
 		Map<String, ISubmodelElement> submodelElements =
 				ConnectedSubmodelElementFactory.getConnectedSubmodelElements(
-						proxy, SubModel.SUBMODELELEMENT, SubModel.SUBMODELELEMENT);
+						proxy, Submodel.SUBMODELELEMENT, Submodel.SUBMODELELEMENT);
 		
 		assertEquals(10, submodelElements.size());
 		assertTrue(submodelElements.get(PROPERTY_ID) instanceof ConnectedProperty);

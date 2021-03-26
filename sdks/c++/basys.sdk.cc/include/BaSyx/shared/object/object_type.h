@@ -1,12 +1,28 @@
-#ifndef BASYX_object_object_TYPE_H
-#define BASYX_object_object_TYPE_H
+#ifndef BASYX_SHARED_OBJECT_OBJECT_TYPE_H
+#define BASYX_SHARED_OBJECT_OBJECT_TYPE_H
 
 #include <string>
 #include <vector>
 #include <unordered_set>
 #include <unordered_map>
 
+template<typename T>
+struct dataTypeMapper
+{
 
+};
+
+template<>
+struct dataTypeMapper<float>
+{
+	static constexpr char datatype_string[] = "xsd:float";
+};
+
+template<>
+struct dataTypeMapper<int>
+{
+	static constexpr char datatype_string[] = "xsd:integer";
+};
 
 namespace basyx {
 
@@ -162,4 +178,4 @@ namespace util {
 	template<> inline std::string to_string<basyx::type::valueType::Object>() { return "Object"; };
 }
 
-#endif
+#endif /* BASYX_SHARED_OBJECT_OBJECT_TYPE_H */

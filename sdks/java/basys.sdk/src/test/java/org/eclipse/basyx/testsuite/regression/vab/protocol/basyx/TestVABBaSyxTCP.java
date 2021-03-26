@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.vab.protocol.basyx;
 
 import static org.junit.Assert.assertFalse;
@@ -9,7 +18,7 @@ import org.eclipse.basyx.testsuite.regression.vab.modelprovider.TestProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnector;
-import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorProvider;
+import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorFactory;
 import org.eclipse.basyx.vab.protocol.basyx.server.VABBaSyxTCPInterface;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,7 +31,7 @@ import org.junit.Test;
  */
 public class TestVABBaSyxTCP extends TestProvider {
 	protected VABConnectionManager connManager = new VABConnectionManager(new TestsuiteDirectory_BaSyxNative(),
-			new BaSyxConnectorProvider());
+			new BaSyxConnectorFactory());
 
 	@Rule
 	public VABTCPServerResource res = new VABTCPServerResource(new VABMapProvider(new SimpleVABElement()));
@@ -42,7 +51,7 @@ public class TestVABBaSyxTCP extends TestProvider {
 	public void testSuccessfulShutdown() throws InterruptedException {
 		BaSyxConnector connector = new BaSyxConnector("localhost", 6998);
 
-		connector.getModelPropertyValue("integer");
+		connector.getValue("integer");
 
 		// Wait until thread is closed on server
 		Thread.sleep(100);

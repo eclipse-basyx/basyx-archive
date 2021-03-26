@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.vab.protocol.basyx.connector;
 
 import java.io.IOException;
@@ -143,7 +152,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 	 * Invoke a BaSys get operation via HTTP
 	 */
 	@Override
-	public String getModelPropertyValue(String servicePath) {
+	public String getValue(String servicePath) {
 
 		byte[] call = createCall(servicePath, VABBaSyxTCPInterface.BASYX_GET);
 
@@ -160,7 +169,7 @@ public class BaSyxConnector implements IBaSyxConnector {
 	 *             that carries the Exceptions thrown on the server
 	 */
 	@Override
-	public String setModelPropertyValue(String servicePath, String newValue) {
+	public String setValue(String servicePath, String newValue) {
 
 		byte[] call = createCall(servicePath, newValue, VABBaSyxTCPInterface.BASYX_SET);
 
@@ -277,5 +286,15 @@ public class BaSyxConnector implements IBaSyxConnector {
 		CoderTools.setString(call, 9 + servicePath.length() + 4, newValue);
 
 		return call;
+	}
+
+	/**
+	 * Get string representation of endpoint for given path for debugging. 
+	 * @param path Requested path
+	 * @return String representing requested endpoint
+	 */
+	@Override
+	public String getEndpointRepresentation(String path) {
+		return "basyx://" + serverSocketAddress.getHostString() + ":" + serverSocketAddress.getPort() + "/" + path;
 	}
 }

@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.map.qualifier;
 
 import java.util.Collection;
@@ -69,7 +78,7 @@ public class HasDataSpecification extends VABModelMap<Object> implements IHasDat
 	@Override
 	public Collection<IEmbeddedDataSpecification> getEmbeddedDataSpecifications() {
 		Collection<Map<String, Object>> collection = (Collection<Map<String, Object>>) get(EMBEDDEDDATASPECIFICATIONS);
-		return collection.stream().map(EmbeddedDataSpecification::createAsFacade).collect(Collectors.toSet());
+		return collection == null ? new HashSet<IEmbeddedDataSpecification>() : collection.stream().map(EmbeddedDataSpecification::createAsFacade).collect(Collectors.toSet());
 	}
 
 	public void setEmbeddedDataSpecifications(Collection<IEmbeddedDataSpecification> embeddedDataSpecifications) {

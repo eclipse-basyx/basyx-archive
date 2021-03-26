@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.dataelement;
 
 import java.util.Map;
@@ -15,7 +24,7 @@ import org.w3c.dom.Element;
 
 /**
  * Parses &lt;aas:multiLanguageProperty&gt; and builds the MultiLanguageProperty object from it <br>
- * Builds &lt;aas:multiLanguageProperty&gt; form a given MultiLanguageProperty object
+ * Builds &lt;aas:multiLanguageProperty&gt; from a given MultiLanguageProperty object
  * 
  * @author conradi
  *
@@ -23,7 +32,6 @@ import org.w3c.dom.Element;
 public class MultiLanguagePropertyXMLConverter extends SubmodelElementXMLConverter {
 	
 	public static final String MULTI_LANGUAGE_PROPERTY = "aas:multiLanguageProperty";
-	public static final String VALUE_ID = "aas:valueId";
 	
 	/**
 	 * Parses a Map containing the content of XML tag &lt;aas:multiLanguageProperty&gt;

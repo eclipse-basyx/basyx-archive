@@ -52,6 +52,25 @@ TYPED_TEST(ElementContainerTest, TestAdd)
 	ASSERT_EQ(propB->getValue(), 5);
 };
 
+TYPED_TEST(ElementContainerTest, TestGetByIndex)
+{
+	auto prop = util::make_unique<Property<int>>("prop1");
+	prop->setValue(5);
+
+	auto prop2 = util::make_unique<Property<float>>("prop2");
+	prop2->setValue(10.0f);
+
+	this->elementContainer->addElement(std::move(prop));
+	this->elementContainer->addElement(std::move(prop2));
+	ASSERT_EQ(this->elementContainer->size(), 2);
+
+	auto submodelElement1 = this->elementContainer->getElement(0);
+	ASSERT_TRUE(submodelElement1->getIdShort() == "prop1" || submodelElement1->getIdShort() == "prop2");
+
+	auto submodelElement2 = this->elementContainer->getElement(0);
+	ASSERT_TRUE(submodelElement2->getIdShort() == "prop1" || submodelElement2->getIdShort() == "prop2");
+};
+
 TYPED_TEST(ElementContainerTest, TestCreate)
 {
 	auto prop = this->elementContainer->template createElement<Property<int>>("testProperty");
@@ -62,64 +81,5 @@ TYPED_TEST(ElementContainerTest, TestCreate)
 	auto propB = dynamic_cast<map::Property<int>*>(submodelElement);
 	ASSERT_NE(propB, nullptr);
 	ASSERT_EQ(propB->getValue(), 5);
-};
-
-/*********************************************************
- * Map implementation tests
- *********************************************************/
-
-class MapElementContainerTest : public ::testing::Test {
-protected:
-  map::ElementContainer<ISubmodelElement> elementContainer;
-protected:
-  void SetUp() override
-  {
-  }
-
-  void TearDown() override
-  {
-  }
-};
-
-TEST_F(MapElementContainerTest, TestMapImplementationCreateDeleteAfterwards)
-{
-	auto prop = this->elementContainer.createElement<Property<int>>("testProperty");
-	ASSERT_EQ(this->elementContainer.size(), 1);
-	prop->setValue(5);
-
-	// Delete in map
-	auto & objectList = this->elementContainer.getMap().Get<basyx::object::object_list_t&>();
-	objectList.clear();
-	ASSERT_EQ(this->elementContainer.size(), 0);
-	auto prop_b = this->elementContainer.getElement("testProperty");
-	ASSERT_EQ(prop_b, nullptr);
-};
-
-
-/*********************************************************
- * Simple implementation tests
- *********************************************************/
-class SimpleElementContainerTest : public ::testing::Test {
-protected:
-  simple::ElementContainer<IReferable> elementContainer;
-protected:
-  void SetUp() override
-  {}
-
-  void TearDown() override
-  {}
-};
-
-TEST_F(SimpleElementContainerTest, TestSimpleImplementationCopy)
-{
-//  std::unique_ptr<IReferable> ref = util::make_unique<simple::Referable>("testRef");
-//  ref->setCategory("testCategory");
-//  this->elementContainer.addElement(std::unique_ptr<IReferable>(ref.release()));
-//  ASSERT_EQ(this->elementContainer.size(), 1);
-//
-//  simple::ElementContainer<IReferable> elementContainer2(std::move(elementContainer));
-//  auto prop2 = dynamic_cast<simple::Referable*>(elementContainer2.getElement("testRef"));
-//  ASSERT_EQ(elementContainer2->size(), 1);
-//  ASSERT_EQ(prop2->getCategory(), std::string("testCategory"));
 };
 

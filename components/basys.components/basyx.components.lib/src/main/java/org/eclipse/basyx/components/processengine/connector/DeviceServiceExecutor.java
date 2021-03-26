@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.components.processengine.connector;
 
 import java.util.ArrayList;
@@ -5,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.manager.api.IAssetAdministrationShellManager;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
@@ -51,7 +60,7 @@ public class DeviceServiceExecutor implements IDeviceServiceExecutor {
 			IIdentifier smId = new Identifier(IdentifierType.CUSTOM, submodelid);
 
 			// create the submodel of the corresponding aas
-			ISubModel serviceSubmodel = manager.retrieveSubModel(aasId, smId);
+			ISubmodel serviceSubmodel = manager.retrieveSubmodel(aasId, smId);
 
 			// navigate to the expected service 
 			Map<String, IOperation> operations = serviceSubmodel.getOperations();

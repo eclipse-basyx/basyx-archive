@@ -1,6 +1,15 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.vab.protocol.http;
 
-import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
+import org.eclipse.basyx.vab.protocol.http.server.BaSyxHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.junit.rules.ExternalResource;
 
@@ -11,7 +20,7 @@ import org.junit.rules.ExternalResource;
  *
  */
 public class AASHTTPServerResource extends ExternalResource {
-	private AASHTTPServer server;
+	private BaSyxHTTPServer server;
 	private BaSyxContext context;
 
 	/**
@@ -26,7 +35,7 @@ public class AASHTTPServerResource extends ExternalResource {
 	 */
 	@Override
     protected void before() {
-    	server = new AASHTTPServer(context);
+    	server = new BaSyxHTTPServer(context);
 		server.start();
     }
 

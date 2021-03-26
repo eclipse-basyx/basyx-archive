@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.vab.support;
 
 import java.util.ArrayList;
@@ -36,15 +45,15 @@ public class RecordingProvider implements IModelProvider {
 
 
 	@Override
-	public Object getModelPropertyValue(String path) throws ProviderException {
+	public Object getValue(String path) throws ProviderException {
 		paths.add(path);
-		return wrapped.getModelPropertyValue(path);
+		return wrapped.getValue(path);
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
+	public void setValue(String path, Object newValue) throws ProviderException {
 		paths.add(path);
-		wrapped.setModelPropertyValue(path, newValue);
+		wrapped.setValue(path, newValue);
 	}
 
 	@Override
