@@ -34,7 +34,7 @@ import org.junit.Test;
  */
 public class TestJSONConverter {
 
-	private String jsonPath = "src/test/resources/aas/factory/json/aasJsonSchemaV2.0.1_Example.json";
+	private String jsonPath = "src/test/resources/aas/factory/json/aasJsonSchemaV3.0RC01_Example.json";
 	
 	private JSONToMetamodelConverter converter;
 	
