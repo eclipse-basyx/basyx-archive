@@ -1,28 +1,60 @@
 {
   "assetAdministrationShells": [
     {
-      "asset": {
-        "keys": [
-          {
-            "type": "Asset",
-            "local": true,
-            "value": "http://customer.com/assets/KHBVZJSQKIY",
-            "idType": "IRI"
-          }
-        ],
-        "kind": "Type",
-        "idShort": "assetId1",
-        "identification": {
-        	"idType": "IRI",
-        	"id": "assetId1"
-        }
+      "assetInformation": {
+            "assetKind": "Type",
+            "globalAssetId": {
+               "keys": [
+                  {
+                     "type": "Asset",
+                     "value": "http://customer.com/assets/KHBVZJSQKIY",
+                     "idType": "IRI"
+                  }
+               ]
+            },
+            "specificAssetIds": [
+               {
+                  "key": "EquipmentID",
+                  "value": "123456-789",
+                  "subjectId": {
+                     "keys": [
+                        {
+                           "type": "GlobalReference",
+                           "value": "http://dummy.com/Systems/ERP/02",
+                           "idType": "IRI"
+                        }
+                     ]
+                  }
+               },
+               {
+                  "key": "DeviceID",
+                  "value": "1222-2344-553",
+                  "subjectId": {
+                     "keys": [
+                        {
+                           "type": "GlobalReference",
+                           "value": "http://dummy.com/Systems/IOT/1",
+                           "idType": "IRI"
+                        }
+                     ]
+                  }
+               }
+            ],
+            "thumbnail": {
+               "modelType": {
+                  "name": "File"
+               },
+               "kind": "Instance",
+               "idShort": "thumbnail",
+               "mimeType": "image/png",
+               "value": "http://dummy.png"
+            }
       },
       "submodels": [
         {
           "keys": [
             {
               "type": "Submodel",
-              "local": true,
               "value": "http.//i40.customer.com/type/1/1/7A7104BDAB57E184",
               "idType": "IRI"
             }
@@ -37,7 +69,6 @@
           "keys": [
             {
               "type": "Submodel",
-              "local": true,
               "value": "http://i40.customer.com/instance/1/1/AC69B1CB44F07935",
               "idType": "IRI"
             }
@@ -52,7 +83,6 @@
           "keys": [
             {
               "type": "Submodel",
-              "local": true,
               "value": "http://i40.customer.com/type/1/1/1A7B62B529F19152",
               "idType": "IRI"
             }
@@ -64,7 +94,6 @@
 	      }
         }
       ],
-      "conceptDictionaries": [],
       "identification": {
         "idType": "IRI",
         "id": "http://customer.com/aas/9175_7013_7091_9168"
@@ -78,16 +107,6 @@
   ],
   "assets": [
     {
-      "assetIdentificationModelRef": {
-        "keys": [
-          {
-            "type": "Submodel",
-            "local": true,
-            "value": "i40.customer.com/type/1/1/F13E8576F6488342",
-            "idType": "IRI"
-          }
-        ]
-      },
       "identification": {
         "idType": "IRI",
         "id": "http://customer.com/assets/KHBVZJSQKIY"
@@ -96,8 +115,7 @@
       "category": "",
       "modelType": {
         "name": "Asset"
-      },
-      "kind": "Instance"
+      }
     }
   ],
   "submodels": [
@@ -106,7 +124,6 @@
         "keys": [
           {
             "type": "GlobalReference",
-            "local": false,
             "value": "0173-1#01-AFZ615#016",
             "idType": "IRDI"
           }
@@ -129,7 +146,6 @@
             "keys": [
               {
                 "type": "ConceptDescription",
-                "local": true,
                 "value": "0173-1#02-BAA120#008",
                 "idType": "IRDI"
               }
@@ -168,7 +184,6 @@
             "keys": [
               {
                 "type": "ConceptDescription",
-                "local": true,
                 "value": "www.vdi2770.com/blatt1/Entwurf/Okt18/cd/Document",
                 "idType": "IRI"
               }
@@ -187,7 +202,6 @@
                 "keys": [
                   {
                     "type": "ConceptDescription",
-                    "local": true,
                     "value": "www.vdi2770.com/blatt1/Entwurf/Okt18/cd/Description/Title",
                     "idType": "IRI"
                   }
@@ -208,7 +222,6 @@
                 "keys": [
                   {
                     "type": "ConceptDescription",
-                    "local": true,
                     "value": "www.vdi2770.com/blatt1/Entwurf/Okt18/cd/StoredDocumentRepresentation/DigitalFile",
                     "idType": "IRI"
                   }
@@ -252,7 +265,6 @@
             "keys": [
               {
                 "type": "ConceptDescription",
-                "local": true,
                 "value": "http://customer.com/cd/1/1/18EBD56F6B43D895",
                 "idType": "IRI"
               }
@@ -287,7 +299,6 @@
             "keys": [
               {
                 "type": "GlobalReference",
-                "local": false,
                 "value": "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360",
                 "idType": "IRI"
               }
@@ -343,7 +354,6 @@
             "keys": [
               {
                 "type": "GlobalReference",
-                "local": false,
                 "value": "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360",
                 "idType": "IRI"
               }
@@ -420,7 +430,6 @@
               "keys": [
                 {
                   "type": "GlobalReference",
-                  "local": false,
                   "value": "0173-1#05-AAA650#002",
                   "idType": "IRDI"
                 }
@@ -463,7 +472,6 @@
             "keys": [
               {
                 "type": "GlobalReference",
-                "local": false,
                 "value": "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360",
                 "idType": "IRI"
               }
@@ -495,7 +503,6 @@
               "keys": [
                 {
                   "type": "GlobalReference",
-                  "local": false,
                   "value": "0173-1#05-AAA650#002",
                   "idType": "IRDI"
                 }
@@ -533,7 +540,6 @@
             "keys": [
               {
                 "type": "GlobalReference",
-                "local": false,
                 "value": "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360",
                 "idType": "IRI"
               }
