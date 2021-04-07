@@ -42,7 +42,7 @@ public class IdentifierKeyValuePair extends HasSemantics {
 	/**
 	 * Creates a IdentifierKeyValuePair object from a map
 	 * 
-	 * @param obj
+	 * @param map
 	 *            a IdentifierKeyValuePair object as raw map
 	 * @return a IdentifierKeyValuePair object, that behaves like a facade for the given map
 	 */

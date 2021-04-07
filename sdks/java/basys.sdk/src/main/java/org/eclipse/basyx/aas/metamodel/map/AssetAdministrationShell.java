@@ -44,7 +44,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * AssetAdministrationShell class <br/>
+ * AssetAdministrationShell class <br>
  * Does not implement IAssetAdministrationShell since there are only references
  * stored in this map
  * 
@@ -76,7 +76,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	 * Constructor accepting only mandatory attributes
 	 * @param idShort
 	 * @param identification
-	 * @param asset
+	 * @param assetInformation
 	 */
 	public AssetAdministrationShell(String idShort, IIdentifier identification, AssetInformation assetInformation) {
 		this(null, null, assetInformation, new HashSet<Submodel>(), new HashSet<IView>());
@@ -107,7 +107,7 @@ public class AssetAdministrationShell extends VABModelMap<Object> implements IAs
 	/**
 	 * Creates a AssetAdministrationShell object from a map
 	 * 
-	 * @param obj
+	 * @param map
 	 *            a AssetAdministrationShell object as raw map
 	 * @return a AssetAdministrationShell object, that behaves like a facade for the
 	 *         given map

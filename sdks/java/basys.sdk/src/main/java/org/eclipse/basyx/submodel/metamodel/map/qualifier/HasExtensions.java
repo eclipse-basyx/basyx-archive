@@ -29,7 +29,7 @@ public class HasExtensions extends VABModelMap<Object> {
 	/**
 	 * Creates a HasExtensions object from a map
 	 * 
-	 * @param obj
+	 * @param map
 	 *            a HasExtensions object as raw map
 	 * @return a HasExtensions object, that behaves like a facade for the given map
 	 */

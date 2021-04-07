@@ -56,7 +56,7 @@ public class AssetInformation extends VABModelMap<Object> {
 	/**
 	 * Creates a AssetInformation object from a map
 	 * 
-	 * @param obj
+	 * @param map
 	 *            a AssetInformation object as raw map
 	 * @return a AssetInformation object, that behaves like a facade for the given map
 	 */
@@ -143,7 +143,7 @@ public class AssetInformation extends VABModelMap<Object> {
 	
 	/**
 	 * sets additional domain specific specific, typically proprietary Identifier for the asset like e.g. serial number etc.
-	 * @param assetIds {@link List<IdentifierKeyValuePair>}
+	 * @param assetIds
 	 */
 	public void setSpecificAssetId(List<IdentifierKeyValuePair> assetIds) {
 		put(SPECIFICASSETID, assetIds);
@@ -151,7 +151,7 @@ public class AssetInformation extends VABModelMap<Object> {
 	
 	/**
 	 * gets additional domain specific specific, typically proprietary Identifier for the asset like e.g. serial number etc.
-	 * @return {@link List<IdentifierKeyValuePair>}
+	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	public List<IdentifierKeyValuePair> getSpecificAssetId() {
@@ -170,7 +170,7 @@ public class AssetInformation extends VABModelMap<Object> {
 	/**
 	 * sets a reference to a Submodel that defines the bill of material of the asset represented by the AAS.
 	 * This submodel contains a set of entities describing the material used to compose the composite I4.0 Component.
-	 * @param reference {@link List<Reference>}
+	 * @param reference
 	 */
 	public void setBillOfMaterial(List<Reference> reference) {
 		put(BILLOFMATERIAL, reference);

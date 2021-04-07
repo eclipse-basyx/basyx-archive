@@ -48,7 +48,7 @@ public class Extension extends HasSemantics {
 	/**
 	 * Creates a Extension object from a map
 	 * 
-	 * @param obj
+	 * @param map
 	 *            a Extension object as raw map
 	 * @return a Extension object, that behaves like a facade for the given map
 	 */

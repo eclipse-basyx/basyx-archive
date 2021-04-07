@@ -49,7 +49,7 @@ public interface IEntity extends ISubmodelElement {
 	
 	/**
 	 * gets reference to an identifier key value pair representing a specific identifier of the asset represented by the asset administration shell.
-	 * @return {@link List<IdentifierKeyValuePair>}
+	 * @return
 	 */
 	List<IdentifierKeyValuePair> getSpecificAssetId();
 }

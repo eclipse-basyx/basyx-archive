@@ -181,7 +181,7 @@ public class Entity extends SubmodelElement implements IEntity {
 	/**
 	 * sets reference to an identifier key value pair representing a specific identifier of the asset represented by the asset administration shell.
 	 * 
-	 * @param assetIds {@link List<IdentifierKeyValuePair>}
+	 * @param assetIds
 	 */
 	public void setSpecificAssetId(List<IdentifierKeyValuePair> assetIds) {
 		put(SPECIFICASSETID, assetIds);
@@ -189,7 +189,7 @@ public class Entity extends SubmodelElement implements IEntity {
 	
 	/**
 	 * gets reference to an identifier key value pair representing a specific identifier of the asset represented by the asset administration shell.
-	 * @return {@link List<IdentifierKeyValuePair>}
+	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	@Override

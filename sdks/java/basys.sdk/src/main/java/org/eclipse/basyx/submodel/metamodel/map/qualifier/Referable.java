@@ -85,7 +85,7 @@ public class Referable extends HasExtensions implements IReferable {
 	/**
 	 * Creates a Referable object from a map
 	 * 
-	 * @param obj
+	 * @param map
 	 *            a Referable object as raw map
 	 * @return a Referable object, that behaves like a facade for the given map
 	 */

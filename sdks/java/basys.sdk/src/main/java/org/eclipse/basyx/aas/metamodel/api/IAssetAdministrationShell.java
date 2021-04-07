@@ -34,7 +34,7 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHas
 	/**
 	 * Return all registered submodels of this AAS
 	 * 
-	 * @return IdShort -> ISubmodel
+	 * @return {@literal IdShort -> ISubmodel}
 	 */
 	public Map<String, ISubmodel> getSubmodels();
 
@@ -97,7 +97,7 @@ public interface IAssetAdministrationShell extends IElement, IIdentifiable, IHas
 
 
 	/**
-	 * Gets the views associated with the AAS. <br/>
+	 * Gets the views associated with the AAS. <br>
 	 * If needed stakeholder specific views can be defined on the elements of the
 	 * AAS.
 	 * 
