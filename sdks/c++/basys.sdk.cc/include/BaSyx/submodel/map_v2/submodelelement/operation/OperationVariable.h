@@ -9,10 +9,8 @@ namespace submodel {
 namespace map {
 
 struct OperationVariablePath {
-  static constexpr char Value[] = "value";
+  static constexpr const char* Value = "value";
 };
-
-constexpr char OperationVariablePath::Value[];
 
 template<typename T>
 class OperationVariable : 
