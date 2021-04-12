@@ -31,12 +31,12 @@ void AdministrativeInformation::setRevision(const std::string &revision)
 
 bool AdministrativeInformation::hasVersion() const
 {
-  return not this->map.getProperty(Path::Version).IsNull();
+  return ! this->map.getProperty(Path::Version).IsNull();
 }
 
 bool AdministrativeInformation::hasRevision() const
 {
-  return not this->map.getProperty(Path::Revision).IsNull();
+  return ! this->map.getProperty(Path::Revision).IsNull();
 }
 
 const std::string * const AdministrativeInformation::getVersion() const

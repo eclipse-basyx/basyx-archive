@@ -21,7 +21,7 @@ Identifiable::Identifiable(const std::string & idShort, const simple::Identifier
 
 bool Identifiable::hasAdministrativeInformation() const noexcept
 {
-  return not this->map.getProperty(Path::AdministrativeInformation).IsNull();
+  return ! this->map.getProperty(Path::AdministrativeInformation).IsNull();
 };
 
 simple::Identifier Identifiable::getIdentification() const

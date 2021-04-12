@@ -74,7 +74,7 @@ public:
     // or if it's a primitive type, not null or object
     if (object.GetObjectType() == type::objectType::Primitive)
     {
-      if (object.GetValueType() != type::valueType::Null and object.GetValueType() != type::valueType::Object)
+      if (object.GetValueType() != type::valueType::Null && object.GetValueType() != type::valueType::Object)
         this->map.insertKey(PropertyPath::Value, object);
         this->map.insertKey(PropertyPath::ValueType, xsd_types::getPrimitiveXSDType(object.GetValueType()));
     }

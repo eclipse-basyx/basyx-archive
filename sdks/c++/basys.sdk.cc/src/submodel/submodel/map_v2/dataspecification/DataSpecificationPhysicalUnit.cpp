@@ -63,7 +63,7 @@ void DataSpecificationPhysicalUnit::setDefinition(const api::ILangStringSet &def
 
 const std::string * DataSpecificationPhysicalUnit::getSiNotation() const
 {
-  if ( not this->map.hasProperty(DataSpecificationPhysicalUnitPath::SiNotation) )
+  if ( ! this->map.hasProperty(DataSpecificationPhysicalUnitPath::SiNotation) )
     return nullptr;
 
   return &this->map.getProperty(DataSpecificationPhysicalUnitPath::SiNotation).GetStringContent();
@@ -76,7 +76,7 @@ void DataSpecificationPhysicalUnit::setSiNotation(const std::string &siNotation)
 
 const std::string * DataSpecificationPhysicalUnit::getSiName() const
 {
-  if ( not this->map.hasProperty(DataSpecificationPhysicalUnitPath::SiName) )
+  if ( ! this->map.hasProperty(DataSpecificationPhysicalUnitPath::SiName) )
     return nullptr;
 
   return &this->map.getProperty(DataSpecificationPhysicalUnitPath::SiName).GetStringContent();
@@ -89,7 +89,7 @@ void DataSpecificationPhysicalUnit::setSiName(const std::string &siName)
 
 const std::string * DataSpecificationPhysicalUnit::getDinNotation() const
 {
-  if ( not this->map.hasProperty(DataSpecificationPhysicalUnitPath::DinNotation) )
+  if ( ! this->map.hasProperty(DataSpecificationPhysicalUnitPath::DinNotation) )
     return nullptr;
 
   return &this->map.getProperty(DataSpecificationPhysicalUnitPath::DinNotation).GetStringContent();
@@ -102,7 +102,7 @@ void DataSpecificationPhysicalUnit::setDinNotation(const std::string &dinNotatio
 
 const std::string * DataSpecificationPhysicalUnit::getEceName() const
 {
-  if ( not this->map.hasProperty(DataSpecificationPhysicalUnitPath::EceName) )
+  if ( ! this->map.hasProperty(DataSpecificationPhysicalUnitPath::EceName) )
     return nullptr;
 
   return &this->map.getProperty(DataSpecificationPhysicalUnitPath::EceName).GetStringContent();
@@ -115,7 +115,7 @@ void DataSpecificationPhysicalUnit::setEceName(const std::string &eceName)
 
 const std::string * DataSpecificationPhysicalUnit::getEceCode() const
 {
-  if ( not this->map.hasProperty(DataSpecificationPhysicalUnitPath::EceCode) )
+  if ( ! this->map.hasProperty(DataSpecificationPhysicalUnitPath::EceCode) )
     return nullptr;
 
   return &this->map.getProperty(DataSpecificationPhysicalUnitPath::EceCode).GetStringContent();
@@ -128,7 +128,7 @@ void DataSpecificationPhysicalUnit::setEceCode(const std::string &eceCode)
 
 const std::string * DataSpecificationPhysicalUnit::getNistName() const
 {
-  if ( not this->map.hasProperty(DataSpecificationPhysicalUnitPath::NistName) )
+  if ( ! this->map.hasProperty(DataSpecificationPhysicalUnitPath::NistName) )
     return nullptr;
 
   return &this->map.getProperty(DataSpecificationPhysicalUnitPath::NistName).GetStringContent();
@@ -141,7 +141,7 @@ void DataSpecificationPhysicalUnit::setNistName(const std::string &nistName)
 
 const std::string * DataSpecificationPhysicalUnit::getSourceOfDefinition() const
 {
-  if ( not this->map.hasProperty(DataSpecificationPhysicalUnitPath::SourceOfDefinition) )
+  if ( ! this->map.hasProperty(DataSpecificationPhysicalUnitPath::SourceOfDefinition) )
     return nullptr;
 
   return &this->map.getProperty(DataSpecificationPhysicalUnitPath::SourceOfDefinition).GetStringContent();
@@ -154,7 +154,7 @@ void DataSpecificationPhysicalUnit::setSourceOfDefinition(const std::string &sou
 
 const std::string * DataSpecificationPhysicalUnit::getConversionFactor() const
 {
-  if ( not this->map.hasProperty(DataSpecificationPhysicalUnitPath::ConversionFactor) )
+  if ( ! this->map.hasProperty(DataSpecificationPhysicalUnitPath::ConversionFactor) )
     return nullptr;
 
   return &this->map.getProperty(DataSpecificationPhysicalUnitPath::ConversionFactor).GetStringContent();
@@ -167,7 +167,7 @@ void DataSpecificationPhysicalUnit::setConversionFactor(const std::string &conve
 
 const std::string * DataSpecificationPhysicalUnit::getRegistrationAuthorityId() const
 {
-  if ( not this->map.hasProperty(DataSpecificationPhysicalUnitPath::RegistrationAuthorityId) )
+  if ( ! this->map.hasProperty(DataSpecificationPhysicalUnitPath::RegistrationAuthorityId) )
     return nullptr;
 
   return &this->map.getProperty(DataSpecificationPhysicalUnitPath::RegistrationAuthorityId).GetStringContent();
@@ -180,7 +180,7 @@ void DataSpecificationPhysicalUnit::setRegistrationAuthorityId(const std::string
 
 const std::string * DataSpecificationPhysicalUnit::getSupplier() const
 {
-  if ( not this->map.hasProperty(DataSpecificationPhysicalUnitPath::Supplier) )
+  if ( ! this->map.hasProperty(DataSpecificationPhysicalUnitPath::Supplier) )
     return nullptr;
 
   return &this->map.getProperty(DataSpecificationPhysicalUnitPath::Supplier).GetStringContent();
