@@ -65,7 +65,7 @@ TYPED_TEST(PropertyTest, TestGetKeyElementType)
 TYPED_TEST(PropertyTest, TestAnyURI)
 {
   map::Property<simple::AnyURI> map_uri_prop("id");
-  ASSERT_EQ(map_uri_prop.getValueType(), std::string("anyURI"));
+  ASSERT_EQ(map_uri_prop.getValueType(), std::string("anyuri"));
 }
 
 TYPED_TEST(PropertyTest, TestSafeDateTime)

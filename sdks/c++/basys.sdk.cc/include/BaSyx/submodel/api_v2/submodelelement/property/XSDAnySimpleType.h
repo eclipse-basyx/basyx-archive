@@ -72,117 +72,155 @@ using namespace submodel;
   };
 
   template<>
-  struct xsd_type<int>
+  struct xsd_type<int8_t>
+  {
+      static const std::string getDataTypeDef()
+      {
+          return "byte";
+      }
+
+      static const inline int8_t getXSDRepresentation(const int8_t & int_value)
+      {
+          return int_value;
+      }
+
+      static const inline int8_t fromXSDRepresentation(basyx::object value)
+      {
+          return value.Get<int8_t>();
+      }
+  };
+
+  template<>
+  struct xsd_type<int16_t>
+  {
+      static const std::string getDataTypeDef()
+      {
+          return "short";
+      }
+
+      static const inline int16_t getXSDRepresentation(const int16_t & short_value)
+      {
+          return short_value;
+      }
+
+      static const inline int16_t fromXSDRepresentation(basyx::object value)
+      {
+          return value.Get<int16_t>();
+      }
+  };
+
+  template<>
+  struct xsd_type<int32_t>
   {
     static const std::string getDataTypeDef()
     {
-      return "integer";
+      return "int";
     }
 
-    static const inline int getXSDRepresentation(const int & int_value)
+    static const inline int32_t getXSDRepresentation(const int32_t & int_value)
     {
       return int_value;
     }
 
-    static const inline int fromXSDRepresentation(basyx::object value)
+    static const inline int32_t fromXSDRepresentation(basyx::object value)
     {
-      return value.Get<int>();
-    }
-  };
-
-template<>
-  struct xsd_type<long>
-  {
-    static const std::string getDataTypeDef()
-    {
-      return "long";
-    }
-
-    static const inline long getXSDRepresentation(const long & long_value)
-    {
-      return long_value;
-    }
-
-    static const inline long fromXSDRepresentation(basyx::object value)
-    {
-      return value.Get<long>();
+      return value.Get<int32_t>();
     }
   };
 
   template<>
-  struct xsd_type<short>
+  struct xsd_type<int64_t>
   {
-    static const std::string getDataTypeDef()
-    {
-      return "short";
-    }
+      static const std::string getDataTypeDef()
+      {
+          return "long";
+      }
 
-    static const inline short getXSDRepresentation(const short & short_value)
-    {
-      return short_value;
-    }
+      static const inline int64_t getXSDRepresentation(const int64_t & long_value)
+      {
+          return long_value;
+      }
 
-    static const inline short fromXSDRepresentation(basyx::object value)
-    {
-      return value.Get<short>();
-    }
+      static const inline int64_t fromXSDRepresentation(basyx::object value)
+      {
+          return value.Get<int64_t>();
+      }
   };
 
   template<>
-  struct xsd_type<unsigned int>
+  struct xsd_type<uint8_t>
+  {
+      static const std::string getDataTypeDef()
+      {
+          return "unsignedByte";
+      }
+
+      static const inline uint8_t getXSDRepresentation(const uint8_t & int_value)
+      {
+          return int_value;
+      }
+
+      static const inline uint8_t fromXSDRepresentation(basyx::object value)
+      {
+          return value.Get<uint8_t>();
+      }
+  };
+
+  template<>
+  struct xsd_type<uint16_t>
+  {
+      static const std::string getDataTypeDef()
+      {
+          return "unsignedShort";
+      }
+
+      static const inline uint16_t getXSDRepresentation(const uint16_t & ushort_value)
+      {
+          return ushort_value;
+      }
+
+      static const inline uint16_t fromXSDRepresentation(basyx::object value)
+      {
+          return value.Get<uint16_t>();
+      }
+  };
+
+  template<>
+  struct xsd_type<uint32_t>
   {
     static const std::string getDataTypeDef()
     {
       return "unsignedInt";
     }
 
-    static const inline unsigned int getXSDRepresentation(const unsigned int & uint_value)
+    static const inline uint32_t getXSDRepresentation(const uint32_t & uint_value)
     {
       return uint_value;
     }
 
-    static const inline unsigned int fromXSDRepresentation(basyx::object value)
+    static const inline uint32_t fromXSDRepresentation(basyx::object value)
     {
-      return value.Get<unsigned int>();
+      return value.Get<uint32_t>();
     }
   };
 
   template<>
-  struct xsd_type<unsigned short>
+  struct xsd_type<uint64_t>
   {
-    static const std::string getDataTypeDef()
-    {
-      return "unsignedShort";
-    }
+      static const std::string getDataTypeDef()
+      {
+          return "unsignedLong";
+      }
 
-    static const inline unsigned short getXSDRepresentation(const unsigned short & ushort_value)
-    {
-      return ushort_value;
-    }
+      static const inline uint64_t getXSDRepresentation(const uint64_t & ulong_value)
+      {
+          return ulong_value;
+      }
 
-    static const inline unsigned short fromXSDRepresentation(basyx::object value)
-    {
-      return value.Get<unsigned short>();
-    }
-  };
-
-  template<>
-  struct xsd_type<unsigned long>
-  {
-    static const std::string getDataTypeDef()
-    {
-      return "unsignedLong";
-    }
-
-    static const inline unsigned long getXSDRepresentation(const unsigned long & ulong_value)
-    {
-      return ulong_value;
-    }
-
-    static const inline unsigned long fromXSDRepresentation(basyx::object value)
-    {
-      return value.Get<unsigned long>();
-    }
+      static const inline uint64_t fromXSDRepresentation(basyx::object value)
+      {
+          return value.Get<uint64_t>();
+      }
   };
 
   template<>
@@ -247,7 +285,7 @@ template<>
   {
     static const std::string getDataTypeDef()
     {
-      return "anyURI";
+      return "anyuri";
     }
 
     static const inline std::string getXSDRepresentation(const simple::AnyURI & uri)
@@ -257,7 +295,12 @@ template<>
 
     static const inline simple::AnyURI fromXSDRepresentation(const std::string & value)
     {
-      return value;
+      return simple::AnyURI(value);
+    }
+
+    static const inline simple::AnyURI fromXSDRepresentation(basyx::object value)
+    {
+        return simple::AnyURI(value.Get<std::string>());
     }
   };
 
@@ -414,7 +457,8 @@ template<>
       {
         xsd_str += "-";
         years *= -1;
-      } else if (months < 0 and years == 0)
+      }
+	  else if (months < 0 && years == 0)
       {
         xsd_str += "-";
         months *= -1;
