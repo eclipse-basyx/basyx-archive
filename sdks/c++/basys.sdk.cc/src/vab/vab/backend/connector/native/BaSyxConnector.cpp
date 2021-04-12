@@ -22,11 +22,10 @@ namespace vab {
 namespace connector {
 namespace native {
 
-NativeConnector::NativeConnector(std::string const& address, int port)
-	: socket{ basyx::net::tcp::Socket::Connect(address, port) }
+NativeConnector::NativeConnector()
+	: socket{ nullptr }
 	, log{ "NativeConnector" }
 {
-	log.trace("Connected to {}:{}", address, port);
 }
 
 
@@ -34,6 +33,12 @@ NativeConnector::NativeConnector(std::string const& address, int port)
 NativeConnector::~NativeConnector() {
 }
 
+void NativeConnector::connect(const std::string & address, int port)
+{
+	log.trace("Connecting to {}:{}", address, port);
+	this->socket = util::make_unique<basyx::net::tcp::Socket>(basyx::net::tcp::Socket::Connect(address, port));
+	log.trace("Connected to {}:{}", address, port);
+};
 
 
 basyx::object NativeConnector::basysGet(std::string const& path)
@@ -121,22 +126,21 @@ void NativeConnector::sendData(char* msg, size_t size)
 	size += BASYX_FRAMESIZE_SIZE;
 
 	log.debug("Sending {} bytes.", size);
-	auto sent_bytes = this->socket.Send(basyx::net::make_buffer(msg, size));
+	auto sent_bytes = this->socket->Send(basyx::net::make_buffer(msg, size));
 	log.debug("Sent {} bytes.", sent_bytes);
 
 	if (sent_bytes < 0) {
-		log.error("Send failed! Error code: {}", this->socket.GetErrorCode());
+		log.error("Send failed! Error code: {}", this->socket->GetErrorCode());
 	}
 }
 
-// TODO: Error handling
 size_t NativeConnector::receiveData(char* data) 
 {
 	log.trace("receiveData() called");
 	log.trace("    data: 0x{0:x}", (std::size_t)data);
 
 	// recv(data, DEFAULT_BUFFER_LENGTH, 0);
-	auto recv_bytes = this->socket.Receive(basyx::net::make_buffer(data, default_buffer_length));
+	auto recv_bytes = this->socket->Receive(basyx::net::make_buffer(data, default_buffer_length));
 
 	log.debug("Received {} bytes.", recv_bytes);
 
@@ -151,10 +155,8 @@ size_t NativeConnector::receiveData(char* data)
 
 void NativeConnector::sendFrame(const Frame & frame)
 {
-	Frame::write_to_buffer(
-		basyx::net::make_buffer(
-			buffer.data() + BASYX_FRAMESIZE_SIZE, default_buffer_length - BASYX_FRAMESIZE_SIZE), 
-		frame);
+	auto buffer_view = basyx::net::make_buffer(buffer.data() + BASYX_FRAMESIZE_SIZE, default_buffer_length - BASYX_FRAMESIZE_SIZE);
+	Frame::write_to_buffer(buffer_view, frame);
 
 	sendData(buffer.data(), frame.size());
 };
@@ -163,7 +165,9 @@ Frame NativeConnector::recvFrame()
 {
 	this->receiveData(buffer.data());
 	auto size = *reinterpret_cast<uint32_t*>(buffer.data());
-	auto frame = Frame::read_from_buffer(basyx::net::make_buffer(this->buffer.data() + BASYX_FRAMESIZE_SIZE, size));
+
+	auto buffer_view = basyx::net::make_buffer(this->buffer.data() + BASYX_FRAMESIZE_SIZE, size);
+	auto frame = Frame::read_from_buffer(buffer_view);
 
 	return frame;
 };

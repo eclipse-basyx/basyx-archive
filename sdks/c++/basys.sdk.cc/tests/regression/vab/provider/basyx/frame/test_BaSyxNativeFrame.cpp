@@ -15,7 +15,8 @@ TEST(BaSyxNativeFrame, frameTestNoValue)
 	char buffer[4096];
 	memset(buffer, 0, 4096);
 
-	Frame::write_to_buffer(basyx::net::make_buffer(buffer, 4096), frame);
+	auto buffer_view = basyx::net::make_buffer(buffer, 4096);
+	Frame::write_to_buffer(buffer_view, frame);
 	auto frame_b = Frame::read_from_buffer(basyx::net::make_buffer(buffer, 4096));
 
 	ASSERT_EQ(buffer[frame.size()], 0x0);
@@ -35,7 +36,8 @@ TEST(BaSyxNativeFrame, frameTestWithValue)
 	char buffer[4096];
 	memset(buffer, 0, 4096);
 
-	Frame::write_to_buffer(basyx::net::make_buffer(buffer, 4096), frame);
+	auto buffer_view = basyx::net::make_buffer(buffer, 4096);
+	Frame::write_to_buffer(buffer_view, frame);
 	auto frame_b = Frame::read_from_buffer(basyx::net::make_buffer(buffer, 4096));
 
 	ASSERT_EQ(buffer[frame.size()], 0x0);
@@ -55,6 +57,7 @@ TEST(BaSyxNativeFrame, bufferTooSmall)
 	char buffer[4096];
 	memset(buffer, 0, 4096);
 
-	auto result = Frame::write_to_buffer(basyx::net::make_buffer(buffer, 10), frame);
+	auto buffer_view = basyx::net::make_buffer(buffer, 10);
+	auto result = Frame::write_to_buffer(buffer_view, frame);
 	ASSERT_FALSE(result);
 }

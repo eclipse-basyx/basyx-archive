@@ -8,6 +8,7 @@
 #include <BaSyx/log/log.h>
 
 #include <asio.hpp>
+#include <asio/read.hpp>
 
 #include <BaSyx/server/BaSyxNativeProvider.h>
 #include <BaSyx/vab/provider/native/frame/BaSyxNativeFrameProcessor.h>
@@ -15,75 +16,166 @@
 namespace basyx {
 namespace server {
 
+template<typename Backend>
+class NativeConnection : public std::enable_shared_from_this<NativeConnection<Backend>>
+{
+public:
+	using ptr_t = std::shared_ptr<NativeConnection>;
+private:
+	vab::provider::native::frame::BaSyxNativeFrameProcessor processor;
+	asio::ip::tcp::socket socket_;
+
+	static constexpr std::size_t default_buffer_size = 8192;
+	std::array<char, default_buffer_size> recv_buffer;
+	std::array<char, default_buffer_size> send_buffer;
+
+	uint32_t received_frame_window_size;
+	std::vector<uint8_t> data;
+public:
+	void process_frame()
+	{
+		using namespace basyx::vab::connector::native;
+
+		auto frame = Frame::read_from_buffer(data);
+		auto output_frame = processor.processInputFrame(frame);
+
+		data.resize(output_frame.size() + BASYX_FRAMESIZE_SIZE);
+
+		auto buffer_view = basyx::net::make_buffer(&data[BASYX_FRAMESIZE_SIZE], output_frame.size());
+		Frame::write_to_buffer(
+			buffer_view,
+			output_frame
+		);
+
+		auto size_field = reinterpret_cast<uint32_t*>(&data[0]);
+		*size_field = static_cast<uint32_t>(output_frame.size());
+
+		auto transfer_size = data.size();
+		auto shared_this = this->shared_from_this();
+		asio::async_write(socket_, asio::buffer(data, transfer_size),
+			[shared_this, transfer_size](asio::error_code error, std::size_t bytes_transferred) {
+			if (error || bytes_transferred != transfer_size) {
+				shared_this->close();
+			}
+			else {
+				shared_this->run();
+			}
+		});
+	};
+
+	void close()
+	{
+		this->socket_.close();
+	};
+
+	void read_frame()
+	{
+		data.resize(received_frame_window_size);
+
+		auto shared_this = this->shared_from_this();
+		asio::async_read(socket_, asio::buffer(data),
+			[shared_this](asio::error_code error, std::size_t bytes_read) {
+			if (!error) {
+				shared_this->process_frame();
+			};
+		});
+	};
+public:
+	NativeConnection(asio::io_context & io_context, Backend * backend)
+		: socket_(io_context)
+		, processor(backend)
+		, data(4, 0)
+	{
+	};
+
+	asio::ip::tcp::socket & socket() { return this->socket_; }
+
+	void run()
+	{
+		auto shared_this = this->shared_from_this();
+		asio::async_read(socket_, asio::buffer((char*)&received_frame_window_size, sizeof(received_frame_window_size)), 
+			[shared_this](asio::error_code error, std::size_t bytes_read) {
+			if (!error) {
+				shared_this->read_frame();
+			};
+		});
+	};
+};
+
+
 template <typename Backend>
 class TCPServer {
 public:
     using socket_ptr_t = std::unique_ptr<asio::ip::tcp::socket>;
-
+	using connection_t = NativeConnection<Backend>;
+	using connection_ptr_t = typename connection_t::ptr_t;
 private:
     Backend* backend;
 
     asio::io_context io_context;
-    asio::ip::tcp::acceptor acceptor;
-
-    std::vector<std::thread> threads;
-    std::vector<socket_ptr_t> sockets;
-
-    bool closed;
-    std::atomic_bool running;
+	asio::executor_work_guard<asio::io_context::executor_type> work_guard;
+	asio::ip::tcp::acceptor acceptor;
 
     basyx::log log;
-
 public:
     TCPServer(Backend* backend, int port)
         : backend { backend }
-        , running { false }
-        , io_context { 1 }
+        , io_context { 2 }
+		, work_guard{ asio::make_work_guard(io_context) }
         , acceptor { io_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port) }
         , log { "TCPServer" }
     {
-        // ToDo: Check health of acceptor
-        log.info("Starting server on port {}", port);
+        log.info("Creating server on port {}", port);
         acceptor.listen();
+        log.trace("Acceptor open");
     }
 
     void run()
     {
-		start_accept();
-		this->running.store(true);
+		log.info("Starting server");
+
+		asio::dispatch(this->acceptor.get_executor(), [this]() {
+			this->start_accept();
+		});
+
 		this->io_context.run();
     };
 
     void stop()
     {
-        this->io_context.stop();
-    };
+		this->acceptor.close();
+		this->work_guard.reset();
+		this->io_context.stop();
+	};
 
     void start_accept()
     {
-        asio::error_code ec;
-        auto client_socket = util::make_unique<asio::ip::tcp::socket>(io_context);
+		log.info("Waiting for new connections...");
+		asio::error_code ec;
 
-		sockets.emplace_back(std::move(client_socket));
+		auto connection = std::make_shared<connection_t>(this->io_context, this->backend);
 
-        acceptor.async_accept(*sockets.back(),
-            std::bind(&TCPServer::handle_accept, this,
-                std::placeholders::_1));
+		acceptor.async_accept(connection->socket(), 
+			[this, connection](const asio::error_code error) {
+				this->handle_accept(error, std::move(connection));
+		});
     };
 
-    void handle_accept(
-        const asio::error_code& error)
+    void handle_accept(const asio::error_code error, connection_ptr_t connection)
     {
+		log.trace("Entering handle_accept()");
+
         if (!error) {
             log.info("Incoming new connection");
 
-            std::thread handlerThread { &TCPServer<Backend>::processConnection, this, std::ref(*sockets.back()) };
-            threads.emplace_back(std::move(handlerThread));
+			asio::dispatch(this->io_context, [connection]() {
+				connection->run();
+			});
+			start_accept();
         } else {
-            sockets.pop_back();
+            //sockets.pop_back();
+			log.warn("Client socket closed.");
         }
-
-        start_accept();
     };
 
     void Close()
@@ -93,30 +185,7 @@ public:
         if (!isRunning())
             return;
 
-        running.store(false);
-        this->stop();
-
-        //// Close the acceptor socket
-        //log.trace("Closing Acceptor...");
-        //acceptor.close();
-
-        // Close all accepted connections
-        // This will bring all open connection threads to a finish
-        log.trace("Closing open connections...");
-        for (auto& socket : sockets) {
-            try {
-                if (socket->is_open())
-                    socket->close();
-            } catch (std::exception& e) {
-                log.warn("Socket closed unexpectedly: {}", e.what());
-            }
-        };
-
-        // Wait for all threads to finish
-        for (auto& thread : threads)
-            thread.join();
-
-        // ToDo: Check for errors during cleanup
+		this->stop();
     }
 
     ~TCPServer()
@@ -124,51 +193,9 @@ public:
         this->Close();
     }
 
-    /**
-    * Has to be called periodically
-    */
-    void update()
-    {
-        if (isRunning()) {
-            log.info("Accepting new connections."); 
-
-            auto ClientSocket = util::make_unique<asio::ip::tcp::socket>(io_context);
-            this->acceptor.accept(*ClientSocket.get());
-
-            //auto error = WSAGetLastError();
-
-            if (!ClientSocket->is_open()) {
-                log.warn("Incoming connection failed");
-                return;
-            }
-
-            log.info("Incoming new connection");
-            sockets.emplace_back(std::move(ClientSocket));
-
-            std::thread handlerThread { &TCPServer<Backend>::processConnection, this, std::ref(*sockets.back()) };
-            threads.emplace_back(std::move(handlerThread));
-        }
-    }
-
     bool isRunning()
     {
-        return running.load();
-    }
-
-private:
-    /**
-* Handles a BaSyxNativeProvider
-*/
-    void processConnection(asio::ip::tcp::socket& socket)
-    {
-        log.trace("Processing new connection");
-
-        vab::provider::native::frame::BaSyxNativeFrameProcessor processor { this->backend };
-        vab::provider::native::NativeProvider provider { socket, &processor };
-
-        while (!provider.isClosed()) {
-            provider.update();
-        }
+        return !io_context.stopped();
     }
 };
 };

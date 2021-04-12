@@ -27,6 +27,6 @@ target_sources(tests_vab
 
 target_include_directories(tests_vab PUBLIC ${PROJECT_SOURCE_DIR})
 target_link_libraries(tests_vab basyx::util basyx::vab basyx::shared lib::gtest tests::support tests::main basyx::server)
-gtest_discover_tests(tests_vab)
+#temporarily disabled# gtest_discover_tests(tests_vab)
 
 diagnostics_print(tests_vab)
