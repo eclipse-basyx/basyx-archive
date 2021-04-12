@@ -78,7 +78,6 @@ set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_DEFAULT} CACHE BOOL "Build Shared (.so
 option(BASYX_USE_SYSTEM_LIBFMT "Wether to build external, yet included library libfmt" OFF)
 option(BASYX_USE_SYSTEM_ASIO "Use system supplied ASIO library." OFF)
 option(BASYX_USE_SYSTEM_JSON "Use system supplied nlohmann json library" OFF)
-option(BASYX_MODULE_OPCUA "Build the BaSyx OPCUA module" OFF)
 
 ### Compiler settings ###
 set(CMAKE_CXX_STANDARD 11)
@@ -130,10 +129,6 @@ if(${BASYX_BUILD_TESTS})
     include(GoogleTest)
 endif()
 
-if(${BASYX_MODULE_OPCUA})
-	add_subdirectory(lib/open62541)
-endif()
-
 ###############################################
 ###           Source Directory              ###
 ###############################################
@@ -147,10 +142,6 @@ add_subdirectory(src/vab)
 add_subdirectory(src/server)
 add_subdirectory(src/submodel)
 add_subdirectory(src/controlcomponent)
-
-if(${BASYX_MODULE_OPCUA})
-	add_subdirectory(src/opcua)
-endif()
 
 ###############################################
 ###           Test Directory                ###

@@ -27,10 +27,6 @@ add_subdirectory(regression/vab)
 add_subdirectory(regression/submodel)
 add_subdirectory(regression/controlcomponent)
 
-if(${BASYX_MODULE_OPCUA})
-    add_subdirectory(regression/opcua)
-endif()
-
 ### Integration tests ###
 
 if(BASYX_BUILD_INTEGRATION_TESTS)
