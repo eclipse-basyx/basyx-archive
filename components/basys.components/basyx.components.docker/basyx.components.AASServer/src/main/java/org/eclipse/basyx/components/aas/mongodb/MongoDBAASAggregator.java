@@ -89,7 +89,7 @@ public class MongoDBAASAggregator implements IAASAggregator {
 	/**
 	 * Receives the path of the configuration.properties file in it's constructor.
 	 * 
-	 * @param configFilePath
+	 * @param config
 	 */
 	public MongoDBAASAggregator(BaSyxMongoDBConfiguration config) {
 		this.setConfiguration(config);
