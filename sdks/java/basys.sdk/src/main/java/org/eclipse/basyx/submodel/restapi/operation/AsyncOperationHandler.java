@@ -17,7 +17,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.poi.ss.formula.functions.T;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationExecutionTimeoutException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
@@ -102,8 +101,8 @@ public class AsyncOperationHandler {
 	/**
 	 * Function for scheduling a timeout function with completable futures
 	 */
-	private static CompletableFuture<T> setTimeout(int timeout, String requestId) {
-		CompletableFuture<T> result = new CompletableFuture<>();
+	private static CompletableFuture<Void> setTimeout(int timeout, String requestId) {
+		CompletableFuture<Void> result = new CompletableFuture<>();
 		delayer.schedule(
 				() -> result.completeExceptionally(
 						new OperationExecutionTimeoutException("Request " + requestId + " timed out")),
