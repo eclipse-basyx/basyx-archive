@@ -39,8 +39,8 @@ public class ProviderException extends RuntimeException {
 	}
 	
 		
-	public ProviderException(Exception e) {
-		super(e);
+	public ProviderException(Throwable cause) {
+		super(cause);
 	}
 
 
