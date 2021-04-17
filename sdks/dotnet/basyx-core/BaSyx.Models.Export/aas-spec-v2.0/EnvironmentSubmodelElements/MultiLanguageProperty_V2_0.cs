@@ -18,7 +18,8 @@ namespace BaSyx.Models.Export
     public class MultiLanguageProperty_V2_0 : SubmodelElementType_V2_0
     {
         [JsonProperty("value")]
-        [XmlElement("value")]
+        [XmlArray("value")]
+        [XmlArrayItem("langString")]
         public LangStringSet Value { get; set; }
 
         [JsonProperty("valueId")]
