@@ -14,7 +14,7 @@ import static org.junit.Assert.assertFalse;
 
 import java.io.IOException;
 
-import org.eclipse.basyx.extensions.submodel.mqtt.MqttSubmodelAPI;
+import org.eclipse.basyx.extensions.submodel.mqtt.MqttSubmodelAPIObserver;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
@@ -23,6 +23,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.observer.ObservableSubmodelAPI;
 import org.eclipse.basyx.submodel.restapi.vab.VABSubmodelAPI;
 import org.eclipse.basyx.testsuite.regression.extensions.shared.mqtt.MqttTestListener;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
@@ -39,18 +40,19 @@ import io.moquette.broker.config.IConfig;
 import io.moquette.broker.config.IResourceLoader;
 import io.moquette.broker.config.ResourceLoaderConfig;
 
+
 /**
- * Tests events emitting with the MqttSubmodelAPI
+ * Test for MqttSubmodelAPIObserver
  * 
- * @author espen
+ * @author espen, conradi
  *
  */
-public class TestMqttSubmodelAPIEvents {
+public class MqttSubmodelAPIObserverTest {
 	private static final String AASID = "testaasid";
 	private static final String SUBMODELID = "testsubmodelid";
 	
 	private static Server mqttBroker;
-	private static MqttSubmodelAPI eventAPI;
+	private static ObservableSubmodelAPI observableAPI;
 	private MqttTestListener listener;
 
 	/**
@@ -70,7 +72,8 @@ public class TestMqttSubmodelAPIEvents {
 		sm.setParent(parentRef);
 		
 		VABSubmodelAPI vabAPI = new VABSubmodelAPI(new VABMapProvider(sm));
-		eventAPI = new MqttSubmodelAPI(vabAPI, "tcp://localhost:1884", "testClient");
+		observableAPI = new ObservableSubmodelAPI(vabAPI);
+		new MqttSubmodelAPIObserver(observableAPI, "tcp://localhost:1884", "testClient");
 	}
 
 	@AfterClass
@@ -94,10 +97,10 @@ public class TestMqttSubmodelAPIEvents {
 		String elemIdShort = "testAddProp"; 
 		Property prop = new Property(true);
 		prop.setIdShort(elemIdShort);
-		eventAPI.addSubmodelElement(prop);
+		observableAPI.addSubmodelElement(prop);
 
-		assertEquals(MqttSubmodelAPI.getCombinedMessage(AASID, SUBMODELID, elemIdShort), listener.lastPayload);
-		assertEquals(MqttSubmodelAPI.TOPIC_ADDELEMENT, listener.lastTopic);
+		assertEquals(MqttSubmodelAPIObserver.getCombinedMessage(AASID, SUBMODELID, elemIdShort), listener.lastPayload);
+		assertEquals(MqttSubmodelAPIObserver.TOPIC_ADDELEMENT, listener.lastTopic);
 	}
 
 	@Test
@@ -105,14 +108,14 @@ public class TestMqttSubmodelAPIEvents {
 		String idShortPath = "/testColl/testAddProp/";
 		SubmodelElementCollection coll = new SubmodelElementCollection();
 		coll.setIdShort("testColl");
-		eventAPI.addSubmodelElement(coll);
+		observableAPI.addSubmodelElement(coll);
 
 		Property prop = new Property(true);
 		prop.setIdShort("testAddProp");
-		eventAPI.addSubmodelElement(idShortPath, prop);
+		observableAPI.addSubmodelElement(idShortPath, prop);
 
-		assertEquals(MqttSubmodelAPI.getCombinedMessage(AASID, SUBMODELID, idShortPath), listener.lastPayload);
-		assertEquals(MqttSubmodelAPI.TOPIC_ADDELEMENT, listener.lastTopic);
+		assertEquals(MqttSubmodelAPIObserver.getCombinedMessage(AASID, SUBMODELID, idShortPath), listener.lastPayload);
+		assertEquals(MqttSubmodelAPIObserver.TOPIC_ADDELEMENT, listener.lastTopic);
 	}
 
 	@Test
@@ -120,11 +123,11 @@ public class TestMqttSubmodelAPIEvents {
 		String idShortPath = "/testDeleteProp";
 		Property prop = new Property(true);
 		prop.setIdShort("testDeleteProp");
-		eventAPI.addSubmodelElement(prop);
-		eventAPI.deleteSubmodelElement(idShortPath);
+		observableAPI.addSubmodelElement(prop);
+		observableAPI.deleteSubmodelElement(idShortPath);
 
-		assertEquals(MqttSubmodelAPI.getCombinedMessage(AASID, SUBMODELID, idShortPath), listener.lastPayload);
-		assertEquals(MqttSubmodelAPI.TOPIC_DELETEELEMENT, listener.lastTopic);
+		assertEquals(MqttSubmodelAPIObserver.getCombinedMessage(AASID, SUBMODELID, idShortPath), listener.lastPayload);
+		assertEquals(MqttSubmodelAPIObserver.TOPIC_DELETEELEMENT, listener.lastTopic);
 	}
 
 	@Test
@@ -132,11 +135,11 @@ public class TestMqttSubmodelAPIEvents {
 		String idShortPath = "testUpdateProp";
 		Property prop = new Property(true);
 		prop.setIdShort(idShortPath);
-		eventAPI.addSubmodelElement(prop);
-		eventAPI.updateSubmodelElement(idShortPath, false);
+		observableAPI.addSubmodelElement(prop);
+		observableAPI.updateSubmodelElement(idShortPath, false);
 
-		assertFalse((boolean) eventAPI.getSubmodelElementValue(idShortPath));
-		assertEquals(MqttSubmodelAPI.getCombinedMessage(AASID, SUBMODELID, idShortPath), listener.lastPayload);
-		assertEquals(MqttSubmodelAPI.TOPIC_UPDATEELEMENT, listener.lastTopic);
+		assertFalse((boolean) observableAPI.getSubmodelElementValue(idShortPath));
+		assertEquals(MqttSubmodelAPIObserver.getCombinedMessage(AASID, SUBMODELID, idShortPath), listener.lastPayload);
+		assertEquals(MqttSubmodelAPIObserver.TOPIC_UPDATEELEMENT, listener.lastTopic);
 	}
 }
