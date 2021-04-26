@@ -118,10 +118,8 @@ public:
 
     std::size_t sendFrame(const connector::native::Frame& frame)
     {
-        connector::native::Frame::write_to_buffer(
-            basyx::net::make_buffer(
-                send_buffer.data() + BASYX_FRAMESIZE_SIZE, default_buffer_size - BASYX_FRAMESIZE_SIZE),
-            frame);
+		auto buffer_view = basyx::net::make_buffer(send_buffer.data() + BASYX_FRAMESIZE_SIZE, default_buffer_size - BASYX_FRAMESIZE_SIZE);
+        connector::native::Frame::write_to_buffer(buffer_view, frame);
 
         auto size_field = reinterpret_cast<uint32_t*>(&send_buffer[0]);
         *size_field = static_cast<uint32_t>(frame.size());

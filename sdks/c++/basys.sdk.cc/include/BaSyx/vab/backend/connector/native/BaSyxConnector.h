@@ -24,14 +24,15 @@ namespace native {
     public:
         static constexpr std::size_t default_buffer_length = 8192;
 	private:
-		basyx::net::tcp::Socket socket;
+		std::unique_ptr<basyx::net::tcp::Socket> socket;
 		std::array<char, default_buffer_length> buffer;
 	private:
 		basyx::log log;
 	public:
-        NativeConnector(std::string const& address, int port);
+        NativeConnector();
         virtual ~NativeConnector();
     public:
+		void connect(const std::string & address, int port);
         virtual basyx::object basysGet(std::string const& path) override;
         virtual basyx::object basysSet(std::string const& path, const basyx::object& newValue) override;
         virtual basyx::object basysCreate(std::string const& servicePath, const basyx::object& val) override;

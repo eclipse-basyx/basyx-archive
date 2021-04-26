@@ -77,14 +77,17 @@ public:
 
     static basic_socket<socket_impl> Connect(const std::string& address, int port)
     {
+		std::cout << "[Socket] Entering ctor";
         return basic_socket<socket_impl>::Connect(address, std::to_string(port));
     }
 
     static basic_socket<socket_impl> Connect(const std::string& address, const std::string& port)
     {
-        //ToDo: Error handling
-        auto sock_impl = util::make_unique<socket_impl>();
-        auto result = sock_impl->connect(address, port);
+		std::cout << "[Connector] Entering connect";
+		auto sock_impl = util::make_unique<socket_impl>();
+		std::cout << "[Connector] sock_impl created";
+		auto result = sock_impl->connect(address, port);
+		std::cout << "[Connector] sock_impl connected";
 
         if (result != 0)
             return basic_socket<socket_impl> {};

@@ -60,53 +60,53 @@ void Frame::setSecondValue(const std::string & value)
 	this->value_2 = value;
 };
 
-bool Frame::write_to_buffer(const basyx::net::Buffer & buffer, const Frame & frame)
-{
-	// bail out if buffer to small
-	if (frame.size() > buffer.size())
-		return false;
+//bool Frame::write_to_buffer(const basyx::net::Buffer & buffer, const Frame & frame)
+//{
+//	// bail out if buffer to small
+//	if (frame.size() > buffer.size())
+//		return false;
+//
+//	std::size_t pos = 0;
+//	char * data = reinterpret_cast<char*>(buffer.data());
+//
+//	// write command field
+//	data[pos] = static_cast<uint8_t>(frame.getFlag());
+//	pos += 1;
+//	
+//	// write first value field
+//	pos += StringTools::toArray(frame.getFirstValue(), &data[pos]);
+//
+//	// write second value field
+//	if (!frame.getSecondValue().empty())
+//	{
+//		pos += StringTools::toArray(frame.getSecondValue(), &data[pos]);
+//	};
+//
+//	return true;
+//};
 
-	std::size_t pos = 0;
-	char * data = reinterpret_cast<char*>(buffer.data());
-
-	// write command field
-	data[pos] = static_cast<uint8_t>(frame.getFlag());
-	pos += 1;
-	
-	// write first value field
-	pos += StringTools::toArray(frame.getFirstValue(), &data[pos]);
-
-	// write second value field
-	if (!frame.getSecondValue().empty())
-	{
-		pos += StringTools::toArray(frame.getSecondValue(), &data[pos]);
-	};
-
-	return true;
-};
-
-Frame Frame::read_from_buffer(const basyx::net::Buffer & buffer)
-{
-	Frame frame;
-
-	std::size_t pos = 0;
-	char * data = reinterpret_cast<char*>(buffer.data());
-	
-	uint8_t flag = static_cast<uint8_t>(data[pos]);
-	frame.setFlag(flag);
-	pos += 1;
-
-	frame.setFirstValue(StringTools::fromArray(&data[pos]));
-	pos += frame.getFirstValue().size() + sizeof(uint32_t);
-
-	if (pos < buffer.size())
-	{
-		frame.setSecondValue(StringTools::fromArray(&data[pos]));
-		pos += frame.getSecondValue().size() + sizeof(uint32_t);
-	};
-
-	return frame;
-};
+//Frame Frame::read_from_buffer(const basyx::net::Buffer & buffer)
+//{
+//	Frame frame;
+//
+//	std::size_t pos = 0;
+//	char * data = reinterpret_cast<char*>(buffer.data());
+//	
+//	uint8_t flag = static_cast<uint8_t>(data[pos]);
+//	frame.setFlag(flag);
+//	pos += 1;
+//
+//	frame.setFirstValue(StringTools::fromArray(&data[pos]));
+//	pos += frame.getFirstValue().size() + sizeof(uint32_t);
+//
+//	if (pos < buffer.size())
+//	{
+//		frame.setSecondValue(StringTools::fromArray(&data[pos]));
+//		pos += frame.getSecondValue().size() + sizeof(uint32_t);
+//	};
+//
+//	return frame;
+//};
 
 std::size_t Frame::size() const
 {

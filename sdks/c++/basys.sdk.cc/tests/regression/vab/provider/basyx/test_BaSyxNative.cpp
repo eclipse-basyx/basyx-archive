@@ -23,6 +23,8 @@
 
 using namespace basyx;
 
+class ConnectedModelProvider;
+
 class TestBaSyxNative : public ::testing::Test {
 	using TcpServer_t = server::TCPServer<vab::provider::VABModelProvider>;
 public:
@@ -31,6 +33,9 @@ public:
 
 	std::unique_ptr<vab::provider::VABModelProvider> provider;
 	std::unique_ptr<TcpServer_t> tcpServer;
+
+	std::unique_ptr<vab::connector::native::NativeConnector> clientConnector;
+	std::unique_ptr<ConnectedModelProvider> clientProvider;
 
 	std::atomic<bool> done;
 
@@ -51,14 +56,19 @@ public:
 		};
 
 		// Wait until server started up
-		std::this_thread::sleep_for(std::chrono::seconds(3));
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+
+		clientConnector = util::make_unique<vab::connector::native::NativeConnector>();
+		clientConnector->connect("127.0.0.1", port);
+
+		clientProvider = util::make_unique<ConnectedModelProvider>(clientConnector.get());
 	}
 
 	virtual void TearDown()
 	{
 		tcpServer->Close();
 		server_thread.join();
-		std::this_thread::sleep_for(std::chrono::seconds(3));
+		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
 };
 
@@ -108,42 +118,27 @@ public:
 
 TEST_F(TestBaSyxNative, MapRead)
 {
-	auto connector = util::make_unique<vab::connector::native::NativeConnector>("127.0.0.1", port);
-	auto provider = ConnectedModelProvider(connector.get());
-
-	tests::regression::vab::snippet::MapRead::test(&provider);
+	tests::regression::vab::snippet::MapRead::test(clientProvider.get());
 }
 
 TEST_F(TestBaSyxNative, MapUpdate)
 {
-	auto connector = util::make_unique<vab::connector::native::NativeConnector>("127.0.0.1", port);
-	auto provider = ConnectedModelProvider(connector.get());
-
-	tests::regression::vab::snippet::MapUpdate::test(&provider);
+	tests::regression::vab::snippet::MapUpdate::test(clientProvider.get());
 }
 
 TEST_F(TestBaSyxNative, MapCreateDelete)
 {
-	auto connector = util::make_unique<vab::connector::native::NativeConnector>("127.0.0.1", port);
-	auto provider = ConnectedModelProvider(connector.get());
-
-	tests::regression::vab::snippet::MapCreateDelete::test(&provider);
+	tests::regression::vab::snippet::MapCreateDelete::test(clientProvider.get());
 }
 
 TEST_F(TestBaSyxNative, MapInvoke)
 {
-	auto connector = util::make_unique<vab::connector::native::NativeConnector>("127.0.0.1", port);
-	auto provider = ConnectedModelProvider(connector.get());
-
-	tests::regression::vab::snippet::MapInvoke::test(&provider);
+	tests::regression::vab::snippet::MapInvoke::test(clientProvider.get());
 }
 
 TEST_F(TestBaSyxNative, TestCollectionProperty)
 {
-	auto connector = util::make_unique<vab::connector::native::NativeConnector>("127.0.0.1", port);
-	auto provider = ConnectedModelProvider(connector.get());
-
-	tests::regression::vab::snippet::TestCollectionProperty::test(&provider);
+	tests::regression::vab::snippet::TestCollectionProperty::test(clientProvider.get());
 }
 
 int constexpr TestBaSyxNative::port;
