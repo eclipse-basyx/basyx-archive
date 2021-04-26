@@ -144,10 +144,13 @@ public class OperationProvider implements IModelProvider {
 	private Object createInvocationResponseFromDirectResult(InvocationRequest request, Object directResult) {
 		// Get SubmodelElement output template
 		Collection<IOperationVariable> outputs = copyOutputVariables();
-		SubmodelElement outputElem = (SubmodelElement) outputs.iterator().next().getValue();
-		// Set result object
-		outputElem.setValue(directResult);
-
+		if(outputs.size() > 0)
+		{
+			SubmodelElement outputElem = (SubmodelElement) outputs.iterator().next().getValue();
+			// Set result object
+			outputElem.setValue(directResult);
+		};
+		
 		// Create and return InvokationResponse
 		return new InvocationResponse(request.getRequestId(), new ArrayList<>(), outputs, ExecutionState.COMPLETED);
 	}
