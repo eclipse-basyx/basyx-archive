@@ -114,7 +114,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/submodelelement/operation/OperationVariable.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/submodelelement/property/MultiLanguageProperty.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/submodelelement/property/ReferenceElement.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/submodelelement/SubmodelElementCollection.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/submodelelement/SubmodelElementCollection.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/submodelelement/SubmodelElement.cpp
     )
 
@@ -206,6 +206,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/reference/Reference.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/AnnotatedRelationshipElement.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/DataElement.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/Range.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/RelationshipElement.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/file/Blob.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/file/File.h
@@ -263,6 +264,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/submodelelement/property/MultiLanguageProperty.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/submodelelement/property/Property.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/submodelelement/property/ReferenceElement.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/submodelelement/Range.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/submodelelement/SubmodelElementCollection.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/submodelelement/SubmodelElement.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/SubModel.h

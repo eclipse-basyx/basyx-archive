@@ -32,6 +32,7 @@ target_sources(${PROJECT_NAME}
 	api/property/test_Property.cpp
 	api/submodelelement/test_RelationshipElement.cpp
 	api/submodelelement/test_AnnotatedRelationshipElement.cpp
+	api/submodelelement/test_Range.cpp
 	api/test_Submodel.cpp
 	map_v2/common/test_ElementContainer.cpp
 	map_v2/dataspecification/test_DataSpecification.cpp
