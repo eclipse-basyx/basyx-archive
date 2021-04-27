@@ -17,10 +17,18 @@ class File :
 	public SubmodelElement,
 	public ModelType<ModelTypes::File>
 {
+public:
+	struct Path {
+		static constexpr char MimeType[] = "mimeType";
+		static constexpr char Value[] = "value";
+	};
 private:
 	std::string path;
 	std::string mimeType;
 public:
+	File(const std::string & idShort, const std::string & mimeType);
+	File(const File & other);
+
 	virtual ~File() = default;
 
 	const std::string getPath() const override;
@@ -28,6 +36,8 @@ public:
 
 	const std::string getMimeType() const override;
 	void setMimeType(const std::string & mimeType) override;
+
+	KeyElements getKeyElementType() const override { return KeyElements::File; };
 };
 
 }

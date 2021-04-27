@@ -22,8 +22,8 @@ public:
 	virtual const PathType getPath() const = 0;
 	virtual void setPath(const PathType & path) = 0;
 
-	virtual const MimeType getMimeType() const = 0;
-	virtual void setMimeType(const MimeType & mimeType) = 0;
+	virtual const std::string getMimeType() const = 0;
+	virtual void setMimeType(const std::string & mimeType) = 0;
 
 	virtual KeyElements getKeyElementType() const override { return KeyElements::File; };
 };

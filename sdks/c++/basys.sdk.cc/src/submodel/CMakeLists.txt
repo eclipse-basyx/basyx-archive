@@ -57,6 +57,8 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/SubModel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/operation/Operation.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/operation/OperationVariable.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/file/Blob.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/file/File.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/property/MultiLanguageProperty.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/property/ReferenceElement.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/SubmodelElement.cpp

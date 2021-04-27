@@ -26,6 +26,8 @@ target_sources(${PROJECT_NAME}
 	api/parts/test_ConceptDescription.cpp
 	api/parts/test_View.cpp
 	api/property/test_Property.cpp
+	api/submodelelement/file/test_Blob.cpp
+	api/submodelelement/file/test_File.cpp
 	api/common/test_LangStringSet.cpp
 	api/property/test_Property.cpp
 	api/test_Submodel.cpp
