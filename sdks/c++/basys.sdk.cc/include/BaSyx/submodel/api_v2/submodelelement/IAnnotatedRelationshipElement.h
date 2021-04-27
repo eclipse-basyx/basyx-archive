@@ -13,7 +13,7 @@ class IAnnotatedRelationshipElement : public IDataElement
 public:
   virtual ~IAnnotatedRelationshipElement() = 0;
 
-  virtual IElementContainer<IDataElement> & getAnnotation() const = 0;
+  virtual const IElementContainer<IDataElement> & getAnnotation() const = 0;
 
   virtual KeyElements getKeyElementType() const override { return KeyElements::AnnotatedRelationshipElement; };
 };
