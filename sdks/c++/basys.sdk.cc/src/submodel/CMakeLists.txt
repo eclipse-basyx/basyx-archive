@@ -55,7 +55,8 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/qualifier/Referable.cpp        
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/reference/Reference.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/SubModel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/operation/Operation.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/DataElement.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/operation/Operation.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/operation/OperationVariable.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/file/Blob.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/file/File.cpp
@@ -199,6 +200,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/Qualifiable.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/Referable.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/reference/Reference.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/DataElement.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/file/Blob.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/file/File.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/operation/Operation.h
