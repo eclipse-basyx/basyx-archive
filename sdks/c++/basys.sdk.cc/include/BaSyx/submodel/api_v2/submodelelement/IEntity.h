@@ -11,7 +11,8 @@ namespace submodel {
 namespace api {
 
 
-class IEntity : public virtual ISubmodelElement
+class IEntity
+  : public virtual ISubmodelElement
 {
 public:
 	virtual ~IEntity() = 0;
@@ -21,7 +22,6 @@ public:
 	virtual EntityType getEntityType() const = 0;
 
 	virtual const IReference * const getAssetRef() const = 0;
-	virtual void setAssetRef(const IReference & assetRef) = 0;
 
 	virtual KeyElements getKeyElementType() const override { return KeyElements::Entity; };
 };
