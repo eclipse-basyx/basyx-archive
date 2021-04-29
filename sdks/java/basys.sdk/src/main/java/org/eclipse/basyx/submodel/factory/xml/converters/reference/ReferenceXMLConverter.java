@@ -25,6 +25,8 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.google.common.base.Strings;
+
 /**
  * Handles the conversion between an IReference object and the XML tag &lt;aas:keys&gt; in both directions
  * 
@@ -105,7 +107,21 @@ public class ReferenceXMLConverter {
 		String idType = XMLHelper.getString(xmlObject.get(IDTYPE));
 		String type = XMLHelper.getString(xmlObject.get(TYPE));
 		boolean local = Boolean.parseBoolean(XMLHelper.getString(xmlObject.get(LOCAL)));
-	
+		
+		// Enables parsing external aasx-files with empty or null id type
+		if (Strings.isNullOrEmpty(idType)) {
+			idType = KeyType.CUSTOM.toString();
+		}
+		
+		// Enables parsing external aasx-files with URI instead of IRI
+		if (idType.equalsIgnoreCase("URI")) {
+			idType = KeyType.IRI.toString();
+		}
+		
+		// Enables parsing external aasx-files with empty or null key type
+		if (Strings.isNullOrEmpty(type)) {
+			type = KeyElements.REFERENCEELEMENT.toString();
+		}
 		return new Key(KeyElements.fromString(type), local, text, KeyType.fromString(idType));
 	}
 	

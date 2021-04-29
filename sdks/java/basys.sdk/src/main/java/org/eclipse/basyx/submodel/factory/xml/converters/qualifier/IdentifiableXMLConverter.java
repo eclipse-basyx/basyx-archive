@@ -16,6 +16,8 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IIdentifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -29,6 +31,7 @@ import com.google.common.base.Strings;
  *
  */
 public class IdentifiableXMLConverter {
+	private static final Logger logger = LoggerFactory.getLogger(IdentifiableXMLConverter.class);
 
 	public static final String ADMINISTRATION = "aas:administration";
 	public static final String VERSION = "aas:version";
@@ -53,15 +56,34 @@ public class IdentifiableXMLConverter {
 		}
 		String id = XMLHelper.getString(identierFromXML.get(XMLHelper.TEXT));
 		String idType = XMLHelper.getString(identierFromXML.get(IDTYPE));
-		if (Strings.isNullOrEmpty(id) || Strings.isNullOrEmpty(idType)) {
-			throw createInvalidIdentifierException(xmlObject);
+		if (Strings.isNullOrEmpty(id)) {
+			// Warns without exception to enable parsing external aasx-files without id
+			logger.warn("Invalid XML of Identifiable. No valid identification is present. " + xmlObject.toString());
 		}
+		
+		if (Strings.isNullOrEmpty(idType)) {
+			// Warns without exception to enable parsing external aasx-files without idType
+			logger.warn("Invalid XML of Identifiable. empty identifierType changed to default identifierType Custom. " + xmlObject.toString());
+			idType = IdentifierType.CUSTOM.toString();
+		}
+		
+		// Enables parsing external aasx-files with URI instead of IRI
+		if (idType.equalsIgnoreCase("URI")) {
+			idType = IdentifierType.IRI.toString();
+		}
+			
 		identifiable.setIdentification(IdentifierType.fromString(idType), id);
 
 		Map<String, Object> administrationFromXML = (Map<String, Object>) xmlObject.get(ADMINISTRATION);
 		if(administrationFromXML != null) {
 			String version = XMLHelper.getString(administrationFromXML.get(VERSION));
 			String revision = XMLHelper.getString(administrationFromXML.get(REVISION));
+			
+			// Enables parsing external aasx-files with revision and empty version
+			if (!Strings.isNullOrEmpty(revision) && Strings.isNullOrEmpty(version)) {
+				version = "0.0.1";
+			}
+			
 			identifiable.setAdministration(new AdministrativeInformation(version, revision));
 		}
 	}
