@@ -42,13 +42,40 @@ public class LangStringsXMLConverter {
 	}
 
 	/**
-	 * Parses the LangStrings object from XML with a custom lang string xml tag
+	 * Parses the LangStrings object from XML/String with a custom lang string xml tag
 	 * 
-	 * @param xmlObject the XML map containing the &lt;langString&gt; tags
+	 * @param obj the LangString objects or a single string
 	 * @param tagName   the custom &lt;*langString*&gt; tagName
 	 * @return the parsed LangStrings object
 	 */
-	public static LangStrings parseLangStrings(Map<String, Object> xmlObject, String tagName) {
+	@SuppressWarnings("unchecked")
+	public static LangStrings parseLangStrings(Object obj, String tagName) {
+		if (obj == null) {
+			return new LangStrings();
+		} else if (obj instanceof Map) {
+			return parseLangStringsFromMap((Map<String, Object>) obj, tagName);
+		} else {
+			return parseLangStringsFromString((String) obj);
+		}
+	}
+	
+	/**
+	 * Parses the LangStrings object from String description
+	 * @param str given description
+	 * @return parsed LangStrings object
+	 */
+	private static LangStrings parseLangStringsFromString(String str) {
+		LangString langString = new LangString("EN", str);
+		return new LangStrings(langString);
+	}
+	
+	/**
+	 * Parses the LangStrings object from XML with a custom lang string xml tag
+	 * @param xmlObject given XML object
+	 * @param tagName the custom &lt;*langString*&gt; tagName
+	 * @return the parsed LangStrings object
+	 */
+	private static LangStrings parseLangStringsFromMap(Map<String, Object> xmlObject, String tagName) {
 		LangStrings langStrings = new LangStrings();
 		
 		if(xmlObject != null) {

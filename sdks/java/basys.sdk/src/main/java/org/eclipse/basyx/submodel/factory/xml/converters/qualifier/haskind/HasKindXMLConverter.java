@@ -40,6 +40,10 @@ public class HasKindXMLConverter {
 	public static void populateHasKind(Map<String, Object> xmlObject, HasKind hasKind) {
 		String hasKindValue = XMLHelper.getString(xmlObject.get(KIND));
 		if (!Strings.isNullOrEmpty(hasKindValue)) {
+			// Enables parsing external aasx-files with Type instead of Template
+			if (hasKindValue.equals("Type")) {
+				hasKindValue = ModelingKind.TEMPLATE.toString();
+			}
 			hasKind.setModelingKind(ModelingKind.fromString(hasKindValue));	
 		}
 	}

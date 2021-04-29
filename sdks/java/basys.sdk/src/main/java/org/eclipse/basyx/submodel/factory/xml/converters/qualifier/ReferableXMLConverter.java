@@ -14,9 +14,12 @@ import java.util.Map;
 import org.eclipse.basyx.submodel.factory.xml.XMLHelper;
 import org.eclipse.basyx.submodel.factory.xml.converters.reference.ReferenceXMLConverter;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IReferable;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -30,6 +33,7 @@ import com.google.common.base.Strings;
  *
  */
 public class ReferableXMLConverter {
+	private static final Logger logger = LoggerFactory.getLogger(AdministrativeInformation.class);
 	
 	public static final String ID_SHORT = "aas:idShort";
 	public static final String CATEGORY = "aas:category";
@@ -51,7 +55,8 @@ public class ReferableXMLConverter {
 		
 		Reference parent = ReferenceXMLConverter.parseReference((Map<String, Object>) xmlObject.get(PARENT));
 		if (Strings.isNullOrEmpty(idShort)) {
-			throw new RuntimeException("Invalid XML of Referable. No valid idShort is present. " + xmlObject.toString());
+			// Warning without exception for empty idshort for parsing external aasx-files
+			logger.warn("Invalid XML of Referable. No valid idShort is present. " + xmlObject.toString());
 		}
 		referable.setIdShort(idShort);
 		
@@ -73,15 +78,14 @@ public class ReferableXMLConverter {
 	 * @param xmlObject the XML map containing the &lt;aas:description&gt; tag
 	 * @return a LangStrings Object parsed form the XML
 	 */
-	@SuppressWarnings("unchecked")
 	private static LangStrings parseDescription(Map<String, Object> xmlObject) {
+		Object descObj = xmlObject.get(DESCRIPTION);
 		
-		Map<String, Object> descObj = (Map<String, Object>) xmlObject.get(DESCRIPTION);
 		if (descObj == null) {
 			return null;
 		}
 		
-		return LangStringsXMLConverter.parseLangStrings(descObj);
+		return LangStringsXMLConverter.parseLangStrings(descObj, LangStringsXMLConverter.LANG_STRING);
 	}
 	
 	
