@@ -36,6 +36,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
@@ -195,6 +196,29 @@ public class TestSubmodelElementCollection {
 	public void testDeleteSubmodelElementNotExist() {
 		SubmodelElementCollection collection = new SubmodelElementCollection(elements1, false, false);
 		collection.deleteSubmodelElement("Id_Which_Does_Not_Exist");
+	}
+	
+	@Test
+	public void testGetValues() {
+		SubmodelElementCollection collection = new SubmodelElementCollection(elements1, false, false);
+		collection.setIdShort("smColl");
+		Map<String, Object> elements = collection.getValues();
+		Property property = getProperty();
+		assertEquals(1, elements.size());
+		assertTrue(elements.containsKey(PROPERTY_ID));
+		assertEquals(property.getValue(), elements.get(PROPERTY_ID));
+		
+		String newKey = "newKey";
+		String newValue = "newValue";
+		
+		Property property2 = new Property(newKey, newValue);
+		property2.setValueType(ValueType.String);
+		collection.addSubmodelElement(property2);
+		
+		elements = collection.getValues();
+		assertEquals(2, elements.size());
+		assertTrue(elements.containsKey(newKey));
+		assertEquals(newValue, elements.get(newKey));
 	}
 
 	/**

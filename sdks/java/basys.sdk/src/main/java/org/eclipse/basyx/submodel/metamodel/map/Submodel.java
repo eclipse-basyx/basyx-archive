@@ -32,7 +32,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
-import org.eclipse.basyx.submodel.metamodel.facade.SubmodelValuesHelper;
+import org.eclipse.basyx.submodel.metamodel.facade.ElementContainerValuesHelper;
 import org.eclipse.basyx.submodel.metamodel.map.helper.ElementContainerHelper;
 import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
@@ -316,7 +316,7 @@ public class Submodel extends VABModelMap<Object> implements IElementContainer, 
 
 	@Override
 	public Map<String, Object> getValues() {
-		return SubmodelValuesHelper.getSubmodelValue(this);
+		return ElementContainerValuesHelper.getSubmodelValue(this);
 	}
 	
 	@Override
