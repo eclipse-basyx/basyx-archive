@@ -93,9 +93,11 @@ public class SubmodelProvider implements IModelProvider {
 		path = VABPathTools.stripSlashes(path);
 		String submodelWithSlash = SUBMODEL + "/";
 		if (path.startsWith(submodelWithSlash)) {
-			path = path.replaceFirst("submodel/", "");
+			path = path.replaceFirst(submodelWithSlash, "");
 		} else if (path.equals(SUBMODEL)) {
 			path = "";
+		} else {
+			throw new MalformedRequestException("The request " + path + " is not allowed for this endpoint. /" + SUBMODEL + " is missing");
 		}
 		path = VABPathTools.stripSlashes(path);
 		return path;
@@ -173,7 +175,7 @@ public class SubmodelProvider implements IModelProvider {
 	public void setValue(String path, Object newValue) throws ProviderException {
 		path = removeSubmodelPrefix(path);
 		if (path.isEmpty()) {
-			throw new MalformedRequestException("Set on \"submodel\" not supported");
+			throw new MalformedRequestException("Set on \"" + SUBMODEL + "\" not supported");
 		} else {
 			String[] splitted = VABPathTools.splitPath(path);
 			path = removeSMElementPrefix(path);
@@ -215,7 +217,7 @@ public class SubmodelProvider implements IModelProvider {
 				throw new MalformedRequestException("Path " + path + " not supported for delete");
 			}
 		} else {
-			throw new MalformedRequestException("Path \"submodel\" not supported for delete");
+			throw new MalformedRequestException("Path \"" + SUBMODEL + "\" not supported for delete");
 		}
 	}
 
@@ -244,7 +246,7 @@ public class SubmodelProvider implements IModelProvider {
 					return submodelAPI.invokeOperation(path, parameters);
 				}
 			} else {
-				throw new MalformedRequestException("Given path '" + path + "' does not end in /invoke");
+				throw new MalformedRequestException("Given path '" + path + "' does not end in /" + Operation.INVOKE);
 			}
 		}
 	}
