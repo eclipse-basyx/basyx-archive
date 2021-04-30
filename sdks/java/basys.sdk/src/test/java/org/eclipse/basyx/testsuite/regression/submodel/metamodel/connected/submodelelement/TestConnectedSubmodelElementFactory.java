@@ -40,8 +40,8 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.rang
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.event.BasicEvent;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
-import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.support.TypeDestroyingProvider;
@@ -87,7 +87,8 @@ public class TestConnectedSubmodelElementFactory {
 		
 		values.put(Submodel.SUBMODELELEMENT, submodelElements);
 		
-		proxy = new VABElementProxy("", new SubmodelProvider(new TypeDestroyingProvider(new VABLambdaProvider(values))));
+		proxy = new VABElementProxy("/" + SubmodelProvider.SUBMODEL,
+				new SubmodelProvider(new TypeDestroyingProvider(new VABLambdaProvider(values))));
 	}
 	
 	/**

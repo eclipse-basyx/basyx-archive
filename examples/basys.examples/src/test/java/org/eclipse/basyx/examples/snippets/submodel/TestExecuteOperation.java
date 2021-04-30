@@ -28,8 +28,9 @@ import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
-import org.eclipse.basyx.vab.protocol.http.server.BaSyxHTTPServer;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
+import org.eclipse.basyx.vab.protocol.http.server.BaSyxHTTPServer;
 import org.junit.After;
 import org.junit.Test;
 
@@ -112,7 +113,7 @@ public class TestExecuteOperation extends AbstractSnippetTest {
 		server.start();
 		
 		IIdentifier aasIdentifier = new Identifier(IdentifierType.CUSTOM, AAS_ID);
-		SubmodelDescriptor descriptor = new SubmodelDescriptor(submodel, "http://localhost:8082/submodel");
+		SubmodelDescriptor descriptor = new SubmodelDescriptor(submodel, "http://localhost:8082/submodel/" + SubmodelProvider.SUBMODEL);
 		
 		// Register the new Submodel
 		AASRegistryProxy registry = new AASRegistryProxy(registryComponent.getRegistryPath());

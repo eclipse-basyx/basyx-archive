@@ -28,6 +28,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueTypeHelper;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.submodel.restapi.OperationProvider;
 import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
@@ -71,14 +72,18 @@ public class SubmodelProviderTest {
 		SubmodelProvider provider = new SubmodelProvider(new SimpleAASSubmodel("mySubmodelId"));
 		provider.getValue("/submodel");
 		provider.getValue("/submodel/");
+	}
 
+	@Test
+	public void testInvalidGetPath() {
+		VABElementProxy smProxy = getConnectionManager().connectToVABElement(submodelAddr);
 		try {
-			provider.getValue("invalid");
+			smProxy.getValue("");
 			fail();
-		} catch (Exception e) {
-			
+		} catch (MalformedRequestException e) {
 		}
 	}
+
 
 	/**
 	 * Test creating single property
@@ -96,6 +101,30 @@ public class SubmodelProviderTest {
 		Integer result = (Integer) submodelElement
 				.getValue("/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/newProperty/value");
 		assertEquals(500, result.intValue());
+	}
+
+	@Test
+	public void testCreatePath() {
+		VABElementProxy smProxy = getConnectionManager().connectToVABElement(submodelAddr);
+		Property prop = new Property(500);
+		prop.setIdShort("newProperty");
+		try {
+			smProxy.createValue("/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/newProperty", prop);
+			fail();
+		} catch (MalformedRequestException e) {
+		}
+	}
+
+	@Test
+	public void testInvalidSetPath() {
+		VABElementProxy smProxy = getConnectionManager().connectToVABElement(submodelAddr);
+		Property prop = new Property(500);
+		prop.setIdShort("newProperty");
+		try {
+			smProxy.setValue(MultiSubmodelElementProvider.ELEMENTS + "/newProperty", prop);
+			fail();
+		} catch (MalformedRequestException e) {
+		}
 	}
 
 	/**
@@ -335,11 +364,18 @@ public class SubmodelProviderTest {
 		assertEquals(8, set.size());
 	}
 
-	/**
-	 * Test deleting a single property
-	 */
 	@Test
-	public void testDeleteProperty() {
+	public void testInvalidDeletePath() {
+		VABElementProxy smProxy = getConnectionManager().connectToVABElement(submodelAddr);
+		try {
+			smProxy.deleteValue(MultiSubmodelElementProvider.ELEMENTS + "/integerProperty");
+			fail();
+		} catch (MalformedRequestException e) {
+		}
+	}
+
+	@Test
+	public void testDeleteSingleProperty() {
 		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
 
 		// Delete property
@@ -409,9 +445,6 @@ public class SubmodelProviderTest {
 		} catch (ResourceNotFoundException e) {}
 	}
 
-	/**
-	 * Test invoking an operation
-	 */
 	@Test
 	public void testInvokeOperation() {
 		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
@@ -429,6 +462,16 @@ public class SubmodelProviderTest {
 		assertTrue((boolean) result);
 	}
 	
+	@Test
+	public void testInvalidInvokePath() {
+		VABElementProxy smProxy = getConnectionManager().connectToVABElement(submodelAddr);
+		try {
+			smProxy.invokeOperation("/submodelElements/simple/invoke" + Operation.INVOKE);
+			fail();
+		} catch (MalformedRequestException e) {
+		}
+	}
+
 	/**
 	 * Test invoking an operation from within a SubmodelElementCollection
 	 */

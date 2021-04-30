@@ -17,6 +17,7 @@ import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
@@ -74,7 +75,7 @@ public class AASBundleHelper {
 			IModelProvider provider = aggregator.getAASProvider(aas.getIdentification());
 			for (ISubmodel sm : bundle.getSubmodels()) {
 				try {
-					provider.getValue("/aas/submodels/" + sm.getIdShort());
+					provider.getValue("/aas/submodels/" + sm.getIdShort() + "/" + SubmodelProvider.SUBMODEL);
 					// If no ResourceNotFoundException occurs, SM exists on server
 					// -> no further action required
 				} catch (ResourceNotFoundException e) {

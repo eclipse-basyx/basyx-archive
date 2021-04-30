@@ -33,6 +33,7 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionConverter;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.support.bundle.AASBundle;
 import org.eclipse.basyx.support.bundle.AASBundleHelper;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
@@ -145,7 +146,7 @@ public class TestAASBundleHelper {
 		IModelProvider provider = aggregator.getAASProvider(new Identifier(IdentifierType.CUSTOM, AAS_ID));
 		
 		Submodel sm = SubmodelElementMapCollectionConverter.mapToSM(
-				(Map<String, Object>) provider.getValue("/aas/submodels/" + SM_ID));
+				(Map<String, Object>) provider.getValue("/aas/submodels/" + SM_ID + "/" + SubmodelProvider.SUBMODEL));
 		
 		assertEquals(SM_ID, sm.getIdentification().getId());
 	}
