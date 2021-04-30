@@ -26,6 +26,7 @@ import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.restapi.SimpleAASSubmodel;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
+import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.junit.Before;
@@ -59,10 +60,7 @@ public class MultiSubmodelProviderTest {
 		stub.addProvider(urn, "", provider);
 		proxy = stub.connectToVABElement(urn);
 	}
-
-	/**
-	 * Run JUnit test case
-	 */
+	
 	@Test
 	public void invokeExceptionTest() {
 		// Invoke operationEx1
@@ -76,6 +74,19 @@ public class MultiSubmodelProviderTest {
 			proxy.invokeOperation("/aas/submodels/SimpleAASSubmodel/submodel/submodelElements/exception2/invokable/invoke", "prop1");
 			fail();
 		} catch (ProviderException e) {}
+	}
+	
+	@Test
+	public void invalidPathPrefixInvokeTest() {
+		try {
+			proxy.invokeOperation("/aas/submodelX/SimpleAASSubmodel/submodel/submodelElements/complex/" + Operation.INVOKE, 10, 3);
+			fail();
+		} catch (MalformedRequestException e) {}
+		
+		try {
+			proxy.invokeOperation("/abc/submodels/SimpleAASSubmodel/submodel/submodelElements/complex/" + Operation.INVOKE, 10, 3);
+			fail();
+		} catch (MalformedRequestException e) {}
 	}
 
 	@Test
@@ -93,6 +104,19 @@ public class MultiSubmodelProviderTest {
 
 		getTestRunner("SimpleAASSubmodel");
 	}
+	
+	@Test
+	public void invalidPathPrefixGetTest() {
+		try {
+			proxy.getValue("/aas/submodelX/SimpleAASSubmodel/submodel/");
+			fail();
+		} catch (MalformedRequestException e) {}
+		
+		try {
+			proxy.getValue("/abc/submodel/SimpleAASSubmodel/submodel/");
+			fail();
+		} catch (MalformedRequestException e) {}
+	}
 
 	@Test
 	public void updateSubmodelTest() {
@@ -107,6 +131,21 @@ public class MultiSubmodelProviderTest {
 		ConnectedAssetAdministrationShell shell = new ConnectedAssetAdministrationShell(proxy.getDeepProxy("/aas"));
 		String newId = shell.getSubmodels().get("TestSM").getIdentification().getId();
 		assertEquals("TestId2", newId);
+	}
+	
+	@Test
+	public void invalidPathPrefixSetTest() {
+		Submodel sm = new SimpleAASSubmodel("TestSM");
+		sm.setIdentification(IdentifierType.CUSTOM, "TestId");
+		try {
+			proxy.setValue("/aas/submodelX/" + sm.getIdShort(), sm);
+			fail();
+		} catch (MalformedRequestException e) {}
+		
+		try {
+			proxy.setValue("/abc/submodels/" + sm.getIdShort(), sm);
+			fail();
+		} catch (MalformedRequestException e) {}
 	}
 
 	@Test
@@ -136,6 +175,22 @@ public class MultiSubmodelProviderTest {
 			// Expected
 		}
 	}
+	
+	@Test
+	public void invalidPathPrefixDeleteTest() {
+		Submodel sm = new SimpleAASSubmodel("TestSM");
+		sm.setIdentification(IdentifierType.CUSTOM, "TestId");
+		try {
+			proxy.deleteValue("/aas/submodelX/SimpleAASSubmodel");
+			fail();
+		} catch (MalformedRequestException e) {}
+		
+		try {
+			proxy.deleteValue("/aas/submodelX/SimpleAASSubmodel");
+			fail();
+		} catch (MalformedRequestException e) {}
+	}
+
 
 	private void getTestRunner(String smId) {
 		// Get property value
