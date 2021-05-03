@@ -22,39 +22,16 @@ public class ProviderException extends RuntimeException {
 	 * Version information for serialized instances
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	
-	/**
-	 * Store message
-	 */
-	protected String message = null;
-	
-	
-	/**
-	 * Constructor
-	 */
+
 	public ProviderException(String msg) {
-		// Store message
-		message = msg;
+		super(msg);
 	}
-	
-		
+
 	public ProviderException(Throwable cause) {
 		super(cause);
 	}
 
-
 	public ProviderException(String message, Throwable cause) {
-		super(cause);
-		this.message = message;
-	}
-
-
-	/**
-	 * Return detailed message
-	 */
-	@Override
-	public String getMessage() {
-		return message;
+		super(message, cause);
 	}
 }
