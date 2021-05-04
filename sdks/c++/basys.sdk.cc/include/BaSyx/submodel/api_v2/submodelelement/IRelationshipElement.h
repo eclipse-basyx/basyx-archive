@@ -16,8 +16,8 @@ class IRelationshipElement
 public:
   virtual ~IRelationshipElement() = 0;
 
-  virtual IReferable & getFirst() const = 0;
-  virtual IReferable & getSecond() const = 0;
+  virtual const IReferable & getFirst() const = 0;
+  virtual const IReferable & getSecond() const = 0;
 
   virtual KeyElements getKeyElementType() const override { return KeyElements::RelationshipElement; };
 };

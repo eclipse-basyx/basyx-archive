@@ -56,6 +56,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/reference/Reference.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/SubModel.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/DataElement.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/RelationshipElement.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/operation/Operation.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/operation/OperationVariable.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/file/Blob.cpp
@@ -103,7 +104,8 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/reference/Key.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/reference/Reference.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/SubModel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/submodelelement/DataElement.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/submodelelement/DataElement.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/submodelelement/RelationshipElement.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/submodelelement/file/Blob.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/submodelelement/file/File.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/submodelelement/operation/Operation.cpp
@@ -201,6 +203,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/Referable.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/reference/Reference.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/DataElement.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/RelationshipElement.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/file/Blob.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/file/File.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/operation/Operation.h
@@ -247,7 +250,8 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/qualifier/Referable.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/reference/Key.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/reference/Reference.h
-        ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/submodelelement/DataElement.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/submodelelement/DataElement.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/submodelelement/RelationshipElement.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/submodelelement/file/Blob.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/submodelelement/file/File.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/submodelelement/operation/Operation.h
