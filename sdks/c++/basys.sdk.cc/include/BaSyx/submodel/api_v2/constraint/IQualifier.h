@@ -17,6 +17,7 @@ namespace api {
 
 class IQualifier : public IConstraint, public virtual IHasSemantics
 {
+  using ValueDataType = std::string;
 public:
 	virtual ~IQualifier() = 0;
 

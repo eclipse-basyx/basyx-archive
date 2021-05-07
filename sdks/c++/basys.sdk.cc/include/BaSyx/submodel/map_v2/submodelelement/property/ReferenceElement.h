@@ -4,15 +4,16 @@
 #include <BaSyx/submodel/api_v2/submodelelement/property/IReferenceElement.h>
 #include <BaSyx/submodel/map_v2/common/ModelType.h>
 #include <BaSyx/submodel/map_v2/reference/Reference.h>
-#include <BaSyx/submodel/map_v2/submodelelement/SubmodelElement.h>
+#include <BaSyx/submodel/map_v2/submodelelement/DataElement.h>
 
 namespace basyx {
 namespace submodel {
 namespace map {
 
-class ReferenceElement : public api::IReferenceElement,
-                         public SubmodelElement,
-                         public ModelType<ModelTypes::ReferenceElement> 
+class ReferenceElement
+  : public virtual api::IReferenceElement
+  , public DataElement
+  , public ModelType<ModelTypes::ReferenceElement>
 {
 public:
   struct Path {
@@ -25,8 +26,8 @@ public:
     ReferenceElement(const std::string& idShort, ModelingKind kind = ModelingKind::Instance);
     virtual ~ReferenceElement() = default;
 
-    virtual const api::IReference* const getValue() const override = 0;
-    virtual void setValue(const api::IReference& value) override = 0;
+    virtual const api::IReference* const getValue() const override;
+    virtual void setValue(const api::IReference& value) override;
 
     virtual KeyElements getKeyElementType() const override { return KeyElements::ReferenceElement; };
 };

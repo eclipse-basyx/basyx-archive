@@ -14,7 +14,7 @@ namespace submodel {
 namespace simple {
 
 class SubmodelElement
-  : public api::ISubmodelElement
+  : public virtual api::ISubmodelElement
 {
 private:
 	HasDataSpecification dataSpecification;

@@ -24,7 +24,11 @@ class ISubmodelElement
 {
 public:
   virtual ~ISubmodelElement() = 0;
+
+  virtual KeyElements getKeyElementType() const override;
 };
+
+inline KeyElements ISubmodelElement::getKeyElementType() const { return KeyElements::SubmodelElement; };
 
 inline ISubmodelElement::~ISubmodelElement() = default;
 
