@@ -35,8 +35,8 @@ TEST(BaSyxNativeFrameProcessor, getTest) {
 	
 	basyx::object val = basyx::serialization::json::deserialize(answerFrame.getFirstValue());
 
-	ASSERT_TRUE(val.InstanceOf<int>());
-	ASSERT_EQ(val.Get<int>(), 2);
+	ASSERT_TRUE(val.InstanceOf<uint64_t>());
+	ASSERT_EQ(val.Get<uint64_t>(), 2);
 }
 
 TEST(BaSyxNativeFrameProcessor, setTest) {
@@ -54,8 +54,8 @@ TEST(BaSyxNativeFrameProcessor, setTest) {
 
 	ASSERT_EQ(mockup->path, path);
 
-	ASSERT_TRUE(mockup->val.InstanceOf<int>());
-	ASSERT_EQ(mockup->val.Get<int>(), 10);
+	ASSERT_TRUE(mockup->val.InstanceOf<uint64_t>());
+	ASSERT_EQ(mockup->val.Get<uint64_t>(), 10);
 }
 
 TEST(BaSyxNativeFrameProcessor, createTest) {
@@ -73,8 +73,8 @@ TEST(BaSyxNativeFrameProcessor, createTest) {
 
 	ASSERT_EQ(mockup->path, path);
 
-	ASSERT_TRUE(mockup->val.InstanceOf<int>());
-	ASSERT_EQ(mockup->val.Get<int>(), 10);
+	ASSERT_TRUE(mockup->val.InstanceOf<uint64_t>());
+	ASSERT_EQ(mockup->val.Get<uint64_t>(), 10);
 }
 
 TEST(BaSyxNativeFrameProcessor, deleteComplexTest) {
@@ -93,8 +93,8 @@ TEST(BaSyxNativeFrameProcessor, deleteComplexTest) {
 
 	ASSERT_EQ(mockup->path, path);
 
-	ASSERT_TRUE(mockup->val.InstanceOf<int>());
-	ASSERT_EQ(mockup->val.Get<int>(), 10);
+	ASSERT_TRUE(mockup->val.InstanceOf<uint64_t>());
+	ASSERT_EQ(mockup->val.Get<uint64_t>(), 10);
 }
 
 TEST(BaSyxNativeFrameProcessor, deleteSimpleTest) {
@@ -124,13 +124,13 @@ TEST(BaSyxNativeFrameProcessor, invokeTest) {
 
 	ASSERT_EQ(mockup->called, MockupModelProvider::CalledFunction::INVOKE);
 	ASSERT_EQ(mockup->path, path);
-	ASSERT_TRUE(mockup->val.InstanceOf<int>());
-	ASSERT_EQ(mockup->val.Get<int>(), 10);
+	ASSERT_TRUE(mockup->val.InstanceOf<uint64_t>());
+	ASSERT_EQ(mockup->val.Get<uint64_t>(), 10);
 
 	ASSERT_EQ(answerFrame.getFlag(), 0);
 
 	// Deserialize return value of operation
 	auto val = basyx::serialization::json::deserialize(nlohmann::json::parse(answerFrame.getFirstValue()));
-	ASSERT_TRUE(val.InstanceOf<int>());
-	ASSERT_EQ(val.Get<int>(),3);
+	ASSERT_TRUE(val.InstanceOf<uint64_t>());
+	ASSERT_EQ(val.Get<uint64_t>(),3);
 }

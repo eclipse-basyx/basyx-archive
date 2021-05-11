@@ -22,10 +22,10 @@ struct PropertyPath {
 template<typename T>
 class Property
     : public virtual api::IProperty
-        , public virtual SubmodelElement
-        , public virtual vab::ElementMap
-        , public virtual Qualifiable
-        , public ModelType<ModelTypes::Property>
+    , public virtual SubmodelElement
+    , public virtual vab::ElementMap
+    , public virtual Qualifiable
+    , public ModelType<ModelTypes::Property>
 {
 private:
   std::unique_ptr<Reference> valueId;

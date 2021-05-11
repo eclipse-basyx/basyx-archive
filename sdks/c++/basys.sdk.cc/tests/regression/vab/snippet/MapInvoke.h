@@ -22,8 +22,8 @@ class MapInvoke {
 public:
 
     static void test(basyx::vab::core::IModelProvider * modelProvider) {
-		auto complex = modelProvider->invokeOperation("operations/complex", basyx::object::make_list<object>({ 12 , 34 }));
-		ASSERT_ANY_EQ(complex, 46);
+		auto complex = modelProvider->invokeOperation("operations/complex", basyx::object::make_list<object>({ uint64_t{ 12 } , uint64_t{ 34 } }));
+		ASSERT_ANY_EQ(complex, uint64_t{ 46 });
 
 		// Invoke unsupported functional interface
 		auto supplier = modelProvider->invokeOperation("operations/supplier", basyx::object::make_null());

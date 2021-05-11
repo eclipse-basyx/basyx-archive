@@ -30,7 +30,7 @@ bool basyx::object::empty()
         case basyx::type::valueType::Bool:
             return this->Get<object::list_t<bool>&>().empty();
         case basyx::type::valueType::Int:
-            return this->Get<object::list_t<int>&>().empty();
+            return this->Get<object::list_t<uint64_t>&>().empty();
         case basyx::type::valueType::Float:
             return this->Get<object::list_t<double>&>().empty();
         case basyx::type::valueType::String:
@@ -76,9 +76,9 @@ bool basyx::object::insert(basyx::object obj)
             case basyx::type::valueType::Bool:
                 return this->insert(obj.Get<bool&>());
             case basyx::type::valueType::Int:
-                return this->insert(obj.Get<int&>());
+                return this->insert(obj.Get<uint64_t&>());
             case basyx::type::valueType::Float:
-                return this->insert(obj.Get<float&>());
+                return this->insert(obj.Get<double&>());
             case basyx::type::valueType::String:
                 return this->insert(obj.Get<std::string&>());
             default:
@@ -162,9 +162,9 @@ std::size_t basyx::object::size()
         case basyx::type::valueType::Bool:
             return this->Get<object::list_t<bool>&>().size();
         case basyx::type::valueType::Int:
-            return this->Get<object::list_t<int>&>().size();
+            return this->Get<object::list_t<uint64_t>&>().size();
         case basyx::type::valueType::Float:
-            return this->Get<object::list_t<float>&>().size();
+            return this->Get<object::list_t<double>&>().size();
         case basyx::type::valueType::String:
             return this->Get<object::list_t<std::string>&>().size();
         case basyx::type::valueType::Object:
@@ -247,7 +247,7 @@ basyx::object basyx::object::invoke(basyx::object& obj)
         }
         else if (value_type == basyx::type::valueType::Int)
         {
-            auto & list = obj.Get<basyx::object::list_t<int>&>();
+            auto & list = obj.Get<basyx::object::list_t<uint64_t>&>();
             param = basyx::object::make_list<basyx::object>(list.begin(), list.end());
         }
         else if (value_type == basyx::type::valueType::Float)

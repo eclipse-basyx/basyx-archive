@@ -27,13 +27,13 @@ private:
 	static void testRead(basyx::vab::core::IModelProvider * modelProvider)
 	{
 		// Adding elements to tested list
-		modelProvider->createValue("/structure/list/", 5);
-		modelProvider->createValue("/structure/list/", 12);
+		modelProvider->createValue("/structure/list/", uint64_t{ 5 });
+		modelProvider->createValue("/structure/list/", uint64_t{ 12 });
 
 		// Test reading whole lists
     	auto collection = modelProvider->getModelPropertyValue("/structure/list/");
-    	ASSERT_TRUE(collection.InstanceOf<basyx::object::list_t<int>>());
-    	ASSERT_EQ(collection.Get<basyx::object::list_t<int>&>().size(), 2);
+    	ASSERT_TRUE(collection.InstanceOf<basyx::object::list_t<uint64_t>>());
+    	ASSERT_EQ(collection.Get<basyx::object::list_t<uint64_t>&>().size(), 2);
 
 		// Test invalid list access - single list elements cannot be accessed directly
 		auto singleAccess = modelProvider->getModelPropertyValue("/structure/list/0");
@@ -45,8 +45,8 @@ private:
 		ASSERT_TRUE(invalid.IsNull());
 
 		// Delete remaining entries
-		modelProvider->deleteValue("/structure/list",  5);
-		modelProvider->deleteValue("/structure/list", 12);
+		modelProvider->deleteValue("/structure/list",  uint64_t{ 5 });
+		modelProvider->deleteValue("/structure/list", uint64_t{ 12 });
 
 		auto collection2 = modelProvider->getModelPropertyValue("/structure/list/");
 		ASSERT_TRUE(collection2.empty());
@@ -56,33 +56,33 @@ private:
 	static void testCreateDelete(basyx::vab::core::IModelProvider * modelProvider)
 	{
 		// Create elements in List (no key provided)
-		auto insertResult = modelProvider->createValue("/structure/list/", 56);
+		auto insertResult = modelProvider->createValue("/structure/list/", uint64_t{ 56 });
 		ASSERT_EQ(insertResult, basyx::object::error::None);
 		auto toTest = modelProvider->getModelPropertyValue("/structure/list/");
-		ASSERT_TRUE(toTest.InstanceOf<basyx::object::list_t<int>>());
-		auto & objectCollection = toTest.Get<basyx::object::list_t<int>&>();
-		ASSERT_EQ(objectCollection.back(), 56);
+		ASSERT_TRUE(toTest.InstanceOf<basyx::object::list_t<uint64_t>>());
+		auto & objectCollection = toTest.Get<basyx::object::list_t<uint64_t>&>();
+		ASSERT_EQ(objectCollection.back(), uint64_t{ 56 });
 		
 		// Delete at List
 		// by object
-		modelProvider->deleteValue("/structure/list/", 56);
+		modelProvider->deleteValue("/structure/list/", uint64_t{ 56 });
 		toTest = modelProvider->getModelPropertyValue("/structure/list/");
 		ASSERT_EQ(toTest.GetObjectType(), basyx::type::objectType::List);
 		ASSERT_TRUE(toTest.empty());
 
 		// Create a list element
-		modelProvider->createValue("listInRoot", basyx::object::list_t<int>{ 1, 1, 2, 3, 5 });
+		modelProvider->createValue("listInRoot", basyx::object::list_t<uint64_t>{ 1, 1, 2, 3, 5 });
 
 		// Test whole list
 		auto listInRoot = modelProvider->getModelPropertyValue("listInRoot");
-		ASSERT_TRUE(listInRoot.InstanceOf<basyx::object::list_t<int>>());
-		ASSERT_EQ(listInRoot.Get<basyx::object::list_t<int>&>().size(), 5);
+		ASSERT_TRUE(listInRoot.InstanceOf<basyx::object::list_t<uint64_t>>());
+		ASSERT_EQ(listInRoot.Get<basyx::object::list_t<uint64_t>&>().size(), 5);
 
-		ASSERT_EQ(listInRoot.Get<basyx::object::list_t<int>&>()[0], 1);
-		ASSERT_EQ(listInRoot.Get<basyx::object::list_t<int>&>()[1], 1);
-		ASSERT_EQ(listInRoot.Get<basyx::object::list_t<int>&>()[2], 2);
-		ASSERT_EQ(listInRoot.Get<basyx::object::list_t<int>&>()[3], 3);
-		ASSERT_EQ(listInRoot.Get<basyx::object::list_t<int>&>()[4], 5);
+		ASSERT_EQ(listInRoot.Get<basyx::object::list_t<uint64_t>&>()[0], 1);
+		ASSERT_EQ(listInRoot.Get<basyx::object::list_t<uint64_t>&>()[1], 1);
+		ASSERT_EQ(listInRoot.Get<basyx::object::list_t<uint64_t>&>()[2], 2);
+		ASSERT_EQ(listInRoot.Get<basyx::object::list_t<uint64_t>&>()[3], 3);
+		ASSERT_EQ(listInRoot.Get<basyx::object::list_t<uint64_t>&>()[4], 5);
 
 		// Delete whole list
 		modelProvider->deleteValue("listInRoot");

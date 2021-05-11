@@ -26,7 +26,7 @@ public:
     static void testUpdate(basyx::vab::core::IModelProvider * modelProvider) 
 	{
 		// Set primitives
-		modelProvider->setModelPropertyValue("primitives/integer", 12);
+		modelProvider->setModelPropertyValue("primitives/integer", uint64_t{ 12 });
 		modelProvider->setModelPropertyValue("primitives/double", 1.2);
 		modelProvider->setModelPropertyValue("primitives/string", "updated");
 
@@ -36,8 +36,8 @@ public:
 		auto stringValue = modelProvider->getModelPropertyValue("primitives/string");
 
 		// Test
-		ASSERT_TRUE(integerValue.InstanceOf<int>());
-		ASSERT_EQ(integerValue.Get<int>(), 12);
+		ASSERT_TRUE(integerValue.InstanceOf<uint64_t>());
+		ASSERT_EQ(integerValue.Get<uint64_t>(), uint64_t{ 12 });
 		ASSERT_TRUE(doubleValue.InstanceOf<double>());
 		ASSERT_EQ(doubleValue.Get<double>(), 1.2);
 		ASSERT_TRUE(stringValue.InstanceOf<std::string>());

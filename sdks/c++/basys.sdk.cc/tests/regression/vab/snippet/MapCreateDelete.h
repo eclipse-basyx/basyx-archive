@@ -38,14 +38,14 @@ private:
 
 		// Create map element
 		basyx::object::object_map_t newMap;
-		newMap.emplace("entryA", 3);
-		newMap.emplace("entryB", 4);
+		newMap.emplace("entryA", uint64_t{ 3 });
+		newMap.emplace("entryB", uint64_t{ 4 });
 		modelProvider->createValue("mapInRoot", newMap);
 		toTest = modelProvider->getModelPropertyValue("mapInRoot");
 
 		ASSERT_TRUE(toTest.InstanceOf<basyx::object::object_map_t>());
 		ASSERT_EQ(toTest.Get<basyx::object::object_map_t&>().size(), 2);
-		ASSERT_ANY_EQ(toTest.Get<basyx::object::object_map_t&>().at("entryA"), 3);
+		ASSERT_ANY_EQ(toTest.Get<basyx::object::object_map_t&>().at("entryA"), uint64_t{ 3 });
 
 		// Try to overwrite existing element (should throw Exception, already exists)
 		auto overwriteError = modelProvider->createValue("inRoot", 0);
@@ -54,11 +54,11 @@ private:
 		ASSERT_ANY_EQ(toTest, 1.2);
 
 		// Check case-sensitivity
-		modelProvider->createValue("inroot", 78);
+		modelProvider->createValue("inroot", uint64_t{ 78 });
 		toTest = modelProvider->getModelPropertyValue("inRoot");
 		ASSERT_ANY_EQ(toTest, 1.2);
 		toTest = modelProvider->getModelPropertyValue("inroot");
-		ASSERT_ANY_EQ(toTest, 78);
+		ASSERT_ANY_EQ(toTest, uint64_t{ 78 });
 
 		// Non-existing parent element
 		modelProvider->createValue("unkown/x", 5);
@@ -87,7 +87,7 @@ private:
 
 		// Check case-sensitivity
 		toTest = modelProvider->getModelPropertyValue("inroot");
-		ASSERT_ANY_EQ(toTest, 78);
+		ASSERT_ANY_EQ(toTest, uint64_t{ 78 });
 		modelProvider->deleteValue("inroot");
 		toTest = modelProvider->getModelPropertyValue("inroot");
 		ASSERT_TRUE(toTest.IsNull());
@@ -115,7 +115,7 @@ private:
 		// Empty paths - should not delete anything
 		modelProvider->deleteValue("", "");
 		toTest = modelProvider->getModelPropertyValue("/primitives/integer");
-		ASSERT_ANY_EQ(toTest, 123);
+		ASSERT_ANY_EQ(toTest, uint64_t{ 123 });
 	}
 
 };

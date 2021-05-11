@@ -95,7 +95,7 @@ inline bool basyx::object::remove(basyx::object & obj)
     case basyx::type::valueType::Bool:
         return this->remove(obj.Get<const bool>());
     case basyx::type::valueType::Int:
-        return this->remove(obj.Get<const int>());
+        return this->remove(obj.Get<const uint64_t>());
     case basyx::type::valueType::String:
         return this->remove(obj.Get<const std::string>());
     case basyx::type::valueType::Float:

@@ -17,13 +17,13 @@ public:
 TEST_F(TestBaSyxObjectSerializerJson, FullTest)
 {
 	auto innerMap = basyx::object::make_map();
-	innerMap.insertKey("a", 1);
-	innerMap.insertKey("b", 2);
+	innerMap.insertKey("a", uint64_t{ 1 });
+	innerMap.insertKey("b", uint64_t{ 2 });
 
-	auto intList = basyx::object::make_list<int>({ 1,2,3 });
+	auto intList = basyx::object::make_list<uint64_t>({ 1,2,3 });
 	auto objList = basyx::object::make_object_list();
 	objList.insert(false);
-	objList.insert(4);
+	objList.insert(uint64_t{ 4 });
 	objList.insert(5.0);
 	objList.insert(std::string("6,0"));
 	objList.insert(innerMap);
@@ -44,7 +44,7 @@ TEST_F(TestBaSyxObjectSerializerJson, FullTest)
 
 	json_t jsonMap = basyx::serialization::json::serialize(objectMap);
 	auto dumped = jsonMap.dump(4);
-	
+
 	auto deserialized = basyx::serialization::json::deserialize(dumped);
 
 	ASSERT_TRUE(deserialized.InstanceOf<basyx::object::object_map_t>());
@@ -56,8 +56,8 @@ TEST_F(TestBaSyxObjectSerializerJson, FullTest)
 	ASSERT_EQ(dBool.Get<bool>(), true);
 
 	auto dInt = deserialized.getProperty("int");
-	ASSERT_TRUE(dInt.InstanceOf<int>());
-	ASSERT_EQ(dInt.Get<int>(), 1);
+	ASSERT_TRUE(dInt.InstanceOf<uint64_t>());
+	ASSERT_EQ(dInt.Get<uint64_t>(), 1);
 
 	auto dFloat = deserialized.getProperty("double");
 	ASSERT_TRUE(dFloat.InstanceOf<double>());
@@ -68,7 +68,7 @@ TEST_F(TestBaSyxObjectSerializerJson, FullTest)
 	ASSERT_EQ(dString.Get<std::string&>(), "test");
 
 	// Test empty containers
-	
+
 	auto dEmptyList = deserialized.getProperty("emptyList");
 	ASSERT_TRUE(dEmptyList.InstanceOf<basyx::object::object_list_t>());
 	ASSERT_EQ(dEmptyList.size(), 0);
@@ -87,12 +87,12 @@ TEST_F(TestBaSyxObjectSerializerJson, FullTest)
 	ASSERT_EQ(aInnerMap, bInnerMap);
 
 	// Test lists
-	
+
 	auto dIntList = deserialized.getProperty("intList");
-	ASSERT_TRUE(dIntList.InstanceOf<basyx::object::list_t<int>>());
+	ASSERT_TRUE(dIntList.InstanceOf<basyx::object::list_t<uint64_t>>());
 	ASSERT_EQ(dIntList.size(), 3);
-	auto & aIntList = dIntList.Get<basyx::object::list_t<int>&>();
-	auto & bIntList = intList.Get<basyx::object::list_t<int>&>();
+	auto & aIntList = dIntList.Get<basyx::object::list_t<uint64_t>&>();
+	auto & bIntList = intList.Get<basyx::object::list_t<uint64_t>&>();
 	ASSERT_EQ(aIntList, bIntList);
 
 	auto dObjList = deserialized.getProperty("objList");

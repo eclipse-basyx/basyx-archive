@@ -227,16 +227,16 @@ TEST_F(TestBaSyxObject, InsertTest)
 
 TEST_F(TestBaSyxObject, InsertTestObject)
 {
-	basyx::object anyVec = basyx::object::list_t<int>{ 1,2 };
-	auto & vec = anyVec.Get<basyx::object::list_t<int>&>();
+	basyx::object anyVec = basyx::object::list_t<uint64_t>{ 1,2 };
+	auto & vec = anyVec.Get<basyx::object::list_t<uint64_t>&>();
 
-	int i = 5;
+	uint64_t i = 5;
 
 	// Insert new elements
 	ASSERT_EQ(vec.size(), 2);
 	ASSERT_TRUE(anyVec.insert(basyx::object::make_object_ref(&i)));
 	ASSERT_EQ(vec.size(), 3);
-	ASSERT_TRUE(anyVec.insert(basyx::object(10)));
+	ASSERT_TRUE(anyVec.insert(basyx::object(uint64_t{ 10 })));
 	ASSERT_EQ(vec.size(), 4);
 
 	// Insert new element, but with wrong type, shouldn't do anything

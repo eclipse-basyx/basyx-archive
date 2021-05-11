@@ -28,10 +28,10 @@ public:
 		auto slashC = modelProvider->getModelPropertyValue("/primitives/integer/");
 		auto slashD = modelProvider->getModelPropertyValue("/primitives/integer/");
 
-		ASSERT_ANY_EQ(slashA, 123);
-		ASSERT_ANY_EQ(slashB, 123);
-		ASSERT_ANY_EQ(slashC, 123);
-		ASSERT_ANY_EQ(slashD, 123);
+		ASSERT_ANY_EQ(slashA, uint64_t{ 123 });
+		ASSERT_ANY_EQ(slashB, uint64_t{ 123 });
+		ASSERT_ANY_EQ(slashC, uint64_t{ 123 });
+		ASSERT_ANY_EQ(slashD, uint64_t{ 123 });
 
 		// Test reading different data types
 		auto mapValue = modelProvider->getModelPropertyValue("primitives");
@@ -74,7 +74,7 @@ public:
 		ASSERT_EQ(unknownError2.getError(), basyx::object::error::PropertyNotFound);
 
 		// Nested access
-		ASSERT_ANY_EQ(modelProvider->getModelPropertyValue("special/nested/nested/value"), 100);
+		ASSERT_ANY_EQ(modelProvider->getModelPropertyValue("special/nested/nested/value"), uint64_t{ 100 });
 
 		// Empty path
 		auto rootValueA = modelProvider->getModelPropertyValue("");

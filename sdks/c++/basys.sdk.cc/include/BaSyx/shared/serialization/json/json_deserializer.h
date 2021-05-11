@@ -53,7 +53,7 @@ namespace json {
 			if (json.is_number_float())
 				return basyx::object{ json.get<double>() };
 			else if (json.is_number_integer())
-				return basyx::object{ json.get<int>() };
+				return basyx::object{ json.get<uint64_t>() };
 			else if (json.is_boolean())
 				return basyx::object{ json.get<bool>() };
             else if (json.is_string())
@@ -104,15 +104,15 @@ namespace json {
 				case basyx::type::valueType::Bool:
 					return deserialize_helper::list_t<bool>(json_array);
 				case basyx::type::valueType::Int:
-					return deserialize_helper::list_t<int>(json_array);
+					return deserialize_helper::list_t<uint64_t>(json_array);
 				case basyx::type::valueType::String:
 					return deserialize_helper::list_t<std::string>(json_array);
 				case basyx::type::valueType::Float:
 					return deserialize_helper::list_t<double>(json_array);
 				case basyx::type::valueType::Object:
 					return deserialize_helper::object_list(json_array);
-                                default:
-                                    break;
+                default:
+                    break;
 				};
 			}
 
