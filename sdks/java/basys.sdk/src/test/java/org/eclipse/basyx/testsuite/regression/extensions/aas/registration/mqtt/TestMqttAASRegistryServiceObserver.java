@@ -20,7 +20,8 @@ import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.memory.InMemoryRegistry;
-import org.eclipse.basyx.extensions.aas.registration.mqtt.MqttAASRegistryService;
+import org.eclipse.basyx.aas.registration.observing.ObservableAASRegistryService;
+import org.eclipse.basyx.extensions.aas.registration.mqtt.MqttAASRegistryServiceObserver;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
@@ -39,12 +40,12 @@ import io.moquette.broker.config.IResourceLoader;
 import io.moquette.broker.config.ResourceLoaderConfig;
 
 /**
- * Tests events emitting with the MqttAASRegistryService
+ * Tests events emitting with the MqttAASRegistryServiceObserver
  * 
  * @author haque
  *
  */
-public class TestMqttAASRegistryService {
+public class TestMqttAASRegistryServiceObserver {
 	
 	private static final String AASID = "aasid1";
 	private static final String SUBMODELID = "submodelid1";
@@ -53,7 +54,8 @@ public class TestMqttAASRegistryService {
 	private static final Identifier SUBMODELIDENTIFIER = new Identifier(IdentifierType.IRI, SUBMODELID);
 	
 	private static Server mqttBroker;
-	private static MqttAASRegistryService eventAPI;
+	private static ObservableAASRegistryService observedAPI;
+	private static MqttAASRegistryServiceObserver mqttObserver;
 	private MqttTestListener listener;
 
 	/**
@@ -69,8 +71,10 @@ public class TestMqttAASRegistryService {
 
 		// Create underlying registry service
 		IAASRegistry registryService = new InMemoryRegistry();
+		observedAPI = new ObservableAASRegistryService(registryService);
 		
-		eventAPI = new MqttAASRegistryService(registryService, "tcp://localhost:1884", "testClient");
+		mqttObserver = new MqttAASRegistryServiceObserver("tcp://localhost:1884", "testClient");
+		observedAPI.addObserver(mqttObserver);
 	}
 
 	@AfterClass
@@ -82,12 +86,12 @@ public class TestMqttAASRegistryService {
 	public void setUp() {
 		AssetAdministrationShell shell = new AssetAdministrationShell(AASID, AASIDENTIFIER, new Asset("assetid1", new Identifier(IdentifierType.IRI, "assetid1"), AssetKind.INSTANCE));
 		AASDescriptor aasDescriptor = new AASDescriptor(shell, AASENDPOINT);
-		eventAPI.register(aasDescriptor);
+		observedAPI.register(aasDescriptor);
 		
 		Submodel submodel = new Submodel(SUBMODELID, SUBMODELIDENTIFIER);
 		String submodelEndpoint = AASENDPOINT + "/submodels/" + SUBMODELID + "/submodel";
 		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(submodel, submodelEndpoint);
-		eventAPI.register(AASIDENTIFIER, submodelDescriptor);
+		observedAPI.register(AASIDENTIFIER, submodelDescriptor);
 		
 		listener = new MqttTestListener();
 		mqttBroker.addInterceptHandler(listener);
@@ -106,10 +110,10 @@ public class TestMqttAASRegistryService {
 		String aasEndpoint = "http://localhost:8080/aasList/" + newAASId + "/aas";
 		
 		AASDescriptor aasDescriptor = new AASDescriptor(shell, aasEndpoint);
-		eventAPI.register(aasDescriptor);
+		observedAPI.register(aasDescriptor);
 		
 		assertEquals(newAASId, listener.lastPayload);
-		assertEquals(MqttAASRegistryService.TOPIC_REGISTERAAS, listener.lastTopic);
+		assertEquals(MqttAASRegistryServiceObserver.TOPIC_REGISTERAAS, listener.lastTopic);
 	}
 	
 	@Test
@@ -120,25 +124,25 @@ public class TestMqttAASRegistryService {
 		String submodelEndpoint = AASENDPOINT + "/submodels/" + submodelid + "/submodel";
 		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(submodel, submodelEndpoint);
 		
-		eventAPI.register(AASIDENTIFIER, submodelDescriptor);
+		observedAPI.register(AASIDENTIFIER, submodelDescriptor);
 		
-		assertEquals(MqttAASRegistryService.concatAasSmId(AASIDENTIFIER, newSubmodelIdentifier), listener.lastPayload);
-		assertEquals(MqttAASRegistryService.TOPIC_REGISTERSUBMODEL, listener.lastTopic);
+		assertEquals(MqttAASRegistryServiceObserver.concatAasSmId(AASIDENTIFIER, newSubmodelIdentifier), listener.lastPayload);
+		assertEquals(MqttAASRegistryServiceObserver.TOPIC_REGISTERSUBMODEL, listener.lastTopic);
 	}
 	
 	@Test
 	public void testDeleteAAS() {
-		eventAPI.delete(AASIDENTIFIER);
+		observedAPI.delete(AASIDENTIFIER);
 		
 		assertEquals(AASID, listener.lastPayload);
-		assertEquals(MqttAASRegistryService.TOPIC_DELETEAAS, listener.lastTopic);
+		assertEquals(MqttAASRegistryServiceObserver.TOPIC_DELETEAAS, listener.lastTopic);
 	}
 	
 	@Test
 	public void testDeleteSubmodel() {
-		eventAPI.delete(AASIDENTIFIER, SUBMODELIDENTIFIER);
+		observedAPI.delete(AASIDENTIFIER, SUBMODELIDENTIFIER);
 
-		assertEquals(MqttAASRegistryService.concatAasSmId(AASIDENTIFIER, SUBMODELIDENTIFIER), listener.lastPayload);
-		assertEquals(MqttAASRegistryService.TOPIC_DELETESUBMODEL, listener.lastTopic);
+		assertEquals(MqttAASRegistryServiceObserver.concatAasSmId(AASIDENTIFIER, SUBMODELIDENTIFIER), listener.lastPayload);
+		assertEquals(MqttAASRegistryServiceObserver.TOPIC_DELETESUBMODEL, listener.lastTopic);
 	}
 }

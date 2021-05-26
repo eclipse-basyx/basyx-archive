@@ -23,7 +23,7 @@ import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.observer.ObservableSubmodelAPI;
+import org.eclipse.basyx.submodel.restapi.observing.ObservableSubmodelAPI;
 import org.eclipse.basyx.submodel.restapi.vab.VABSubmodelAPI;
 import org.eclipse.basyx.testsuite.regression.extensions.shared.mqtt.MqttTestListener;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;

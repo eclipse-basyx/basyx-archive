@@ -7,11 +7,11 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 ******************************************************************************/
-package org.eclipse.basyx.submodel.observer;
+package org.eclipse.basyx.submodel.restapi.observing;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
+import org.eclipse.basyx.aas.observer.Observable;
 import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
@@ -24,33 +24,12 @@ import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPI;
  * @author conradi
  *
  */
-public class ObservableSubmodelAPI implements ISubmodelAPI {
+public class ObservableSubmodelAPI extends Observable<ISubmodelAPIObserver> implements ISubmodelAPI {
 
 	ISubmodelAPI submodelAPI;
-	
-	Collection<ISubmodelAPIObserver> observers = new ArrayList<>();
-	
+
 	public ObservableSubmodelAPI(ISubmodelAPI observerdAPI) {
 		submodelAPI = observerdAPI;
-	}
-	
-	/**
-	 * Adds an ISubmodelAPIObserver to the subscriber list
-	 * 
-	 * @param observer the observer to be added
-	 */
-	public void addObserver(ISubmodelAPIObserver observer) {
-		observers.add(observer);
-	}
-	
-	/**
-	 * Removes an ISubmodelAPIObserver from the subscriber list
-	 * 
-	 * @param observer the observer to be removed
-	 * @return true if the observer was found and removed; false otherwise
-	 */
-	public boolean removeObserver(ISubmodelAPIObserver observer) {
-		return observers.remove(observer);
 	}
 	
 	@Override

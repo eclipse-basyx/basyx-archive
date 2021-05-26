@@ -7,7 +7,9 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 ******************************************************************************/
-package org.eclipse.basyx.submodel.observer;
+package org.eclipse.basyx.submodel.restapi.observing;
+
+import org.eclipse.basyx.aas.observer.IObserver;
 
 /**
  * Interface for an observer of {@link ObservableSubmodelAPI}
@@ -15,7 +17,7 @@ package org.eclipse.basyx.submodel.observer;
  * @author conradi
  *
  */
-public interface ISubmodelAPIObserver {
+public interface ISubmodelAPIObserver extends IObserver {
 
 	/**
 	 * Is called when a SubmodelElement is added

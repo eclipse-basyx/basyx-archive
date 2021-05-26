@@ -7,7 +7,7 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 ******************************************************************************/
-package org.eclipse.basyx.testsuite.regression.submodel.observer;
+package org.eclipse.basyx.testsuite.regression.submodel.restapi.observing;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -20,8 +20,8 @@ import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.observer.ISubmodelAPIObserver;
-import org.eclipse.basyx.submodel.observer.ObservableSubmodelAPI;
+import org.eclipse.basyx.submodel.restapi.observing.ISubmodelAPIObserver;
+import org.eclipse.basyx.submodel.restapi.observing.ObservableSubmodelAPI;
 import org.eclipse.basyx.submodel.restapi.vab.VABSubmodelAPI;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.junit.Before;
