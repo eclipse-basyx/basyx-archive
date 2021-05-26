@@ -20,7 +20,8 @@ import org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.UInteger;
  * A node id unique identifies a node within an OPC UA server's address space.
  */
 public final class NodeId {
-	private org.eclipse.milo.opcua.stack.core.types.builtin.NodeId internalId;
+	private final org.eclipse.milo.opcua.stack.core.types.builtin.NodeId internalId;
+	private String cachedStringRepresentation;
 
 	
 	/**
@@ -203,11 +204,18 @@ public final class NodeId {
 	 * <a href="https://reference.opcfoundation.org/v104/Core/docs/Part6/5.3.1/#5.3.1.10">part 6</a>
 	 * of the specification.
 	 * 
+	 * <p>During the first call to this method the string is initially generated and cached. 
+	 * Subsequent calls come at no additional computation cost. 
+	 * 
 	 * @return A machine-parseable string representation of the node id.
 	 */
 	@Override
 	public String toString() {
-		return internalId.toParseableString();
+		if (cachedStringRepresentation == null) {
+			cachedStringRepresentation = internalId.toParseableString();
+		}
+		
+		return cachedStringRepresentation;
 	}
 	
 	

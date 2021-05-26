@@ -13,6 +13,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -20,6 +21,11 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeConstants;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.protocol.opcua.connector.ClientConfiguration;
@@ -63,14 +69,24 @@ import org.slf4j.LoggerFactory;
  * Provides a wrapper around the eclipse Milo OPC UA client that works in the BaSyx environment.
  */
 public class MiloOpcUaClient implements IOpcUaClient {
-	private final Logger logger = LoggerFactory.getLogger(getClass());
+	private final static Logger logger = LoggerFactory.getLogger(MiloOpcUaClient.class);
+	private static DatatypeFactory xmlDatatypeFactory;
 
 	private ClientConfiguration configuration = new ClientConfiguration();
 	private OpcUaClientConfigBuilder miloConfiguration;
 	private CompletableFuture<? extends UaClient> futureClient;
 	private String endpointUrl;
 
-
+	static {
+		try {
+			xmlDatatypeFactory = DatatypeFactory.newInstance();
+		} catch (DatatypeConfigurationException e) {
+			logger.error(
+					"Failed to instantiate XML DatatypeFactory. This will lead to NullPointerExceptions, if DateTime values are received from the OPC UA server.",
+					e);
+		}
+	}
+	
 	/**
 	 * Creates a new OPC UA client for the given endpoint URL with a default configuration.
 	 * 
@@ -125,6 +141,15 @@ public class MiloOpcUaClient implements IOpcUaClient {
 		}
 	}
 
+	/**
+	 * Gets the endpoint URL that this client connects to.
+	 * 
+	 * @return The endpoint URL of the server to connect to.
+	 */
+	@Override
+	public String getEndpointUrl() {
+		return endpointUrl;
+	}
 	
 	/**
 	 * Sets advanced configuration settings not available in {@link ClientConfiguration}.
@@ -144,7 +169,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 	 * <b>Caution:</b> Use this method at your own risk. Your code might break if BaSyx switches
 	 * to a	newer version of Milo or a different OPC UA implementation altogether.
 	 * 
-	 * @param configuration
+	 * @param configuration The Milo client configuration object.
 	 */
 	public void setConfiguration(OpcUaClientConfigBuilder configuration) {
 		this.miloConfiguration = configuration;
@@ -728,7 +753,10 @@ public class MiloOpcUaClient implements IOpcUaClient {
 	 */
 	private Object mapMiloToBaSyxTypes(Object value) {
 		if (value instanceof DateTime) {
-			return ((DateTime) value).getJavaInstant();
+			long millis = ((DateTime) value).getJavaTime();
+			GregorianCalendar cal = new GregorianCalendar();
+			cal.setTimeInMillis(millis);
+			return xmlDatatypeFactory.newXMLGregorianCalendar(cal);
 		} else if (value instanceof UByte) {
 			return new UnsignedByte((UByte)value);
 		} else if (value instanceof UShort) {
@@ -750,8 +778,15 @@ public class MiloOpcUaClient implements IOpcUaClient {
 	 * @return The corresponding Milo object.
 	 */
 	private Object mapBaSyxToMiloTypes(Object value) {
-		if (value instanceof Instant) {
-			return new DateTime((Instant) value);
+		if (value instanceof XMLGregorianCalendar) {
+			XMLGregorianCalendar v = (XMLGregorianCalendar) value;
+			if (v.getXMLSchemaType() != DatatypeConstants.DATETIME) {
+				throw new OpcUaException(
+						"The OPC UA DateTime type doesn't support incomplete date/time specifications. Illegal value: "
+								+ v);
+			}
+			Instant i = Instant.ofEpochMilli(v.toGregorianCalendar().getTimeInMillis());
+			return new DateTime(i);
 		} else if (value instanceof UnsignedByte) {
 			return ((UnsignedByte)value).getInternalValue();
 		} else if (value instanceof UnsignedShort) {

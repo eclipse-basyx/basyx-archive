@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.protocol.opcua.connector.milo.MiloOpcUaClient;
 import org.eclipse.basyx.vab.protocol.opcua.exception.AmbiguousBrowsePathException;
@@ -39,20 +42,28 @@ import org.eclipse.basyx.vab.protocol.opcua.types.UnsignedShort;
  * made.
  * 
  * <h2>Regarding types</h2>
- * Users of this interface pass data back and forth between their code and an OPC UA server. OPC UA 
- * has an expansive type system which doesn't map fully to standard Java types. For that reason, any
- * Java implementation of OPC UA must provide custom classes for at least some of OPC UA's types.
- * <br>A full list of all types for OPC UA data values is available 
- * <a href="https://reference.opcfoundation.org/v104/Core/docs/Part5/12.2/">here</a>.
  * 
- * <p>This implementation makes no attempt at complete coverage of all OPC UA types. Only a
- * subset of the most common data types are supported. Callers can pass these types
- * to any of the interface methods and expect these types to be returned.
+ * This interface must necessarily translate between two distinct type systems.
+ * There is the {@link ValueType BaSyx type system} on the one hand, itself a
+ * mapping of XML Schema types to standard JDK types with some additional custom
+ * classes. And on the other hand, there is
+ * <a href="https://reference.opcfoundation.org/v104/Core/docs/Part5/12.2">OPC
+ * UA's type system</a>. The two aren't fully compatible, meaning that there
+ * isn't a simple one-to-one mapping of types.
  * 
- * <p>Special care should be taken with values returned by this API. If the server returns value 
- * types beyond what is listed here (e.g. when reading nodes or invoking methods), corresponding
- * classes from the underlying OPC UA library might be returned, whose API can change without 
- * further notice. User code should therefore be limited to the types listed below.
+ * <p>
+ * This implementation makes no attempt at complete coverage of all OPC UA
+ * types. Only a subset of the most common data types are supported. Below table
+ * shows which Java types can be used and what OPC UA type they map to. Callers
+ * can pass these types to any of the interface methods and expect these types
+ * to be returned.
+ * 
+ * <p>
+ * Please note that if the OPC UA server returns a value of a different type
+ * than those listed in the table, e.g. as the result of a read operation or
+ * method invocation, then that type will be returned from the API as is. It
+ * would likely be a class from the underlying OPC UA library and the caller
+ * would have to know how to handle that type.
  *
  * <table>
  * <caption>Java / OPC UA type mapping</caption>
@@ -69,12 +80,21 @@ import org.eclipse.basyx.vab.protocol.opcua.types.UnsignedShort;
  * <tr><td>{@link UnsignedShort}</td><td>UInt16</td></tr>
  * <tr><td>{@link UnsignedInteger}</td><td>UInt32</td></tr>
  * <tr><td>{@link UnsignedLong}</td><td>UInt64</td></tr>
- * <tr><td>{@link Instant}</td><td>DateTime</td></tr>
+ * <tr><td>{@link XMLGregorianCalendar}</td><td>DateTime</td></tr>
  * <tr><td>{@link String}</td><td>String</td></tr>
  * <tr><td>{@link UUID}</td><td>GUID</td></tr>
  * <tr><td>Array of the aforementioned types<br>(Single- or multi-dimensional)</td><td>Array of equivalent OPC UA type</td></tr>
  * </tbody>
  * </table>
+ * 
+ * <h3>Date &amp; time types</h3>
+ * 
+ * Special care must be taken when dealing with the {@link XMLGregorianCalendar}
+ * type. It allows for incomplete date or time specifications, such as <i>March
+ * 13</i>, without providing a year. Or <i>5 minutes</i> without any information
+ * on the hour or seconds. Such date/time specifications are not supported by
+ * the OPC UA DateTime type. It functions like the {@link java.time.Instant}
+ * type and must always specify a precise moment in time.
  */
 public interface IOpcUaClient {
 	/**
@@ -100,6 +120,13 @@ public interface IOpcUaClient {
 	 * @throws IllegalStateException if this method is called after a connection has been established.
 	 */
 	void setConfiguration(ClientConfiguration configuration);
+	
+	/**
+	 * Gets the endpoint URL that this client connects to.
+	 * 
+	 * @return The endpoint URL to connect to.
+	 */
+	public String getEndpointUrl();
 	
 	/**
 	 * Gets a value signifying whether this client has already attempted to establish a connection
@@ -233,7 +260,7 @@ public interface IOpcUaClient {
 	 * <p>This is not a typical use case for OPC UA applications but it is a useful helper for 
 	 * invoking BaSyx operations through OPC UA. That's because BaSyx identifies all elements in its
 	 * information model only through a single path, represented as a string. These strings map 
-	 * directly to OPC UA browse paths in the case of  {@link OpcUaConnector}).
+	 * directly to OPC UA browse paths in the case of {@link OpcUaConnector}).
 	 * 
 	 * <p>For BaSyx properties (i.e., variable nodes in OPC UA) that's all well and good. But 
 	 * for BaSyx operations (which correspond to OPC UA methods) it poses a problem.
@@ -245,6 +272,8 @@ public interface IOpcUaClient {
 	 * <p>BaSyx solves this conundrum by assuming that the final node targeted by a browse
 	 * path is the method node itself, while the second to last node in the path is the owner.
 	 * <br>For any BaSyx model directly mapped to OPC UA this assumption is guaranteed to hold true.
+	 * The same can not be said for general purpose OPC UA servers. This should be kept in mind when
+	 * utilizing this method with a server not provided by a BaSyx application.
 	 * 
 	 * <p>For general information on how browse paths are resolved, please refer to 
 	 * {@link #translateBrowsePathToNodeId(NodeId, String)}.
