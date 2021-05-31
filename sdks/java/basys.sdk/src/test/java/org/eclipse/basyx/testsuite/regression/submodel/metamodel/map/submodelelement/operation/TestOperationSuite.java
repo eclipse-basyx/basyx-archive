@@ -1,10 +1,10 @@
 /*******************************************************************************
  * Copyright (C) 2021 the Eclipse BaSyx Authors
- * 
+ *
  * This program and the accompanying materials are made
  * available under the terms of the Eclipse Public License 2.0
  * which is available at https://www.eclipse.org/legal/epl-2.0/
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.submodelelement.operation;
@@ -15,6 +15,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Function;
 
@@ -34,27 +35,27 @@ import org.junit.Test;
 
 /**
  * Tests for IOperation
- * 
+ *
  * @author conradi
  *
  */
 public abstract class TestOperationSuite {
-	
+
 	protected static final String IN_VALUE = "inValue";
 	protected static final String OUT_VALUE = "outValue";
 	protected static final String INOUT_VALUE = "inOutValue";
 	protected static Collection<OperationVariable> IN;
 	protected static Collection<OperationVariable> OUT;
 	protected static Collection<OperationVariable> INOUT;
-	
+
 	protected static final Function<Object[], Object> FUNC = (Function<Object[], Object>) v -> {
-		return (int)v[0] + (int)v[1];
+		return (int) v[0] + (int) v[1];
 	};
-	
+
 	protected static final Function<Object[], Object> EXCEPTION_FUNC = (Function<Object[], Object>) v -> {
 		throw new NullPointerException();
 	};
-	
+
 	protected IOperation operation;
 	protected IOperation operationException;
 
@@ -62,39 +63,56 @@ public abstract class TestOperationSuite {
 	 * Converts an Operation into the IOperation to be tested
 	 */
 	protected abstract IOperation prepareOperation(Operation operation);
-	
+
 	@Before
 	public void setup() {
-		IN = new ArrayList<OperationVariable>();
-		OUT = new ArrayList<OperationVariable>();
-		INOUT = new ArrayList<OperationVariable>();
-		Property inProp1 = new Property("testIn1", IN_VALUE);
-		inProp1.setModelingKind(ModelingKind.TEMPLATE);
-		Property inProp2 = new Property("testIn2", IN_VALUE);
-		inProp2.setModelingKind(ModelingKind.TEMPLATE);
-		Property outProp = new Property("testId2", OUT_VALUE);
-		outProp.setModelingKind(ModelingKind.TEMPLATE);
+		IN = createInputVariables();
+		OUT = createOutputVariables();
+		INOUT = createInOutVariables();
+
+		operation = createAddOperation();
+		operationException = createExceptionOperation();
+	}
+
+	private IOperation createAddOperation() {
+		Operation op = new Operation(IN, OUT, INOUT, FUNC);
+		op.setIdShort("op1");
+		return prepareOperation(op);
+	}
+
+	private IOperation createExceptionOperation() {
+		Operation op = new Operation(IN, OUT, INOUT, EXCEPTION_FUNC);
+		op.setIdShort("op2");
+		return prepareOperation(op);
+	}
+
+	private Collection<OperationVariable> createInOutVariables() {
 		Property inOutProp = new Property("testId3", INOUT_VALUE);
 		inOutProp.setModelingKind(ModelingKind.TEMPLATE);
-		IN.add(new OperationVariable(inProp1));
-		IN.add(new OperationVariable(inProp2));
-		OUT.add(new OperationVariable(outProp));
-		INOUT.add(new OperationVariable(inOutProp));
-		
-		Operation op1 = new Operation(IN, OUT, INOUT, FUNC);
-		op1.setIdShort("op1");
-		operation = prepareOperation(op1);
-
-		Operation op2 = new Operation(IN, OUT, INOUT, EXCEPTION_FUNC);
-		op2.setIdShort("op2");
-		operationException = prepareOperation(op2);
+		return Arrays.asList(new OperationVariable(inOutProp));
 	}
-	
+
+	private Collection<OperationVariable> createOutputVariables() {
+		Property outProp = new Property("testId2", OUT_VALUE);
+		outProp.setModelingKind(ModelingKind.TEMPLATE);
+		return Arrays.asList(new OperationVariable(outProp));
+	}
+
+	private Collection<OperationVariable> createInputVariables() {
+		Property inProp1 = new Property("testIn1", IN_VALUE);
+		inProp1.setModelingKind(ModelingKind.TEMPLATE);
+
+		Property inProp2 = new Property("testIn2", IN_VALUE);
+		inProp2.setModelingKind(ModelingKind.TEMPLATE);
+
+		return Arrays.asList(new OperationVariable(inProp1), new OperationVariable(inProp2));
+	}
+
 	@Test
 	public void testInvoke() throws Exception {
 		assertEquals(5, operation.invoke(2, 3));
 	}
-	
+
 	@Test
 	public void testInvokeException() throws Exception {
 		try {
@@ -103,31 +121,31 @@ public abstract class TestOperationSuite {
 			fail();
 		} catch (Exception e) {
 			// Exceptions from ConnectedOperation are wrapped in ProviderException
-			assertTrue(e instanceof NullPointerException
-					|| e.getCause() instanceof NullPointerException);
+			assertTrue(e instanceof NullPointerException || e.getCause() instanceof NullPointerException);
 		}
 	}
-	
+
 	@Test
 	public void testInvokeWithSubmodelElements() {
 		Property param1 = new Property("testIn1", 2);
 		param1.setModelingKind(ModelingKind.TEMPLATE);
 		Property param2 = new Property("testIn2", 4);
 		param2.setModelingKind(ModelingKind.TEMPLATE);
+
 		SubmodelElement[] result = operation.invoke(param1, param2);
+
 		assertEquals(1, result.length);
 		assertEquals(6, result[0].getValue());
 	}
 
 	@Test
-	public void testInvokeParametersException() throws Exception {
+	public void testInvokeParametersException() {
 		try {
 			operation.invoke(1);
 			fail();
 		} catch (Exception e) {
 			// Exceptions from ConnectedOperation are wrapped in ProviderException
-			assertTrue(e instanceof WrongNumberOfParametersException
-					|| e.getCause() instanceof WrongNumberOfParametersException);
+			assertTrue(e instanceof WrongNumberOfParametersException || e.getCause() instanceof WrongNumberOfParametersException);
 		}
 	}
 
@@ -137,15 +155,15 @@ public abstract class TestOperationSuite {
 		IOperation operation = prepareOperation(helper.getAsyncOperation());
 
 		IAsyncInvocation invocation = operation.invokeAsync(3, 2);
-		
+
 		assertFalse(invocation.isFinished());
-		
+
 		helper.releaseWaitingOperation();
 
 		assertTrue(invocation.isFinished());
 		assertEquals(5, invocation.getResult());
 	}
-	
+
 	@Test
 	public void testInvokeMultipleAsync() throws Exception {
 		AsyncOperationHelper helper = new AsyncOperationHelper();
@@ -165,12 +183,11 @@ public abstract class TestOperationSuite {
 		assertEquals(8, invocation2.getResult());
 	}
 
-	@Test
+	@Test(expected = OperationExecutionTimeoutException.class)
 	public void testInvokeAsyncTimeout() throws Exception {
 		AsyncOperationHelper helper = new AsyncOperationHelper();
 		IOperation operation = prepareOperation(helper.getAsyncOperation());
 
-		// timeout of 1ms
 		IAsyncInvocation invocation = operation.invokeAsyncWithTimeout(1, 3, 2);
 
 		// Should be more than enough to trigger the timeout exception
@@ -178,30 +195,21 @@ public abstract class TestOperationSuite {
 		helper.releaseWaitingOperation();
 
 		assertTrue(invocation.isFinished());
-		try {
-			invocation.getResult();
-			fail();
-		} catch (OperationExecutionTimeoutException e) {
-		}
+		invocation.getResult();
 	}
 
-	@Test
+	@Test(expected = OperationExecutionErrorException.class)
 	public void testInvokeExceptionAsync() throws Exception {
 		AsyncOperationHelper helper = new AsyncOperationHelper();
 		IOperation operationException = prepareOperation(helper.getAsyncExceptionOperation());
 		IAsyncInvocation invocation = operationException.invokeAsync();
 		assertFalse(invocation.isFinished());
-		
-		helper.releaseWaitingOperation();
-		
-		try {
-			invocation.getResult();
-			fail();
-		} catch (OperationExecutionErrorException e) {
-		}
 
+		helper.releaseWaitingOperation();
+
+		invocation.getResult();
 	}
-	
+
 	@Test
 	public void testInputVariables() {
 		Collection<IOperationVariable> inputVariables = operation.getInputVariables();
@@ -213,9 +221,10 @@ public abstract class TestOperationSuite {
 	@Test
 	public void testOutputVariables() {
 		Collection<IOperationVariable> outputVariables = operation.getOutputVariables();
-		assertEquals(1, outputVariables.size());
+
 		Object value = getValueFromOpVariable(outputVariables);
 		assertEquals(OUT_VALUE, value);
+		assertEquals(1, outputVariables.size());
 	}
 
 	@Test
@@ -225,7 +234,7 @@ public abstract class TestOperationSuite {
 		Object value = getValueFromOpVariable(inoutVariables);
 		assertEquals(INOUT_VALUE, value);
 	}
-	
+
 	/**
 	 * Gets the Value from the OperationVariable in a collection
 	 */
@@ -233,5 +242,6 @@ public abstract class TestOperationSuite {
 		IOperationVariable var = new ArrayList<>(vars).get(0);
 		return var.getValue().getValue();
 	}
-	
+
 }
+
