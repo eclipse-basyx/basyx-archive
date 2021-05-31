@@ -52,13 +52,17 @@ public class OperationProvider implements IModelProvider {
 		String[] splitted = VABPathTools.splitPath(path);
 		if (path.isEmpty()) {
 			return modelProvider.getValue("");
-		} else if (splitted[0].equals(INVOCATION_LIST) && splitted.length == 2) {
+		} else if (isInvocationListQuery(splitted)) {
 			String requestId = splitted[1];
 			return AsyncOperationHandler.retrieveResult(requestId, operationId);
-			
+
 		} else {
 			throw new MalformedRequestException("Get of an Operation supports only empty or /invocationList/{requestId} paths");
 		}
+	}
+
+	private boolean isInvocationListQuery(String[] splitted) {
+		return splitted[0].equals(INVOCATION_LIST) && splitted.length == 2;
 	}
 
 	@Override
@@ -82,54 +86,51 @@ public class OperationProvider implements IModelProvider {
 		throw new MalformedRequestException("Delete not allowed at path '" + path + "'");
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object invokeOperation(String path, Object... parameters) throws ProviderException {
-		// Fix path
-		boolean async = path.endsWith(ASYNC);
-		// remove the "invoke" from the end of the path
+		boolean isAsync = isAsyncInvokePath(path);
 		path = VABPathTools.stripInvokeFromPath(path);
+		
+		// Invoke /invokable instead of an Operation property if existent
+		Object childElement = modelProvider.getValue(path);
+		if (!Operation.isOperation(childElement)) {
+			throw new MalformedRequestException("Only operations can be invoked.");
+		}
+
+		Operation op = Operation.createAsFacade((Map<String, Object>) childElement);
 
 		// TODO: Only allow wrapped parameters with InvokationRequests
 		Object[] unwrappedParameters;
-		InvocationRequest request = getInvocationRequest(parameters);
+		InvocationRequest request = getInvocationRequest(parameters, op);
 		String requestId;
 		if (request != null) {
 			unwrappedParameters = request.unwrapInputParameters();
 			requestId = request.getRequestId();
-		} else {
-			// => not necessary, if it is only allowed to use InvocationRequests
+		} else {// => not necessary, if it is only allowed to use InvocationRequests
 			unwrappedParameters = unwrapDirectParameters(parameters);
-			// Generate random request id
 			requestId = UUID.randomUUID().toString();
 		}
 
-		// Invoke /invokable instead of an Operation property if existent
-		Object childElement = modelProvider.getValue(path);
-		if (Operation.isOperation(childElement)) {
-			path = VABPathTools.concatenatePaths(path, Operation.INVOKABLE);
+		if (isAsync) {
+			return handleAsyncOperationInvokation(path, unwrappedParameters, request, requestId);
+		} else {
+			return handleSynchroneousOperationInvokation(path, unwrappedParameters, request);
 		}
-		
-		// Handle async operations
-		if (async) {
-			// Async call? No return value, yet
-			Collection<IOperationVariable> outputVars = copyOutputVariables();
-			IModelProvider provider = new VABElementProxy(path, modelProvider);
+	}
 
-			// Only necessary as long as invocations without InvokationRequest is allowed
-			if (request != null) {
-				AsyncOperationHandler.invokeAsync(provider, operationId, request, outputVars);
-			} else {
-				AsyncOperationHandler.invokeAsync(provider, operationId, requestId, unwrappedParameters, outputVars,
-						10000);
-			}
-
-			// Request id has to be returned for caller to be able to retrieve result
-			// => Use callback response and leave url empty
-			return new CallbackResponse(requestId, "");
-		}
-
-		// Handle synchronous operations
+	/**
+	 * Executes an invocation synchronously
+	 * 
+	 * @param path the invocation path
+	 * @param unwrappedParameters the parameters for the invocation
+	 * @param request the invocation request
+	 * @return the result of the operation
+	 * @throws ProviderException
+	 */
+	private Object handleSynchroneousOperationInvokation(String path, Object[] unwrappedParameters, InvocationRequest request) throws ProviderException {
 		// Forward direct operation call to modelprovider
+		path = VABPathTools.concatenatePaths(path, Operation.INVOKABLE);
 		Object directResult = modelProvider.invokeOperation(path, unwrappedParameters);
 		if (request == null) {
 			// Parameters have been passed directly? Directly return the result
@@ -139,37 +140,112 @@ public class OperationProvider implements IModelProvider {
 	}
 
 	/**
+	 * Executes an invocation asynchronously
+	 * 
+	 * @param path the invocation path
+	 * @param unwrappedParameters the parameters for the invocation
+	 * @param request the invocation request
+	 * @param requestId the id for the request
+	 * @return the result of the operation
+	 */
+	private Object handleAsyncOperationInvokation(String path, Object[] unwrappedParameters, InvocationRequest request, String requestId) {
+		Collection<IOperationVariable> outputVars = copyOutputVariables();
+		IModelProvider provider = new VABElementProxy(path + "/invokable", modelProvider);
+
+		// Only necessary as long as invocations without InvokationRequest is allowed
+		if (request != null) {
+			AsyncOperationHandler.invokeAsync(provider, operationId, request, outputVars);
+		} else {
+			AsyncOperationHandler.invokeAsync(provider, operationId, requestId, unwrappedParameters, outputVars, 10000);
+		}
+
+		// Request id has to be returned for caller to be able to retrieve result
+		// => Use callback response and leave url empty
+		return new CallbackResponse(requestId, "");
+	}
+
+	/**
+	 * Determines if an invocation path is an async invocation
+	 * 
+	 * @param path the invocation path
+	 * @return the result
+	 */
+	private boolean isAsyncInvokePath(String path) {
+		return path.endsWith(ASYNC);
+	}
+
+	/**
 	 * Directly creates an InvocationResponse from an operation result
 	 */
 	private Object createInvocationResponseFromDirectResult(InvocationRequest request, Object directResult) {
 		// Get SubmodelElement output template
 		Collection<IOperationVariable> outputs = copyOutputVariables();
-		if(outputs.size() > 0)
-		{
+		if(outputs.size() > 0) {
 			SubmodelElement outputElem = (SubmodelElement) outputs.iterator().next().getValue();
 			// Set result object
 			outputElem.setValue(directResult);
-		};
-		
+		}
+
 		// Create and return InvokationResponse
 		return new InvocationResponse(request.getRequestId(), new ArrayList<>(), outputs, ExecutionState.COMPLETED);
 	}
 
 	/**
-	 * Extracts an invokation request from a generic parameter array
+	 * Extracts an invocation request from a generic parameter array
+	 * Matches parameters to order of Operation inputs by id
+	 * Throws MalformedArgumentException if a required parameter is missing
 	 * 
-	 * @param parameters
-	 * @return
+	 * @param parameters the input parameters
+	 * @param op the Operation providing the inputVariables to be matched to the actual input
+	 * @return the build InvocationRequest
 	 */
 	@SuppressWarnings("unchecked")
-	private InvocationRequest getInvocationRequest(Object[] parameters) {
-		if (parameters.length == 1 && parameters[0] instanceof Map<?, ?>) {
-			Map<String, Object> requestMap = (Map<String, Object>) parameters[0];
-			return InvocationRequest.createAsFacade(requestMap);
+	private InvocationRequest getInvocationRequest(Object[] parameters, Operation op) {
+		if (!isInvokationRequest(parameters)) {
+			return null;
 		}
-		return null;
+
+		Map<String, Object> requestMap = (Map<String, Object>) parameters[0];
+		InvocationRequest request = InvocationRequest.createAsFacade(requestMap);
+
+		// Sort parameters in request by InputVariables of operation
+		Collection<IOperationVariable> vars = op.getInputVariables();
+		Collection<IOperationVariable> ordered = createOrderedInputVariablesList(request, vars);
+		
+		InvocationRequest orderedRequest = new InvocationRequest(request.getRequestId(), request.getInOutArguments(), ordered, request.getTimeout());
+
+		return orderedRequest;
 	}
-	
+
+	private Collection<IOperationVariable> createOrderedInputVariablesList(InvocationRequest request,
+			Collection<IOperationVariable> vars) {
+		Collection<IOperationVariable> ordered = new ArrayList<>();
+
+		for (IOperationVariable var : vars) {
+			String id = var.getValue().getIdShort();
+			ordered.add(findOperationVariableById(id, request.getInputArguments()));
+		}
+
+		return ordered;
+	}
+
+	private IOperationVariable findOperationVariableById(String id, Collection<IOperationVariable> vars) {
+		for (IOperationVariable input : vars) {
+			if (input.getValue().getIdShort().equals(id)) {
+				return input;
+			}
+		}
+
+		throw new MalformedRequestException("Expected parameter " + id + " missing in request");
+	}
+
+	private boolean isInvokationRequest(Object[] parameters) {
+		if(parameters.length != 1) {
+			return false;
+		}
+		return InvocationRequest.isInvocationRequest(parameters[0]);
+	}
+
 	/**
 	 * Gets the (first) output parameter from the underlying object
 	 * 
