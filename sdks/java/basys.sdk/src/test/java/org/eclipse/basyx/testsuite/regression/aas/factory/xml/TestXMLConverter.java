@@ -35,9 +35,11 @@ import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IDataSpecificationContent;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IHasDataSpecification;
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -45,7 +47,10 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IRange;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.entity.EntityType;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.dataspecification.DataSpecificationIEC61360Content;
@@ -72,6 +77,7 @@ import org.junit.Test;
 public class TestXMLConverter {
 
 	private String xmlInPath = "src/test/resources/aas/factory/xml/in.xml";
+	private String xmlInExternalAllowedPath = "src/test/resources/aas/factory/xml/inExternalAllowed.xml";
 	
 	private XMLToMetamodelConverter converter;
 	
@@ -140,6 +146,50 @@ public class TestXMLConverter {
 		checkAssets(converterWithoutTypes.parseAssets());
 		checkConceptDescriptions(converterWithoutTypes.parseConceptDescriptions());
 		checkSubmodels(converterWithoutTypes.parseSubmodels());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testBuildExternalAllowedXML() throws Exception {
+		String xml = new String(Files.readAllBytes(Paths.get(xmlInExternalAllowedPath)));
+		converter = new XMLToMetamodelConverter(xml);
+		//Convert the in.xml to Objects
+		List<IAssetAdministrationShell> assetAdministrationShellList = converter.parseAAS();
+		List<IAsset> assetList = converter.parseAssets();
+		List<IConceptDescription> conceptDescriptionList = converter.parseConceptDescriptions();
+		List<ISubmodel> submodelList = converter.parseSubmodels();
+		
+		IAssetAdministrationShell secondShell = assetAdministrationShellList.get(1);
+		
+		assertEquals("", secondShell.getIdShort());
+		IIdentifier identifier = secondShell.getIdentification();
+		assertEquals(IdentifierType.CUSTOM, identifier.getIdType());
+		assertEquals("", identifier.getId());
+		IKey key = secondShell.getAssetReference().getKeys().get(0);
+		assertEquals(KeyElements.REFERENCEELEMENT, key.getType());
+		assertEquals(KeyType.IRI, key.getIdType());
+		
+		IAsset asset = assetList.get(1);
+		assertEquals(IdentifierType.IRI, asset.getIdentification().getIdType());
+		
+		IProperty property1 = submodelList.get(0).getProperties().get("rotationSpeed");
+		assertEquals(ValueType.AnySimpleType, property1.getValueType());
+
+		IProperty property2 = submodelList.get(0).getProperties().get("emptyDouble");
+		assertEquals(ValueType.AnyURI, property2.getValueType());
+		
+		IProperty property3 = submodelList.get(0).getProperties().get("emptyDouble2");
+		assertEquals(ValueType.DateTime, property3.getValueType());
+		
+		IRange range = Range.createAsFacade((Map<String, Object>) submodelList.get(0).getSubmodelElement("range_id"));
+		assertEquals(ValueType.Double, range.getValueType());
+		
+		IOperation operation = Operation.createAsFacade((Map<String, Object>) submodelList.get(0).getSubmodelElement("operation_ID"));
+		assertEquals(ModelingKind.TEMPLATE, operation.getInOutputVariables().iterator().next().getValue().getModelingKind());
+		
+		IDataSpecificationContent content = conceptDescriptionList.get(0).getEmbeddedDataSpecifications().iterator().next().getContent();
+		DataSpecificationIEC61360Content parsed = DataSpecificationIEC61360Content.createAsFacade((Map<String, Object>) content);
+		assertEquals("Only Description", parsed.getShortName().get("EN"));  
 	}
 	
 	private void checkAASs(List<IAssetAdministrationShell> aasList) {

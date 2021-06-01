@@ -85,7 +85,13 @@ public class XMLAASBundleFactory {
 				IAsset asset = getByReference(assetRef, assets);
 				((AssetAdministrationShell) shell).setAsset((Asset) asset);
 			} catch (ResourceNotFoundException e) {
-				logger.warn("Can't find asset with id " + shell.getAssetReference().getKeys().get(0).getValue() + " for AAS " + shell.getIdShort() + "; If the asset is not provided in another way, this is an error!");
+				// Enables parsing external aasx-files without any keys in assetref
+				if (shell.getAssetReference().getKeys().size() > 0) {
+					logger.warn("Can't find asset with id " + shell.getAssetReference().getKeys().get(0).getValue() + " for AAS " + shell.getIdShort() + "; If the asset is not provided in another way, this is an error!");
+				}
+				else {
+					logger.warn("Can't find asset for AAS " + shell.getIdShort() + "; If the asset is not provided in another way, this is an error!");	
+				}
 			}
 
 			// Retrieve submodels

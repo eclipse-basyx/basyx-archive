@@ -13,6 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueTypeHelper;
+
+import com.google.common.base.Strings;
+
 /**
  * A Helper class containing tools for the XML converter
  * 
@@ -53,5 +58,36 @@ public class XMLHelper {
 	 */
 	public static String getString(Object object) {
 		return object instanceof String ? ((String) object).trim() : "";
+	}
+	
+	/**
+	 * adapts AASX value type to local value types 
+	 * @param valueType
+	 * @return
+	 */
+	public static ValueType convertAASXValueTypeToLocal(String valueType) {
+		// Enables parsing external aasx-files with empty type
+		if (Strings.isNullOrEmpty(valueType)) {
+			return ValueType.AnySimpleType;
+		}
+		
+		// Enables parsing external aasx-files with anyURI instead of anyuri
+		else if (valueType.equals("anyURI")) {
+			return ValueType.AnyURI;
+		}
+		
+		// Enables parsing external aasx-files with date instead of dateTime
+		else if (valueType.equals("date")) {
+			return ValueType.DateTime;
+		}
+		
+		// Enables parsing external aasx-files with decimal instead of double
+		else if (valueType.equals("decimal")) {
+			return ValueType.Double;
+		}
+		
+		else {
+			return ValueTypeHelper.fromName(valueType);
+		}
 	}
 }
