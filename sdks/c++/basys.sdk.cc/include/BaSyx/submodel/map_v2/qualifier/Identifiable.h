@@ -9,9 +9,10 @@ namespace basyx {
 namespace submodel {
 namespace map {
 
-class Identifiable : 
-	public virtual api::IIdentifiable,
-	public Referable
+class Identifiable
+	: public virtual api::IIdentifiable
+	, public virtual vab::ElementMap
+	, public Referable
 {
 public:
   struct Path {
@@ -36,7 +37,7 @@ public:
 
 	virtual simple::Identifier getIdentification() const override;
 
-    void setAdministrativeInformation(const AdministrativeInformation & administrativeInformation);
+  void setAdministrativeInformation(const AdministrativeInformation & administrativeInformation);
 };
 
 }

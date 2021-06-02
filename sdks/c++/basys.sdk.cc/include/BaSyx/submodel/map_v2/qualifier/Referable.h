@@ -11,9 +11,9 @@ namespace submodel {
 namespace map {
 
 
-class Referable : 
-	public virtual api::IReferable,
-	public virtual vab::ElementMap
+class Referable
+  : public virtual api::IReferable
+  , public virtual vab::ElementMap
 {
 public:
 	struct Path {

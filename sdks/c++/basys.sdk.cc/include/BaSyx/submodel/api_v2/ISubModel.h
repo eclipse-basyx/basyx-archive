@@ -16,7 +16,7 @@ namespace api {
 class ISubModel : 
 	public virtual IIdentifiable,
 	public virtual IHasSemantics, 
-    public virtual IQualifiable,
+  public virtual IQualifiable,
 	public virtual IHasDataSpecification,
 	public virtual IHasKind
 {

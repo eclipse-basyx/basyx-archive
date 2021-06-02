@@ -40,6 +40,7 @@ private:
 	ElementContainer<api::ISubmodelElement> elementContainer;
 public:
 	SubModel(const std::string & idShort, const simple::Identifier & identifier, ModelingKind kind = ModelingKind::Instance);
+	SubModel(basyx::object object);
 
 	virtual ~SubModel() = default;
 public:
