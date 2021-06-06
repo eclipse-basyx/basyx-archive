@@ -23,12 +23,12 @@
                     return;
                 }
 
-                if (relationship.Annotation != null)
+                if (relationship.Annotations != null)
                 {
                     <li class="list-group-item">
                         <div class="row align-items-center">
                             <div class="col-sm-2"><b>Value</b></div>
-                            <div class="col-sm-10">@relationship.Annotation.ToStandardizedString()</div>
+                            <div class="col-sm-10">Count: @relationship.Annotations.Count()</div>
                         </div>
                     </li>
                 }
