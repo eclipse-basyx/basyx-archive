@@ -161,7 +161,16 @@ public class OperationXMLConverter extends SubmodelElementXMLConverter {
 	 */
 	private static List<OperationVariable> getOperationVariables(Map<String, Object> varObj) {
 		List<OperationVariable> variableList = new ArrayList<>();
-		List<Map<String, Object>> xmlOpVars = XMLHelper.getList(varObj.get(OPERATION_VARIABLE));
+		Object operationVarObj = varObj.get(OPERATION_VARIABLE);
+		
+		//TODO: Remove after non-existing aas:operationVariable problem fixed in AAS Package Explorer 
+		if (operationVarObj == null) {
+			if (varObj.get(VALUE) != null) {
+				operationVarObj = varObj;
+			}
+		}
+		
+		List<Map<String, Object>> xmlOpVars = XMLHelper.getList(operationVarObj);
 		
 		for(Map<String, Object> map : xmlOpVars) {
 			variableList.add(parseOperationVariable(map));
