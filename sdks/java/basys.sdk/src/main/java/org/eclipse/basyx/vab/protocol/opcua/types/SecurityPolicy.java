@@ -7,14 +7,16 @@
  * 
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
-package org.eclipse.basyx.vab.protocol.opcua.connector;
+package org.eclipse.basyx.vab.protocol.opcua.types;
 
 /**
- * OPC UA connector factory class.
- *
- * @deprecated As of version 1.1. Replaced by {@link OpcUaConnectorFactory}.
+ * Available security policies for OPC UA connections.
  */
-@Deprecated
-public class OpcUaConnectorProvider extends OpcUaConnectorFactory {
-
+public enum SecurityPolicy {
+	None,
+	Basic128Rsa15,
+	Basic256,
+	Basic256Sha256,
+	Aes128_Sha256_RsaOaep,
+	Aes256_Sha256_RsaPss
 }

@@ -161,14 +161,14 @@
 		<dependency>
 			<groupId>org.eclipse.milo</groupId>
 			<artifactId>sdk-client</artifactId>
-			<version>0.3.3</version>
+			<version>0.6.1</version>
 		</dependency>
 
 		<!-- Eclipse Milo (for OPC-UA server) -->
 		<dependency>
 			<groupId>org.eclipse.milo</groupId>
 			<artifactId>sdk-server</artifactId>
-			<version>0.3.3</version>
+			<version>0.6.1</version>
 		</dependency>
 
 		<!-- Java Servlet API (for HTTP provider) -->
