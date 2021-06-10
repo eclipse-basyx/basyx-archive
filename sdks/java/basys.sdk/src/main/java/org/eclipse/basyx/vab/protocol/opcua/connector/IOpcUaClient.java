@@ -28,7 +28,7 @@ import org.eclipse.basyx.vab.protocol.opcua.types.UnsignedShort;
 /**
  * Very simplified OPC UA client interface for reading and writing node values and invoking methods.
  * 
- * <h1>How to use</h1>
+ * <h2>How to use</h2>
  * This interface features a set of methods to call common OPC UA services on a server (e.g. to read
  * a node). Each comes in a synchronous and an asynchronous variant, returning 
  * {@link CompletableFuture}s. When any of these methods is first called, a connection to the 
@@ -38,7 +38,7 @@ import org.eclipse.basyx.vab.protocol.opcua.types.UnsignedShort;
  * <br>{@link #hasConnected()} lets users check whether such a connection attempt has already been
  * made.
  * 
- * <h1>Regarding types</h1>
+ * <h2>Regarding types</h2>
  * Users of this interface pass data back and forth between their code and an OPC UA server. OPC UA 
  * has an expansive type system which doesn't map fully to standard Java types. For that reason, any
  * Java implementation of OPC UA must provide custom classes for at least some of OPC UA's types.

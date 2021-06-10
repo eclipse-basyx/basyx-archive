@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  *   opcUaConnector.getClient().setConfiguration(config);
  * </pre>
  * 
- * <h1>Using browse paths</h1>
+ * <h2>Using browse paths</h2>
  * 
  * This class uses browses paths to identify OPC UA nodes for read, write and invoke requests. That
  * has two noteworthy caveats:
@@ -54,7 +54,7 @@ import org.slf4j.LoggerFactory;
  *   <br>To address this issue, this class contains a cache for translated browse paths.
  * </ol>
  * 
- * <h2>Node id cache</h2>
+ * <h3>Node id cache</h3>
  * 
  * Using the cache is entirely optional and it is disabled be default. It can be enabled using 
  * {@link #setNodeIdCacheDuration(Duration)}.
