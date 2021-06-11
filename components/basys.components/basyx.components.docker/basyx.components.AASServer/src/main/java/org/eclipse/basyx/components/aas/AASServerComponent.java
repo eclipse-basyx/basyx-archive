@@ -15,7 +15,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -25,12 +24,10 @@ import org.eclipse.basyx.aas.aggregator.AASAggregator;
 import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
 import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.bundle.AASBundle;
-import org.eclipse.basyx.aas.bundle.AASBundleDescriptorFactory;
 import org.eclipse.basyx.aas.bundle.AASBundleHelper;
 import org.eclipse.basyx.aas.factory.aasx.SubmodelFileEndpointLoader;
 import org.eclipse.basyx.aas.factory.json.JSONAASBundleFactory;
 import org.eclipse.basyx.aas.factory.xml.XMLAASBundleFactory;
-import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.aas.restapi.api.IAASAPIFactory;
@@ -48,6 +45,7 @@ import org.eclipse.basyx.components.configuration.BaSyxMongoDBConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxMqttConfiguration;
 import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPIFactory;
+import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxHTTPServer;
 import org.slf4j.Logger;
@@ -270,28 +268,22 @@ public class AASServerComponent implements IComponent {
 	}
 
 	private void registerAAS() {
-		if (registry != null) {
-			Set<AASDescriptor> descriptors = retrieveDescriptors(contextConfig.getUrl());
-			descriptors.stream().forEach(registry::register);
-		} else {
+		if (registry == null) {
 			logger.info("No registry specified, skipped registration");
+			return;
 		}
+
+		String baseUrl = getComponentBasePath();
+		String aggregatorPath = VABPathTools.concatenatePaths(baseUrl, AASAggregatorProvider.PREFIX);
+		AASBundleHelper.register(registry, aasBundles, aggregatorPath);
 	}
 
-	/**
-	 * Returns the set of AAS descriptors for the AAS contained in the AASX
-	 * 
-	 * @param hostBasePath
-	 *                     the path to the server; helper method for e.g. virtualization
-	 *                     environments
-	 * @return
-	 */
-	private Set<AASDescriptor> retrieveDescriptors(String hostBasePath) {
-		// Base path + aggregator accessor
-		final String fullBasePath = hostBasePath + "/" + AASAggregatorProvider.PREFIX;
-
-		return aasBundles.stream().map(b -> AASBundleDescriptorFactory.createAASDescriptor(b, fullBasePath))
-				.collect(Collectors.toSet());
+	private String getComponentBasePath() {
+		String basePath = aasConfig.getHostpath();
+		if (basePath.isEmpty()) {
+			return contextConfig.getUrl();
+		}
+		return basePath;
 	}
 
 	/**
