@@ -104,7 +104,7 @@ namespace BaSyx.Models.Export
             };
             JsonSettings.Converters.Add(new StringEnumConverter());
 
-            fileProvider = new ManifestEmbeddedFileProvider(typeof(AssetAdministrationShellEnvironment_V2_0).Assembly, "aas-spec-v2.0\\Resources");
+            fileProvider = new ManifestEmbeddedFileProvider(typeof(AssetAdministrationShellEnvironment_V2_0).Assembly, Path.Combine("aas-spec-v2.0", "Resources"));
 
             XmlSettings = new XmlReaderSettings();
             XmlSettings.ValidationType = ValidationType.Schema;
