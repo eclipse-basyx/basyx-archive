@@ -408,7 +408,10 @@ namespace BaSyx.Models.Export
             using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
                 string contentType = GetContentType(filePath);
-                AddStreamToAASX(targetUri, fileStream, contentType, compressionOption);              
+                if (!string.IsNullOrEmpty(contentType))
+                    AddStreamToAASX(targetUri, fileStream, contentType, compressionOption);
+                else
+                    logger.Warn($"Unable to add {filePath} to AASX - contentType is not recognized");
             }
         }
 
