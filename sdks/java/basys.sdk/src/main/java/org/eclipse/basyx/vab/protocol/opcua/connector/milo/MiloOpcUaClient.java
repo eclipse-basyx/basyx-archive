@@ -118,7 +118,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 	 * @return A copy of the current configuration.
 	 */
 	@Override
-	public ClientConfiguration getConfiguration() {
+	public synchronized ClientConfiguration getConfiguration() {
 		// Return a copy to protect from external changes.
 		return this.configuration.clone();
 	}
@@ -130,15 +130,13 @@ public class MiloOpcUaClient implements IOpcUaClient {
 	 * more information.
 	 */
 	@Override
-	public void setConfiguration(ClientConfiguration configuration) {
-		synchronized(this) {
-			if (hasConnected()) {
-				throw new IllegalStateException("Cannot change security configuration after opening the connection.");
-			}
-			
-			// Create a local copy to protect from external changes.
-			this.configuration = (configuration != null) ? configuration.clone() : new ClientConfiguration();
+	public synchronized void setConfiguration(ClientConfiguration configuration) {
+		if (hasConnected()) {
+			throw new IllegalStateException("Cannot change security configuration after opening the connection.");
 		}
+
+		// Create a local copy to protect from external changes.
+		this.configuration = (configuration != null) ? configuration.clone() : new ClientConfiguration();
 	}
 
 	/**
@@ -170,8 +168,14 @@ public class MiloOpcUaClient implements IOpcUaClient {
 	 * to a	newer version of Milo or a different OPC UA implementation altogether.
 	 * 
 	 * @param configuration The Milo client configuration object.
+	 *
+	 * @throws IllegalStateException if this method is called after a connection has been established.
 	 */
-	public void setConfiguration(OpcUaClientConfigBuilder configuration) {
+	public synchronized void setConfiguration(OpcUaClientConfigBuilder configuration) {
+		if (hasConnected()) {
+			throw new IllegalStateException("Cannot change security configuration after opening the connection.");
+		}
+
 		this.miloConfiguration = configuration;
 	}
 	
@@ -202,6 +206,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 		try {
 			return translateBrowsePathToNodeIdAsync(browsePath).get();
 		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
 			throw new OpcUaException(e);
 		} catch (ExecutionException e) {
 			if (e.getCause() instanceof OpcUaException) {
@@ -238,6 +243,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 		try {
 			return translateBrowsePathToNodeIdAsync(startingNode, relativePath).get();
 		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
 			throw new OpcUaException(e);
 		} catch (ExecutionException e) {
 			if (e.getCause() instanceof OpcUaException) {
@@ -279,6 +285,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 		try {
 			return translateBrowsePathToParentAndTargetNodeIdAsync(browsePath).get();
 		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
 			throw new OpcUaException(e);
 		} catch (ExecutionException e) {
 			if (e.getCause() instanceof OpcUaException) {
@@ -322,6 +329,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 		try {
 			return readValueAsync(nodeId).get();
 		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
 			throw new OpcUaException(e);
 		} catch (ExecutionException e) {
 			if (e.getCause() instanceof OpcUaException) {
@@ -378,6 +386,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 		try {
 			writeValueAsync(nodeId, value).get();
 		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
 			throw new OpcUaException(e);
 		} catch (ExecutionException e) {
 			if (e.getCause() instanceof OpcUaException) {
@@ -432,6 +441,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 		try {
 			return invokeMethodAsync(ownerId, methodId, parameters).get();
 		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
 			throw new OpcUaException(e);
 		} catch (ExecutionException e) {
 			if (e.getCause() instanceof OpcUaException) {
@@ -580,6 +590,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 		} catch (ExecutionException e) {
 			throw (OpcUaException)e.getCause();
 		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
 			throw new OpcUaException("Endpoint discovery interrupted", e);
 		}
 	}
@@ -605,6 +616,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 							return DiscoveryClient.getEndpoints(discoveryUrl).get();
 						} catch (InterruptedException e) {
 							logger.error("Endpoint discovery failed because thread was interrupted.");
+							Thread.currentThread().interrupt();
 							throw new OpcUaException(e);
 						} catch (ExecutionException e) {
 							logger.error("Endpoint discovery failed with message: " + e.getMessage());
