@@ -123,7 +123,7 @@ public class OpcUaConnector implements IModelProvider {
 			NodeId nodeId = getNodeIdForBrowsePath(path);
 			return client.readValue(nodeId);
 		} catch (OpcUaException e) {
-			logger.error("Failed to get node value. Reason: {}", e.getMessage());
+			logger.error("Failed to get node value.");
 			throw e;
 		}
 	}
@@ -135,7 +135,7 @@ public class OpcUaConnector implements IModelProvider {
 			NodeId nodeId = getNodeIdForBrowsePath(path);
 			client.writeValue(nodeId, newValue);
 		} catch (OpcUaException e) {
-			logger.error("Failed to set node value. Reason: {}", e.getMessage());
+			logger.error("Failed to set node value.");
 			throw e;
 		}
 	}
@@ -164,7 +164,7 @@ public class OpcUaConnector implements IModelProvider {
 			List<NodeId> nodeIds = getNodeIdsForOperationBrowsePath(path);
 			return client.invokeMethod(nodeIds.get(1), nodeIds.get(0), parameters);
 		} catch (OpcUaException e) {
-			logger.error("Failed to invoke operation. Reason: {}", e.getMessage());
+			logger.error("Failed to invoke operation.");
 			throw e;
 		}
 	}

@@ -37,7 +37,7 @@ public class CertificateHelper {
 	private String countryCode;
 	private String applicationUri;
 	private Set<InetAddress> ipAddresses = new HashSet<>();
-	private Set<String> dnsNames = new CopyOnWriteArraySet<String>();
+	private Set<String> dnsNames = new CopyOnWriteArraySet<>();
 
 	
 	/**
@@ -216,7 +216,7 @@ public class CertificateHelper {
 		this.ipAddresses.add(ipAddress);
 		
 		if (lookupHostName) {
-			CompletableFuture.supplyAsync(() -> ipAddress.getHostName())
+			CompletableFuture.supplyAsync(ipAddress::getHostName)
 					.thenAccept(hostName -> this.dnsNames.add(hostName));
 		}
 
@@ -246,14 +246,14 @@ public class CertificateHelper {
 	
 	
 	/** Returns a builder for a default certificate (CN=Unknown). */ 
-	private SelfSignedCertificateBuilder configureDefaultBuilder() throws CertificateException {
+	private SelfSignedCertificateBuilder configureDefaultBuilder() {
 		return new SelfSignedCertificateBuilder(this.keyPair)
                 .setCommonName("Unknown"); 
 	}
 	
 	
 	/** Returns a builder for a certificate with the user-provided information. */
-	private SelfSignedCertificateBuilder configureBuilderWithInfo() throws CertificateException {
+	private SelfSignedCertificateBuilder configureBuilderWithInfo() {
 		SelfSignedCertificateBuilder builder = new SelfSignedCertificateBuilder(keyPair)
                 .setCommonName(this.commonName)
                 .setOrganization(this.organization)
@@ -264,7 +264,7 @@ public class CertificateHelper {
                 .setApplicationUri(this.applicationUri);
         
 		this.ipAddresses.forEach(ip -> builder.addIpAddress(ip.getHostName()));
-		this.dnsNames.forEach(name -> builder.addDnsName(name));
+		this.dnsNames.forEach(builder::addDnsName);
 		
 		return builder;
 	}

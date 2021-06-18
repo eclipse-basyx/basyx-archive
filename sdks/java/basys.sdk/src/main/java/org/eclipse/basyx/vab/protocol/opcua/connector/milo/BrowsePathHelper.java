@@ -252,8 +252,8 @@ public final class BrowsePathHelper {
 	
 	private static boolean isAllHierarchicalReferences(RelativePathElement rpe) {
 		return rpe.getReferenceTypeId().equals(BuiltinReferenceType.HierarchicalReferences.getNodeId())
-				&& rpe.getIsInverse() == false
-				&& rpe.getIncludeSubtypes() == true;
+				&& !rpe.getIsInverse()
+				&& rpe.getIncludeSubtypes();
 	}
 	
 	

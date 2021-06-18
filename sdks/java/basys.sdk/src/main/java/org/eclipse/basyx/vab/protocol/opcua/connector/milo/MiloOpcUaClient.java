@@ -20,6 +20,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -40,6 +41,7 @@ import org.eclipse.basyx.vab.protocol.opcua.types.UnsignedInteger;
 import org.eclipse.basyx.vab.protocol.opcua.types.UnsignedLong;
 import org.eclipse.basyx.vab.protocol.opcua.types.UnsignedShort;
 import org.eclipse.milo.opcua.sdk.client.AddressSpace;
+import org.eclipse.milo.opcua.sdk.client.OpcUaClient;
 import org.eclipse.milo.opcua.sdk.client.api.UaClient;
 import org.eclipse.milo.opcua.sdk.client.api.config.OpcUaClientConfig;
 import org.eclipse.milo.opcua.sdk.client.api.config.OpcUaClientConfigBuilder;
@@ -69,12 +71,12 @@ import org.slf4j.LoggerFactory;
  * Provides a wrapper around the eclipse Milo OPC UA client that works in the BaSyx environment.
  */
 public class MiloOpcUaClient implements IOpcUaClient {
-	private final static Logger logger = LoggerFactory.getLogger(MiloOpcUaClient.class);
+	private static final Logger logger = LoggerFactory.getLogger(MiloOpcUaClient.class);
 	private static DatatypeFactory xmlDatatypeFactory;
 
 	private ClientConfiguration configuration = new ClientConfiguration();
 	private OpcUaClientConfigBuilder miloConfiguration;
-	private CompletableFuture<? extends UaClient> futureClient;
+	private CompletableFuture<UaClient> futureClient;
 	private String endpointUrl;
 
 	static {
@@ -364,7 +366,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 						throw new OpcUaException("Read failed with status code: " + dv.getStatusCode());
 					}
 				})
-				.thenApply(var -> unwrapVariant(var))
+				.thenApply(this::unwrapVariant)
 				.exceptionally(e -> {
 					if (!(e instanceof OpcUaException)) {
 						throw new OpcUaException(e);
@@ -504,15 +506,13 @@ public class MiloOpcUaClient implements IOpcUaClient {
 	 * 
 	 * @return The underlying client object.
 	 */
-	public CompletableFuture<? extends UaClient> getClient() {
-		synchronized(this) {
-			if (futureClient != null) {
-				return futureClient;
-			} else {
-				UaClient client = createClient();
-				futureClient = client.connect();
-				return futureClient;
-			}
+	public synchronized CompletableFuture<UaClient> getClient() {
+		if (futureClient != null) {
+			return futureClient;
+		} else {
+			OpcUaClient client = createClient();
+			futureClient = client.connect();
+			return futureClient;
 		}
 	}
 
@@ -542,7 +542,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 	 * @throws OpcUaException as a wrapper exception around any Milo exceptions thrown during 
 	 * 						  client creation.
 	 */
-	private UaClient createClient() {
+	private OpcUaClient createClient() {
 		// Set up a filter which determines the correct endpoint by its security settings.
 		SecurityPolicy securityPolicy = configuration.getSecurityPolicy();
 		MessageSecurityMode messageSecurityMode = configuration.getMessageSecurityMode();
@@ -559,7 +559,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 
 		try {
 			OpcUaClientConfig config = buildMiloConfiguration(endpoint);
-			return org.eclipse.milo.opcua.sdk.client.OpcUaClient.create(config);
+			return OpcUaClient.create(config);
 		} catch (UaException e) {
 			throw new OpcUaException(e);
 		}
@@ -582,7 +582,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 	private EndpointDescription discoverEndpoint(String endpointUrl, Predicate<EndpointDescription> filter) throws OpcUaException {
 		try {
 			return discoverEndpoints(endpointUrl)
-					.thenApply((list) -> list.stream()
+					.thenApply(list -> list.stream()
 							.filter(filter)
 							.findFirst()
 							.orElseThrow(() -> new OpcUaException("No endpoint found at " + endpointUrl)))
@@ -609,8 +609,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 					if (ex != null) {
 						String discoveryUrl = endpointUrl.endsWith("/") ? endpointUrl : endpointUrl + "/";
 						discoveryUrl += "discovery";
-						logger.debug("Discovery failed at original endpoint URL. Trying with explicit discovery URL: "
-								+ discoveryUrl);
+						logger.debug("Discovery failed at original endpoint URL. Trying with explicit discovery URL: {}", discoveryUrl);
 	
 						try {
 							return DiscoveryClient.getEndpoints(discoveryUrl).get();
@@ -619,7 +618,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 							Thread.currentThread().interrupt();
 							throw new OpcUaException(e);
 						} catch (ExecutionException e) {
-							logger.error("Endpoint discovery failed with message: " + e.getMessage());
+							logger.error("Endpoint discovery failed with message: {}", e.getMessage());
 							if (e.getCause() instanceof OpcUaException) {
 								throw (OpcUaException)e.getCause();
 							} else {
@@ -650,10 +649,10 @@ public class MiloOpcUaClient implements IOpcUaClient {
 		// Prepare this 'address space' for later when we need to convert an expanded node id
 		// to a regular one. That requires a round-trip with the server.
 		CompletableFuture<AddressSpace> futureAddressSpace = getClient()
-				.thenApplyAsync(client -> client.getAddressSpace());
+				.thenApplyAsync(UaClient::getAddressSpace);
 		
 		// This function gets the results from the response, unless the service failed in some way.
-		Function<TranslateBrowsePathsToNodeIdsResponse, BrowsePathResult[]> getResults = (response) -> {
+		Function<TranslateBrowsePathsToNodeIdsResponse, BrowsePathResult[]> getResults = response -> {
 			if (!response.getResponseHeader().getServiceResult().isGood()) {
 				throw new OpcUaException("TranslateBrowsePaths failed with status code: " + response.getResponseHeader().getServiceResult());
 			} else {
@@ -663,17 +662,19 @@ public class MiloOpcUaClient implements IOpcUaClient {
 		
 		// This function gets the expanded node id matching each browse path, unless at least one
 		// of them failed to resolve or was ambiguous.
-		Function<BrowsePathResult[], List<ExpandedNodeId>> extractExpandedNodeIds = (results) -> {
+		Function<BrowsePathResult[], List<ExpandedNodeId>> extractExpandedNodeIds = results -> {
 			List<ExpandedNodeId> exNodeIds = new ArrayList<>(results.length);
 			for (int i = 0; i < results.length; i++) {
 				BrowsePathResult r = results[i];
 				
 				if (!r.getStatusCode().isGood()) {
-					throw new ResourceNotFoundException(String.format("Browse path [%s] failed to resolve with status code: " + r.getStatusCode(), browsePaths.get(i)));
+					String exceptionMessage = String.format("Browse path [%s] failed to resolve with status code: %s", browsePaths.get(i), r.getStatusCode());
+					throw new ResourceNotFoundException(exceptionMessage);
 				} else {
 					BrowsePathTarget[] targets = r.getTargets();
 					if (targets.length > 1) {
-						throw new AmbiguousBrowsePathException(String.format("Browse path [%s] leads to multiple targets.", browsePaths.get(i)));
+						String exceptionMessage = String.format("Browse path [%s] leads to multiple targets.", browsePaths.get(i));
+						throw new AmbiguousBrowsePathException(exceptionMessage);
 					}
 					exNodeIds.add(i, targets[0].getTargetId());
 				}
@@ -683,15 +684,14 @@ public class MiloOpcUaClient implements IOpcUaClient {
 		
 		// This function maps the expanded node ids to regular node ids, using a provided 
 		// address space object.
-		BiFunction<List<ExpandedNodeId>, AddressSpace, List<NodeId>> mapToNodeIds = (expandedNodeIds, addressSpace) -> {
-			return expandedNodeIds.stream()
+		BiFunction<List<ExpandedNodeId>, AddressSpace, List<NodeId>> mapToNodeIds = (expandedNodeIds, addressSpace) -> 
+				expandedNodeIds.stream()
 					.map(addressSpace::toNodeId)
 					.map(NodeId::new)
 					.collect(Collectors.toList());
-		};
 		
 		// This function logs the result and returns it without any changes.
-		Function<List<NodeId>, List<NodeId>> log = (nodeIds) -> {
+		UnaryOperator<List<NodeId>> log = nodeIds -> {
 			List<String> bpStrings = browsePaths.stream()
 					.map(bp -> BrowsePathHelper.toString(bp.getRelativePath()))
 					.collect(Collectors.toList());

@@ -9,6 +9,7 @@
  ******************************************************************************/
 package org.eclipse.basyx.vab.protocol.opcua.types;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import org.eclipse.basyx.vab.protocol.opcua.exception.OpcUaException;
@@ -55,9 +56,8 @@ public final class NodeId {
 	 * 									length.
 	 */
 	public NodeId(int namespaceIndex, String identifier) {
-		if (identifier == null) {
-			throw new IllegalArgumentException("identifier must not be null.");
-		}
+		Objects.requireNonNull(identifier);
+
 		if (identifier.length() > 4096) {
 			throw new IllegalArgumentException("String identifier must not be longer than 4096 characters.");
 		}
@@ -75,9 +75,7 @@ public final class NodeId {
 	 * @throws IllegalArgumentException if identifier is <code>null</code>.
 	 */
 	public NodeId(int namespaceIndex, UUID identifier) {
-		if (identifier == null) {
-			throw new IllegalArgumentException("identifier must not be null.");
-		}
+		Objects.requireNonNull(identifier);
 		
 		this.internalId = new org.eclipse.milo.opcua.stack.core.types.builtin.NodeId(namespaceIndex, identifier);
 	}
@@ -95,9 +93,8 @@ public final class NodeId {
 	 * 									length.
 	 */
 	public NodeId(int namespaceIndex, byte[] identifier) {
-		if (identifier == null) {
-			throw new IllegalArgumentException("identifier must not be null.");
-		}
+		Objects.requireNonNull(identifier);
+		
 		if (identifier.length > 4096) {
 			throw new IllegalArgumentException("ByteString identifier must not be longer than 4096 bytes.");
 		}

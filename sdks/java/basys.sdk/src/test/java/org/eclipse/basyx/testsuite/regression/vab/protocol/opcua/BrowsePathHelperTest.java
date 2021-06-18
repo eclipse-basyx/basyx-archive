@@ -53,8 +53,8 @@ public class BrowsePathHelperTest {
 				true, 
 				new QualifiedName(2, "Block.Output"));
 		
-		assertEquals(bp.getRelativePath().getElements().length, 1);
-		assertEquals(bp.getRelativePath().getElements()[0], rpe);
+		assertEquals(1, bp.getRelativePath().getElements().length);
+		assertEquals(rpe, bp.getRelativePath().getElements()[0]);
 	}
 	
 	@Test
@@ -74,9 +74,9 @@ public class BrowsePathHelperTest {
 				true, 
 				new QualifiedName(0, "NodeVersion"));
 		
-		assertEquals(bp.getRelativePath().getElements().length, 2);
-		assertEquals(bp.getRelativePath().getElements()[0], rpe1);
-		assertEquals(bp.getRelativePath().getElements()[1], rpe2);
+		assertEquals(2, bp.getRelativePath().getElements().length);
+		assertEquals(rpe1, bp.getRelativePath().getElements()[0]);
+		assertEquals(rpe2, bp.getRelativePath().getElements()[1]);
 	}
 	
 	@Test
@@ -96,9 +96,9 @@ public class BrowsePathHelperTest {
 				true, 
 				new QualifiedName(0, "Node:Version"));
 		
-		assertEquals(bp.getRelativePath().getElements().length, 2);
-		assertEquals(bp.getRelativePath().getElements()[0], rpe1);
-		assertEquals(bp.getRelativePath().getElements()[1], rpe2);
+		assertEquals(2, bp.getRelativePath().getElements().length);
+		assertEquals(rpe1, bp.getRelativePath().getElements()[0]);
+		assertEquals(rpe2, bp.getRelativePath().getElements()[1]);
 	}
 	
 	@Test
@@ -195,7 +195,7 @@ public class BrowsePathHelperTest {
 		
 		String s = BrowsePathHelper.toString(rp);
 		
-		assertEquals(s, ".0:Objects/1:Cars/");
+		assertEquals(".0:Objects/1:Cars/", s);
 	}
 	
 	@Test
