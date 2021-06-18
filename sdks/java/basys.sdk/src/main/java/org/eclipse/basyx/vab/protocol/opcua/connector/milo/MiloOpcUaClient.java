@@ -211,11 +211,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 			Thread.currentThread().interrupt();
 			throw new OpcUaException(e);
 		} catch (ExecutionException e) {
-			if (e.getCause() instanceof OpcUaException) {
-				throw (OpcUaException)e.getCause();
-			} else {
-				throw new OpcUaException(e.getCause());
-			}
+			throw makeOpcUaExceptionFromCause(e);
 		}
 	}
 	
@@ -248,11 +244,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 			Thread.currentThread().interrupt();
 			throw new OpcUaException(e);
 		} catch (ExecutionException e) {
-			if (e.getCause() instanceof OpcUaException) {
-				throw (OpcUaException)e.getCause();
-			} else {
-				throw new OpcUaException(e.getCause());
-			}
+			throw makeOpcUaExceptionFromCause(e);
 		}
 	}
 	
@@ -290,11 +282,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 			Thread.currentThread().interrupt();
 			throw new OpcUaException(e);
 		} catch (ExecutionException e) {
-			if (e.getCause() instanceof OpcUaException) {
-				throw (OpcUaException)e.getCause();
-			} else {
-				throw new OpcUaException(e.getCause());
-			}
+			throw makeOpcUaExceptionFromCause(e);
 		}
 	}
 
@@ -334,11 +322,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 			Thread.currentThread().interrupt();
 			throw new OpcUaException(e);
 		} catch (ExecutionException e) {
-			if (e.getCause() instanceof OpcUaException) {
-				throw (OpcUaException)e.getCause();
-			} else {
-				throw new OpcUaException(e.getCause());
-			}
+			throw makeOpcUaExceptionFromCause(e);
 		}
 	}
 
@@ -368,11 +352,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 				})
 				.thenApply(this::unwrapVariant)
 				.exceptionally(e -> {
-					if (!(e instanceof OpcUaException)) {
-						throw new OpcUaException(e);
-					} else {
-						throw (OpcUaException)e;
-					}
+					throw ensureOpcUaException(e);
 				});
 	}
 
@@ -391,11 +371,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 			Thread.currentThread().interrupt();
 			throw new OpcUaException(e);
 		} catch (ExecutionException e) {
-			if (e.getCause() instanceof OpcUaException) {
-				throw (OpcUaException)e.getCause();
-			} else {
-				throw new OpcUaException(e.getCause());
-			}
+			throw makeOpcUaExceptionFromCause(e);
 		}
 	}
 
@@ -423,11 +399,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 						throw new OpcUaException("Write failed with status code: " + status);
 					}
 				}).exceptionally(e -> {
-					if (!(e instanceof OpcUaException)) {
-						throw new OpcUaException(e);
-					} else {
-						throw (OpcUaException)e;
-					}
+					throw ensureOpcUaException(e);
 				});
 	}
 
@@ -446,11 +418,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 			Thread.currentThread().interrupt();
 			throw new OpcUaException(e);
 		} catch (ExecutionException e) {
-			if (e.getCause() instanceof OpcUaException) {
-				throw (OpcUaException)e.getCause();
-			} else {
-				throw new OpcUaException(e.getCause());
-			}
+			throw makeOpcUaExceptionFromCause(e);
 		}
 	}
 
@@ -486,11 +454,7 @@ public class MiloOpcUaClient implements IOpcUaClient {
 							.map(this::unwrapVariant)
 							.collect(Collectors.toList());
 				}).exceptionally(e -> {
-					if (!(e instanceof OpcUaException)) {
-						throw new OpcUaException(e);
-					} else {
-						throw (OpcUaException)e;
-					}
+					throw ensureOpcUaException(e);
 				});
 	}
 
@@ -607,30 +571,33 @@ public class MiloOpcUaClient implements IOpcUaClient {
 		return DiscoveryClient.getEndpoints(endpointUrl)
 				.handleAsync((list, ex) -> {
 					if (ex != null) {
-						String discoveryUrl = endpointUrl.endsWith("/") ? endpointUrl : endpointUrl + "/";
-						discoveryUrl += "discovery";
-						logger.debug("Discovery failed at original endpoint URL. Trying with explicit discovery URL: {}", discoveryUrl);
-	
-						try {
-							return DiscoveryClient.getEndpoints(discoveryUrl).get();
-						} catch (InterruptedException e) {
-							logger.error("Endpoint discovery failed because thread was interrupted.");
-							Thread.currentThread().interrupt();
-							throw new OpcUaException(e);
-						} catch (ExecutionException e) {
-							logger.error("Endpoint discovery failed with message: {}", e.getMessage());
-							if (e.getCause() instanceof OpcUaException) {
-								throw (OpcUaException)e.getCause();
-							} else {
-								throw new OpcUaException(e.getCause());
-							}
-						}
+						return retryDiscovery(endpointUrl);
 					} else {
 						return list;
 					}
 				});
 	}
 
+	private List<EndpointDescription> retryDiscovery(String endpointUrl) {
+		String discoveryUrl = createExplicitDiscoveryUrl(endpointUrl);
+		logger.debug("Discovery failed at original endpoint URL. Trying with explicit discovery URL: {}", discoveryUrl);
+
+		try {
+			return DiscoveryClient.getEndpoints(discoveryUrl).get();
+		} catch (InterruptedException e) {
+			logger.error("Endpoint discovery failed because thread was interrupted.");
+			Thread.currentThread().interrupt();
+			throw new OpcUaException(e);
+		} catch (ExecutionException e) {
+			logger.error("Endpoint discovery failed.");
+			throw makeOpcUaExceptionFromCause(e);
+		}
+	}
+
+	private String createExplicitDiscoveryUrl(String discoveryUrl) {
+		discoveryUrl = discoveryUrl.endsWith("/") ? discoveryUrl : discoveryUrl + "/";
+		return discoveryUrl + "discovery";
+	}
 	
 	/**
 	 * Translates a list of browse paths to a list of associated node ids.
@@ -718,7 +685,14 @@ public class MiloOpcUaClient implements IOpcUaClient {
 		return translateBrowsePathsToNodeIds(browsePaths)
 				.thenApply(nodeIds -> nodeIds.get(0));
 	}
+
+	private OpcUaException makeOpcUaExceptionFromCause(Throwable e) {
+		return ensureOpcUaException(e.getCause());
+	}
 	
+	private OpcUaException ensureOpcUaException(Throwable e) {
+		return (e instanceof OpcUaException) ? (OpcUaException) e : new OpcUaException(e);
+	}
 
 	/**
 	 * Wraps a data value in a {@link Variant}.
