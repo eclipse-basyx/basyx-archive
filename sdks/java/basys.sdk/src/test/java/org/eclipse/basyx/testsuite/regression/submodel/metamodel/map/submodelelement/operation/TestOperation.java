@@ -43,6 +43,9 @@ public class TestOperation extends TestOperationSuite {
 	
 	private static final String KEY_VALUE = "testKeyValue";
 	
+	private int setValueForTestSetNoInNoOutFunctionAsInvokable;
+	private int setValueForTestConsumerAsInvokable;
+
 	@Override
 	protected IOperation prepareOperation(Operation operation) {
 		return operation;
@@ -69,6 +72,22 @@ public class TestOperation extends TestOperationSuite {
 		assertEquals(1, operation.invoke(3,2));
 	}
 
+
+	@Test
+	public void testSetNoInNoOutFunctionAsInvokable() throws Exception {
+		Operation operation = new Operation("noInNoOutFunction");
+		setValueForTestSetNoInNoOutFunctionAsInvokable = 0;
+		int expected = 10;
+		
+		operation.setInvokable(() -> {
+			setValueForTestSetNoInNoOutFunctionAsInvokable = expected;
+		});
+		
+		operation.invokeSimple();
+
+		assertEquals(expected, setValueForTestSetNoInNoOutFunctionAsInvokable);
+	}
+
 	@Test
 	public void testSetSupplierAsInvokable() {
 		int returnValue = 10;
@@ -85,12 +104,10 @@ public class TestOperation extends TestOperationSuite {
 		assertEquals(returnValue, operation.invokeSimple());
 	}
 
-	private int setValue;
-
 	@Test
 	public void testSetConsumerAsInvokable() {
 		Consumer<Object[]> consumer = (a) -> {
-			setValue = (Integer) a[0];
+			setValueForTestConsumerAsInvokable = (Integer) a[0];
 		};
 
 		Operation operation = new Operation("consumer");
@@ -105,7 +122,7 @@ public class TestOperation extends TestOperationSuite {
 		int expected = 5;
 		operation.invokeSimple(expected);
 
-		assertEquals(expected, setValue);
+		assertEquals(expected, setValueForTestConsumerAsInvokable);
 
 	}
 

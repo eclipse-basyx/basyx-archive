@@ -46,7 +46,7 @@ public class Operation extends SubmodelElement implements IOperation {
 
 	public static final String INVOKABLE = "invokable";
 	public static final String MODELTYPE = "Operation";
-	
+
 	public static final String INVOKE = "invoke";
 
 	/**
@@ -65,9 +65,10 @@ public class Operation extends SubmodelElement implements IOperation {
 		// Variables, that are input and output
 		put(INOUT, new ArrayList<OperationVariable>());
 	}
-	
+
 	/**
 	 * Constructor accepting only mandatory attribute
+	 * 
 	 * @param idShort
 	 */
 	public Operation(String idShort) {
@@ -97,8 +98,7 @@ public class Operation extends SubmodelElement implements IOperation {
 	 *            the concrete function
 	 * 
 	 */
-	public Operation(Collection<OperationVariable> in, Collection<OperationVariable> out,
-			Collection<OperationVariable> inout, Function<Object[], Object> function) {
+	public Operation(Collection<OperationVariable> in, Collection<OperationVariable> out, Collection<OperationVariable> inout, Function<Object[], Object> function) {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
 
@@ -136,19 +136,19 @@ public class Operation extends SubmodelElement implements IOperation {
 		if (obj == null) {
 			return null;
 		}
-		
+
 		if (!isValid(obj)) {
 			throw new MetamodelConstructionException(Operation.class, obj);
 		}
-		
+
 		Operation ret = new Operation();
 		ret.setMap(obj);
 		return ret;
 	}
-	
+
 	/**
-	 * Check whether all mandatory elements for the metamodel
-	 * exist in a map
+	 * Check whether all mandatory elements for the metamodel exist in a map
+	 * 
 	 * @return true/false
 	 */
 	public static boolean isValid(Map<String, Object> obj) {
@@ -160,16 +160,16 @@ public class Operation extends SubmodelElement implements IOperation {
 	 */
 	@SuppressWarnings("unchecked")
 	public static boolean isOperation(Object value) {
-		if(!(value instanceof Map<?, ?>)) {
+		if (!(value instanceof Map<?, ?>)) {
 			return false;
 		}
-		
+
 		Map<String, Object> map = (Map<String, Object>) value;
-		
+
 		String modelType = ModelType.createAsFacade(map).getName();
-		// Either model type is set or the element type specific attributes are contained
-		return MODELTYPE.equals(modelType)
-				|| (modelType == null && (map.containsKey(IN) && map.containsKey(OUT) && map.containsKey(INOUT)));
+		// Either model type is set or the element type specific attributes are
+		// contained
+		return MODELTYPE.equals(modelType) || (modelType == null && (map.containsKey(IN) && map.containsKey(OUT) && map.containsKey(INOUT)));
 	}
 
 	@Override
@@ -208,8 +208,7 @@ public class Operation extends SubmodelElement implements IOperation {
 
 	@Override
 	public SubmodelElement[] invoke(SubmodelElement... elems) {
-		throw new UnsupportedOperationException(
-				"SubmodelElement matching logic is only supported for connected Operations");
+		throw new UnsupportedOperationException("SubmodelElement matching logic is only supported for connected Operations");
 	}
 
 	@Override
@@ -238,6 +237,14 @@ public class Operation extends SubmodelElement implements IOperation {
 		put(Operation.INVOKABLE, endpoint);
 	}
 
+	public void setInvokable(Runnable runnable) {
+		Function<Object[], Object> wrapper = (o) -> {
+			runnable.run();
+			return null;
+		};
+		put(Operation.INVOKABLE, wrapper);
+	}
+
 	@Override
 	public Collection<IReference> getDataSpecificationReferences() {
 		return HasDataSpecification.createAsFacade(this).getDataSpecificationReferences();
@@ -262,7 +269,7 @@ public class Operation extends SubmodelElement implements IOperation {
 	public LangStrings getDescription() {
 		return Referable.createAsFacade(this, getKeyElement()).getDescription();
 	}
-	
+
 	@Override
 	protected KeyElements getKeyElement() {
 		return KeyElements.OPERATION;
