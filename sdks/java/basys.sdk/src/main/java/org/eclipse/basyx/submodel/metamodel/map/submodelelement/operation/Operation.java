@@ -12,7 +12,9 @@ package org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -306,5 +308,19 @@ public class Operation extends SubmodelElement implements IOperation {
 			throw new WrongNumberOfParametersException(getIdShort(), getInputVariables(), params);
 		}
 		return ((Function<Object[], Object>) get(INVOKABLE)).apply(params);
+	}
+
+	public void setInvokable(Supplier<Object> supplier) {
+		Function<Object[], Object> wrapper = (o) -> supplier.get();
+		setInvokable(wrapper);
+	}
+
+	public void setInvokable(Consumer<Object[]> consumer) {
+		Function<Object[], Object> wrapper = (o) -> {
+			consumer.accept(o);
+			return null;
+		};
+
+		setInvokable(wrapper);
 	}
 }

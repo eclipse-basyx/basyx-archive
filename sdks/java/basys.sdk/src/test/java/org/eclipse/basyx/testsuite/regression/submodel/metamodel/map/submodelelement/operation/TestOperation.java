@@ -15,16 +15,21 @@ import static org.junit.Assert.fail;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.junit.Test;
 
 /**
@@ -52,7 +57,7 @@ public class TestOperation extends TestOperationSuite {
 	}
 	
 	@Test 
-	public void testSetInvocable() throws Exception {
+	public void testSetFunctionAsInvokable() throws Exception {
 		Operation operation = new Operation(IN, OUT, INOUT, FUNC);
 		assertEquals(5, operation.invoke(3, 2));
 		
@@ -62,6 +67,46 @@ public class TestOperation extends TestOperationSuite {
 		operation.setInvokable(newFunction);
 		
 		assertEquals(1, operation.invoke(3,2));
+	}
+
+	@Test
+	public void testSetSupplierAsInvokable() {
+		int returnValue = 10;
+		Supplier<Object> supplier = () -> returnValue;
+		Operation operation = new Operation("supplier");
+		
+		Property outputProperty = new Property("output", ValueType.Integer);
+		outputProperty.setModelingKind(ModelingKind.TEMPLATE);
+		
+		OperationVariable outputVariable = new OperationVariable(outputProperty);
+		operation.setOutputVariables(Collections.singleton(outputVariable));
+		operation.setInvokable(supplier);
+
+		assertEquals(returnValue, operation.invokeSimple());
+	}
+
+	private int setValue;
+
+	@Test
+	public void testSetConsumerAsInvokable() {
+		Consumer<Object[]> consumer = (a) -> {
+			setValue = (Integer) a[0];
+		};
+
+		Operation operation = new Operation("consumer");
+
+		Property inputProperty = new Property("input", ValueType.Integer);
+		inputProperty.setModelingKind(ModelingKind.TEMPLATE);
+
+		OperationVariable inputVariable = new OperationVariable(inputProperty);
+		operation.setInputVariables(Collections.singleton(inputVariable));
+		operation.setInvokable(consumer);
+
+		int expected = 5;
+		operation.invokeSimple(expected);
+
+		assertEquals(expected, setValue);
+
 	}
 
 	@Override
