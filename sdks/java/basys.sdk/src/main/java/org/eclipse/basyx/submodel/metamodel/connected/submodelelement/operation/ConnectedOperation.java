@@ -67,16 +67,9 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 	 */
 	@Override
 	public Object invoke(Object... params) {
-		// Wrap simple params
-		SubmodelElement[] wrapper = createElementWrapper(params);
-
-		// Invoke with submodel elements
-		SubmodelElement[] result = invoke(wrapper);
-
-		// Unwrap result wrapper
-		return unwrapResult(result);
+		return invokeSimple(params);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public SubmodelElement[] invoke(SubmodelElement... elems) {
@@ -89,8 +82,7 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 
 		// Extract the output elements
 		Collection<IOperationVariable> outputArguments = response.getOutputArguments();
-		List<ISubmodelElement> elements = outputArguments.stream().map(IOperationVariable::getValue)
-				.collect(Collectors.toList());
+		List<ISubmodelElement> elements = outputArguments.stream().map(IOperationVariable::getValue).collect(Collectors.toList());
 
 		// Cast them to an array
 		SubmodelElement[] result = new SubmodelElement[elements.size()];
@@ -100,8 +92,7 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 
 	private InvocationRequest createInvocationRequest(int timeout, SubmodelElement... elems) {
 		// Wrap parameters in operation variables
-		Collection<IOperationVariable> inputArguments = Arrays.asList(elems).stream().map(OperationVariable::new)
-				.collect(Collectors.toList());
+		Collection<IOperationVariable> inputArguments = Arrays.asList(elems).stream().map(OperationVariable::new).collect(Collectors.toList());
 		// Generate random request id
 		String requestId = UUID.randomUUID().toString();
 
@@ -137,7 +128,7 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 		InvocationRequest request = createInvocationRequest(DEFAULT_ASYNC_TIMEOUT, smElements);
 		return new ConnectedAsyncInvocation(getProxy(), getIdShort(), request);
 	}
-	
+
 	@Override
 	public ConnectedAsyncInvocation invokeAsyncWithTimeout(int timeout, Object... params) {
 		SubmodelElement[] smElements = createElementWrapper(params);
@@ -149,7 +140,7 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 	protected KeyElements getKeyElement() {
 		return KeyElements.OPERATION;
 	}
-	
+
 	@Override
 	public Object getValue() {
 		throw new UnsupportedOperationException("An Operation has no value");
@@ -159,7 +150,7 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 	public void setValue(Object value) {
 		throw new UnsupportedOperationException("An Operation has no value");
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private Object unwrapResult(Object result) {
 		if (result instanceof Collection<?>) {
@@ -186,5 +177,12 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 	@Override
 	public Operation getLocalCopy() {
 		return Operation.createAsFacade(getElem()).getLocalCopy();
+	}
+
+	@Override
+	public Object invokeSimple(Object... params) {
+		SubmodelElement[] wrapper = createElementWrapper(params);
+		SubmodelElement[] result = invoke(wrapper);
+		return unwrapResult(result);
 	}
 }

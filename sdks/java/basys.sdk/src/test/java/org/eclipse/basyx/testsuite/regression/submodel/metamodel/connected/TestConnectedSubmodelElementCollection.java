@@ -128,7 +128,7 @@ public class TestConnectedSubmodelElementCollection {
 		IOperation sum = ops.get(OPERATION);
 
 		// Check operation invocation
-		assertEquals(5, sum.invoke(2, 3));
+		assertEquals(5, sum.invokeSimple(2, 3));
 	}
 	
 	@Test

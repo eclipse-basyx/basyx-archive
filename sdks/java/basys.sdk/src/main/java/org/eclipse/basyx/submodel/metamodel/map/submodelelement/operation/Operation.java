@@ -199,13 +199,9 @@ public class Operation extends SubmodelElement implements IOperation {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object invoke(Object... params) {
-		if (params.length != getInputVariables().size()) {
-			throw new WrongNumberOfParametersException(getIdShort(), getInputVariables(), params);
-		}
-		return ((Function<Object[], Object>) get(INVOKABLE)).apply(params);
+		return invokeSimple(params);
 	}
 
 	@Override
@@ -301,5 +297,14 @@ public class Operation extends SubmodelElement implements IOperation {
 		inoutVars.stream().forEach(v -> inoutVarCopy.add(new OperationVariable(v.getValue().getLocalCopy())));
 		copy.setInOutputVariables(inoutVarCopy);
 		return copy;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object invokeSimple(Object... params) {
+		if (params.length != getInputVariables().size()) {
+			throw new WrongNumberOfParametersException(getIdShort(), getInputVariables(), params);
+		}
+		return ((Function<Object[], Object>) get(INVOKABLE)).apply(params);
 	}
 }

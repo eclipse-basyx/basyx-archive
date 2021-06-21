@@ -23,7 +23,6 @@ import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IAsyncInvocation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationExecutionErrorException;
@@ -109,15 +108,15 @@ public abstract class TestOperationSuite {
 	}
 
 	@Test
-	public void testInvoke() throws Exception {
-		assertEquals(5, operation.invoke(2, 3));
+	public void testInvokeSimple() throws Exception {
+		assertEquals(5, operation.invokeSimple(2, 3));
 	}
 
 	@Test
-	public void testInvokeException() throws Exception {
+	public void testInvokeSimpleException() throws Exception {
 		try {
 			// Ensure the operation is invoked directly
-			operationException.invoke(1, 2);
+			operationException.invokeSimple(1, 2);
 			fail();
 		} catch (Exception e) {
 			// Exceptions from ConnectedOperation are wrapped in ProviderException
@@ -126,28 +125,20 @@ public abstract class TestOperationSuite {
 	}
 
 	@Test
-	public void testInvokeWithSubmodelElements() {
-		Property param1 = new Property("testIn1", 2);
-		param1.setModelingKind(ModelingKind.TEMPLATE);
-		Property param2 = new Property("testIn2", 4);
-		param2.setModelingKind(ModelingKind.TEMPLATE);
-
-		SubmodelElement[] result = operation.invoke(param1, param2);
-
-		assertEquals(1, result.length);
-		assertEquals(6, result[0].getValue());
-	}
+	public abstract void testInvokeWithSubmodelElements();
 
 	@Test
-	public void testInvokeParametersException() {
+	public void testInvokeSimpleParametersException() {
 		try {
-			operation.invoke(1);
+			operation.invokeSimple(1);
 			fail();
 		} catch (Exception e) {
-			// Exceptions from ConnectedOperation are wrapped in ProviderException
 			assertTrue(e instanceof WrongNumberOfParametersException || e.getCause() instanceof WrongNumberOfParametersException);
 		}
 	}
+
+	@Test
+	public abstract void testInvokeWithSubmodelElementsException();
 
 	@Test
 	public void testInvokeAsync() throws Exception {

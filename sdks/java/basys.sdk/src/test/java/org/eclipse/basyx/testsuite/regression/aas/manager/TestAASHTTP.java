@@ -129,7 +129,7 @@ public class TestAASHTTP {
 		assertEquals(4, operations.size());
 
 		IOperation op = operations.get("complex");
-		assertEquals(1, op.invoke(2, 1));
+		assertEquals(1, op.invokeSimple(2, 1));
 
 		Map<String, ISubmodelElement> elements = sm.getSubmodelElements();
 		// 2 properties, 4 operations, 1 collection

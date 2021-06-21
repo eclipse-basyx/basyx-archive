@@ -90,4 +90,17 @@ public class TestOperation extends TestOperationSuite {
 		
 		assertEquals(KEY_VALUE, newReference.getKeys().get(0).getValue());
 	}
+
+	@Override
+	public void testInvokeWithSubmodelElementsException() {
+		try {
+			Property param1 = new Property("testIn1", 1);
+			Property param2 = new Property("testIn2", 1);
+
+			// Only unwrapped invokation is supported for local operations
+			operationException.invoke(param1, param2);
+			fail();
+		} catch (UnsupportedOperationException e) {
+		}
+	}
 }

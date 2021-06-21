@@ -95,7 +95,7 @@ public class TestConnectedSubmodel extends TestSubmodelSuite {
 
 		// Check the operation itself
 		IOperation op = ops.get(OP);
-		assertEquals(5, op.invoke(2, 3));
+		assertEquals(5, op.invokeSimple(2, 3));
 	}
 
 	@Test
