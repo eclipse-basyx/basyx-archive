@@ -28,8 +28,9 @@
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="5.0.5" />
   </ItemGroup>
 
-  <PropertyGroup>
-    <DebugType>Full</DebugType>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   
   <ItemGroup>

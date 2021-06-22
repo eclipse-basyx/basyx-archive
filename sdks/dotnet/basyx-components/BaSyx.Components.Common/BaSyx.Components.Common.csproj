@@ -17,9 +17,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BaSyx.API" Version="1.0.0" />
-    <PackageReference Include="BaSyx.Utils" Version="1.0.0" />
-    <PackageReference Include="BaSyx.Utils.DependencyInjection" Version="1.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.14" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
@@ -29,11 +26,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\basyx-core\BaSyx.API\BaSyx.API.csproj" />
+    <ProjectReference Include="..\..\basyx-core\BaSyx.Utils.DependencyInjection\BaSyx.Utils.DependencyInjection.csproj" />
+    <ProjectReference Include="..\..\basyx-core\BaSyx.Utils\BaSyx.Utils.csproj" />
     <ProjectReference Include="..\BaSyx.Components.Common.Abstractions\BaSyx.Components.Common.Abstractions.csproj" />
   </ItemGroup>
 
-  <PropertyGroup>
-    <DebugType>Full</DebugType>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>

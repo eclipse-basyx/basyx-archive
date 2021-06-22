@@ -14,21 +14,23 @@
     <PackageIcon>basyxlogo.png</PackageIcon>
     <PackageIconUrl />
     <LangVersion>8.0</LangVersion>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BaSyx.API" Version="1.0.0" />
     <PackageReference Include="Makaretu.Dns" Version="2.0.1" />
     <PackageReference Include="Makaretu.Dns.Multicast" Version="0.27.0" />
     <PackageReference Include="NLog" Version="4.7.9" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\basyx-core\BaSyx.API\BaSyx.API.csproj" />
     <ProjectReference Include="..\BaSyx.AAS.Client.Http\BaSyx.AAS.Client.Http.csproj" />
   </ItemGroup>
 
-  <PropertyGroup>
-    <DebugType>Full</DebugType>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>

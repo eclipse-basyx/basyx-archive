@@ -22,11 +22,12 @@
     <ProjectReference Include="..\BaSyx.API.Http.Controllers\BaSyx.API.Http.Controllers.csproj" />
     <ProjectReference Include="..\BaSyx.Components.Common\BaSyx.Components.Common.csproj" />
   </ItemGroup>
-  
-  <PropertyGroup>
-    <DebugType>Full</DebugType>
-  </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  
   <ItemGroup>
     <None Include="..\..\resources\basyxlogo.png">
       <Pack>True</Pack>

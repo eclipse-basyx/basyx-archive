@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>basyx</AssemblyName>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,9 +24,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BaSyx.Models.Export" Version="1.0.0" />
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
     <PackageReference Include="NLog" Version="4.7.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\basyx-core\BaSyx.Models.Export\BaSyx.Models.Export.csproj" />
   </ItemGroup>
 
 </Project>
