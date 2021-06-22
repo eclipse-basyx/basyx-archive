@@ -226,6 +226,13 @@ public final class NodeId {
 		if (!(obj instanceof NodeId))
 			return false;
 
-		return this.internalId.equals(obj);
+		NodeId other = (NodeId) obj;
+		return internalId.equals(other.internalId);
+	}
+
+
+	@Override
+	public int hashCode() {
+		return internalId.hashCode();
 	}
 }
