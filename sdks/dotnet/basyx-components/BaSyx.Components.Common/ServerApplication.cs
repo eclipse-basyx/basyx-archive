@@ -297,10 +297,18 @@ namespace BaSyx.Components.Common
             services.AddStandardImplementation();
 
             services.AddCors();
-            services.AddMvc()
+            services
+                .AddMvc(options =>
+                {
+                    options.InputFormatters.RemoveType<Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonInputFormatter>();
+                    options.OutputFormatters.RemoveType<Microsoft.AspNetCore.Mvc.Formatters.SystemTextJsonOutputFormatter>();
+                })
                 .AddApplicationPart(ControllerAssembly)
                 .AddControllersAsServices()
-                .AddNewtonsoftJson(options => options.GetDefaultMvcJsonOptions(services));
+                .AddNewtonsoftJson(options =>
+                {
+                    options.GetDefaultMvcJsonOptions(services);
+                });
 
             services.AddRazorPages(opts =>
             {
