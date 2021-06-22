@@ -249,7 +249,7 @@ namespace BaSyx.Models.Extensions
             {
                 DataType dataType = DataType.GetDataTypeFromSystemType(propertyInfo.PropertyType);
                 if (dataType == null)
-                {
+                {                    
                     logger.Warn($"Unable to convert system type {propertyInfo.PropertyType} to DataType");
                     return null;
                 }
