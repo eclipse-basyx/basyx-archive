@@ -19,10 +19,9 @@ using System.Linq;
 
 namespace BaSyx.Models.Core.Common
 {
-
     public class ElementContainer<TElement> : IElementContainer<TElement> where TElement : IReferable, IModelElement
     {
-        public const string PATH_SEPERATOR = "/";
+        public const char PATH_SEPERATOR = '/';
 
         private readonly List<IElementContainer<TElement>> _children;
 
@@ -33,6 +32,10 @@ namespace BaSyx.Models.Core.Common
         public IReferable Parent { get; set; }
         public IElementContainer<TElement> ParentContainer { get; set; }
 
+        public event EventHandler<ElementContainerEventArgs<TElement>> OnCreated;
+        public event EventHandler<ElementContainerEventArgs<TElement>> OnUpdated;
+        public event EventHandler<ElementContainerEventArgs<TElement>> OnDeleted;
+
         [JsonConstructor]
         public ElementContainer()
         {
@@ -42,10 +45,17 @@ namespace BaSyx.Models.Core.Common
         public ElementContainer(IReferable parent) : this(parent, default, null)
         { }
 
-        public ElementContainer(IReferable parent, TElement rootElement, IElementContainer<TElement> parentContainer)
+        public ElementContainer(IReferable parent, IEnumerable<TElement> list) : this()
         {
-            _children = new List<IElementContainer<TElement>>();
+            Parent = parent;
+            Value = default;
+            IdShort = null;
 
+            AddRange(list);
+        }
+
+        public ElementContainer(IReferable parent, TElement rootElement, IElementContainer<TElement> parentContainer) : this()
+        {
             Parent = parent;
             ParentContainer = parentContainer;
 
@@ -53,25 +63,12 @@ namespace BaSyx.Models.Core.Common
             Value = rootElement;
 
             if (ParentContainer != null && !string.IsNullOrEmpty(ParentContainer.Path))
-            {
                 Path = ParentContainer.Path + PATH_SEPERATOR + IdShort;
-            }
             else
-            {
                 Path = IdShort;
-            }
         }
 
-        public ElementContainer(IReferable parent, IEnumerable<TElement> list)
-        {
-            _children = new List<IElementContainer<TElement>>();
-
-            Parent = parent;
-            Value = default;
-            IdShort = null;
-
-            AddRange(list);
-        }
+       
         public TElement this[int i]
         {
             get
@@ -87,7 +84,7 @@ namespace BaSyx.Models.Core.Common
         {
             get
             {
-                var child = _children.FirstOrDefault(c => c.IdShort == idShortPath);
+                var child = GetChild(idShortPath);
                 if (child != null && child.Value != null)
                     return child.Value;
                 else 
@@ -164,6 +161,7 @@ namespace BaSyx.Models.Core.Common
                     node = new ElementContainer<TElement>(Parent, element, this);
                 
                 this._children.Add(node);
+                OnCreated?.Invoke(this, new ElementContainerEventArgs<TElement>(this, element, ChangedEventType.Created));
             }
         }
 
@@ -224,13 +222,13 @@ namespace BaSyx.Models.Core.Common
             {
                 if (idShortPath.Contains(PATH_SEPERATOR))
                 {
-                    string[] splittedPath = idShortPath.Split(new char[] { PATH_SEPERATOR[0] }, StringSplitOptions.RemoveEmptyEntries);
+                    string[] splittedPath = idShortPath.Split(new char[] { PATH_SEPERATOR }, StringSplitOptions.RemoveEmptyEntries);
                     if (!HasChild(splittedPath[0]))
                         return false;
                     else
                     {
                         var child = GetChild(splittedPath[0]);
-                        return (child.HasChildPath(string.Join(PATH_SEPERATOR, splittedPath.Skip(1))));
+                        return (child.HasChildPath(string.Join(new string(new char[] { PATH_SEPERATOR }), splittedPath.Skip(1))));
                     }
                 }
                 else
@@ -250,11 +248,11 @@ namespace BaSyx.Models.Core.Common
                 IElementContainer<TElement> superChild;
                 if (idShortPath.Contains(PATH_SEPERATOR))
                 {
-                    string[] splittedPath = idShortPath.Split(new char[] { PATH_SEPERATOR[0] }, StringSplitOptions.RemoveEmptyEntries);
+                    string[] splittedPath = idShortPath.Split(new char[] { PATH_SEPERATOR }, StringSplitOptions.RemoveEmptyEntries);
                     if (HasChild(splittedPath[0]))                      
                     {
                         var child = GetChild(splittedPath[0]);
-                        superChild = child.GetChild(string.Join(PATH_SEPERATOR, splittedPath.Skip(1)));
+                        superChild = child.GetChild(string.Join(new string(new char[] { PATH_SEPERATOR }), splittedPath.Skip(1)));
                     }
                     else
                         superChild = null;
@@ -382,8 +380,12 @@ namespace BaSyx.Models.Core.Common
             var child = GetChild(idShortPath);
             if (child != null)
             {
-                int childIndex = _children.FindIndex(p => p.IdShort == idShortPath); //ToDo: Does not work in deeper hierarchy
-                _children[childIndex] = new ElementContainer<TElement>(Parent, element, this);
+                int childIndex = _children.FindIndex(p => p.IdShort == idShortPath);
+                if(element is IElementContainer<TElement> container)
+                    _children[childIndex] = container;
+                else
+                    _children[childIndex] = new ElementContainer<TElement>(Parent, element, this);
+                OnUpdated?.Invoke(this, new ElementContainerEventArgs<TElement>(this, element, ChangedEventType.Updated));
                 return new Result<TElement>(true, element);
             }
             else if (idShortPath.Contains(PATH_SEPERATOR))
@@ -411,6 +413,7 @@ namespace BaSyx.Models.Core.Common
             if (child != null)
             {
                 child.Value = element;
+                OnUpdated?.Invoke(this, new ElementContainerEventArgs<TElement>(child.ParentContainer, element, ChangedEventType.Updated));
                 return new Result<TElement>(true, element);
             }
             return new Result<TElement>(false, new NotFoundMessage());
@@ -423,8 +426,8 @@ namespace BaSyx.Models.Core.Common
 
             var child = GetChild(idShortPath);
             if (child != null)
-            {
-                child.ParentContainer.Remove(child.IdShort);
+            {               
+                child.ParentContainer.Remove(child.IdShort);                
                 return new Result(true);
             }
             return new Result(false, new NotFoundMessage());
@@ -433,6 +436,7 @@ namespace BaSyx.Models.Core.Common
         public void Remove(string idShort)
         {
             _children.RemoveAll(c => c.IdShort == idShort);
+            OnDeleted?.Invoke(this, new ElementContainerEventArgs<TElement>(this, default, ChangedEventType.Deleted) { ElementIdShort = idShort });
         }
 
         public void AddRange(IEnumerable<TElement> collection)
@@ -475,9 +479,14 @@ namespace BaSyx.Models.Core.Common
         {
             var removed = _children.RemoveAll(c => c.IdShort == item.IdShort);
             if (removed > 0)
+            {
+                OnDeleted?.Invoke(this, new ElementContainerEventArgs<TElement>(this, default, ChangedEventType.Deleted) { ElementIdShort = item.IdShort });
                 return true;
+            }
             else
                 return false;
         }
     }
+
+   
 }

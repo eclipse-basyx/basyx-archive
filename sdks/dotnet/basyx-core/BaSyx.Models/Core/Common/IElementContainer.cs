@@ -42,6 +42,10 @@ namespace BaSyx.Models.Core.Common
         TElement this[int i] { get; }
         TElement this[string idShort] { get; }
 
+        event EventHandler<ElementContainerEventArgs<TElement>> OnCreated;
+        event EventHandler<ElementContainerEventArgs<TElement>> OnUpdated;
+        event EventHandler<ElementContainerEventArgs<TElement>> OnDeleted;
+
         IResult<IQueryableElementContainer<TElement>> RetrieveAll();
         IResult<IQueryableElementContainer<TElement>> RetrieveAll(Predicate<TElement> predicate);
 
@@ -64,5 +68,31 @@ namespace BaSyx.Models.Core.Common
         void AppendRootPath(string rootPath);
         void Remove(string idShort);
         void AddRange(IEnumerable<TElement> elements);
+    }
+
+    public class ElementContainerEventArgs<TElement> : EventArgs where TElement : IReferable, IModelElement
+    {
+        public IElementContainer<TElement> ParentContainer { get; }
+        public TElement Element { get; }
+        public ChangedEventType ChangedEventType { get; }
+        public string ElementIdShort { get; set; }
+
+        public ElementContainerEventArgs(IElementContainer<TElement> parentContainer, TElement element, ChangedEventType changedEventType)
+        {
+            ParentContainer = parentContainer;
+            Element = element;
+            ChangedEventType = changedEventType;
+
+            if (element != null)
+                ElementIdShort = element.IdShort;
+        }
+    }
+
+    public enum ChangedEventType
+    {
+        Undefined,
+        Created,
+        Updated,
+        Deleted
     }
 }

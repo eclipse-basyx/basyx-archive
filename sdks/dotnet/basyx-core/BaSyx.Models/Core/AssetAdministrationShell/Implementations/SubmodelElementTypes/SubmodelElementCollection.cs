@@ -73,6 +73,45 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
             Set = (element, value) => { Value = value?.Value as IElementContainer<ISubmodelElement>; };
         }
 
+        public event EventHandler<ElementContainerEventArgs<ISubmodelElement>> OnCreated
+        {
+            add
+            {
+                Value.OnCreated += value;
+            }
+
+            remove
+            {
+                Value.OnCreated -= value;
+            }
+        }
+
+        public event EventHandler<ElementContainerEventArgs<ISubmodelElement>> OnUpdated
+        {
+            add
+            {
+                Value.OnUpdated += value;
+            }
+
+            remove
+            {
+                Value.OnUpdated -= value;
+            }
+        }
+
+        public event EventHandler<ElementContainerEventArgs<ISubmodelElement>> OnDeleted
+        {
+            add
+            {
+                Value.OnDeleted += value;
+            }
+
+            remove
+            {
+                Value.OnDeleted -= value;
+            }
+        }
+
         public IResult<IQueryableElementContainer<ISubmodelElement>> RetrieveAll()
         {
             return Value.RetrieveAll();
