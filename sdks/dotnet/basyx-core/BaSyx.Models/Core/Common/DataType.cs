@@ -91,6 +91,11 @@ namespace BaSyx.Models.Core.Common
                 dataType.IsCollection = true;
                 innerType = type.GetElementType();
             }
+            else if (type.IsEnum)
+            {
+                dataType.IsCollection = false;
+                innerType = typeof(int);
+            }
             else
             {
                 dataType.IsCollection = false;
