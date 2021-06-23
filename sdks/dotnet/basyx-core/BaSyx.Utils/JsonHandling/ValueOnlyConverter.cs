@@ -14,7 +14,7 @@ using System;
 
 namespace BaSyx.Utils.JsonHandling
 {
-    public class RawValueConverter : JsonConverter
+    public class ValueOnlyConverter : JsonConverter
     {
         private static readonly ILogger logger = LogManager.GetCurrentClassLogger();
 
