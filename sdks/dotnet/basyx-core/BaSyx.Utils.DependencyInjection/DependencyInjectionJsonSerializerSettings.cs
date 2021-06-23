@@ -16,7 +16,7 @@ namespace BaSyx.Utils.DependencyInjection
 {
     public class DependencyInjectionJsonSerializerSettings : DefaultJsonSerializerSettings
     {
-        public IServiceProvider ServicePovider { get; }
+        public IServiceProvider ServiceProvider { get; }
         public IServiceCollection Services { get; }
 
         public DependencyInjectionJsonSerializerSettings() :
@@ -27,7 +27,7 @@ namespace BaSyx.Utils.DependencyInjection
         {
             Services = services;
             DefaultServiceProviderFactory serviceProviderFactory = new DefaultServiceProviderFactory();
-            ServicePovider = serviceProviderFactory.CreateServiceProvider(Services);
+            ServiceProvider = serviceProviderFactory.CreateServiceProvider(Services);
             ContractResolver = new DependencyInjectionContractResolver(new DependencyInjectionExtension(Services));
         }        
     }

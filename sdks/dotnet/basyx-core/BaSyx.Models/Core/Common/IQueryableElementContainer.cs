@@ -14,7 +14,5 @@ using System.Linq;
 namespace BaSyx.Models.Core.Common
 {
     public interface IQueryableElementContainer<TElement> : IElementContainer<TElement>, IQueryable<TElement> where TElement : IReferable, IModelElement
-    {
-
-    }
+    { }
 }

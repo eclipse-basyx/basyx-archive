@@ -9,13 +9,10 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 using BaSyx.Models.Core.AssetAdministrationShell.Generics;
-using BaSyx.Models.Extensions;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace BaSyx.Models.Core.Common
 {
-    [JsonConverter(typeof(OperationVariableSetConverter))]
     public interface IOperationVariableSet : IList<IOperationVariable>
     {
         void Add(ISubmodelElement submodelElement);

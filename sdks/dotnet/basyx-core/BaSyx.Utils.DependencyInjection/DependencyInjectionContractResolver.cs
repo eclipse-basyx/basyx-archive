@@ -28,20 +28,32 @@ namespace BaSyx.Utils.DependencyInjection
         {
             if (DependencyInjectionExtension.IsTypeRegistered(objectType))
             {
-                JsonObjectContract contract = DIResolveContract(objectType);
+                JsonObjectContract contract = (JsonObjectContract)DIResolveContract(objectType);
                 contract.DefaultCreator = () => ServiceProvider.GetService(objectType);
                 return contract;
             }
 
             return base.CreateObjectContract(objectType);
         }
-        private JsonObjectContract DIResolveContract(Type objectType)
+        private JsonContract DIResolveContract(Type objectType)
         {
             var registeredType = DependencyInjectionExtension.GetRegisteredTypeFor(objectType);
             if (registeredType != null)
-                return base.CreateObjectContract(registeredType);
+                return base.CreateContract(registeredType);
             else
-                return CreateObjectContract(objectType);
+                return CreateContract(objectType);
+        }
+
+        protected override JsonArrayContract CreateArrayContract(Type objectType)
+        {
+            if (DependencyInjectionExtension.IsTypeRegistered(objectType))
+            {
+                JsonArrayContract contract = (JsonArrayContract)DIResolveContract(objectType);
+                contract.DefaultCreator = () => ServiceProvider.GetService(objectType);
+                return contract;
+            }
+
+            return base.CreateArrayContract(objectType);
         }
     }
 }

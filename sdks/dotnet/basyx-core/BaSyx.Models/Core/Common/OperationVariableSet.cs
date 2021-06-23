@@ -21,13 +21,11 @@ namespace BaSyx.Models.Core.Common
         public OperationVariableSet()
         { }
 
-        public OperationVariableSet(IEnumerable<IOperationVariable> list) : base(list) { }
-
-        public ISubmodelElement this[string idShort] => this.Find(e => e.Value.IdShort == idShort)?.Value;
+        public ISubmodelElement this[string idShort] => this.Find(e => e.Value?.IdShort == idShort)?.Value;
 
         public void Add(ISubmodelElement submodelElement)
         {
-            int index = this.FindIndex(f => f.Value.IdShort == submodelElement.IdShort);
+            int index = this.FindIndex(f => f.Value?.IdShort == submodelElement.IdShort);
             if (index == -1)
                 base.Add(new OperationVariable() { Value = submodelElement });
             else
