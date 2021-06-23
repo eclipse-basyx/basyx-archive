@@ -21,26 +21,32 @@ SubModel::SubModel(object object)
   : ElementMap{}
   , Identifiable{
   object.getProperty(Referable::Path::IdShort).GetStringContent(),
-  simple::Identifier(IdentifierType_::from_string(object.getProperty(IdPath::Identifier).getProperty(IdPath::IdType).GetStringContent()), object.getProperty(IdPath::Identifier).getProperty(IdPath::Id).GetStringContent())}
+  simple::Identifier(IdentifierType_::from_string(object.getProperty(IdPath::Identifier).getProperty(IdPath::IdType).GetStringContent()),
+                     object.getProperty(IdPath::Identifier).getProperty(IdPath::Id).GetStringContent())}
+  , HasDataSpecification{object}
+  , Qualifiable{object}
 {
-  if (not object.getProperty(Path::SubmodelElements).IsNull())
+  if ( not object.getProperty(Path::SubmodelElements).IsNull() )
   {
-
+    auto elements = object.getProperty(Path::SubmodelElements).Get<object::object_map_t>();
+    for ( auto element : elements )
+    {
+      auto submodelElement = SubmodelElementFactory::Create(element.second);
+      this->elementContainer.addElement(std::move(submodelElement));
+    }
   }
+
   if ( not object.getProperty(Path::SemanticId).IsNull() )
     this->semanticId = util::make_unique<Reference>(object.getProperty(Path::SemanticId));
 
-  if ( not this->map.getProperty(IdPath::AdministrativeInformation).IsNull() )
+  if ( not object.getProperty(IdPath::AdministrativeInformation).IsNull() )
   {
-    basyx::object adInObj = object.getProperty(IdPath::AdministrativeInformation);
-    auto & version = adInObj.getProperty(AdministrativeInformation::Path::Version).GetStringContent();
-    auto & revision = adInObj.getProperty(AdministrativeInformation::Path::Revision).GetStringContent();
-    AdministrativeInformation administrativeInformation(version, revision);
-
-    auto list = adInObj.getProperty(HasDataSpecification::Path::DataSpecification).Get<object::object_list_t&>();
-    for (auto refObj : list)
-      administrativeInformation.addDataSpecification(simple::Reference(Reference(refObj.Get<basyx::object>())));
+    AdministrativeInformation administrativeInformation(object.getProperty(IdPath::AdministrativeInformation));
+    this->setAdministrativeInformation(administrativeInformation);
   }
+
+  this->setCategory(object.getProperty(Referable::Path::Category).GetStringContent());
+  this->setDescription(LangStringSet::from_object(object.getProperty(Referable::Path::Description)));
 }
 
 IElementContainer<ISubmodelElement> & SubModel::submodelElements()

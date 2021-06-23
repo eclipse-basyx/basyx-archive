@@ -37,6 +37,7 @@ target_sources(${PROJECT_NAME}
 	api/submodelelement/test_Entity.cpp
 	api/test_Submodel.cpp
 
+	map_v2/test_Submodel.cpp
 	map_v2/common/test_ElementContainer.cpp
 	map_v2/common/test_LangStringSet.cpp
 	map_v2/constraint/test_Formula.cpp

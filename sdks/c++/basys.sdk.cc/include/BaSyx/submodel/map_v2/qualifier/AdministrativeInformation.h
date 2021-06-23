@@ -24,6 +24,7 @@ public:
 public:
   AdministrativeInformation();
   AdministrativeInformation(const std::string & version, const std::string & revision);
+  AdministrativeInformation(basyx::object);
 
   void setVersion(const std::string & version) override;
   void setRevision(const std::string & revision) override;

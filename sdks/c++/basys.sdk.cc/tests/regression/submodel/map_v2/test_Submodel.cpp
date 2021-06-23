@@ -1,116 +1,97 @@
 #include <gtest/gtest.h>
 
 #include <BaSyx/submodel/map_v2/SubModel.h>
-#include <BaSyx/submodel/map_v2/aas/Asset.h>
-#include <BaSyx/submodel/map_v2/aas/AssetAdministrationShell.h>
-
+#include "support/TestingObjects.h"
 
 using namespace basyx::submodel;
 using namespace basyx::submodel::map;
-using namespace basyx::submodel::api;
 
-class MapSubmodelTest: public ::testing::Test{
-protected:
-	std::unique_ptr<map::SubModel> subModel;
-protected:
-	void SetUp() override
-	{
-    simple::Identifier identifier(IdentifierType::Unknown, "test identifier");
-    this->subModel = util::make_unique<SubModel>("test submodel", identifier);
-	}
+class SubmodelTest : public ::testing::Test {};
 
-	void TearDown() override
-	{
-	}
-};
-
-TEST_F(MapSubmodelTest, TestSubmodelReferences)
+TEST_F(SubmodelTest, TestObjectConstructor)
 {
-	// Create asset
-	map::Asset asset{
-		"asset", /* idShort */
-		simple::Identifier::Custom("asset") /* identifier */ };
+  object obj = basyx::object::make_map();
 
-	// Create the asset administration shell and assign asset
-	map::AssetAdministrationShell aas{
-		"aas", /* idShort */
-		simple::Identifier::Custom("aas"), /* identifier */
-		asset };
+  obj.insertKey(Referable::Path::IdShort, "testing id");
 
-	aas.getSubmodels().createElement<map::SubModel>("submodel", simple::Identifier::Custom("submodel"));
+  obj.insert(TestingObjects::map::testingHasDataSpecification().getMap());
+  obj.insert(TestingObjects::map::testingQualifiable().getMap());
 
-	auto map = aas.getMap();
+  basyx::object identifierMap = basyx::object::make_map();
+  identifierMap.insertKey(Identifiable::Path::Id, "identifier");
+  identifierMap.insertKey(Identifiable::Path::IdType, IdentifierType_::to_string(IdentifierType::Unknown));
+  obj.insertKey(Identifiable::Path::Identifier, identifierMap);
 
-	auto submodelKeys = map.getProperty("submodels");
-	ASSERT_EQ(submodelKeys.GetValueType(), basyx::type::valueType::Object);
-	ASSERT_EQ(submodelKeys.GetObjectType(), basyx::type::objectType::List);
-	ASSERT_EQ(submodelKeys.size(), 1);
+  obj.insertKey(Referable::Path::Category, "cat");
 
-	ASSERT_EQ(aas.getSubmodels().size(), 1);
-	ASSERT_TRUE(aas.getSubmodels().getElement("submodel") != nullptr);
+  ElementContainer<SubmodelElement> submodelelements;
+  submodelelements.addElement(util::make_unique<File>(TestingObjects::map::testingFile(1)));
+  submodelelements.addElement(util::make_unique<File>(TestingObjects::map::testingFile(2)));
+  obj.insertKey(SubModel::Path::SubmodelElements, submodelelements.getMap());
+
+  obj.insertKey(SubModel::Path::SemanticId, TestingObjects::map::testingReference_1().getMap());
+
+  AdministrativeInformation administrativeInformation("v1", "r4");
+  obj.insertKey(Identifiable::Path::AdministrativeInformation, administrativeInformation.getMap());
+
+  SubModel submodel{obj};
+
+  ASSERT_EQ(submodel.getIdShort(), "testing id");
+
+  ASSERT_TRUE(TestingObjects::map::testingHasDataSpecification(submodel));
+  ASSERT_TRUE(TestingObjects::map::testingQualifiable(submodel));
+
+  ASSERT_EQ(submodel.getIdentification().getId(), "identifier");
+  ASSERT_EQ(submodel.getIdentification().getIdType(), IdentifierType::Unknown);
+
+  ASSERT_EQ(*submodel.getCategory(), "cat");
+
+  auto & subModelElements = submodel.submodelElements();
+  ASSERT_TRUE(TestingObjects::map::testingFile(*subModelElements.getElement(0), 1));
+  ASSERT_TRUE(TestingObjects::map::testingFile(*subModelElements.getElement(1), 2));
+
+  ASSERT_EQ(TestingObjects::map::testingReference_1(), *submodel.getSemanticId());
+
+  ASSERT_EQ(*submodel.getAdministrativeInformation().getVersion(), "v1");
+  ASSERT_EQ(*submodel.getAdministrativeInformation().getRevision(), "r4");
 }
 
-
-TEST_F(MapSubmodelTest, TestIdentifier)
+TEST_F(SubmodelTest, TestObjectCopy)
 {
-  ASSERT_EQ(this->subModel->getIdShort(), "test submodel");
-  ASSERT_EQ(this->subModel->getIdentification().getId(), "test identifier");
-  ASSERT_EQ(this->subModel->getIdentification().getIdType(), IdentifierType::Unknown);
+  SubModel submodel{"id short", TestingObjects::simple::testingIdentifier()};
 
-  this->subModel->setIdShort("another id");
-  ASSERT_EQ(this->subModel->getIdShort(), "another id");
-}
+  submodel.addFormula(TestingObjects::map::testingFormula());
 
-TEST_F(MapSubmodelTest, TestKind)
-{
-  //defaults to kind instance
-  ASSERT_EQ(this->subModel->getKind(), ModelingKind::Instance);
+  submodel.addQualifier(TestingObjects::map::testingQualifier());
 
-  simple::Identifier identifier(IdentifierType::Unknown, "test identifier");
-  this->subModel = util::make_unique<SubModel>("test submodel", identifier, ModelingKind::Template);
+  submodel.addDataSpecification(TestingObjects::map::testingReference_1());
 
-  ASSERT_EQ(this->subModel->getKind(), ModelingKind::Template);
-}
+  submodel.setSemanticId(util::make_unique<Reference>(TestingObjects::map::testingReference_2()));
 
-TEST_F(MapSubmodelTest, TestSemanticId)
-{
-  ASSERT_TRUE(this->subModel->getSemanticId().empty());
+  submodel.setAdministrativeInformation(AdministrativeInformation("v2", "r34"));
 
-  simple::Key key(KeyElements::SubmodelElement, true, KeyType::URI, "test key");
-  this->subModel->setSemanticId(Reference(key));
+  submodel.setDescription(TestingObjects::map::testingLangString());
 
-  ASSERT_EQ(this->subModel->getSemanticId().getKeys().at(0), key);
-}
+  submodel.setCategory("testing cat");
 
-TEST_F(MapSubmodelTest, TestObjectConstructor)
-{
-  //test the object constructor
-  //add submodel specific members
-  simple::Key key(KeyElements::SubmodelElement, true, KeyType::URI, "test key");
-  this->subModel->setSemanticId(Reference(key));
+  auto map = submodel.getMap();
+  SubModel copied{map};
 
-  SubModel copied(this->subModel->getMap());
+  ASSERT_EQ(copied.getIdShort(), "id short");
 
-  ASSERT_EQ(copied.getIdShort(), "test submodel");
-  ASSERT_EQ(copied.getIdentification().getId(), "test identifier");
-  ASSERT_EQ(copied.getIdentification().getIdType(), IdentifierType::Unknown);
-  ASSERT_EQ(copied.getSemanticId().getKeys().at(0), key);
-}
+  ASSERT_TRUE(TestingObjects::map::testingFormula(copied.getFormulas().at(0)));
 
-TEST_F(MapSubmodelTest, TestObjectConstructorIdentifiableMember)
-{
-  //test object constructor
-  //add IdentifiableSpecificMembers
-  AdministrativeInformation administrativeInformation{"v1", "r1"};
+  ASSERT_TRUE(TestingObjects::map::testingQualifier(copied.getQualifiers().at(0)));
 
-  simple::Key key(KeyElements::SubmodelElement, true, KeyType::URI, "test key");
-  administrativeInformation.addDataSpecification(Reference{key});
-  this->subModel->setAdministrativeInformation(administrativeInformation);
+  ASSERT_EQ(TestingObjects::map::testingReference_1(), copied.getDataSpecificationReference().at(0));
 
-  SubModel copied(this->subModel->getMap());
+  ASSERT_EQ(TestingObjects::map::testingReference_2(), *copied.getSemanticId());
 
-  auto & amIn = copied.getAdministrativeInformation();
-  ASSERT_EQ(*amIn.getRevision(), "r1");
-//  ASSERT_EQ(*amIn.getVersion(), "v1");
-//  ASSERT_EQ(amIn.getDataSpecificationReference().at(0), key);
+  ASSERT_EQ( *copied.getAdministrativeInformation().getVersion(), "v2");
+  ASSERT_EQ( *copied.getAdministrativeInformation().getRevision(), "r34");
+
+  ASSERT_EQ(copied.getDescription().get("DE"), TestingObjects::map::testingLangString().get("DE"));
+  ASSERT_EQ(copied.getDescription().get("EN"), TestingObjects::map::testingLangString().get("EN"));
+
+  ASSERT_EQ(*copied.getCategory(), "testing cat");
 }

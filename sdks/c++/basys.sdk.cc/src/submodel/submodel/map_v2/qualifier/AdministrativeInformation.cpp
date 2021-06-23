@@ -14,9 +14,20 @@ AdministrativeInformation::AdministrativeInformation()
 {}
 
 AdministrativeInformation::AdministrativeInformation(const std::string &version, const std::string &revision)
+  : HasDataSpecification()
 {
   this->map.insertKey(Path::Version, version);
   this->map.insertKey(Path::Revision, revision);
+}
+
+AdministrativeInformation::AdministrativeInformation(basyx::object obj)
+  : HasDataSpecification(obj)
+{
+  if ( not obj.getProperty(Path::Version).IsNull() )
+    this->map.insertKey(Path::Version, obj.getProperty(Path::Version).GetStringContent());
+
+  if ( not obj.getProperty(Path::Version).IsNull() )
+    this->map.insertKey(Path::Revision, obj.getProperty(Path::Revision).GetStringContent());
 }
 
 void AdministrativeInformation::setVersion(const std::string &version)

@@ -15,13 +15,15 @@ using namespace basyx::submodel::simple;
 struct map_types {
 	using submodel_t = map::SubModel;
 	using asset_t = map::Asset;
+	using reference_t = map::Reference;
 	using aas_t = map::AssetAdministrationShell;
 };
 
 struct simple_types {
 	using submodel_t = simple::SubModel;
 	using asset_t = simple::Asset;
-	using aas_t = simple::AssetAdministrationShell;
+  using reference_t = simple::Reference;
+  using aas_t = simple::AssetAdministrationShell;
 };
 
 using TestTypes = ::testing::Types<
@@ -35,15 +37,6 @@ public:
 
 protected:
 	std::unique_ptr<typename Types::submodel_t> subModel;
-
-protected:
-	void SetUp() override
-	{
-	}
-
-	void TearDown() override
-	{
-	}
 };
 
 TYPED_TEST_CASE(SubmodelTest, TestTypes);
@@ -52,8 +45,11 @@ TYPED_TEST(SubmodelTest, TestSubmodelConstructor)
 {
 	using namespace basyx::submodel;
 
+  simple::Identifier identifier( IdentifierType::Custom, "testId");
+	typename TypeParam::submodel_t submodel("test", identifier);
 
-	typename TypeParam::submodel_t submodel{ "test", { simple::Identifier { IdentifierType::Custom, "test" } } };
+	ASSERT_EQ(submodel.getIdShort(), "test");
+	ASSERT_EQ(submodel.getIdentification(), identifier);
 };
 
 TYPED_TEST(SubmodelTest, TestSubmodelReferences)
@@ -85,4 +81,17 @@ TYPED_TEST(SubmodelTest, TestSubmodelReferences)
 	ASSERT_TRUE(sm != nullptr);
 
 	ASSERT_EQ(sm->getIdShort(), "submodel");
+}
+
+TYPED_TEST(SubmodelTest, TestSubmodelSemanticId)
+{
+  simple::Identifier identifier( IdentifierType::Custom, "testId");
+  typename TypeParam::submodel_t submodel("test", identifier);
+
+  using reference_t = typename TypeParam::reference_t;
+  simple::Key key(KeyElements::DataElement, false, KeyType::IdShort, "key");
+  std::unique_ptr<reference_t> semanticId = util::make_unique<reference_t>(key);
+  submodel.setSemanticId(std::move(semanticId));
+
+  ASSERT_EQ(submodel.getSemanticId()->getKeys().at(0), key);
 }

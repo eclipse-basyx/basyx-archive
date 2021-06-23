@@ -13,6 +13,8 @@
 #include <BaSyx/submodel/map_v2/submodelelement/file/File.h>
 #include <BaSyx/submodel/map_v2/submodelelement/operation/OperationVariable.h>
 
+#include <BaSyx/submodel/simple/identifier/Identifier.h>
+
 using namespace basyx;
 using namespace basyx::submodel;
 using namespace basyx::submodel::map;
@@ -191,6 +193,18 @@ static bool testingSubmodelElement(SubmodelElement & submodelElement)
   return TestingObjects::map::testingReferable_1(submodelElement)
           and TestingObjects::map::testingHasDataSpecification(submodelElement)
           and TestingObjects::map::testingQualifiable(submodelElement);
+}
+
+}
+
+namespace simple
+{
+
+static basyx::submodel::simple::Identifier testingIdentifier()
+{
+  basyx::submodel::simple::Identifier identifier{IdentifierType::FragementId, "testing id"};
+
+  return identifier;
 }
 
 }
