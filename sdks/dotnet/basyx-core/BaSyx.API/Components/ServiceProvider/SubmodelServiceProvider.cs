@@ -288,7 +288,7 @@ namespace BaSyx.API.Components
             return new Result<InvocationResponse>(operation_Retrieved);
         }
 
-        private OperationVariableSet CreateOutputArguments(OperationVariableSet outputVariables)
+        private IOperationVariableSet CreateOutputArguments(IOperationVariableSet outputVariables)
         {
             if (outputVariables == null)
                 return null;
