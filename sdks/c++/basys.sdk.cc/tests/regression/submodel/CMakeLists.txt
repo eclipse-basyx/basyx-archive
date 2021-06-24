@@ -41,6 +41,10 @@ target_sources(${PROJECT_NAME}
 	map_v2/dataspecification/test_DataSpecification.cpp
 	map_v2/dataspecification/test_DataSpecificationIEC61360.cpp
 	map_v2/identifier/test_Identifier.cpp
+	map_v2/qualifier/test_Referable.cpp
+
+	#### Support ####
+	support/TestingObjects.h
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR})

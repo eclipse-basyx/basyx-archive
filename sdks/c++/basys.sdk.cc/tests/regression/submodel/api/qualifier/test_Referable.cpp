@@ -7,7 +7,7 @@
 using namespace basyx::submodel;
 
 // Constants
-static const char * idShort = "testId";
+std::string idShort = "testId";
 
 // Implementations to run tests for
 using ImplTypes = ::testing::Types<

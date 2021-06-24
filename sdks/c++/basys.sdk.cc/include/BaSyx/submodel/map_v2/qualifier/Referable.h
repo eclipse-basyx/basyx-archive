@@ -22,15 +22,19 @@ public:
 		static constexpr char Description[] = "description";
 		static constexpr char Parent[] = "parent";
 	};
+
 private:
 	map::LangStringSet description;
 	IReferable * parent = nullptr;
+
 public:
 	virtual ~Referable() = default;
 
 	// Constructors
 	Referable(const std::string & idShort, Referable * parent = nullptr);
 	//Referable(const IReferable & other);
+
+	Referable(basyx::object, Referable * parent = nullptr);
 
 	// Inherited via IReferable
 	virtual const std::string & getIdShort() const override;
@@ -43,6 +47,8 @@ public:
 
 	void setIdShort(const std::string & shortID);
 	void setCategory(const std::string & category) override;
+
+	void setDescription(const LangStringSet &);
 
 	bool hasParent() const noexcept;
 	bool hasDescription() const noexcept;

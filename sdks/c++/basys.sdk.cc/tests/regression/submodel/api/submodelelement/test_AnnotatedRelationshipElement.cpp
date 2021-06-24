@@ -27,8 +27,8 @@ protected:
 protected:
 	void SetUp() override
 	{
-	  referable_t first("first");
-	  referable_t second("second");
+	  referable_t first(std::string("first"));
+	  referable_t second(std::string("second"));
 		this->annotatedRelationshipElement = util::make_unique<impl_t>(first, second, "test annotatedRelationshipElement");
 	}
 

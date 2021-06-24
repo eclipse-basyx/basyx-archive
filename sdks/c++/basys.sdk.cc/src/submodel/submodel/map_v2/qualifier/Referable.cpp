@@ -18,6 +18,22 @@ Referable::Referable(const std::string & idShort, Referable * parent)
 	this->map.insertKey(Path::Description, this->description.getMap());
 }
 
+Referable::Referable(basyx::object obj, Referable * parent)
+  : parent(parent)
+{
+  //mandatory member
+  this->map.insertKey(Path::IdShort, obj.getProperty(Path::IdShort));
+
+  if (not obj.getProperty(Path::Category).empty())
+    this->setCategory(obj.getProperty(Path::Category).GetStringContent());
+
+  if (not obj.getProperty(Path::Description).empty())
+  {
+    auto description_obj = obj.getProperty(Path::Description);
+    this->setDescription(LangStringSet::from_object(description_obj));
+  }
+}
+
 const std::string & Referable::getIdShort() const
 {
 	return this->map.getProperty(Path::IdShort).Get<std::string&>();
@@ -50,6 +66,12 @@ void Referable::setIdShort(const std::string & idShort)
 void Referable::setCategory(const std::string & category)
 {
 	this->map.insertKey(Path::Category, category);
+}
+
+void Referable::setDescription(const LangStringSet & description)
+{
+  this->map.insertKey(Path::Description, description.getMap());
+  this->description = description;
 }
 
 void Referable::setParent(IReferable * parent)

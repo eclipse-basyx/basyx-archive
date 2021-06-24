@@ -26,7 +26,7 @@ protected:
 	void SetUp() override
 	{
 	    view = util::make_unique<impl_t>("TestView");
-        referable = util::make_unique<impl_ref_t>("TestReferable");
+      referable = util::make_unique<impl_ref_t>(std::string("TestReferable"));
 	}
 
 	void TearDown() override
