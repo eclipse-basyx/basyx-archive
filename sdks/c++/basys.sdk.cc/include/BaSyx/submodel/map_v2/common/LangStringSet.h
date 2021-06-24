@@ -32,6 +32,8 @@ public:
 	LangStringSet();
   LangStringSet(const ILangStringSet & other);
 
+  static LangStringSet from_object(basyx::object);
+
 	virtual langCodeSet_t getLanguageCodes() const override;
 
 	virtual const std::string & get(const std::string & languageCode) const override;

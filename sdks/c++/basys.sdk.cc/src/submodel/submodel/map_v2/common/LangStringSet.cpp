@@ -23,6 +23,24 @@ LangStringSet::LangStringSet(const ILangStringSet & other)
     this->add(langCode, other.get(langCode));
 }
 
+map::LangStringSet LangStringSet::from_object(object obj)
+{
+  map::LangStringSet lang_string_set;
+
+  if ( obj.empty() or (obj.GetObjectType() != basyx::type::objectType::List) )
+    return lang_string_set;
+
+  auto lang_objects = obj.Get<object::object_list_t>();
+  for (auto lang_object : lang_objects)
+  {
+    auto language = lang_object.getProperty(Path::Language).GetStringContent();
+    auto content = lang_object.getProperty(Path::Text).GetStringContent();
+    lang_string_set.add(language, content);
+  }
+
+  return lang_string_set;
+}
+
 LangStringSet::langCodeSet_t LangStringSet::getLanguageCodes() const
 {
   auto &langStrings = this->map.Get<basyx::object::object_list_t &>();

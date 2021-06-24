@@ -35,7 +35,9 @@ target_sources(${PROJECT_NAME}
 	api/submodelelement/test_Range.cpp
 	api/submodelelement/test_Entity.cpp
 	api/test_Submodel.cpp
+
 	map_v2/common/test_ElementContainer.cpp
+	map_v2/common/test_LangStringSet.cpp
 	map_v2/dataspecification/test_DataSpecification.cpp
 	map_v2/dataspecification/test_DataSpecificationIEC61360.cpp
 	map_v2/identifier/test_Identifier.cpp
