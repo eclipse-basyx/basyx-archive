@@ -195,7 +195,11 @@ namespace BaSyx.Models.Export.EnvironmentSubmodelElements
             }
             else if (modelType == ModelType.SubmodelElementCollection && envSubmodelElement is SubmodelElementCollection_V2_0 castedSubmodelElementCollection)
             {
-                SubmodelElementCollection submodelElementCollection = new SubmodelElementCollection(castedSubmodelElementCollection.IdShort);
+                SubmodelElementCollection submodelElementCollection = new SubmodelElementCollection(castedSubmodelElementCollection.IdShort)
+                {
+                    AllowDuplicates = castedSubmodelElementCollection.AllowDuplicates,
+                    Ordered = castedSubmodelElementCollection.Ordered
+                };
 
                 if (castedSubmodelElementCollection.Value?.Count > 0)
                 {

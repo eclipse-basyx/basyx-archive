@@ -73,7 +73,7 @@ namespace BaSyx.Models.Export.EnvironmentSubmodelElements
             {
                 Blob blob = new Blob(castedBlob.IdShort)
                 {
-                    MimeType = castedBlob.MimeType                    
+                    MimeType = castedBlob.MimeType
                 };
 
                 blob.SetValue(castedBlob.Value);
@@ -101,7 +101,7 @@ namespace BaSyx.Models.Export.EnvironmentSubmodelElements
             }
             else if (modelType == ModelType.Event && envSubmodelElement is Event_V1_0 castedEvent)
             {
-               Event eventable = new BasicEvent(castedEvent.IdShort);
+                Event eventable = new BasicEvent(castedEvent.IdShort);
 
                 submodelElement = eventable;
             }
@@ -114,7 +114,7 @@ namespace BaSyx.Models.Export.EnvironmentSubmodelElements
                 };
 
                 var operationInElements = castedOperation.In?.ConvertAll(c => c.Value?.submodelElement?.ToSubmodelElement(conceptDescriptions, parent));
-                if(operationInElements?.Count > 0)
+                if (operationInElements?.Count > 0)
                     foreach (var element in operationInElements)
                         operation.InputVariables.Add(element);
 
@@ -127,7 +127,11 @@ namespace BaSyx.Models.Export.EnvironmentSubmodelElements
             }
             else if (modelType == ModelType.SubmodelElementCollection && envSubmodelElement is SubmodelElementCollection_V1_0 castedSubmodelElementCollection)
             {
-               SubmodelElementCollection submodelElementCollection = new SubmodelElementCollection(castedSubmodelElementCollection.IdShort);
+                SubmodelElementCollection submodelElementCollection = new SubmodelElementCollection(castedSubmodelElementCollection.IdShort)
+                {
+                    AllowDuplicates = castedSubmodelElementCollection.AllowDuplicates,
+                    Ordered = castedSubmodelElementCollection.Ordered
+                };
 
                 if (castedSubmodelElementCollection.Value?.Count > 0)
                 {
