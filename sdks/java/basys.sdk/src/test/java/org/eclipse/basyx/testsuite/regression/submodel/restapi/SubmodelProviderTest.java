@@ -26,7 +26,9 @@ import org.eclipse.basyx.submodel.metamodel.facade.SubmodelElementMapCollectionC
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Identifiable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueTypeHelper;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
@@ -62,6 +64,65 @@ public class SubmodelProviderTest {
 			});
 		}
 		return connManager;
+	}
+
+	/**
+	 * Tests all basic submodel operations with idShorts composed of various keywords.
+	 *
+	 * <p>
+	 * The test counts as successful if it finished without any exceptions thrown.
+	 */
+	@Test
+	public void testIdShortWithKeywords() {
+	    final String base_path = SMPROVIDER_PATH_PREFIX + MultiSubmodelElementProvider.ELEMENTS + "/keywords/";
+
+	    VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
+
+	    // Properties
+	    for (String keyword : SimpleAASSubmodel.KEYWORDS) {
+	        Property prop = new Property();
+	        prop.setIdShort(keyword + "Property");
+	        prop.setValueType(ValueType.String);
+	        prop.setValue(null);
+
+	        String path = base_path + prop.getIdShort();
+	        submodelElement.setValue(path, prop);
+	        submodelElement.getValue(path);
+	        submodelElement.setValue(path + "/value", "Test");
+	        submodelElement.deleteValue(path);
+	    }
+
+	    // Operations
+	    for (String keyword : SimpleAASSubmodel.KEYWORDS) {
+            Operation op = new Operation();
+            op.setIdShort(keyword + "Operation");
+            op.setInvokable(() -> {
+               // Do nothing
+            });
+
+            Map<String, Object> param = wrapParameter("argument", 5);
+
+            String path = base_path + op.getIdShort();
+            submodelElement.setValue(path, op);
+            submodelElement.getValue(path);
+            submodelElement.invokeOperation(path + "/invoke", param);
+            submodelElement.deleteValue(path);
+        }
+
+	    // SubmodelElementCollections
+	    for (String keyword : SimpleAASSubmodel.KEYWORDS) {
+            SubmodelElementCollection smc = new SubmodelElementCollection();
+            smc.setIdShort(keyword + "Property");
+
+            Property prop = new Property(500);
+            prop.setIdShort("testProp");
+
+            String path = base_path + smc.getIdShort();
+            submodelElement.setValue(path, smc);
+            submodelElement.setValue(path + "/" + prop.getIdShort(), prop);
+            submodelElement.getValue(path);
+            submodelElement.deleteValue(path);
+        }
 	}
 
 	/**
@@ -376,7 +437,7 @@ public class SubmodelProviderTest {
 		VABElementProxy submodel = getConnectionManager().connectToVABElement(submodelAddr);
 		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) submodel
 				.getValue(SMPROVIDER_PATH_PREFIX + "submodelElements");
-		assertEquals(8, set.size());
+		assertEquals(9, set.size());
 	}
 
 	@Test
@@ -512,9 +573,9 @@ public class SubmodelProviderTest {
 	public void testGetValues() {
 		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
 		Map<String, Object> values = (Map<String, Object>) submodelElement.getValue("submodel/" + SubmodelProvider.VALUES);
-		
-		assertEquals(4, values.size());
-		
+
+		assertEquals(5, values.size());
+
 		// Check if all expected Values are present
 		assertTrue(values.containsKey("containerRoot"));
 		Map<String, Object> collection1 = (Map<String, Object>) values.get("containerRoot");

@@ -11,6 +11,7 @@ package org.eclipse.basyx.testsuite.regression.submodel.restapi;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.function.Function;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
@@ -34,6 +35,11 @@ public class SimpleAASSubmodel extends Submodel {
 
 	public static final String INTPROPIDSHORT = "integerProperty";
 	public static final String OPERATIONSIMPLEIDSHORT = "simple";
+	public static final List<String> KEYWORDS = Collections.unmodifiableList(Arrays.asList(
+	        Property.MODELTYPE, Property.VALUETYPE, Property.VALUE, Property.VALUEID,
+	        Submodel.MODELTYPE, Submodel.SUBMODELELEMENT,
+	        Operation.MODELTYPE, Operation.INVOKE, Operation.OUT, Operation.IN, Operation.INOUT, Operation.INVOKABLE,
+	        SubmodelElementCollection.MODELTYPE, SubmodelElementCollection.ALLOWDUPLICATES, SubmodelElementCollection.ORDERED));
 
 	public SimpleAASSubmodel() {
 		this("SimpleAASSubmodel");
@@ -111,5 +117,10 @@ public class SimpleAASSubmodel extends Submodel {
 		containerPropRoot.setIdShort("containerRoot");
 		containerPropRoot.addSubmodelElement(containerProp);
 		addSubmodelElement(containerPropRoot);
+
+		// Create various submodel elements with keywords in their idShorts
+		SubmodelElementCollection containerKeywords = new SubmodelElementCollection();
+		containerKeywords.setIdShort("keywords");
+        addSubmodelElement(containerKeywords);
 	}
 }

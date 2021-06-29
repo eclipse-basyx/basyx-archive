@@ -129,7 +129,7 @@ public class SubmodelProvider implements IModelProvider {
 				path = removeSMElementPrefix(path);
 
                 if (endsWithValue(splitted)) { // Request for the value of an property
-                    String idShortPath = path.replaceFirst(Pattern.quote("/value"), "");
+                    String idShortPath = removeValueSuffix(path);
                     return submodelAPI.getSubmodelElementValue(idShortPath);
                 } else if (isInvocationListPath(splitted)) {
                     List<String> idShorts = getIdShorts(splitted);
@@ -165,6 +165,20 @@ public class SubmodelProvider implements IModelProvider {
 		return splitted[splitted.length - 1].equals(Property.VALUE);
 	}
 
+	/**
+     * Removes a trailing <code>/value</code> from the path if it exists.
+     *
+     * @param path The original path, which might or might not end on {@value Property.VALUE}.
+     * @return The new path
+     */
+    private String removeValueSuffix(String path) {
+        String suffix = "/" + Property.VALUE;
+        if (path.endsWith(suffix)) {
+            path = path.substring(0, path.length() - suffix.length());
+        }
+
+        return path;
+    }
 
 	private boolean isInvocationListPath(String[] splitted) {
 		return splitted.length > 2 && splitted[splitted.length - 2].equals(OperationProvider.INVOCATION_LIST);
@@ -179,7 +193,7 @@ public class SubmodelProvider implements IModelProvider {
 		} else {
 			String[] splitted = VABPathTools.splitPath(path);
 			path = removeSMElementPrefix(path);
-			String idshortPath = path.replaceFirst(Pattern.quote("/value"), "");
+			String idshortPath = removeValueSuffix(path);
 			if (endsWithValue(splitted)) {
 				submodelAPI.updateSubmodelElement(idshortPath, newValue);
 			} else {

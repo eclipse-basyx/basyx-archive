@@ -133,7 +133,7 @@ public class TestAASHTTP {
 
 		Map<String, ISubmodelElement> elements = sm.getSubmodelElements();
 		// 2 properties, 4 operations, 1 collection
-		assertEquals(8, elements.size());
+		assertEquals(9, elements.size());
 
 	}
 }
