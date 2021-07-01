@@ -38,4 +38,34 @@ namespace BaSyx.Utils.ResultHandling
                 return string.Format(CultureInfo.CurrentCulture, "{0} | {1}", MessageType, Text);
         }
     }
+
+    public class ErrorMessage : Message
+    {
+        public ErrorMessage(string text) : base(MessageType.Error, text) { }
+        public ErrorMessage(string text, string code) : base(MessageType.Error, text, code) { }
+    }
+
+    public class InfoMessage : Message
+    {
+        public InfoMessage(string text) : base(MessageType.Information, text) { }
+        public InfoMessage(string text, string code) : base(MessageType.Information, text, code) { }
+    }
+
+    public class WarningMessage : Message
+    {
+        public WarningMessage(string text) : base(MessageType.Warning, text) { }
+        public WarningMessage(string text, string code) : base(MessageType.Warning, text, code) { }
+    }
+
+    public class DebugMessage : Message
+    {
+        public DebugMessage(string text) : base(MessageType.Debug, text) { }
+        public DebugMessage(string text, string code) : base(MessageType.Debug, text, code) { }
+    }
+
+    public class FatalMessage : Message
+    {
+        public FatalMessage(string text) : base(MessageType.Fatal, text) { }
+        public FatalMessage(string text, string code) : base(MessageType.Fatal, text, code) { }
+    }
 }
