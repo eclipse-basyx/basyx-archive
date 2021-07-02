@@ -2,12 +2,10 @@
 #define BASYX_SUBMODEL_API_V2_QUALIFIER_IHASDATASPECIFICATION_H
 
 #include <vector>
+#include <BaSyx/submodel/simple/reference/Reference.h>
 
 namespace basyx {
 namespace submodel {
-
-namespace simple { class Reference; }
-
 namespace api {
 
 class IHasDataSpecification
