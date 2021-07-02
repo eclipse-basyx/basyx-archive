@@ -10,6 +10,7 @@
 *******************************************************************************/
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
@@ -34,6 +35,7 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Identification
         /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = true, Name = "idType")]
         [JsonProperty(Required = Required.Always, DefaultValueHandling = DefaultValueHandling.Include)]
+        [JsonConverter(typeof(StringEnumConverter))]
         [XmlAttribute("idType")]
         public KeyType IdType { get; set; }
 

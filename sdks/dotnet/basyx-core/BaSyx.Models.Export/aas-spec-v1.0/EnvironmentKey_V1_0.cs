@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
@@ -8,10 +9,12 @@ namespace BaSyx.Models.Export
     public class EnvironmentKey_V1_0
     {
         [JsonProperty(Required = Required.Always, DefaultValueHandling = DefaultValueHandling.Include)]
+        [JsonConverter(typeof(StringEnumConverter))]
         [XmlAttribute("type")]
         public KeyElements_V1_0 Type { get; set; }
 
         [JsonProperty(Required = Required.Always, DefaultValueHandling = DefaultValueHandling.Include)]
+        [JsonConverter(typeof(StringEnumConverter))]
         [XmlAttribute("idType")]
         public KeyType_V1_0 IdType { get; set; }
 

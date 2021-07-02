@@ -13,6 +13,8 @@ using System.Runtime.Serialization;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 
 using BaSyx.Models.Core.Common;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Generics
 {
@@ -38,6 +40,7 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Generics
         /// Denotes whether the Asset of of kind “Type” or “Instance”. 
         /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "kind")]
+        [JsonConverter(typeof(StringEnumConverter))]
         AssetKind Kind { get; }
     }
 }

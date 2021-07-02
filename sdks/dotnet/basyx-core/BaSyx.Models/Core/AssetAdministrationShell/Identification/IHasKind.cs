@@ -9,6 +9,8 @@
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.Runtime.Serialization;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Identification
@@ -22,6 +24,7 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Identification
         ///Kind of the element: either type or instance (Default Value = Instance )
         /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "kind")]
+        [JsonConverter(typeof(StringEnumConverter))]
         ModelingKind Kind { get; }
     }
 }

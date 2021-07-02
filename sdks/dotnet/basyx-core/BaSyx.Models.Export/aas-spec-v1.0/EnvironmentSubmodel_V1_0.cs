@@ -13,6 +13,7 @@ using BaSyx.Models.Core.AssetAdministrationShell;
 using BaSyx.Models.Core.Common;
 using BaSyx.Models.Export.Converter;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
@@ -21,6 +22,7 @@ namespace BaSyx.Models.Export
     public class EnvironmentSubmodel_V1_0 : EnvironmentIdentifiable_V1_0, IModelType
     {
         [JsonProperty("kind")]
+        [JsonConverter(typeof(StringEnumConverter))]
         [XmlElement("kind")]
         public ModelingKind Kind { get; set; }
 

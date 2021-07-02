@@ -8,6 +8,8 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *******************************************************************************/
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.Runtime.Serialization;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Identification
@@ -22,6 +24,7 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Identification
         /// In all other cases the key references a model element of the same or of another AAS.The name of the model element is explicitly listed.
         /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "type")]
+        [JsonConverter(typeof(StringEnumConverter))]
         KeyElements Type { get; }
 
         /// <summary>
@@ -29,6 +32,7 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Identification
         /// In case type=GlobalReference idType shall not be IdShort. 
         /// </summary>
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "idType")]
+        [JsonConverter(typeof(StringEnumConverter))]
         KeyType IdType { get; }
 
         /// <summary>

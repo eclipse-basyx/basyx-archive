@@ -12,6 +12,7 @@ using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 using BaSyx.Models.Core.AssetAdministrationShell.Views;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
@@ -23,10 +24,12 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Identification
     public class Key : IKey, IEquatable<Key>
     {
         [JsonProperty(Required = Required.Always, DefaultValueHandling = DefaultValueHandling.Include)]
+        [JsonConverter(typeof(StringEnumConverter))]
         [XmlAttribute("type")]
         public KeyElements Type { get; set; }
 
         [JsonProperty(Required = Required.Always, DefaultValueHandling = DefaultValueHandling.Include)]
+        [JsonConverter(typeof(StringEnumConverter))]
         [XmlAttribute("idType")]
         public KeyType IdType { get; set; }
 
