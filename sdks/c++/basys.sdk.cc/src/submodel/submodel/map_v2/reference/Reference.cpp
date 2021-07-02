@@ -35,19 +35,21 @@ Reference::Reference(const std::vector<simple::Key> & keys)
 
 Reference::Reference(const IReference & other)
 	: Reference{other.getKeys()}
-{};
-
+{}
 
 Reference::Reference(basyx::object &object)
   : Reference(keyMapList_to_keyList(object.getProperty(Path::Keys).Get<object::object_list_t&>()))
 {}
 
+Reference Reference::from_object(basyx::object & object)
+{
+  return Reference(keyMapList_to_keyList(object.getProperty(Path::Keys).Get<object::object_list_t&>()));
+}
 
 std::vector<simple::Key> Reference::getKeys() const
 {
-	return this->keyMapList_to_keyList(this->map.getProperty(Path::Keys).Get<basyx::object::object_list_t&>());
-};
-
+  return this->keyMapList_to_keyList(this->map.getProperty(Path::Keys).Get<basyx::object::object_list_t &>());
+}
 
 void Reference::addKey(const simple::Key & key)
 {
@@ -106,5 +108,5 @@ bool Reference::operator!=(const Reference & other) const
 bool Reference::operator!=(const api::IReference & other) const
 {
   return this->getKeys() != other.getKeys();
-};
+}
 

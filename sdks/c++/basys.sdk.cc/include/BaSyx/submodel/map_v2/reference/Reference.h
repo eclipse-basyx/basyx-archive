@@ -32,6 +32,8 @@ public:
 	Reference(Reference && other) noexcept = default;
   Reference(basyx::object & object);
 
+  static Reference from_object(basyx::object &);
+
 	Reference & operator=(const api::IReference & other);
 	Reference & operator=(const Reference & other) = default;
 	Reference & operator=(Reference && other) noexcept = default;
