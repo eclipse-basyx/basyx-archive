@@ -19,6 +19,7 @@ target_sources(${PROJECT_NAME}
 	api/qualifier/test_Identifiable.cpp
 	api/qualifier/test_Qualifiable.cpp
 	api/qualifier/test_Referable.cpp
+	api/reference/test_Key.cpp
 	api/reference/test_Reference.cpp
 	api/dataspecification/test_ValueList.cpp
 	api/dataspecification/test_DataSpecificationPhysicalUnit.cpp

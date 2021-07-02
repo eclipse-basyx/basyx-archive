@@ -14,8 +14,12 @@ using ImplTypes = ::testing::Types<
 
 template<class Impl>
 class ReferenceTest :public ::testing::Test {
+public:
+  using impl_t = Impl;
+
 protected:
 	std::unique_ptr<api::IReference> reference;
+
 protected:
 	void SetUp() override
 	{
@@ -43,4 +47,28 @@ TYPED_TEST(ReferenceTest, TestAddKey)
 	auto keys = this->reference->getKeys();
 	ASSERT_EQ(keys.size(), 1);
 	ASSERT_EQ(keys[0], key);
+}
+
+TYPED_TEST(ReferenceTest, TestEqualsOperator)
+{
+  using impl_t = typename TestFixture::impl_t;
+
+  simple::Key key_1{ KeyElements::Asset, true, KeyType::Custom, "key" };
+  impl_t ref_1{key_1};
+
+  simple::Reference ref_map{key_1};
+  map::Reference ref_simple{key_1};
+
+  ASSERT_EQ(ref_1, ref_simple);
+  ASSERT_EQ(ref_1, ref_map);
+
+  simple::Key key_2{ KeyElements::SubmodelElementCollection, false, KeyType::FragementId, "other key" };
+  ref_1.addKey(key_2);
+  ASSERT_NE(ref_1, ref_simple);
+  ASSERT_NE(ref_1, ref_map);
+
+  ref_simple.addKey(key_2);
+  ref_map.addKey(key_2);
+  ASSERT_EQ(ref_1, ref_simple);
+  ASSERT_EQ(ref_1, ref_map);
 }

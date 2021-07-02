@@ -36,9 +36,9 @@ std::string Key::getValue() const noexcept
 bool Key::operator!=(const Key & other) const
 {
 	return this->idType != other.idType
-		&& this->local != other.local
-		&& this->type != other.type
-		&& this->value != other.value;
+		or this->local != other.local
+		or this->type != other.type
+		or this->value != other.value;
 };
 
 bool Key::isModelKey() const noexcept
