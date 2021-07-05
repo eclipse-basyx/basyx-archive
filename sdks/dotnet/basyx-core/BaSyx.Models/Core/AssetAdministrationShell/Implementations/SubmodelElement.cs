@@ -18,6 +18,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using BaSyx.Models.Core.AssetAdministrationShell.Semantics;
 using BaSyx.Models.Core.Common;
+using System;
 
 namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
 {
@@ -56,6 +57,7 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
             }
         }
 
+        public event EventHandler<ValueChangedArgs> ValueChanged;
 
         [JsonConstructor]
         protected SubmodelElement(string idShort) : base(idShort)
@@ -79,6 +81,11 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
                 return true;
             else
                 return false;
+        }
+
+        protected virtual void OnValueChanged(ValueChangedArgs e)
+        {
+            ValueChanged?.Invoke(this, e);
         }
     }
 }

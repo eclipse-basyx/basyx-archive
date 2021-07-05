@@ -49,9 +49,7 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
 
         [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "valueType")]
         public virtual DataType ValueType { get; set; }
-        public IReference ValueId { get; set; }
-
-        public event EventHandler<ValueChangedArgs> ValueChanged;
+        public IReference ValueId { get; set; }        
 
         public Property(string idShort) : this(idShort, null, null)
         { }
@@ -97,12 +95,7 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
         public object ToObject(Type type)
         {
             return new ElementValue(Value, ValueType).ToObject(type);
-        }
-
-        protected virtual void OnValueChanged(ValueChangedArgs e)
-        {
-            ValueChanged?.Invoke(this, e);
-        }
+        }        
     }
     ///<inheritdoc cref="IProperty"/>
     [DataContract]

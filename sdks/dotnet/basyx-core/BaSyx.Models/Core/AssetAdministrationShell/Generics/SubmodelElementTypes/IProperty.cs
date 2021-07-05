@@ -17,7 +17,7 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Generics
     /// <summary>
     /// A property is a data element that has a single value. 
     /// </summary>
-    public interface IProperty : ISubmodelElement, IValue, IValueChanged
+    public interface IProperty : ISubmodelElement, IValue
     {
         /// <summary>
         /// Reference to the global unqiue id of a coded value.  

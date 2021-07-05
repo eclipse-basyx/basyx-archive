@@ -25,7 +25,7 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Generics
     public delegate void SetValueHandler<TValue>(ISubmodelElement submodelElement, TValue value);
 
     [JsonConverter(typeof(SubmodelElementConverter))]
-    public interface ISubmodelElement : IHasSemantics, IQualifiable, IReferable, IHasKind, IModelElement, IHasDataSpecification
+    public interface ISubmodelElement : IHasSemantics, IQualifiable, IReferable, IHasKind, IModelElement, IHasDataSpecification, IValueChanged
     {
         [IgnoreDataMember]
         GetValueHandler Get { get; }
