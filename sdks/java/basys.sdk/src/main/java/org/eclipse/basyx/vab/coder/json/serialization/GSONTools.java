@@ -305,7 +305,8 @@ public class GSONTools implements Serializer {
 		return (value instanceof Supplier<?>) 
 				|| (value instanceof Function<?, ?>) 
 				|| (value instanceof Consumer<?>)
-				|| (value instanceof BiConsumer<?, ?>);
+				|| (value instanceof BiConsumer<?, ?> 
+				|| (value instanceof Runnable));
 	}
 
 	/**
