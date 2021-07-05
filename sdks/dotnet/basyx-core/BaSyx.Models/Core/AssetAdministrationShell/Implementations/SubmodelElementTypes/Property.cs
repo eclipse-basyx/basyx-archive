@@ -33,18 +33,16 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
         {
             get
             {
-                return Get.Invoke(this)?.Value;
+                return Get?.Invoke(this)?.Value;
             }            
             set
             {
                 if (value != null)
                 {
                     if (value is IValue iValue)
-                        Set.Invoke(this, iValue);
+                        Set?.Invoke(this, iValue);
                     else
-                        Set.Invoke(this, new ElementValue(value, ValueType));
-
-                    ValueChanged?.Invoke(this, new ValueChangedArgs(IdShort, value, ValueType));
+                        Set?.Invoke(this, new ElementValue(value, ValueType));                   
                 }
             }
         }
@@ -79,8 +77,16 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
                     _value = ElementValue.ToObject(value, valueType.SystemType);
             }
 
-            Get = element  => { return new ElementValue(_value, ValueType); };
-            Set = (element, iValue) => { _value = iValue.Value; };
+            Get = element  => 
+            { 
+                return new ElementValue(_value, ValueType); 
+            };
+
+            Set = (element, iValue) => 
+            { 
+                _value = iValue.Value;
+                OnValueChanged(new ValueChangedArgs(IdShort, _value, ValueType));
+            };
         }
 
         public T ToObject<T>()
@@ -92,6 +98,11 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
         {
             return new ElementValue(Value, ValueType).ToObject(type);
         }
+
+        protected virtual void OnValueChanged(ValueChangedArgs e)
+        {
+            ValueChanged?.Invoke(this, e);
+        }
     }
     ///<inheritdoc cref="IProperty"/>
     [DataContract]
@@ -99,23 +110,22 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
     {
         public override ModelType ModelType => ModelType.Property;
         public override DataType ValueType => typeof(TInnerType);
-
-        public new event EventHandler<ValueChangedArgs> ValueChanged;
-        
+       
         [JsonIgnore, IgnoreDataMember]
         public virtual new TInnerType Value
         {
             get
             {
-                return Get.Invoke(this);
+                if (Get != null)
+                    return Get.Invoke(this);
+                else
+                    return default;
             }
             set
             {
                 if (value != null)
                 {
-                    Set.Invoke(this, value);
-                    
-                    ValueChanged?.Invoke(this, new ValueChangedArgs(IdShort, value, ValueType));
+                    Set?.Invoke(this, value);                                       
                 }
             }
         }
@@ -130,7 +140,10 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
             set
             {
                 _get = value;
-                base.Get = new GetValueHandler(element => new ElementValue<TInnerType>(_get.Invoke(element)));
+                if (value != null)
+                    base.Get = new GetValueHandler(element => new ElementValue<TInnerType>(_get.Invoke(element)));
+                else
+                    base.Get = null;
             }
         }
         [JsonIgnore, IgnoreDataMember]
@@ -140,7 +153,15 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
             set
             {
                 _set = value;
-                base.Set = new SetValueHandler((element, iValue) => _set.Invoke(element, iValue.ToObject<TInnerType>()));
+                if (value != null)
+                    base.Set = new SetValueHandler((element, iValue) =>
+                    {
+                        TInnerType typedValue = iValue.ToObject<TInnerType>();
+                        _set.Invoke(element, typedValue);
+                        OnValueChanged(new ValueChangedArgs(IdShort, typedValue, ValueType));
+                    });
+                else
+                    base.Set = null;
             }
         }
 
@@ -149,8 +170,14 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
         [JsonConstructor]
         public Property(string idShort, TInnerType value) : base(idShort, typeof(TInnerType), value) 
         {
-            _get = element => { return base.Get.Invoke(element).ToObject<TInnerType>(); };
-            _set = (element, iValue) => { base.Set.Invoke(element, new ElementValue<TInnerType>(iValue)); };
+            _get = element =>
+            {
+                if (base.Get != null)
+                    return base.Get.Invoke(element).ToObject<TInnerType>();
+                else
+                    return default;
+            };
+            _set = (element, iValue) => { base.Set?.Invoke(element, new ElementValue<TInnerType>(iValue)); };
         }
 
     }
