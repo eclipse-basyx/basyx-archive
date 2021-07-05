@@ -50,6 +50,10 @@ namespace BaSyx.Models.Core.AssetAdministrationShell.Implementations
 
         public event EventHandler<ValueChangedArgs> ValueChanged;
 
+        public ElementValue(object value) 
+            : this(value, DataType.GetDataTypeFromSystemType(value.GetType()))
+        { }
+
         [JsonConstructor]
         public ElementValue(object value, DataType valueType)
         {
