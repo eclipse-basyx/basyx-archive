@@ -9,12 +9,14 @@
 * 
 *******************************************************************************/
 using BaSyx.Models.Core.AssetAdministrationShell;
+using BaSyx.Models.Core.AssetAdministrationShell.Generics;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification;
 using BaSyx.Models.Core.AssetAdministrationShell.Identification.BaSyx;
 using BaSyx.Models.Core.AssetAdministrationShell.Implementations;
 using BaSyx.Models.Core.Common;
 using BaSyx.Models.Extensions;
 using BaSyx.Utils.ResultHandling;
+using NLog;
 using System;
 using System.Threading.Tasks;
 
@@ -22,6 +24,7 @@ namespace SimpleAssetAdministrationShell
 {
     public static class SimpleAssetAdministrationShell
     {
+        private static readonly ILogger logger = LogManager.GetCurrentClassLogger();
         public static AssetAdministrationShell GetAssetAdministrationShell()
         {
             AssetAdministrationShell aas = new AssetAdministrationShell("SimpleAAS", new BaSyxShellIdentifier("SimpleAAS", "1.0.0"))
@@ -84,6 +87,17 @@ namespace SimpleAssetAdministrationShell
                         Set = (prop, val) => y = val,
                         Get = prop => { return Math.Pow(y, i); }
                     },
+                    new Property<string>("TestPropertyNull")
+                    {
+                        Set = (prop, val) => propertyValue = val,
+                        Get = prop => { return null; }
+                    },
+                    new Property<string>("TestPropertyNoSetter")
+                    {
+                        Set = null,
+                        Get = prop => { return "You can't change me!"; }
+                    },
+                    new Property<string>("TestValueChanged1", "InitialValue"),
                     new SubmodelElementCollection("TestSubmodelElementCollection")
                     {
                         Value =
@@ -178,7 +192,15 @@ namespace SimpleAssetAdministrationShell
 
                 }
             };
+
+            testSubmodel.SubmodelElements["TestProperty4"].Cast<IProperty>().ValueChanged += SimpleAssetAdministrationShell_ValueChanged;
+
             return testSubmodel;
+        }
+
+        private static void SimpleAssetAdministrationShell_ValueChanged(object sender, ValueChangedArgs e)
+        {
+            logger.Info($"Property {e.IdShort} changed to {e.Value}");
         }
 
         public static double CalulcateExpression(string expression)
