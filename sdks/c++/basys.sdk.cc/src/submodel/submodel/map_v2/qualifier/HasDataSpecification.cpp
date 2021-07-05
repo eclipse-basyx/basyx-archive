@@ -16,15 +16,27 @@ HasDataSpecification::HasDataSpecification()
 	this->map.insertKey(Path::DataSpecification, this->dataSpecification);
 }
 
+
+HasDataSpecification::HasDataSpecification(basyx::object obj)
+  : ElementMap()
+  , dataSpecification()
+{
+  this->map.insertKey(Path::DataSpecification, this->dataSpecification);
+
+  auto dataSpec_objects = obj.getProperty(Path::DataSpecification).Get<basyx::object::object_list_t>();
+  for (basyx::object dataSpec_obj : dataSpec_objects)
+  {
+    auto mapRef = map::Reference::from_object( dataSpec_obj);
+    this->addDataSpecification(mapRef);
+  }
+}
+
 void HasDataSpecification::addDataSpecification(const simple::Reference & reference)
 {
-	map::Reference ref;
-	for (const auto & key : reference.getKeys()) {
-		ref.addKey(key);
-	}
-
+	map::Reference ref { reference.getKeys() };
 	this->dataSpecification.emplace_back(ref.getMap());
-};
+  this->map.insertKey(Path::DataSpecification, this->dataSpecification);
+}
 
 const std::vector<simple::Reference> HasDataSpecification::getDataSpecificationReference() const
 {
@@ -33,7 +45,7 @@ const std::vector<simple::Reference> HasDataSpecification::getDataSpecificationR
 	for (auto & refObj : dataSpecification) {
 		map::Reference mapRef{ refObj };
 		dataSpecs.emplace_back(mapRef.getKeys());
-	};
+	}
 
 	return dataSpecs;
 }

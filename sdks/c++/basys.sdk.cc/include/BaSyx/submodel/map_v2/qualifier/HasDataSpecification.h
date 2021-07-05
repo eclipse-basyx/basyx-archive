@@ -20,8 +20,10 @@ public:
 
 private:
 	basyx::object::object_list_t dataSpecification;
+
 public:
 	HasDataSpecification();
+	HasDataSpecification(basyx::object);
 
 	virtual ~HasDataSpecification() = default;
 public:
