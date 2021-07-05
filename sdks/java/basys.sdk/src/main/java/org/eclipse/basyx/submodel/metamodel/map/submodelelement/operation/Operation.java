@@ -28,6 +28,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.vab.exception.provider.WrongNumberOfParametersException;
+import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 
 /**
  * Operation as defined in DAAS document <br>
@@ -238,11 +239,7 @@ public class Operation extends SubmodelElement implements IOperation {
 	}
 
 	public void setInvokable(Runnable runnable) {
-		Function<Object[], Object> wrapper = (o) -> {
-			runnable.run();
-			return null;
-		};
-		put(Operation.INVOKABLE, wrapper);
+		put(Operation.INVOKABLE, runnable);
 	}
 
 	@Override
@@ -308,26 +305,19 @@ public class Operation extends SubmodelElement implements IOperation {
 		return copy;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object invokeSimple(Object... params) {
 		if (params.length != getInputVariables().size()) {
 			throw new WrongNumberOfParametersException(getIdShort(), getInputVariables(), params);
 		}
-		return ((Function<Object[], Object>) get(INVOKABLE)).apply(params);
+		return new VABLambdaProvider(this).invokeOperation(INVOKABLE, params);
 	}
 
 	public void setInvokable(Supplier<Object> supplier) {
-		Function<Object[], Object> wrapper = (o) -> supplier.get();
-		setInvokable(wrapper);
+		put(Operation.INVOKABLE, supplier);
 	}
 
 	public void setInvokable(Consumer<Object[]> consumer) {
-		Function<Object[], Object> wrapper = (o) -> {
-			consumer.accept(o);
-			return null;
-		};
-
-		setInvokable(wrapper);
+		put(Operation.INVOKABLE, consumer);
 	}
 }
