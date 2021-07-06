@@ -22,25 +22,25 @@ TEST_F(ReferableTest, TestObjectConstructor)
   basyx::object object = basyx::object::make_map();
   object.insertKey(Referable::Path::IdShort, "test id");
   object.insertKey(Referable::Path::Category, "testing category");
-  object.insertKey(Referable::Path::Description, TestingObjects::object::testingLangString());
+  object.insertKey(Referable::Path::Description, TestingObjects::map::testingLangString().getMap());
 
   Referable referable{object};
 
   ASSERT_EQ(referable.getIdShort(), "test id");
   ASSERT_EQ(*referable.getCategory(), "testing category");
-  ASSERT_EQ(referable.getDescription(), LangStringSet::from_object(TestingObjects::object::testingLangString()));
+  ASSERT_EQ(referable.getDescription(), TestingObjects::map::testingLangString());
 }
 
 TEST_F(ReferableTest, TestObjectCopy)
 {
   Referable referable(std::string("test id"));
   referable.setCategory("testing category");
-  referable.setDescription(TestingObjects::object::testingLangString());
+  referable.setDescription(TestingObjects::map::testingLangString());
 
   auto map = referable.getMap();
   Referable copied(map);
 
   ASSERT_EQ(copied.getIdShort(), "test id");
   ASSERT_EQ(*copied.getCategory(), "testing category");
-  ASSERT_EQ(copied.getDescription(), LangStringSet::from_object(TestingObjects::object::testingLangString()));
+  ASSERT_EQ(copied.getDescription(), TestingObjects::map::testingLangString());
 }

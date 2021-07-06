@@ -42,6 +42,7 @@ target_sources(${PROJECT_NAME}
 	map_v2/dataspecification/test_DataSpecification.cpp
 	map_v2/dataspecification/test_DataSpecificationIEC61360.cpp
 	map_v2/identifier/test_Identifier.cpp
+    map_v2/parts/test_View.cpp
 	map_v2/qualifier/test_Referable.cpp
 	map_v2/qualifier/test_HasDataSpecification.cpp
 

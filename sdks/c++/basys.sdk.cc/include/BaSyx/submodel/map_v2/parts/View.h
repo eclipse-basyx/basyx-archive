@@ -28,8 +28,11 @@ public:
 private:
   ElementContainer<IReferable> contained_elements;
   std::unique_ptr<Reference> semanticId;
+
 public:
   View(const std::string & idShort, Referable * parent = nullptr);
+  View(basyx::object & object, Referable * parent = nullptr);
+
   virtual ~View() = default;
 
   //inherited via api::IView
