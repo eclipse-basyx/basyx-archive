@@ -62,7 +62,7 @@ bool basyx::object::insert(basyx::object obj)
 
     switch (this->content->object_type())
     {
-    case basyx::type::objectType::List:
+      case basyx::type::objectType::List:
         if (this->content->value_type() == basyx::type::valueType::Object)
         {
             this->Get<basyx::object::object_list_t&>().emplace_back(obj);
@@ -85,7 +85,18 @@ bool basyx::object::insert(basyx::object obj)
                 break;
             };
         };
-    default:
+      case basyx::type::objectType::Map:
+        if (obj.InstanceOf<object::object_map_t>())
+        {
+          auto & map = obj.Get<object::object_map_t&>();
+          for (auto & element : map)
+          {
+            this->insertKey(element.first, element.second);
+          }
+        }
+        else
+          break;
+      default:
         break;
     };
 
