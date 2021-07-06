@@ -71,17 +71,17 @@ void Qualifier::setValueId(const IReference & reference)
 bool Qualifier::operator!=(const Qualifier & other) const
 {
 	return this->qualifierType != other.qualifierType
-		&& this->valueDataType != other.valueDataType
-		&& this->valueType != other.valueType
-		&& this->valueId != other.valueId;
+		or this->valueDataType != other.valueDataType
+		or this->valueType != other.valueType
+		or this->valueId != other.valueId;
 };
 
 bool Qualifier::operator!=(const IQualifier & other) const
 {
 	return this->getQualifierType() != other.getQualifierType()
-		&& this->getValueType() != other.getValueType()
-		&& this->getValueDataType() != other.getValueDataType()
-		&& this->getValueId() != other.getValueId();
+		or this->getValueType() != other.getValueType()
+		or this->getValueDataType() != other.getValueDataType()
+		or this->getValueId() != other.getValueId();
 };
 
 const IReference * Qualifier::getSemanticId() const

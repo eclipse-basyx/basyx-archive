@@ -80,9 +80,9 @@ void Qualifier::setValueId(const IReference & reference)
 bool Qualifier::operator!=(const IQualifier & other) const
 {
 	return this->getQualifierType() != other.getQualifierType()
-		&& this->getValueType() != other.getValueType()
-		&& this->getValueDataType() != other.getValueDataType()
-		&& this->getValueId() != other.getValueId();
+		or this->getValueType() != other.getValueType()
+		or this->getValueDataType() != other.getValueDataType()
+		or this->getValueId() != other.getValueId();
 };
 
 const IReference * Qualifier::getSemanticId() const
