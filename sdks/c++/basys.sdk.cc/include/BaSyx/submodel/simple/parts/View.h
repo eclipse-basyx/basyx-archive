@@ -19,7 +19,7 @@ private:
 	Referable referable;
 
   ElementContainer<api::IReferable> contained_elements;
-  Reference semanticId;
+  std::unique_ptr<Reference> semanticId;
 public:
   View(const std::string & idShort, Referable * parent = nullptr);
 
@@ -34,8 +34,8 @@ public:
   virtual const std::vector<simple::Reference> getDataSpecificationReference() const override;
 
   //inherited via IHasSemantics
-  const api::IReference & getSemanticId() const override;
-  void setSemanticId(const api::IReference & reference) override;
+  const api::IReference * getSemanticId() const override;
+  void setSemanticId(std::unique_ptr<Reference> semanticId);
 
   // Inherited via IReferable
   virtual const std::string & getIdShort() const override;

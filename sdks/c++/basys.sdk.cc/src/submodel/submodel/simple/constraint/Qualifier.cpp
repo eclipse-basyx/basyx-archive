@@ -84,12 +84,14 @@ bool Qualifier::operator!=(const IQualifier & other) const
 		&& this->getValueId() != other.getValueId();
 };
 
-const IReference & Qualifier::getSemanticId() const
+const IReference * Qualifier::getSemanticId() const
 {
-	return this->semanticId;
+	if (semanticId.empty())
+		return nullptr;
+	return &this->semanticId;
 }
 
-void Qualifier::setSemanticId(const IReference & reference)
+void Qualifier::setSemanticId(const Reference & reference)
 {
 	this->semanticId = reference;
 }

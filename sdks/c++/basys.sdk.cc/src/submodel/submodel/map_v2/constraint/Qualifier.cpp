@@ -16,7 +16,6 @@ Qualifier::Qualifier(const std::string & qualifierType, const std::string & valu
 {
 	this->map.insertKey(Path::QualifierType, qualifierType);
 	this->map.insertKey(Path::ValueType, valueType);
-	this->map.insertKey(Path::SemanticId, this->semanticId.getMap());
 	this->map.insertKey(Path::ValueId, this->valueId.getMap());
 };
 
@@ -29,7 +28,6 @@ Qualifier::Qualifier(const std::string & qualifierType,
 	this->map.insertKey(Path::ValueDataType, valueDataType);
 	this->map.insertKey(Path::QualifierType, qualifierType);
 	this->map.insertKey(Path::ValueType, valueType);
-	this->map.insertKey(Path::SemanticId, semanticId.getMap());
 	this->map.insertKey(Path::ValueId, this->valueId.getMap());
 };
 
@@ -87,12 +85,13 @@ bool Qualifier::operator!=(const IQualifier & other) const
 		&& this->getValueId() != other.getValueId();
 };
 
-const IReference & Qualifier::getSemanticId() const
+const IReference * Qualifier::getSemanticId() const
 {
-	return this->semanticId;
+	return this->semanticId.get();
 }
 
-void Qualifier::setSemanticId(const IReference & reference)
+void Qualifier::setSemanticId(std::unique_ptr<Reference> reference)
 {
-	this->semanticId = reference;
+	this->semanticId = std::move(reference);
+  this->map.insertKey(Path::SemanticId, this->semanticId->getMap());
 }

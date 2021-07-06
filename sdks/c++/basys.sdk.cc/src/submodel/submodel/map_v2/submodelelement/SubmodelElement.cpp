@@ -14,17 +14,17 @@ SubmodelElement::SubmodelElement(const std::string & idShort, ModelingKind kind)
 	, vab::ElementMap{}
 {
 	this->map.insertKey(Path::Kind, ModelingKind_::to_string(kind));
-	this->map.insertKey(Path::SemanticId, semanticId.getMap());
 }
 
-const api::IReference & SubmodelElement::getSemanticId() const
+const api::IReference * SubmodelElement::getSemanticId() const
 {
-	return this->semanticId;
+	return this->semanticId.get();
 };
 
-void SubmodelElement::setSemanticId(const api::IReference & semanticId)
+void SubmodelElement::setSemanticId(std::unique_ptr<Reference> semanticId)
 {
-	this->semanticId = semanticId;
+	this->semanticId = std::move(semanticId);
+	this->map.insertKey(Path::SemanticId, semanticId->getMap());
 };
 
 ModelingKind SubmodelElement::getKind() const

@@ -90,14 +90,14 @@ const std::vector<Reference> SubModel::getDataSpecificationReference() const
 	return this->dataSpecification.getDataSpecificationReference();
 }
 
-const IReference & SubModel::getSemanticId() const
+const IReference * SubModel::getSemanticId() const
 {
-	return this->semanticId;
+	return this->semanticId.get();
 }
 
-void SubModel::setSemanticId(const IReference & semanticId)
+void SubModel::setSemanticId(std::unique_ptr<Reference> semanticId)
 {
-	this->semanticId = semanticId;
+	this->semanticId = std::move(semanticId);
 }
 
 void SubModel::addFormula(const api::IFormula & formula)

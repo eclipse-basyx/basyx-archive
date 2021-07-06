@@ -26,10 +26,10 @@ public:
     static constexpr char ValueId[] = "valueId";
   };
 
-
 private:
 	Reference valueId;
-	Reference semanticId;
+	std::unique_ptr<Reference> semanticId;
+
 public:
 	using vab::ElementMap::ElementMap;
 
@@ -61,8 +61,8 @@ public:
 	virtual void setValueId(const api::IReference & reference) override;
 
 	// Inherited via IQualifier
-	virtual const api::IReference & getSemanticId() const override;
-	virtual void setSemanticId(const api::IReference & reference) override;
+	virtual const api::IReference * getSemanticId() const override;
+	virtual void setSemanticId(std::unique_ptr<Reference> reference);
 };
 
 }

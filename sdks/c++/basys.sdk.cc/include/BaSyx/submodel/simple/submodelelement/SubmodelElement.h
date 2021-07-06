@@ -19,7 +19,7 @@ class SubmodelElement
 private:
 	HasDataSpecification dataSpecification;
 	ModelingKind kind;
-	Reference semanticId;
+  std::unique_ptr<Reference> semanticId;
 	Referable referable;
 	Qualifiable qualifiable;
 	ModelTypes modelType;
@@ -29,8 +29,8 @@ public:
 	~SubmodelElement() = default;
 
 	// Inherited via IHasDataSemantics
-	const api::IReference & getSemanticId() const override;
-	void setSemanticId(const api::IReference & reference) override;
+	const api::IReference * getSemanticId() const override;
+	void setSemanticId(std::unique_ptr<Reference> semanticId);
 
 	// Inherited via IHasDataSpecification
 	void addDataSpecification(const Reference & reference) override;

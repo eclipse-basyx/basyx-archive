@@ -10,23 +10,24 @@ using namespace basyx::submodel;
 
 using ImplTypes = ::testing::Types
 <
-  std::tuple<map::View, map::Referable>,
-  std::tuple<simple::View, simple::Referable>
+  std::tuple<map::View, map::Referable, map::Reference>,
+  std::tuple<simple::View, simple::Referable, simple::Reference>
 >;
 
 template<class Impl>
 class ViewTest :public ::testing::Test {
 protected:
   using impl_t = typename std::tuple_element<0, Impl>::type;
-  using impl_ref_t = typename std::tuple_element<1, Impl>::type;
+  using impl_referable_t = typename std::tuple_element<1, Impl>::type;
+  using impl_reference_t = typename std::tuple_element<2, Impl>::type;
 
   std::unique_ptr<impl_t> view;
-  std::unique_ptr<impl_ref_t> referable;
+  std::unique_ptr<impl_referable_t> referable;
 protected:
 	void SetUp() override
 	{
 	    view = util::make_unique<impl_t>("TestView");
-      referable = util::make_unique<impl_ref_t>(std::string("TestReferable"));
+      referable = util::make_unique<impl_referable_t>(std::string("TestReferable"));
 	}
 
 	void TearDown() override
@@ -51,12 +52,16 @@ TYPED_TEST(ViewTest, TestContainedElements)
 
 TYPED_TEST(ViewTest, TestSemanticId)
 {
-  std::unique_ptr<api::IReference> ref = util::make_unique<simple::Reference>();
+  using impl_reference_t = typename TestFixture::impl_reference_t;
+
+  ASSERT_EQ(this->view->getSemanticId(), nullptr);
+
+  std::unique_ptr<impl_reference_t> ref = util::make_unique<impl_reference_t>();
 
   simple::Key key(KeyElements::Submodel, false, KeyType::URI, "test");
   ref->addKey(key);
 
-  this->view->setSemanticId(*ref);
+  this->view->setSemanticId(std::move(ref));
 
-  ASSERT_EQ(this->view->getSemanticId().getKeys().at(0).getValue(), std::string("test"));
+  ASSERT_EQ(this->view->getSemanticId()->getKeys().at(0).getValue(), std::string("test"));
 }

@@ -18,14 +18,14 @@ void View::addContainedElement(std::unique_ptr<Referable> referable)
   this->contained_elements.addElement(std::move(referable));
 }
 
-const api::IReference &View::getSemanticId() const
+const api::IReference * View::getSemanticId() const
 {
-  return this->semanticId;
+  return this->semanticId.get();
 }
 
-void View::setSemanticId(const api::IReference &reference)
+void View::setSemanticId(std::unique_ptr<Reference> semanticId)
 {
-  this->semanticId = reference;
+  this->semanticId = std::move(semanticId);
 }
 
 void View::addDataSpecification(const simple::Reference & reference)

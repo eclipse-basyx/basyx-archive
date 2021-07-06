@@ -14,9 +14,8 @@ SubModel::SubModel(const std::string & idShort, const simple::Identifier & ident
 	: Identifiable(idShort, identifier)
 {
 	this->map.insertKey(Path::SubmodelElements, this->elementContainer.getMap());
-	this->map.insertKey(Path::SemanticId, semanticId.getMap());
   this->map.insertKey(Path::Kind, ModelingKind_::to_string(kind));
-};
+}
 
 SubModel::SubModel(object object)
   : ElementMap{}
@@ -28,7 +27,8 @@ SubModel::SubModel(object object)
   {
 
   }
-  this->semanticId = Reference{object.getProperty(Path::SemanticId)};
+  if ( not object.getProperty(Path::SemanticId).IsNull() )
+    this->semanticId = util::make_unique<Reference>(object.getProperty(Path::SemanticId));
 
   if ( not this->map.getProperty(IdPath::AdministrativeInformation).IsNull() )
   {
@@ -58,13 +58,13 @@ ModelingKind SubModel::getKind() const
 	return ModelingKind_::from_string(this->map.getProperty(Path::Kind).GetStringContent());
 }
 
-const IReference & SubModel::getSemanticId() const
+const IReference * SubModel::getSemanticId() const
 {
-	return this->semanticId;
+	return this->semanticId.get();
 }
 
-void SubModel::setSemanticId(const IReference & semanticId)
+void SubModel::setSemanticId(std::unique_ptr<Reference> semanticId)
 {
-	this->semanticId = Reference{semanticId};
-  this->map.insertKey(Path::SemanticId, this->semanticId.getMap());
+	this->semanticId = std::move(semanticId);
+  this->map.insertKey(Path::SemanticId, this->semanticId->getMap());
 }

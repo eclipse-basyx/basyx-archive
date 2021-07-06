@@ -36,7 +36,7 @@ public:
     static constexpr char Kind[] = "kind";
   };
 private:
-	Reference semanticId;
+  std::unique_ptr<Reference> semanticId;
 	ElementContainer<api::ISubmodelElement> elementContainer;
 public:
 	SubModel(const std::string & idShort, const simple::Identifier & identifier, ModelingKind kind = ModelingKind::Instance);
@@ -51,8 +51,8 @@ public:
 	virtual ModelingKind getKind() const override;
 
 	// Inherited via IHasSemantics
-	virtual const api::IReference & getSemanticId() const override;
-	virtual void setSemanticId(const api::IReference & semanticId) override;
+	virtual const api::IReference * getSemanticId() const override;
+	virtual void setSemanticId(std::unique_ptr<Reference> semanticId);
 
 	virtual KeyElements getKeyElementType() const override { return KeyElements::Submodel; };
 };

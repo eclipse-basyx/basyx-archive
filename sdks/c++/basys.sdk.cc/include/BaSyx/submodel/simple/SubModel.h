@@ -26,7 +26,7 @@ private:
 	Identifiable identifiable;
 	ModelingKind kind;
 	HasDataSpecification dataSpecification;
-	Reference semanticId;
+  std::unique_ptr<Reference> semanticId;
 	Qualifiable qualifiable;
 
 	ElementContainer<api::ISubmodelElement> elementContainer;
@@ -64,8 +64,8 @@ public:
 	virtual const std::vector<Reference> getDataSpecificationReference() const override;
 
 	// Inherited via IHasSemantics
-	virtual const api::IReference & getSemanticId() const override;
-	virtual void setSemanticId(const api::IReference & semanticId) override;
+	virtual const api::IReference * getSemanticId() const override;
+	virtual void setSemanticId(std::unique_ptr<Reference> semanticId);
 
 	// Inherited via IQualifiable
 	virtual void addFormula(const api::IFormula & formula) override;

@@ -11,14 +11,14 @@ SubmodelElement::SubmodelElement(const std::string & idShort, ModelingKind kind)
 
 }
 
-const IReference & SubmodelElement::getSemanticId() const
+const IReference * SubmodelElement::getSemanticId() const
 {
-	return this->semanticId;
+	return this->semanticId.get();
 };
 
-void SubmodelElement::setSemanticId(const api::IReference & semanticId)
+void SubmodelElement::setSemanticId(std::unique_ptr<Reference> semanticId)
 {
-	this->semanticId = semanticId;
+	this->semanticId = std::move(semanticId);
 };
 
 void SubmodelElement::addDataSpecification(const Reference & reference)
