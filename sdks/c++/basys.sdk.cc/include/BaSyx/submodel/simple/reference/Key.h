@@ -3,7 +3,7 @@
 
 #include <BaSyx/submodel/enumerations/KeyType.h>
 #include <BaSyx/submodel/enumerations/KeyElements.h>
-#include <BaSyx/submodel/api_v2/reference/IKey.h>
+//#include <BaSyx/submodel/api_v2/reference/IKey.h>
 
 #include <string>
 
@@ -11,7 +11,7 @@ namespace basyx {
 namespace submodel {
 namespace simple {
 
-class Key : public api::IKey
+class Key // : public api::IKey
 {
 private:
 	KeyElements type;
@@ -24,10 +24,13 @@ public:
 	bool operator!=(const Key & other) const;
 	inline bool operator==(const Key & other) const { return !(*this != other); };
 public:
-	KeyElements getType() const noexcept override;
-	KeyType getIdType() const noexcept override;
-	bool isLocal() const noexcept override;
-	std::string getValue() const noexcept override;
+	KeyElements getType() const noexcept;
+	KeyType getIdType() const noexcept;
+	bool isLocal() const noexcept;
+	std::string getValue() const noexcept;
+
+	bool isGlobalKey() const noexcept;
+	bool isModelKey() const noexcept;
 };
 
 }

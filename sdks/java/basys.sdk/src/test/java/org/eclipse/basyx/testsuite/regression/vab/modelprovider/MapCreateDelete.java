@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.vab.modelprovider;
 
 import static org.junit.Assert.assertEquals;
@@ -33,12 +42,12 @@ public class MapCreateDelete {
 	private static void testCreateElements(VABElementProxy connVABElement) {
 		// Create property directly in root element
 		connVABElement.createValue("inRoot", 1.2);
-		Object toTest = connVABElement.getModelPropertyValue("inRoot");
+		Object toTest = connVABElement.getValue("inRoot");
 		assertEquals(1.2, toTest);
 		
 		// Create element in Map (with new key contained in the path)
 		connVABElement.createValue("/structure/map/inMap", "34");
-		toTest = connVABElement.getModelPropertyValue("/structure/map/inMap");
+		toTest = connVABElement.getValue("/structure/map/inMap");
 		assertEquals("34", toTest);
 		
 		// Create map element
@@ -46,7 +55,7 @@ public class MapCreateDelete {
 		newMap.put("entryA", 3);
 		newMap.put("entryB", 4);
 		connVABElement.createValue("mapInRoot", newMap);
-		toTest = connVABElement.getModelPropertyValue("mapInRoot");
+		toTest = connVABElement.getValue("mapInRoot");
 		assertTrue(toTest instanceof Map<?, ?>);
 		assertEquals(2, ((Map<String, Object>) toTest).size());
 		assertEquals(3, ((Map<String, Object>) toTest).get("entryA"));
@@ -59,14 +68,14 @@ public class MapCreateDelete {
 			// If inRoot would have been a list 0 could be added here
 			// => 1.2 has an "invalid" type for creating values in it
 		}
-		toTest = connVABElement.getModelPropertyValue("inRoot");
+		toTest = connVABElement.getValue("inRoot");
 		assertEquals(1.2, toTest);
 		
 		// Check case-sensitivity
 		connVABElement.createValue("inroot", 78);
-		toTest = connVABElement.getModelPropertyValue("inRoot");
+		toTest = connVABElement.getValue("inRoot");
 		assertEquals(1.2, toTest);
-		toTest = connVABElement.getModelPropertyValue("inroot");
+		toTest = connVABElement.getValue("inroot");
 		assertEquals(78, toTest);
 		
 		// Non-existing parent element
@@ -75,7 +84,7 @@ public class MapCreateDelete {
 			fail();
 		} catch (ResourceNotFoundException e) {}
 		try {
-			connVABElement.getModelPropertyValue("unknown/x");
+			connVABElement.getValue("unknown/x");
 			fail();
 		} catch (ResourceNotFoundException e) {}
 		
@@ -100,24 +109,24 @@ public class MapCreateDelete {
 			fail();
 		} catch (MalformedRequestException e) {
 		}
-		Object toTest = connVABElement.getModelPropertyValue("inRoot");
+		Object toTest = connVABElement.getValue("inRoot");
 		assertEquals(1.2, toTest);
 		
 		// - by index
 		connVABElement.deleteValue("inRoot");
 		try {
 			// "inRoot" should not exist anymore
-			connVABElement.getModelPropertyValue("inRoot");
+			connVABElement.getValue("inRoot");
 			fail();
 		} catch (ResourceNotFoundException e) {}
 		
 		// Check case-sensitivity
-		toTest = connVABElement.getModelPropertyValue("inroot");
+		toTest = connVABElement.getValue("inroot");
 		assertEquals(78, toTest);
 		connVABElement.deleteValue("inroot");
 		try {
 			// "inroot" should not exist anymore
-			connVABElement.getModelPropertyValue("inroot");
+			connVABElement.getValue("inroot");
 			fail();
 		} catch (ResourceNotFoundException e) {}
 		
@@ -129,18 +138,18 @@ public class MapCreateDelete {
 		} catch (MalformedRequestException e) {
 		}
 		
-		toTest = connVABElement.getModelPropertyValue("/structure/map/inMap");
+		toTest = connVABElement.getValue("/structure/map/inMap");
 		assertEquals("34", toTest);
 		// - by index
 		connVABElement.deleteValue("/structure/map/inMap");
-		toTest = connVABElement.getModelPropertyValue("/structure/map");
+		toTest = connVABElement.getValue("/structure/map");
 		assertEquals(0, ((Map<?, ?>) toTest).size());
 		
 		// Delete remaining complete Map
 		connVABElement.deleteValue("mapInRoot");
 		try {
 			// "mapInRoot" should not exist anymore
-			connVABElement.getModelPropertyValue("mapInRoot");
+			connVABElement.getValue("mapInRoot");
 			fail();
 		} catch (ResourceNotFoundException e) {}
 		
@@ -153,7 +162,7 @@ public class MapCreateDelete {
 			// It would be possible to delete "" from a "root list"
 			// => invalid type
 		}
-		toTest = connVABElement.getModelPropertyValue("/primitives/integer");
+		toTest = connVABElement.getValue("/primitives/integer");
 		assertEquals(123, toTest);
 		
 		// Null path - should throw exception

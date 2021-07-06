@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.submodelelement;
 
 import static org.junit.Assert.assertEquals;
@@ -11,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
@@ -28,6 +38,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementC
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -54,9 +65,10 @@ public class TestSubmodelElementCollection {
 		elements1.add(getOperation());
 
 		elements2 = new ArrayList<ISubmodelElement>();
-		elements2.add(new Property("testId1"));
-		elements2.add(new Property("testId2"));
+		elements2.add(new Property("idShort1", "testId1"));
+		elements2.add(new Property("idShort2","testId2"));
 		elementCollection = new SubmodelElementCollection(elements2, false, false);
+		elementCollection.setIdShort("testCollectionId");
 	} 
 
 	@Test
@@ -64,15 +76,20 @@ public class TestSubmodelElementCollection {
 		SubmodelElementCollection elementCollection = new SubmodelElementCollection(elements1, true, true);
 		assertTrue(elementCollection.isAllowDuplicates());
 		assertTrue(elementCollection.isOrdered());
-		assertEquals(elements1, elementCollection.getValue());
+		
+		ISubmodelElement checkOperation = elementCollection.getSubmodelElements().get(OPERATION_ID);
+		assertEquals(OPERATION_ID, checkOperation.getIdShort());
 	} 
 	
 	@Test
 	public void testAddValue() {
-		ISubmodelElement element = new Property("testIdNew");
-		elementCollection.addElement(element);
+		Property element = new Property("testProperty");
+		element.setIdShort("propId");
+		elementCollection.addSubmodelElement(element);
 		elements2.add(element);
-		assertEquals(elements2, elementCollection.getValue());
+		
+		ISubmodelElement checkProperty = elementCollection.getSubmodelElements().get("propId");
+		assertEquals(element.getIdShort(), checkProperty.getIdShort());
 	} 
 	
 	@Test
@@ -85,9 +102,13 @@ public class TestSubmodelElementCollection {
 	@Test
 	public void testSetValue() {
 		Collection<ISubmodelElement> elements = new ArrayList<ISubmodelElement>();
-		elements.add(new Property("testId1"));
+		Property element = new Property("testProperty");
+		element.setIdShort("propId");
+		elements.add(element);
 		elementCollection.setValue(elements);
-		assertEquals(elements, elementCollection.getValue());
+		
+		ISubmodelElement checkProperty = elementCollection.getSubmodelElements().get("propId");
+		assertEquals(element.getIdShort(), checkProperty.getIdShort());
 	} 
 	
 	@Test
@@ -134,18 +155,46 @@ public class TestSubmodelElementCollection {
 	}
 
 	@Test
-	public void testAddSubModelElement() {
+	public void testAddSubmodelElement() {
 		SubmodelElementCollection collection = new SubmodelElementCollection(elements1, false, false);
+		String smCollIdShort = "coll1";
+		collection.setIdShort(smCollIdShort);
 		Property property = new Property("testValue");
 		String newIdShort = "newIdShort";
 		property.put(Referable.IDSHORT, newIdShort);
-		collection.addElement(property);
-		assertEquals(new Reference(new Key(KeyElements.SUBMODELELEMENTCOLLECTION, true, "", KeyType.IDSHORT)), property.getParent());
+		collection.addSubmodelElement(property);
+		assertEquals(new Reference(new Key(KeyElements.SUBMODELELEMENTCOLLECTION, true, smCollIdShort, KeyType.IDSHORT)), property.getParent());
 		Map<String, ISubmodelElement> submodelElements = new HashMap<String, ISubmodelElement>();
 		submodelElements.put(PROPERTY_ID, getProperty());
 		submodelElements.put(OPERATION_ID, getOperation());
 		submodelElements.put(newIdShort, property);
 		assertEquals(submodelElements, collection.getSubmodelElements());
+	}
+	
+	@Test
+	public void testGetSubmodelElement() {
+		SubmodelElementCollection collection = new SubmodelElementCollection(elements1, false, false);
+		ISubmodelElement retrievedElement = collection.getSubmodelElement(PROPERTY_ID);
+		assertEquals(getProperty(), retrievedElement);
+	}
+	
+	@Test(expected = ResourceNotFoundException.class)
+	public void testGetSubmodelElementNotExist() {
+		SubmodelElementCollection collection = new SubmodelElementCollection(elements1, false, false);
+		collection.getSubmodelElement("Id_Which_Does_Not_Exist");
+	}
+	
+	@Test(expected = ResourceNotFoundException.class)
+	public void testDeleteSubmodelElement() {
+		SubmodelElementCollection collection = new SubmodelElementCollection(elements1, false, false);
+		collection.deleteSubmodelElement(PROPERTY_ID);
+		collection.getSubmodelElement(PROPERTY_ID);
+	}
+	
+	@Test(expected = ResourceNotFoundException.class)
+	public void testDeleteSubmodelElementNotExist() {
+		SubmodelElementCollection collection = new SubmodelElementCollection(elements1, false, false);
+		collection.deleteSubmodelElement("Id_Which_Does_Not_Exist");
 	}
 
 	/**
@@ -168,8 +217,10 @@ public class TestSubmodelElementCollection {
 	 * @return operation
 	 */
 	private Operation getOperation() {
+		Property property = new Property("testOpVariableId");
+		property.setModelingKind(ModelingKind.TEMPLATE);
 		List<OperationVariable> variable = Collections
-				.singletonList(new OperationVariable(new Property("testOpVariableId")));
+				.singletonList(new OperationVariable(property));
 		Operation operation = new Operation(variable, variable, variable, null);
 		operation.put(Referable.IDSHORT, OPERATION_ID);
 		return operation;

@@ -1,5 +1,5 @@
-#ifndef BASYX_SUBMODEL_ENUM_IdentifiableElements_H
-#define BASYX_SUBMODEL_ENUM_IdentifiableElements_H
+#ifndef BASYX_SUBMODEL_ENUMERATIONS_IDENTIFIABLEELEMENTS_H
+#define BASYX_SUBMODEL_ENUMERATIONS_IDENTIFIABLEELEMENTS_H
 
 #include <string>
 
@@ -7,24 +7,10 @@ namespace basyx {
 namespace submodel {
 
 enum class IdentifiableElements {
-    AccessPermissionRule,
-    AnnotatedRelationshipElemenBasicEvent,
-    Blob,
-    Capability,
-    ConceptDictionary,
-    DataElement,
-    Entity,
-    Event,
-    File,
-    MultiLanguageProperty,
-    Operation,
-    Property,
-    Range,
-    ReferenceElement,
-    RelationshipElement,
-    SubmodelElement,
-    SubmodelElementCollection,
-    View,
+    Asset,
+    AssetAdministrationShell,
+    ConceptDescription,
+    Submodel,
 };
 
 class IdentifiableElements_
@@ -38,4 +24,4 @@ public:
 }
 }
 
-#endif
+#endif /* BASYX_SUBMODEL_ENUMERATIONS_IDENTIFIABLEELEMENTS_H */

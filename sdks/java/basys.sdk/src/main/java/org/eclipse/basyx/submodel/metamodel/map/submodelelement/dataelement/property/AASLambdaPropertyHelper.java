@@ -1,10 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDef;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueTypeHelper;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProviderHelper;
 
@@ -25,7 +34,7 @@ public class AASLambdaPropertyHelper {
 	 */
 	public static Property setLambdaValue(Property property, Supplier<Object> get, Consumer<Object> set) {
 		Object newValue = VABLambdaProviderHelper.createSimple(get, set);
-		PropertyValueTypeDef newType = PropertyValueTypeDefHelper.getType(get.get());
+		ValueType newType = ValueTypeHelper.getType(get.get());
 		property.set(newValue, newType);
 		return property;
 	}

@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.vab.modelprovider.generic;
 
 import java.util.function.Function;
@@ -30,13 +39,13 @@ public class VABModelProvider implements IModelProvider {
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) {
+	public Object getValue(String path) {
 		Object element = getTargetElement(path);
 		return handler.postprocessObject(element);
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) {
+	public void setValue(String path, Object newValue) {
 		VABPathTools.checkPathForNull(path);
 		if (VABPathTools.isEmptyPath(path)) {
 			// Empty path => parent element == null => replace root, if it exists
@@ -99,7 +108,10 @@ public class VABModelProvider implements IModelProvider {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object invokeOperation(String path, Object... parameters) {
-		Object childElement = getModelPropertyValue(path);
+		
+		path = VABPathTools.stripInvokeFromPath(path);
+		
+		Object childElement = getValue(path);
 
 		// Invoke operation for function interfaces
 		if (childElement instanceof Function<?, ?>) {

@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.components.xml;
 
 import java.io.IOException;
@@ -15,11 +24,12 @@ import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IIdentifiable;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.support.bundle.AASBundle;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -36,16 +46,6 @@ public class XMLAASBundleFactory {
 	private static Logger logger = LoggerFactory.getLogger(XMLAASBundleFactory.class);
 
 	private String content;
-
-	/**
-	 * Internal exception used to indicate that the resource was not found
-	 * 
-	 * @author schnicke
-	 *
-	 */
-	private class ResourceNotFoundException extends Exception {
-		private static final long serialVersionUID = -1247012719907370743L;
-	}
 
 	/**
 	 * 
@@ -72,7 +72,7 @@ public class XMLAASBundleFactory {
 		XMLToMetamodelConverter converter = new XMLToMetamodelConverter(content);
 
 		List<IAssetAdministrationShell> shells = converter.parseAAS();
-		List<ISubModel> submodels = converter.parseSubmodels();
+		List<ISubmodel> submodels = converter.parseSubmodels();
 
 		List<IAsset> assets = converter.parseAssets();
 
@@ -89,7 +89,7 @@ public class XMLAASBundleFactory {
 			}
 
 			// Retrieve submodels
-			Set<ISubModel> currentSM = retrieveSubmodelsForAAS(submodels, shell);
+			Set<ISubmodel> currentSM = retrieveSubmodelsForAAS(submodels, shell);
 			bundles.add(new AASBundle(shell, currentSM));
 		}
 
@@ -103,12 +103,12 @@ public class XMLAASBundleFactory {
 	 * @param shell
 	 * @return
 	 */
-	private Set<ISubModel> retrieveSubmodelsForAAS(List<ISubModel> submodels, IAssetAdministrationShell shell) {
-		Set<ISubModel> currentSM = new HashSet<>();
+	private Set<ISubmodel> retrieveSubmodelsForAAS(List<ISubmodel> submodels, IAssetAdministrationShell shell) {
+		Set<ISubmodel> currentSM = new HashSet<>();
 
 		for (IReference submodelRef : shell.getSubmodelReferences()) {
 			try {
-				ISubModel sm = getByReference(submodelRef, submodels);
+				ISubmodel sm = getByReference(submodelRef, submodels);
 				currentSM.add(sm);
 				logger.debug("Found Submodel " + sm.getIdShort() + " for AAS " + shell.getIdShort());
 			} catch (ResourceNotFoundException e) {
@@ -129,16 +129,23 @@ public class XMLAASBundleFactory {
 	 * @throws ResourceNotFoundException
 	 */
 	private <T extends IIdentifiable> T getByReference(IReference ref, List<T> submodels) throws ResourceNotFoundException {
+		IKey lastKey = null;
 		// It may be that only one key fits to the Submodel contained in the XML
 		for (IKey key : ref.getKeys()) {
+			lastKey = key;
 			// There will only be a single submodel matching the identification at max
 			Optional<T> match = submodels.stream().filter(s -> s.getIdentification().getId().equals(key.getValue())).findFirst();
 			if (match.isPresent()) {
 				return match.get();
 			}
 		}
+		if (lastKey == null) {
+			throw new ResourceNotFoundException("Could not resolve reference without keys");
+		} else {
+			throw new ResourceNotFoundException("Could not resolve reference with last key " + lastKey.getValue());
+		}
 
 		// If no identifiable is found, indicate it by throwing an exception
-		throw new ResourceNotFoundException();
+
 	}
 }

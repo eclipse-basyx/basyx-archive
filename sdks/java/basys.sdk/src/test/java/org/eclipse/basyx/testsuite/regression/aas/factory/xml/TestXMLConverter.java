@@ -1,16 +1,23 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.aas.factory.xml;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +32,7 @@ import org.eclipse.basyx.aas.metamodel.api.parts.IView;
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IDataSpecificationContent;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
@@ -37,9 +44,10 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IDataElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.entity.EntityType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.dataspecification.DataSpecificationIEC61360Content;
 import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
@@ -47,12 +55,14 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementC
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Range;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.ReferenceElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.Range;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.entity.Entity;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.event.BasicEvent;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.AnnotatedRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 import org.eclipse.basyx.vab.model.VABModelMap;
 import org.eclipse.basyx.vab.support.TypeDestroyer;
@@ -66,101 +76,70 @@ public class TestXMLConverter {
 	private XMLToMetamodelConverter converter;
 	
 	@Before
-	public void buildConverter() {
-		try {
-			String xml = new String(Files.readAllBytes(Paths.get(xmlInPath)));
-			converter = new XMLToMetamodelConverter(xml);
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail();
-		}
+	public void buildConverter() throws Exception {
+		String xml = new String(Files.readAllBytes(Paths.get(xmlInPath)));
+		converter = new XMLToMetamodelConverter(xml);
 	}
 
 	@Test
-	public void testParseAAS() {
-		try {
-			checkAASs(converter.parseAAS());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail();
-		}
+	public void testParseAAS() throws Exception {
+		checkAASs(converter.parseAAS());
 	}
 	
 	@Test
-	public void testParseAssets() {
-		try {
-			checkAssets(converter.parseAssets());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail();
-		}
+	public void testParseAssets() throws Exception {
+		checkAssets(converter.parseAssets());
 	}
 	
 	@Test
 	public void testParseConceptDescriptions() {
-		try {
-			checkConceptDescriptions(converter.parseConceptDescriptions());
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail();
-		}
+		checkConceptDescriptions(converter.parseConceptDescriptions());
 	}
 	
 	@Test
 	public void testParseSubmodels() {
-		try {
-			checkSubmodels(converter.parseSubmodels());			
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail();
-		}
+		checkSubmodels(converter.parseSubmodels());
 	}
 	
 	@Test
-	public void testBuildXML() {
-		try {
-			//Convert the in.xml to Objects
-			List<IAssetAdministrationShell> assetAdministrationShellList = converter.parseAAS();
-			List<IAsset> assetList = converter.parseAssets();
-			List<IConceptDescription> conceptDescriptionList = converter.parseConceptDescriptions();
-			List<ISubModel> submodelList = converter.parseSubmodels();
-			
-			//Build XML-File from the Objects and write it to a StringWriter
-			StringWriter resultWithTypes = new StringWriter();
-			MetamodelToXMLConverter.convertToXML(assetAdministrationShellList, assetList, conceptDescriptionList, submodelList, new StreamResult(resultWithTypes));
-			
-			
-			//Read the content of the StringWriter, convert it into Objects and check them
-			XMLToMetamodelConverter converterWithTypes = new XMLToMetamodelConverter(resultWithTypes.toString());
-
-			checkAASs(converterWithTypes.parseAAS());
-			checkAssets(converterWithTypes.parseAssets());
-			checkConceptDescriptions(converterWithTypes.parseConceptDescriptions());
-			checkSubmodels(converterWithTypes.parseSubmodels());
-			
-			//erase the types of the Objects, that they are plain Maps as if they were transferred over the VAB
-			List<IAssetAdministrationShell> iAssetAdministrationShellList = destroyAASTypes(assetAdministrationShellList);
-			List<IAsset> iAssetList = destroyAssetTypes(assetList);
-			List<IConceptDescription> iConceptDescriptionList = destroyConceptDescriptionTypes(conceptDescriptionList);
-			List<ISubModel> iSubmodelList = destroySubmodelTypes(submodelList);
-			
-			//Build XML-File from the Objects and write it to a StringWriter
-			StringWriter resultWithoutTypes = new StringWriter();
-			MetamodelToXMLConverter.convertToXML(iAssetAdministrationShellList, iAssetList, iConceptDescriptionList, iSubmodelList, new StreamResult(resultWithoutTypes));
-			
-			
-			//Read the content of the StringWriter, convert it into Objects and check them
-			XMLToMetamodelConverter converterWithoutTypes = new XMLToMetamodelConverter(resultWithoutTypes.toString());
-			
-			checkAASs(converterWithoutTypes.parseAAS());
-			checkAssets(converterWithoutTypes.parseAssets());
-			checkConceptDescriptions(converterWithoutTypes.parseConceptDescriptions());
-			checkSubmodels(converterWithoutTypes.parseSubmodels());
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail();
-		}
+	public void testBuildXML() throws Exception {
+		//Convert the in.xml to Objects
+		List<IAssetAdministrationShell> assetAdministrationShellList = converter.parseAAS();
+		List<IAsset> assetList = converter.parseAssets();
+		List<IConceptDescription> conceptDescriptionList = converter.parseConceptDescriptions();
+		List<ISubmodel> submodelList = converter.parseSubmodels();
+		
+		//Build XML-File from the Objects and write it to a StringWriter
+		StringWriter resultWithTypes = new StringWriter();
+		MetamodelToXMLConverter.convertToXML(assetAdministrationShellList, assetList, conceptDescriptionList, submodelList, new StreamResult(resultWithTypes));
+		
+		
+		//Read the content of the StringWriter, convert it into Objects and check them
+		XMLToMetamodelConverter converterWithTypes = new XMLToMetamodelConverter(resultWithTypes.toString());
+	
+		checkAASs(converterWithTypes.parseAAS());
+		checkAssets(converterWithTypes.parseAssets());
+		checkConceptDescriptions(converterWithTypes.parseConceptDescriptions());
+		checkSubmodels(converterWithTypes.parseSubmodels());
+		
+		//erase the types of the Objects, that they are plain Maps as if they were transferred over the VAB
+		List<IAssetAdministrationShell> iAssetAdministrationShellList = destroyAASTypes(assetAdministrationShellList);
+		List<IAsset> iAssetList = destroyAssetTypes(assetList);
+		List<IConceptDescription> iConceptDescriptionList = destroyConceptDescriptionTypes(conceptDescriptionList);
+		List<ISubmodel> iSubmodelList = destroySubmodelTypes(submodelList);
+		
+		//Build XML-File from the Objects and write it to a StringWriter
+		StringWriter resultWithoutTypes = new StringWriter();
+		MetamodelToXMLConverter.convertToXML(iAssetAdministrationShellList, iAssetList, iConceptDescriptionList, iSubmodelList, new StreamResult(resultWithoutTypes));
+		
+		
+		//Read the content of the StringWriter, convert it into Objects and check them
+		XMLToMetamodelConverter converterWithoutTypes = new XMLToMetamodelConverter(resultWithoutTypes.toString());
+		
+		checkAASs(converterWithoutTypes.parseAAS());
+		checkAssets(converterWithoutTypes.parseAssets());
+		checkConceptDescriptions(converterWithoutTypes.parseConceptDescriptions());
+		checkSubmodels(converterWithoutTypes.parseSubmodels());
 	}
 	
 	private void checkAASs(List<IAssetAdministrationShell> aasList) {
@@ -320,7 +299,7 @@ public class TestXMLConverter {
 		assertEquals("3s7plfdrs35_asset1", asset.getIdShort());
 		assertEquals("asset1_Description", asset.getDescription().get("EN"));
 		assertEquals(IdentifierType.IRI, asset.getIdentification().getIdType());
-		assertEquals("Instance", asset.getAssetKind().toString());
+		assertEquals("Type", asset.getAssetKind().toString());
 		assertEquals("www.festo.com/dic/08111234", asset.getAssetIdentificationModel().getKeys().get(0).getValue());
 	}
 	
@@ -340,12 +319,12 @@ public class TestXMLConverter {
 		assertEquals(1, refs.size());
 	}
 	
-	private void checkSubmodels(List<ISubModel> submodels) {
+	private void checkSubmodels(List<ISubmodel> submodels) {
 		assertEquals(2, submodels.size());
-		ISubModel submodel = null;
+		ISubmodel submodel = null;
 		
-		//select the SubModel with a specific ID form the list
-		for(ISubModel s: submodels) {
+		//select the Submodel with a specific ID form the list
+		for(ISubmodel s: submodels) {
 			if(s.getIdShort().equals("3s7plfdrs35_submodel1")) {
 				submodel = s;
 				break;
@@ -355,34 +334,37 @@ public class TestXMLConverter {
 		assertNotNull(submodel);
 		checkDefaultEmbeddedDataSpecification(submodel);
 		assertEquals("3s7plfdrs35_submodel1", submodel.getIdShort());
-		Collection<IConstraint> constraints = submodel.getQualifier();
-		assertEquals(2, constraints.size());
+		Collection<IConstraint> constraints = submodel.getQualifiers();
+		assertEquals(4, constraints.size());
 		checkSubmodelElements(submodel);
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void checkSubmodelElements(ISubModel submodel) {
+	private void checkSubmodelElements(ISubmodel submodel) {
 		Map<String, ISubmodelElement> submodelElements = (Map<String, ISubmodelElement>)
-				((Map<String, Object>)submodel).get(SubModel.SUBMODELELEMENT);
-		assertEquals(12, submodelElements.size());
+				((Map<String, Object>)submodel).get(Submodel.SUBMODELELEMENT);
+		assertEquals(13, submodelElements.size());
 		
 		ISubmodelElement element = submodelElements.get("rotationSpeed");
 		assertTrue(element instanceof Property);
 		Property property = (Property) element;
 		checkDefaultEmbeddedDataSpecification(property);
-		assertEquals("2000", property.get());
-		assertEquals("double", property.getValueType());
+		List<IKey> keys = property.getValueId().getKeys();
+		assertEquals(1, keys.size());
+		assertEquals("0173-1#05-AAA650#002", keys.get(0).getValue());
+		assertEquals(2000.0, property.getValue());
+		assertEquals(ValueType.Double, property.getValueType());
 		assertEquals("rotationSpeed", property.getIdShort());
 		
 		element = submodelElements.get("emptyDouble");
 		assertTrue(element instanceof Property);
 		property = (Property) element;
-		assertEquals("double", property.getValueType());
+		assertEquals(ValueType.Double, property.getValueType());
 		
 		element = submodelElements.get("basic_event_id");
 		assertTrue(element instanceof BasicEvent);
 		BasicEvent basicEvent = (BasicEvent) element;
-		List<IKey> keys = basicEvent.getObserved().getKeys();
+		keys = basicEvent.getObserved().getKeys();
 		assertEquals(1, keys.size());
 		assertEquals("http://www.zvei.de/demo/submodelDefinitions/87654346", keys.get(0).getValue());
 		
@@ -408,7 +390,7 @@ public class TestXMLConverter {
 		element = submodelElements.get("range_id");
 		assertTrue(element instanceof Range);
 		Range range = (Range) element;
-		assertEquals("int", range.getValueType());
+		assertEquals(ValueType.Integer, range.getValueType());
 		assertEquals("1", range.getMin());
 		assertEquals("10", range.getMax());
 		
@@ -422,7 +404,7 @@ public class TestXMLConverter {
 		assertTrue(element instanceof Blob);
 		Blob blob = (Blob) element;
 		assertEquals("blob_mimetype", blob.getMimeType());
-		assertEquals("YmxvYit2YWx1ZQ==", Base64.getEncoder().encodeToString(blob.getValue()));
+		assertEquals("YmxvYit2YWx1ZQ==", blob.getValue());
 		
 		element = submodelElements.get("reference_ELE_ID");
 		assertTrue(element instanceof ReferenceElement);
@@ -449,6 +431,21 @@ public class TestXMLConverter {
 		assertEquals(1, keys.size());
 		assertEquals("0173-1#05-AAA650#002", keys.get(0).getValue());
 		
+		element = submodelElements.get("annotatedRelationshipElement_ID");
+		assertTrue(element instanceof AnnotatedRelationshipElement);
+		AnnotatedRelationshipElement annotatedElem = (AnnotatedRelationshipElement) element;
+		keys = annotatedElem.getFirst().getKeys();
+		assertEquals(1, keys.size());
+		assertEquals("0173-1#05-AAA650#003", keys.get(0).getValue());
+		keys = annotatedElem.getSecond().getKeys();
+		assertEquals(1, keys.size());
+		assertEquals("0173-1#05-AAA650#004", keys.get(0).getValue());
+		Collection<IDataElement> annotations = annotatedElem.getValue().getAnnotations();
+		assertEquals(2, annotations.size());
+		for(IDataElement annotationElement: annotations) {
+			assertTrue(annotationElement instanceof Property);
+		}
+		
 		element = submodelElements.get("operation_ID");
 		assertTrue(element instanceof Operation);
 		Operation op = (Operation) element;
@@ -474,10 +471,10 @@ public class TestXMLConverter {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private List<ISubModel> destroySubmodelTypes(List<ISubModel> submodelList) {
-		List<ISubModel> ret = new ArrayList<>();
-		for(ISubModel submodel: submodelList) {
-			ret.add(SubModel.createAsFacade(new VABModelMap<>(TypeDestroyer.destroyType((Map<String, Object>) submodel))));
+	private List<ISubmodel> destroySubmodelTypes(List<ISubmodel> submodelList) {
+		List<ISubmodel> ret = new ArrayList<>();
+		for(ISubmodel submodel: submodelList) {
+			ret.add(Submodel.createAsFacade(new VABModelMap<>(TypeDestroyer.destroyType((Map<String, Object>) submodel))));
 		}
 		return ret;
 	}

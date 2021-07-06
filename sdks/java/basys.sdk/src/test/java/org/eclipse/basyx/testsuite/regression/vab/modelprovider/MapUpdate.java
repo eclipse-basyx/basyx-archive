@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.vab.modelprovider;
 
 import static org.junit.Assert.assertEquals;
@@ -27,13 +36,13 @@ public class MapUpdate {
 		VABElementProxy connVABElement = connManager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
 		
 		// Set primitives
-		connVABElement.setModelPropertyValue("primitives/integer", 12);
-		connVABElement.setModelPropertyValue("primitives/double", 1.2d);
-		connVABElement.setModelPropertyValue("primitives/string", "updated");
+		connVABElement.setValue("primitives/integer", 12);
+		connVABElement.setValue("primitives/double", 1.2d);
+		connVABElement.setValue("primitives/string", "updated");
 		// Read back
-		Object integer = connVABElement.getModelPropertyValue("primitives/integer");
-		Object doubleValue = connVABElement.getModelPropertyValue("primitives/double");
-		Object string = connVABElement.getModelPropertyValue("primitives/string");
+		Object integer = connVABElement.getValue("primitives/integer");
+		Object doubleValue = connVABElement.getValue("primitives/double");
+		Object string = connVABElement.getValue("primitives/string");
 		// Test
 		assertTrue(integer instanceof Integer);
 		assertEquals(12, integer);
@@ -42,22 +51,22 @@ public class MapUpdate {
 		assertTrue(string instanceof String);
 		assertEquals("updated", string);
 		// Revert
-		connVABElement.setModelPropertyValue("primitives/integer", 123);
-		connVABElement.setModelPropertyValue("primitives/double", 3.14d);
-		connVABElement.setModelPropertyValue("primitives/string", "TestValue");
+		connVABElement.setValue("primitives/integer", 123);
+		connVABElement.setValue("primitives/double", 3.14d);
+		connVABElement.setValue("primitives/string", "TestValue");
 		
 		// Update serializable function
-		connVABElement.setModelPropertyValue("operations/serializable",
+		connVABElement.setValue("operations/serializable",
 				(Function<Object[], Object> & Serializable) (param) -> {
 					return (int) param[0] - (int) param[1];
 				});
 		// Read back
-		Object serializableFunction = connVABElement.getModelPropertyValue("operations/serializable");
+		Object serializableFunction = connVABElement.getValue("operations/serializable");
 		// Test
 		Function<Object[], Object> testFunction = (Function<Object[], Object>) serializableFunction;
 		assertEquals(-1, testFunction.apply(new Object[] { 2, 3 }));
 		// Revert
-		connVABElement.setModelPropertyValue("operations/serializable",
+		connVABElement.setValue("operations/serializable",
 				(Function<Object[], Object> & Serializable) (param) -> {
 					return (int) param[0] + (int) param[1];
 				});
@@ -68,28 +77,28 @@ public class MapUpdate {
 			fail();
 		} catch (ResourceNotFoundException e) {}
 		try {
-			connVABElement.getModelPropertyValue("unknown/newElement");
+			connVABElement.getValue("unknown/newElement");
 			fail();
 		} catch (ResourceNotFoundException e) {}
 		
 		// Test updating a non-existing element
 		try {
-			connVABElement.setModelPropertyValue("newElement", 10);
+			connVABElement.setValue("newElement", 10);
 			fail();
 		} catch (ResourceNotFoundException e) {}
 		try {
-			connVABElement.getModelPropertyValue("newElement");
+			connVABElement.getValue("newElement");
 			fail();
 		} catch (ResourceNotFoundException e) {}
 		
 		// Test updating an existing null-element
-		connVABElement.setModelPropertyValue("special/null", true);
-		Object bool = connVABElement.getModelPropertyValue("special/null");
+		connVABElement.setValue("special/null", true);
+		Object bool = connVABElement.getValue("special/null");
 		assertTrue((boolean) bool);
 
 		// Null path - should throw exception
 		try {
-			connVABElement.setModelPropertyValue(null, "");
+			connVABElement.setValue(null, "");
 			fail();
 		} catch (MalformedRequestException e) {}
 	}
@@ -104,7 +113,7 @@ public class MapUpdate {
 		newMap.put("testKey", "testValue");
 		// - push
 		try {
-			connVABElement.setModelPropertyValue(null, newMap);
+			connVABElement.setValue(null, newMap);
 			fail();
 		} catch (MalformedRequestException e) {}
 	
@@ -113,15 +122,15 @@ public class MapUpdate {
 		HashMap<String, Object> newMap2 = new HashMap<>();
 		newMap2.put("testKey2", "testValue2");
 		// - push
-		connVABElement.setModelPropertyValue("", newMap2);
+		connVABElement.setValue("", newMap2);
 		// - test
-		assertEquals("testValue2", connVABElement.getModelPropertyValue("testKey2"));
+		assertEquals("testValue2", connVABElement.getValue("testKey2"));
 		try {
-			connVABElement.getModelPropertyValue("testKey");
+			connVABElement.getValue("testKey");
 			fail();
 		} catch (ResourceNotFoundException e) {}
 		try {
-			connVABElement.getModelPropertyValue("primitives/integer");
+			connVABElement.getValue("primitives/integer");
 			fail();
 		} catch (ResourceNotFoundException e) {}
 	}

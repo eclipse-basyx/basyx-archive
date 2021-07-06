@@ -3,12 +3,15 @@
 using namespace basyx::submodel;
 using namespace basyx::submodel::map;
 
-View::View(const std::string &idShort, const Referable *parent)
+constexpr char View::Path::ContainedElements[];
+constexpr char View::Path::SemanticId[];
+
+View::View(const std::string &idShort, Referable *parent)
   : vab::ElementMap{}
   , Referable(idShort, parent)
 {
-  this->map.insertKey("ContainedElements", this->contained_elements.getMap());
-  this->map.insertKey("SemanticId", this->semanticId.getMap());
+  this->map.insertKey(Path::ContainedElements, this->contained_elements.getMap());
+  this->map.insertKey(Path::SemanticId, this->semanticId.getMap());
 }
 
 const api::IElementContainer<api::IReferable> & View::getContainedElements() const

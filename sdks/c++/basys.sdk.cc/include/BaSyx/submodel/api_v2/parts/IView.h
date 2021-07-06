@@ -1,5 +1,5 @@
-#ifndef BASYX_API_V2_SDK_IVIEW_H
-#define BASYX_API_V2_SDK_IVIEW_H
+#ifndef BASYX_SUBMODEL_API_V2_PARTS_IVIEW_H
+#define BASYX_SUBMODEL_API_V2_PARTS_IVIEW_H
 
 #include <BaSyx/submodel/api_v2/qualifier/IReferable.h>
 #include <BaSyx/submodel/api_v2/qualifier/IHasDataSpecification.h>
@@ -26,4 +26,4 @@ inline IView::~IView() = default;
 }
 }
 }
-#endif //BASYX_API_V2_SDK_IVIEW_H
+#endif /* BASYX_SUBMODEL_API_V2_PARTS_IVIEW_H */

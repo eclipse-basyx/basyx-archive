@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.aas.factory.xml.api.parts;
 
 import java.util.ArrayList;
@@ -15,6 +24,10 @@ import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.HasSemanticsX
 import org.eclipse.basyx.submodel.factory.xml.converters.qualifier.ReferableXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.reference.ReferenceXMLConverter;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -51,9 +64,9 @@ public class ViewXMLConverter {
 		for(Map<String, Object> xmlView: xmlViewList) {
 			View view = new View();
 			
-			ReferableXMLConverter.populateReferable(xmlView, view);
-			HasSemanticsXMLConverter.populateHasSemantics(xmlView, view);
-			HasDataSpecificationXMLConverter.populateHasDataSpecification(xmlView, view);
+			ReferableXMLConverter.populateReferable(xmlView, Referable.createAsFacadeNonStrict(view, KeyElements.VIEW));
+			HasSemanticsXMLConverter.populateHasSemantics(xmlView, HasSemantics.createAsFacade(view));
+			HasDataSpecificationXMLConverter.populateHasDataSpecification(xmlView, HasDataSpecification.createAsFacade(view));
 			
 			Map<String, Object> xmlContainedElementsObject = ((Map<String, Object>) xmlView.get(CONTAINED_ELEMENTS));
 			Map<String, Object> xmlContainedElementObject = (Map<String, Object>) xmlContainedElementsObject.get(CONTAINED_ELEMENT_REF);

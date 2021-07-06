@@ -1,6 +1,16 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.vab.protocol.http.server;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -9,7 +19,6 @@ import java.util.List;
 import java.util.StringJoiner;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,6 +29,9 @@ import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Charsets;
+import com.google.common.io.ByteSource;
 
 
 /**
@@ -91,8 +103,6 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		PrintWriter responseWriter = resp.getWriter();
-		
 		try {
 			String path = extractPath(req);
 
@@ -103,12 +113,10 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 			resp.setStatus(200);
 
 			// Process get request
-			providerBackend.processBaSysGet(path, responseWriter);
-			responseWriter.flush();
+			providerBackend.processBaSysGet(path, resp.getOutputStream());
 		} catch(ProviderException e) {
 			int httpCode = ExceptionToHTTPCodeMapper.mapFromException(e);
 			resp.setStatus(httpCode);
-			responseWriter.flush();
 			logger.debug("Exception in HTTP-GET. Response-code: " + httpCode, e);
 		}
 		
@@ -120,21 +128,19 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 	 */
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		PrintWriter responseWriter = resp.getWriter();
-		
 		try {
 			String path = extractPath(req);
 			String serValue = extractSerializedValue(req);
 			logger.trace("DoPut: {}", serValue);
 
+			resp.setContentType("application/json");
+			resp.setCharacterEncoding("UTF-8");
 			resp.setStatus(200);
 
-			providerBackend.processBaSysSet(path, serValue.toString(), responseWriter);
-			responseWriter.flush();
+			providerBackend.processBaSysSet(path, serValue.toString(), resp.getOutputStream());
 		} catch(ProviderException e) {
 			int httpCode = ExceptionToHTTPCodeMapper.mapFromException(e);
 			resp.setStatus(httpCode);
-			responseWriter.flush();
 			logger.debug("Exception in HTTP-PUT. Response-code: " + httpCode, e);
 		}
 	}
@@ -147,8 +153,6 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 	 */
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		PrintWriter responseWriter = resp.getWriter();
-
 		try {
 			String path = extractPath(req);
 			String serValue = extractSerializedValue(req);
@@ -161,21 +165,18 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 			resp.setCharacterEncoding("UTF-8");
 
 			// Check if request is for property creation or operation invoke
-			if (VABPathTools.isOperationPath(path)) {
+			if (VABPathTools.isOperationInvokationPath(path)) {
 			// Invoke BaSys VAB 'invoke' primitive
 
-				providerBackend.processBaSysInvoke(path, serValue, responseWriter);
-				responseWriter.flush();
+				providerBackend.processBaSysInvoke(path, serValue, resp.getOutputStream());
 
 			} else {
 			// Invoke the BaSys 'create' primitive
-				providerBackend.processBaSysCreate(path, serValue, responseWriter);
-				responseWriter.flush();
+				providerBackend.processBaSysCreate(path, serValue, resp.getOutputStream());
 			}
 		} catch (ProviderException e) {
 			int httpCode = ExceptionToHTTPCodeMapper.mapFromException(e);
 			resp.setStatus(httpCode);
-			responseWriter.flush();
 			logger.debug("Exception in HTTP-POST. Response-code: " + httpCode, e);
 		}
 	}
@@ -187,7 +188,6 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 	 */
 	@Override
 	protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		PrintWriter responseWriter = resp.getWriter();
 		try {
 			String path = extractPath(req);
 			String serValue = extractSerializedValue(req);
@@ -195,12 +195,10 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 
 			resp.setStatus(200);
 
-			providerBackend.processBaSysDelete(path, serValue, responseWriter);
-			responseWriter.flush();
+			providerBackend.processBaSysDelete(path, serValue, resp.getOutputStream());
 		} catch(ProviderException e) {
 			int httpCode = ExceptionToHTTPCodeMapper.mapFromException(e);
 			resp.setStatus(httpCode);
-			responseWriter.flush();
 			logger.debug("Exception in HTTP-PATCH. Response-code: " + httpCode, e);
 		}
 	}
@@ -211,8 +209,6 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 	 */
 	@Override
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		PrintWriter responseWriter = resp.getWriter();
-
 		try {
 			String path = extractPath(req);
 
@@ -222,12 +218,10 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 			resp.setStatus(200);
 
 
-			providerBackend.processBaSysDelete(path, nullParam, responseWriter);
-			responseWriter.flush();
+			providerBackend.processBaSysDelete(path, nullParam, resp.getOutputStream());
 		} catch(ProviderException e) {
 			int httpCode = ExceptionToHTTPCodeMapper.mapFromException(e);
 			resp.setStatus(httpCode);
-			responseWriter.flush();
 			logger.debug("Exception in HTTP-DELETE. Response-code: " + httpCode, e);
 		}
 	}
@@ -305,14 +299,14 @@ public class VABHTTPInterface<ModelProvider extends IModelProvider> extends Basy
 	 * @throws IOException
 	 */
 	private String extractSerializedValue(HttpServletRequest req) throws IOException {
-		// Read request body
-		ServletInputStream is = req.getInputStream();		
-		StringBuilder serValue = new StringBuilder();
-
-		// This seems kind of slow...
-		while (!is.isFinished()) {
-			serValue.append(String.valueOf((char) (byte) is.read()));
-		}
-		return serValue.toString();
+		// https://www.baeldung.com/convert-input-stream-to-string#guava
+		ByteSource byteSource = new ByteSource() {
+	        @Override
+	        public InputStream openStream() throws IOException {
+	            return req.getInputStream();
+	        }
+	    };
+	 
+	    return byteSource.asCharSource(Charsets.UTF_8).read();
 	}
 }

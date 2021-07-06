@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.vab.gateway;
 
 import static org.junit.Assert.assertEquals;
@@ -7,18 +16,18 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.basyx.vab.directory.memory.InMemoryDirectory;
 import org.eclipse.basyx.vab.gateway.ConnectorProviderMapper;
 import org.eclipse.basyx.vab.gateway.DelegatingModelProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
-import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorProvider;
+import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorFactory;
 import org.eclipse.basyx.vab.protocol.basyx.server.BaSyxTCPServer;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
-import org.eclipse.basyx.vab.protocol.http.server.AASHTTPServer;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
+import org.eclipse.basyx.vab.protocol.http.server.BaSyxHTTPServer;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
+import org.eclipse.basyx.vab.registry.memory.VABInMemoryRegistry;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +42,7 @@ import org.junit.Test;
 public class TestGateway {
 	private BaSyxTCPServer<VABMapProvider> server;
 	private BaSyxTCPServer<DelegatingModelProvider> basyxGateway;
-	private AASHTTPServer httpGateway;
+	private BaSyxHTTPServer httpGateway;
 
 	@Before
 	public void build() { // Create VAB element
@@ -46,8 +55,8 @@ public class TestGateway {
 		// Create ConnectorProviderMapper and add mapping from "basyx" to
 		// BaSyxConnectorProvider for gateway
 		ConnectorProviderMapper gatewayMapper = new ConnectorProviderMapper();
-		gatewayMapper.addConnectorProvider("basyx", new BaSyxConnectorProvider());
-		gatewayMapper.addConnectorProvider("http", new HTTPConnectorProvider());
+		gatewayMapper.addConnectorProvider("basyx", new BaSyxConnectorFactory());
+		gatewayMapper.addConnectorProvider("http", new HTTPConnectorFactory());
 
 		// Create tcp gateway using DelegatingModelProvider
 		basyxGateway = new BaSyxTCPServer<>(new DelegatingModelProvider(gatewayMapper), 6999);
@@ -56,7 +65,7 @@ public class TestGateway {
 		DelegatingModelProvider httpGWProvider = new DelegatingModelProvider(gatewayMapper);
 		BaSyxContext context = new BaSyxContext("", "", "localhost", 5123);
 		context.addServletMapping("/path/to/gateway/*", new VABHTTPInterface<DelegatingModelProvider>(httpGWProvider));
-		httpGateway = new AASHTTPServer(context);
+		httpGateway = new BaSyxHTTPServer(context);
 
 		// Start element provider and gateway
 		server.start();
@@ -89,12 +98,12 @@ public class TestGateway {
 	public void test() throws UnknownHostException, IOException {
 		// Create Directory, here it is configured statically, of course a dynamic
 		// request to e.g. a servlet is also possible
-		InMemoryDirectory directory = new InMemoryDirectory();
+		VABInMemoryRegistry directory = new VABInMemoryRegistry();
 		directory.addMapping("Elem", "http://localhost:5123/path/to/gateway//basyx://127.0.0.1:6999//basyx://127.0.0.1:6998");
 
 		// Create ConnectionProviderMapper for client
 		ConnectorProviderMapper clientMapper = new ConnectorProviderMapper();
-		clientMapper.addConnectorProvider("http", new HTTPConnectorProvider());
+		clientMapper.addConnectorProvider("http", new HTTPConnectorFactory());
 
 		// Create VABConnectionManager
 		VABConnectionManager manager = new VABConnectionManager(directory, clientMapper);
@@ -103,7 +112,7 @@ public class TestGateway {
 		VABElementProxy proxy = manager.connectToVABElement("Elem");
 
 		// Test if the value is retrieved correctly
-		assertEquals(10, proxy.getModelPropertyValue("propertyA"));
+		assertEquals(10, proxy.getValue("propertyA"));
 	}
 
 	@After

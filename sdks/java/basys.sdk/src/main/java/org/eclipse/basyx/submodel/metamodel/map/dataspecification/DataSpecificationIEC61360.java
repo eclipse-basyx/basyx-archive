@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.map.dataspecification;
 
 import java.util.Map;
@@ -23,8 +32,6 @@ public class DataSpecificationIEC61360 extends EmbeddedDataSpecification {
 	 * Creates an empty DataSpecificationIEC61360
 	 */
 	public DataSpecificationIEC61360() {
-		// Add model type
-		put(CONTENT, null);
 		put(DATASPECIFICATION, TEMPLATE_REFERENCE);
 	}
 

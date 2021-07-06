@@ -1,5 +1,5 @@
-#ifndef BASYX_C_SDK_VALUELIST_H
-#define BASYX_C_SDK_VALUELIST_H
+#ifndef BASYX_SUBMODEL_MAP_V2_DATASPECIFICATION_VALUELIST_H
+#define BASYX_SUBMODEL_MAP_V2_DATASPECIFICATION_VALUELIST_H
 
 #include <BaSyx/submodel/api_v2/dataspecification/IValueList.h>
 #include <BaSyx/vab/ElementMap.h>
@@ -13,6 +13,12 @@ class ValueList
   , public vab::ElementMap
 {
 public:
+  struct Path {
+    static constexpr char Value[] = "value";
+    static constexpr char ValueId[] = "valueId";
+  };
+
+public:
   ValueList();
   explicit ValueList(const std::vector<simple::ValueReferencePair> & list);
 
@@ -24,4 +30,4 @@ public:
 }
 }
 
-#endif //BASYX_C_SDK_VALUELIST_H
+#endif /* BASYX_SUBMODEL_MAP_V2_DATASPECIFICATION_VALUELIST_H */

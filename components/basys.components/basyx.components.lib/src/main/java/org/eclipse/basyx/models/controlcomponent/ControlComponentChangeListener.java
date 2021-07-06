@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.models.controlcomponent;
 
 
@@ -27,14 +36,6 @@ public interface ControlComponentChangeListener {
 	 * Indicate new occupation state
 	 */
 	public void onNewOccupationState(OccupationState state);
-
-	
-	/**
-	 * Indicate a change of last occupier. This is probably not relevant for many sub classes, therefore this class
-	 * provides a default implementation. 
-	 */
-	default void onLastOccupier(String lastOccupierId) { /* Do nothing */ }
-
 		
 	/**
 	 * Indicate an execution mode change
@@ -64,12 +65,5 @@ public interface ControlComponentChangeListener {
 	 * Indicate an error state change
 	 */
 	public void onChangedErrorState(String newWorkState);
-
-	
-	/**
-	 * Indicate an previous error state change. This is probably not relevant for many sub classes, therefore this class
-	 * provides a default implementation. 
-	 */
-	default void onChangedPrevError(String newWorkState) { /* Do nothing */ }
 }
 

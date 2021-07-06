@@ -5,8 +5,8 @@
  *      Author: psota
  */
 
-#ifndef BASYX_object_PLACEHOLDER_H
-#define BASYX_object_PLACEHOLDER_H
+#ifndef BASYX_SHARED_OBJECT_OBJ_PLACEHOLDER_H
+#define BASYX_SHARED_OBJECT_OBJ_PLACEHOLDER_H
 
 #include <BaSyx/shared/object/object_type.h>
 
@@ -43,4 +43,4 @@ namespace detail {
 }
 };
 
-#endif /* BASYX_object_PLACEHOLDER_H */
+#endif /* BASYX_SHARED_OBJECT_OBJ_PLACEHOLDER_H */

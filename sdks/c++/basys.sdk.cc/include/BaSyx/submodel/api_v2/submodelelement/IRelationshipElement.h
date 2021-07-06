@@ -1,5 +1,5 @@
-#ifndef BASYX_API_V2_SDK_IRELATIONSHIPELEMENT_H
-#define BASYX_API_V2_SDK_IRELATIONSHIPELEMENT_H
+#ifndef BASYX_SUBMODEL_API_V2_SUBMODELELEMENT_IRELATIONSHIPELEMENT_H
+#define BASYX_SUBMODEL_API_V2_SUBMODELELEMENT_IRELATIONSHIPELEMENT_H
 
 #include <BaSyx/submodel/api_v2/submodelelement/ISubmodelElement.h>
 
@@ -18,6 +18,8 @@ public:
 
   virtual IReferable & getFirst() const = 0;
   virtual IReferable & getSecond() const = 0;
+
+  virtual KeyElements getKeyElementType() const override { return KeyElements::RelationshipElement; };
 };
 
 inline IRelationshipElement::~IRelationshipElement() = default;
@@ -25,4 +27,4 @@ inline IRelationshipElement::~IRelationshipElement() = default;
 }
 }
 }
-#endif //BASYX_API_V2_SDK_IRELATIONSHIPELEMENT_H
+#endif /* BASYX_SUBMODEL_API_V2_SUBMODELELEMENT_IRELATIONSHIPELEMENT_H */

@@ -1,5 +1,5 @@
-#ifndef BASYX_SUBMODEL_ENUM_KeyType_H
-#define BASYX_SUBMODEL_ENUM_KeyType_H
+#ifndef BASYX_SUBMODEL_ENUMERATIONS_KEYTYPE_H
+#define BASYX_SUBMODEL_ENUMERATIONS_KEYTYPE_H
 
 #include <string>
 
@@ -26,4 +26,4 @@ public:
 }
 }
 
-#endif
+#endif /* BASYX_SUBMODEL_ENUMERATIONS_KEYTYPE_H */

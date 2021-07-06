@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.vab.protocol.http.connector;
 
 import javax.ws.rs.client.Client;
@@ -7,13 +16,17 @@ import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.protocol.api.IBaSyxConnector;
+import org.eclipse.basyx.vab.protocol.http.server.ExceptionToHTTPCodeMapper;
 import org.glassfish.jersey.client.HttpUrlConnectorProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.netty.handler.codec.http.HttpMethod;
 
 /**
  * HTTP connector class
@@ -27,7 +40,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	
 	private String address;
 	private String mediaType;
-	private Client client;
+	protected Client client;
 
 	/**
 	 * Invoke a BaSys get operation via HTTP GET
@@ -39,12 +52,12 @@ public class HTTPConnector implements IBaSyxConnector {
 	 * @return the requested object
 	 */
 	@Override
-	public String getModelPropertyValue(String servicePath) {
+	public String getValue(String servicePath) {
 		return httpGet(servicePath);
 	}
 
 	public HTTPConnector(String address) {
-		this(address, MediaType.APPLICATION_JSON);
+		this(address, MediaType.APPLICATION_JSON + ";charset=UTF-8");
 	}
 
 	public HTTPConnector(String address, String mediaType) {
@@ -69,7 +82,7 @@ public class HTTPConnector implements IBaSyxConnector {
 	 *            should be an IElement of type Property, Operation or Event
 	 */
 	@Override
-	public String setModelPropertyValue(String servicePath, String newValue) throws ProviderException {
+	public String setValue(String servicePath, String newValue) throws ProviderException {
 
 		return httpPut(servicePath, newValue);
 	}
@@ -125,7 +138,6 @@ public class HTTPConnector implements IBaSyxConnector {
 		// Build request, set JSON encoding
 		Builder request = resource.request();
 		request.accept(mediaType);
-
 		// Return JSON request
 		return request;
 	}
@@ -159,7 +171,14 @@ public class HTTPConnector implements IBaSyxConnector {
 		Builder request = retrieveBuilder(servicePath);
 
 		// Perform request
-		Response rsp = request.get();
+		Response rsp = null;
+		try {
+			rsp = request.get();
+		} finally {
+			if (!isRequestSuccess(rsp)) {
+				throw this.handleProcessingException(HttpMethod.GET, getStatusCode(rsp));	
+			}
+		}
 
 		// Return response message (header)
 		return rsp.readEntity(String.class);
@@ -171,7 +190,14 @@ public class HTTPConnector implements IBaSyxConnector {
 		Builder request = retrieveBuilder(servicePath);
 
 		// Perform request
-		Response rsp = request.put(Entity.entity(newValue, mediaType));
+		Response rsp = null;
+		try {
+			rsp = request.put(Entity.entity(newValue, mediaType));
+		} finally {
+			if (!isRequestSuccess(rsp)) {
+				throw this.handleProcessingException(HttpMethod.PUT, getStatusCode(rsp));	
+			}
+		}
 
 		// Return response message (header)
 		return rsp.readEntity(String.class);
@@ -181,11 +207,15 @@ public class HTTPConnector implements IBaSyxConnector {
 	private String httpPatch(String servicePath, String newValue) throws ProviderException {
 		logger.trace("[HTTP Patch] {} {}", VABPathTools.concatenatePaths(address, servicePath), newValue);
 
-		// Invoke service call via web services
-		Client client = ClientBuilder.newClient();
-
 		// Create and invoke HTTP PATCH request
-		Response rsp = client.target(VABPathTools.concatenatePaths(address, servicePath)).request().build("PATCH", Entity.text(newValue)).property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true).invoke();
+		Response rsp = null;
+		try {
+			rsp = this.client.target(VABPathTools.concatenatePaths(address, servicePath)).request().build("PATCH", Entity.text(newValue)).property(HttpUrlConnectorProvider.SET_METHOD_WORKAROUND, true).invoke();
+		} finally {
+			if (!isRequestSuccess(rsp)) {
+				throw this.handleProcessingException(HttpMethod.PATCH, getStatusCode(rsp));	
+			}
+		}
 
 		// Return response message (header)
 		return rsp.readEntity(String.class);
@@ -197,7 +227,14 @@ public class HTTPConnector implements IBaSyxConnector {
 		Builder request = retrieveBuilder(servicePath);
 
 		// Perform request
-		Response rsp = request.post(Entity.entity(parameter, mediaType));
+		Response rsp = null;
+		try {
+			rsp = request.post(Entity.entity(parameter, mediaType));
+		} finally {
+			if (!isRequestSuccess(rsp)) {
+				throw this.handleProcessingException(HttpMethod.POST, getStatusCode(rsp));	
+			}
+		}
 
 		// Return response message (header)
 		return rsp.readEntity(String.class);
@@ -209,7 +246,14 @@ public class HTTPConnector implements IBaSyxConnector {
 		Builder request = retrieveBuilder(servicePath);
 
 		// Perform request
-		Response rsp = request.delete();
+		Response rsp = null;
+		try {
+			rsp = request.delete();
+		} finally {
+			if (!isRequestSuccess(rsp)) {
+				throw this.handleProcessingException(HttpMethod.DELETE, getStatusCode(rsp));	
+			}
+		}
 
 		// Return response message (header)
 		return rsp.readEntity(String.class);
@@ -231,4 +275,35 @@ public class HTTPConnector implements IBaSyxConnector {
 		return buildRequest(client, VABPathTools.concatenatePaths(address, servicePath));
 	}
 
+	private ProviderException handleProcessingException(HttpMethod method, int statusCode) {
+		return ExceptionToHTTPCodeMapper.mapToException(statusCode, "[HTTP " + method.name() + "] Failed to request " + this.address + " with mediatype " + this.mediaType);
+	}
+	
+	/**
+	 * Get status code from HTTP Response
+	 * @param rsp
+	 * @return
+	 */
+	private int getStatusCode(Response rsp) {
+		return rsp != null ? rsp.getStatus() : 0;
+	}
+	
+	/**
+	 * Returns true if the response is succeeded
+	 * @param rsp
+	 * @return
+	 */
+	private boolean isRequestSuccess(Response rsp) {
+		return rsp != null && rsp.getStatusInfo().getFamily() == Status.Family.SUCCESSFUL;
+	}
+
+	/**
+	 * Get string representation of endpoint for given path for debugging. 
+	 * @param path Requested path
+	 * @return String representing requested endpoint
+	 */
+	@Override
+	public String getEndpointRepresentation(String path) {
+		return VABPathTools.concatenatePaths(address, path);
+	}
 }

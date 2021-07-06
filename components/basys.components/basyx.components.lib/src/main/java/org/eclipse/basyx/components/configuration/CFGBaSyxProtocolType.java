@@ -1,8 +1,17 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.components.configuration;
 
-import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
-import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorProvider;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorFactory;
+import org.eclipse.basyx.vab.protocol.basyx.connector.BaSyxConnectorFactory;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 
 
 
@@ -44,10 +53,10 @@ public enum CFGBaSyxProtocolType {
 	/**
 	 * Create protocol instance
 	 */
-	public IConnectorProvider createInstance() {
+	public IConnectorFactory createInstance() {
 		// Create protocol instance
-		if (this.equals(HTTP))  return new HTTPConnectorProvider();
-		if (this.equals(BASYX)) return new BaSyxConnectorProvider();
+		if (this.equals(HTTP))  return new HTTPConnectorFactory();
+		if (this.equals(BASYX)) return new BaSyxConnectorFactory();
 		
 		// Unknown protocol
 		return null;

@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.map.reference;
 
 import java.util.ArrayList;
@@ -6,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IIdentifiable;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
@@ -87,10 +97,66 @@ public class Reference extends VABModelMap<Object> implements IReference {
 		if (map == null) {
 			return null;
 		}
-
+		
+		if (!isValid(map)) {
+			throw new MetamodelConstructionException(Reference.class, map);
+		}
+		
 		Reference ret = new Reference();
 		ret.setMap(map);
 		return ret;
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	@SuppressWarnings("unchecked")
+	public static boolean isValid(Map<String, Object> map) {
+		if (map != null && map.containsKey(Reference.KEY)) {
+			Collection<Map<String, Object>> keysCollection = (Collection<Map<String, Object>>)map.get(Reference.KEY);
+			for (Map<String, Object> key : keysCollection) {
+				if (!Key.isValid(key)) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Creates a Reference object from a map
+	 * without checking mandatory attributes present
+	 * 
+	 * @param obj
+	 *            a Reference object as raw map
+	 * @return a Reference object, that behaves like a facade for the given map
+	 */
+	public static Reference createAsFacadeNonStrict(Map<String, Object> map) {
+		if (map == null) {
+			return null;
+		}
+		
+		Reference ret = new Reference();
+		ret.setMap(map);
+		return ret;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static boolean isReference(Object value) {
+		if(!(value instanceof Map<?, ?>)) {
+			return false;
+		}
+		
+		Map<String, Object> map = (Map<String, Object>) value;
+		
+		if(!(map.get(KEY) instanceof Collection<?>)) {
+			return false;
+		}
+		
+		return ((Collection<Key>) map.get(KEY)).stream().allMatch(Key::isKey);
 	}
 
 	@SuppressWarnings("unchecked")

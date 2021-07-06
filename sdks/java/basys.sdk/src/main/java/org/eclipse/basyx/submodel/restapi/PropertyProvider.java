@@ -1,10 +1,18 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.restapi;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetypedef.PropertyValueTypeDefHelper;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueTypeHelper;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
@@ -16,7 +24,7 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
  * @author schnicke
  *
  */
-public class PropertyProvider extends MetaModelProvider {
+public class PropertyProvider implements IModelProvider {
 
 	private IModelProvider proxy;
 
@@ -26,64 +34,54 @@ public class PropertyProvider extends MetaModelProvider {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object getModelPropertyValue(String path) throws ProviderException {
+	public Object getValue(String path) throws ProviderException {
 		path = VABPathTools.stripSlashes(path);
 
 		// Handle "/value" path
 		if (path.equals(Property.VALUE)) {
-			// Build map containing value & valueType
-			Map<String, Object> p = (Map<String, Object>) proxy.getModelPropertyValue("");
-			Map<String, Object> ret = new HashMap<>();
-			Object o = p.get(Property.VALUE);
+			// return value
+			Map<String, Object> p = (Map<String, Object>) proxy.getValue("");
+			return p.get(Property.VALUE);
 
-			// Wrap return value in map describing it
-			ret.put(Property.VALUE, o);
-			ret.put(Property.VALUEID, p.get(Property.VALUEID));
-			if (p.containsKey(Property.VALUETYPE)) {
-				ret.put(Property.VALUETYPE, p.get(Property.VALUETYPE));
-			} else {
-				ret.put(Property.VALUETYPE, PropertyValueTypeDefHelper.getTypeWrapperFromObject(o));
-			}
-			return ret;
 		} else if (path.isEmpty()) {
 			// Handle "" path by returning complete property
-			return proxy.getModelPropertyValue("");
+			return proxy.getValue("");
 		} else {
-			throw getUnknownPathException(path);
+			throw new MalformedRequestException("Unknown path: " + path);
 		}
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
+	public void setValue(String path, Object newValue) throws ProviderException {
 		path = VABPathTools.stripSlashes(path);
 		// Only handle "/value" paths
 		if (path.equals(Property.VALUE)) {
 			// Set value and type
-			proxy.setModelPropertyValue(Property.VALUE, newValue);
-			proxy.setModelPropertyValue(Property.VALUETYPE, PropertyValueTypeDefHelper.getTypeWrapperFromObject(newValue));
+			proxy.setValue(Property.VALUE, newValue);
+			proxy.setValue(Property.VALUETYPE, ValueTypeHelper.getType(newValue).toString());
 		} else {
-			throw new MalformedRequestException("Invalid access path");
+			throw new MalformedRequestException("Given Set path '" + path + "' does not end in /value");
 		}
 	}
 
 	@Override
 	public void createValue(String path, Object newEntity) throws ProviderException {
-		throw new MalformedRequestException("Invalid access path");
+		throw new MalformedRequestException("Create not allowed at path '" + path + "'");
 	}
 
 	@Override
 	public void deleteValue(String path) throws ProviderException {
-		throw new MalformedRequestException("Invalid access path");
+		throw new MalformedRequestException("Delete not allowed at path '" + path + "'");
 	}
 
 	@Override
 	public void deleteValue(String path, Object obj) throws ProviderException {
-		throw new MalformedRequestException("Invalid access path");
+		throw new MalformedRequestException("Delete not allowed at path '" + path + "'");
 	}
 
 	@Override
 	public Object invokeOperation(String path, Object... parameter) throws ProviderException {
-		throw new MalformedRequestException("Invalid access path");
+		throw new MalformedRequestException("Invoke not allowed at path '" + path + "'");
 	}
 
 }

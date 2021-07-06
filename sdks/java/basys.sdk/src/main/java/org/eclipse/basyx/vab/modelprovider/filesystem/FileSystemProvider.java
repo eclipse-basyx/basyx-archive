@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.vab.modelprovider.filesystem;
 
 import java.io.IOException;
@@ -324,7 +333,7 @@ public class FileSystemProvider implements IModelProvider {
 	}
 
 	@Override
-	public synchronized Object getModelPropertyValue(String path) throws ProviderException {
+	public synchronized Object getValue(String path) throws ProviderException {
 		path = unifyPath(path);
 		String directory = VABPathTools.getParentPath(path);
 		String fileName = VABPathTools.getLastElement(path);
@@ -375,7 +384,7 @@ public class FileSystemProvider implements IModelProvider {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public synchronized void setModelPropertyValue(String path, Object newValue) throws ProviderException {
+	public synchronized void setValue(String path, Object newValue) throws ProviderException {
 		path = unifyPath(path);
 		String fileName = VABPathTools.getLastElement(path);
 		String fullPath = rootDir + "/" + path;

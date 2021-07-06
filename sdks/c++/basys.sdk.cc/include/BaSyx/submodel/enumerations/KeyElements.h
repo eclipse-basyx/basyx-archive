@@ -1,5 +1,5 @@
-#ifndef BASYX_SUBMODEL_ENUM_KeyElements_H
-#define BASYX_SUBMODEL_ENUM_KeyElements_H
+#ifndef BASYX_SUBMODEL_ENUMERATIONS_KEYELEMENTS_H
+#define BASYX_SUBMODEL_ENUMERATIONS_KEYELEMENTS_H
 
 #include <string>
 
@@ -21,6 +21,7 @@ enum class KeyElements {
     File,
     MultiLanguageProperty,
     Operation,
+    OperationVariable,
     Property,
     Range,
     ReferenceElement,
@@ -46,4 +47,4 @@ public:
 }
 }
 
-#endif
+#endif /* BASYX_SUBMODEL_ENUMERATIONS_KEYELEMENTS_H */

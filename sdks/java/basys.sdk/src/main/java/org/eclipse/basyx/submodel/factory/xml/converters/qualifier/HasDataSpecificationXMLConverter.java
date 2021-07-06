@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.factory.xml.converters.qualifier;
 
 import java.util.ArrayList;
@@ -41,23 +50,25 @@ public class HasDataSpecificationXMLConverter {
 	 * @param hasDataSpecificationMap the IHasDataSpecification object to be populated -treated as Map here-
 	 */
 	public static void populateHasDataSpecification(Map<String, Object> xmlObject,
-			Map<String, Object> hasDataSpecificationMap) {
-		HasDataSpecification hasDataSpecification = HasDataSpecification.createAsFacade(hasDataSpecificationMap);
+			HasDataSpecification hasDataSpecification) {
 		if (xmlObject == null || hasDataSpecification == null) return;
 		
 		Object xmlDataSpecObj = xmlObject.get(EMBEDDED_DATA_SPECIFICATION);
-		List<IEmbeddedDataSpecification> embeddedSpecList = new ArrayList<>();
-		List<Map<String, Object>> xmlSpecList = XMLHelper.getList(xmlDataSpecObj);
-		for (Map<String, Object> xmlSpec : xmlSpecList) {
-			IReference ref = parseReference(xmlSpec);
-			IDataSpecificationContent content = parseContent(xmlSpec);
-			EmbeddedDataSpecification spec = new EmbeddedDataSpecification();
-			spec.setDataSpecificationTemplate(ref);
-			// TODO: Also support other templates
-			spec.setContent((DataSpecificationIEC61360Content) content);
-			embeddedSpecList.add(spec);
+		if (xmlDataSpecObj != null ) {
+			List<IEmbeddedDataSpecification> embeddedSpecList = new ArrayList<>();
+			List<Map<String, Object>> xmlSpecList = XMLHelper.getList(xmlDataSpecObj);
+			for (Map<String, Object> xmlSpec : xmlSpecList) {
+				IReference ref = parseReference(xmlSpec);
+				IDataSpecificationContent content = parseContent(xmlSpec);
+				EmbeddedDataSpecification spec = new EmbeddedDataSpecification();
+				spec.setDataSpecificationTemplate(ref);
+				// TODO: Also support other templates
+				spec.setContent((DataSpecificationIEC61360Content) content);
+				embeddedSpecList.add(spec);
+			}
+			hasDataSpecification.setEmbeddedDataSpecifications(embeddedSpecList);	
 		}
-		hasDataSpecification.setEmbeddedDataSpecifications(embeddedSpecList);
+		
 
 		// Note: DataSpecificationReferences are not serialized in XML
 		// "http://admin-shell.io/DataSpecificationTemplates/DataSpecificationIEC61360/2/0" could always be added here,
@@ -135,6 +146,7 @@ public class HasDataSpecificationXMLConverter {
 			root.appendChild(embeddedDataSpecRoot);
 		}
 	}
+		
 
 	/**
 	 * Populates a DataSpecificationContent XML from the IDataSpecificationContent object

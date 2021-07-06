@@ -1,7 +1,17 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.map.qualifier;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
@@ -27,11 +37,18 @@ public class Identifiable extends Referable implements IIdentifiable {
 	public Identifiable() {
 		// Add qualifier
 		putAll(new Referable());
-
-		// Administrative information of an element. (AdministrativeInformation)
-		put(ADMINISTRATION, new AdministrativeInformation());
 		// The globally unique identification of an element. (Identificator)
 		put(IDENTIFICATION, new Identifier());
+	}
+	
+	/**
+	 * Constructor with mandatory attribute
+	 * @param idShort
+	 * @param identification
+	 */
+	public Identifiable(String idShort, IIdentifier identification) {
+		super(idShort);
+		setIdentification(identification.getIdType(), identification.getId());
 	}
 
 	/**
@@ -58,7 +75,41 @@ public class Identifiable extends Referable implements IIdentifiable {
 		if (map == null) {
 			return null;
 		}
-
+		
+		if (!isValid(map)) {
+			throw new MetamodelConstructionException(Identifiable.class, map);
+		}
+		
+		Identifiable ret = new Identifiable();
+		ret.setMap(map);
+		ret.setElementType(type);
+		return ret;
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	@SuppressWarnings("unchecked")
+	public static boolean isValid(Map<String, Object> map) {
+		return Referable.isValid(map) &&
+				map.containsKey(Identifiable.IDENTIFICATION) &&
+				Identifier.isValid((Map<String, Object>)map.get(Identifiable.IDENTIFICATION));
+	}
+	
+	/**
+	 * Creates an Identifiable object from a map
+	 * Without checking mandatory attributes present
+	 * @param map
+	 * @param type
+	 * @return
+	 */
+	public static Identifiable createAsFacadeNonStrict(Map<String, Object> map, KeyElements type) {
+		if (map == null) {
+			return null;
+		}
+		
 		Identifiable ret = new Identifiable();
 		ret.setMap(map);
 		ret.setElementType(type);

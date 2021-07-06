@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.factory.xml.converters.submodelelement;
 
 import java.util.ArrayList;
@@ -20,7 +29,9 @@ import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.dataele
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.entity.EntityXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.event.BasicEventXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.operation.OperationXMLConverter;
+import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.relationship.AnnotatedRelationshipElementXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.relationship.RelationshipElementXMLConverter;
+import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IBlob;
@@ -32,25 +43,32 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IRef
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.entity.IEntity;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.event.IBasicEvent;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.relationship.IAnnotatedRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.relationship.IRelationshipElement;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasDataSpecification;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Range;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.ReferenceElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.Range;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.entity.Entity;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.event.BasicEvent;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.AnnotatedRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
  * Parses &lt;aas:submodelElements&gt; and builds the SubmodelElement objects from it <br>
- * Builds &lt;aas:submodelElements&gt; form a given Collection of SubmodelElement
+ * Builds &lt;aas:submodelElements&gt; from a given Collection of SubmodelElement
  * 
  * @author conradi
  *
@@ -59,8 +77,10 @@ public class SubmodelElementXMLConverter {
 	
 	public static final String SUBMODEL_ELEMENTS = "aas:submodelElements";
 	public static final String SUBMODEL_ELEMENT = "aas:submodelElement";
+	public static final String DATA_ELEMENT = "aas:dataElement";
 	public static final String VALUE = "aas:value";
 	public static final String VALUE_TYPE = "aas:valueType";
+	public static final String VALUE_ID = "aas:valueId";
 	public static final String MIME_TYPE = "aas:mimeType";
 
 	
@@ -68,7 +88,7 @@ public class SubmodelElementXMLConverter {
 	 * Parses a given Map containing the XML tag &lt;aas:submodelElements&gt;
 	 * 
 	 * @param xmlSubmodelElements a Map of the XML tag &lt;aas:submodelElements&gt;
-	 * @return a List with the ISubmodelElement Objects parsed form the XML  
+	 * @return a List with the ISubmodelElement Objects parsed from the XML  
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<ISubmodelElement> parseSubmodelElements(Map<String, Object> xmlSubmodelElements) {
@@ -78,10 +98,10 @@ public class SubmodelElementXMLConverter {
 	
 
 	/**
-	 * Parses the individual &lt;aas:submodelElement&gt; tags form the Map
+	 * Parses the individual &lt;aas:submodelElement&gt; tags from the Map
 	 * 
 	 * @param xmlObject a Map of &lt;aas:submodelElement&gt; tags
-	 * @return a List with the ISubmodelElement Objects parsed form the XML 
+	 * @return a List with the ISubmodelElement Objects parsed from the XML 
 	 */
 	protected static List<ISubmodelElement> getSubmodelElements(Map<String, Object> xmlObject) {
 		List<ISubmodelElement> submodelElemList = new ArrayList<>();
@@ -100,14 +120,14 @@ public class SubmodelElementXMLConverter {
 	 * Parses the one SubmodelElement
 	 * 
 	 * @param xmlObject a Map of the SubmodelElement XML
-	 * @return a List with the ISubmodelElement Objects parsed form the XML 
+	 * @return a List with the ISubmodelElement Objects parsed from the XML 
 	 */
 	@SuppressWarnings("unchecked")
-	protected static SubmodelElement getSubmodelElement(Map<String, Object> xmlObject) {
+	public static SubmodelElement getSubmodelElement(Map<String, Object> xmlObject) {
 		
 		if (xmlObject.containsKey(PropertyXMLConverter.PROPERTY)) {
 			xmlObject = (Map<String, Object>) xmlObject.get(PropertyXMLConverter.PROPERTY);
-			return PropertyXMLConverter.parsePropery(xmlObject);
+			return PropertyXMLConverter.parseProperty(xmlObject);
 		}
 		else if (xmlObject.containsKey(BasicEventXMLConverter.BASIC_EVENT)) {
 			xmlObject = (Map<String, Object>) xmlObject.get(BasicEventXMLConverter.BASIC_EVENT);
@@ -149,6 +169,11 @@ public class SubmodelElementXMLConverter {
 					RelationshipElementXMLConverter.RELATIONSHIP_ELEMENT);
 			return RelationshipElementXMLConverter.parseRelationshipElement(xmlObject);
 		}
+		else if(xmlObject.containsKey(AnnotatedRelationshipElementXMLConverter.ANNOTATED_RELATIONSHIP_ELEMENT)) {
+			xmlObject = (Map<String, Object>) xmlObject.get(
+					AnnotatedRelationshipElementXMLConverter.ANNOTATED_RELATIONSHIP_ELEMENT);
+			return AnnotatedRelationshipElementXMLConverter.parseAnnotatedRelationshipElement(xmlObject);
+		}
 		else if(xmlObject.containsKey(OperationXMLConverter.OPERATION)) {
 			xmlObject = (Map<String, Object>) xmlObject.get(OperationXMLConverter.OPERATION);
 			return OperationXMLConverter.parseOperation(xmlObject);
@@ -166,11 +191,11 @@ public class SubmodelElementXMLConverter {
 	 */
 	@SuppressWarnings("unchecked")
 	protected static void populateSubmodelElement(Map<String, Object> xmlObject, ISubmodelElement submodelElement) {
-		ReferableXMLConverter.populateReferable(xmlObject, (Map<String, Object>) submodelElement);
-		QualifiableXMLConverter.populateQualifiable(xmlObject, (Map<String, Object>) submodelElement);
-		HasDataSpecificationXMLConverter.populateHasDataSpecification(xmlObject, (Map<String, Object>) submodelElement);
-		HasSemanticsXMLConverter.populateHasSemantics(xmlObject, (Map<String, Object>) submodelElement);
-		HasKindXMLConverter.populateHasKind(xmlObject, (Map<String, Object>) submodelElement);
+		ReferableXMLConverter.populateReferable(xmlObject, Referable.createAsFacadeNonStrict((Map<String, Object>) submodelElement, KeyElements.SUBMODELELEMENT));
+		QualifiableXMLConverter.populateQualifiable(xmlObject, Qualifiable.createAsFacade((Map<String, Object>) submodelElement));
+		HasDataSpecificationXMLConverter.populateHasDataSpecification(xmlObject, HasDataSpecification.createAsFacade((Map<String, Object>) submodelElement));
+		HasSemanticsXMLConverter.populateHasSemantics(xmlObject, HasSemantics.createAsFacade((Map<String, Object>) submodelElement));
+		HasKindXMLConverter.populateHasKind(xmlObject, HasKind.createAsFacade((Map<String, Object>) submodelElement));
 	}
 	
 
@@ -180,7 +205,7 @@ public class SubmodelElementXMLConverter {
 	 * Builds the SubmodelElemensts XML tag &lt;aas:submodelElements&gt;
 	 * 
 	 * @param document the XML document
-	 * @param submodelElements the SubmodelElements of the SubModel 
+	 * @param submodelElements the SubmodelElements of the Submodel 
 	 * @return XML Element with the root tag &lt;aas:submodelElements&gt;
 	 */
 	public static Element buildSubmodelElementsXML(Document document, Collection<ISubmodelElement> submodelElements) {
@@ -191,7 +216,7 @@ public class SubmodelElementXMLConverter {
 	
 	
 	/**
-	 * Builds the individual SubmodelElement XML tags form a List of SubmodelElements and <br>
+	 * Builds the individual SubmodelElement XML tags from a List of SubmodelElements and <br>
 	 * populates the given root Element with them
 	 * 
 	 * @param document the XML document
@@ -215,7 +240,7 @@ public class SubmodelElementXMLConverter {
 	 * @param submodelElement the SubmodelElement to build the XML for
 	 * @return the SubmodelElement XML tag
 	 */
-	protected static Element buildSubmodelElement(Document document, ISubmodelElement submodelElement) {
+	public static Element buildSubmodelElement(Document document, ISubmodelElement submodelElement) {
 		String type = submodelElement.getModelType();	
 		
 		switch (type) {
@@ -243,6 +268,9 @@ public class SubmodelElementXMLConverter {
 			case RelationshipElement.MODELTYPE:
 				return RelationshipElementXMLConverter.buildRelationshipElement(
 						document, (IRelationshipElement) submodelElement);
+			case AnnotatedRelationshipElement.MODELTYPE:
+				return AnnotatedRelationshipElementXMLConverter.buildAnnotatedRelationshipElement(
+						document, (IAnnotatedRelationshipElement) submodelElement);
 			case Operation.MODELTYPE:
 				return OperationXMLConverter.buildOperation(document, (IOperation) submodelElement);
 			default:

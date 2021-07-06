@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.aas.metamodel;
 
 import static org.junit.Assert.assertEquals;
@@ -5,12 +14,15 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
+import org.eclipse.basyx.aas.metamodel.api.parts.asset.AssetKind;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
-import org.eclipse.basyx.submodel.metamodel.api.ISubModel;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.CustomId;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
+import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
+import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IAdministrativeInformation;
@@ -19,12 +31,13 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.AdministrativeInformation;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
 import org.junit.Test;
 
 
@@ -71,11 +84,9 @@ public abstract class AssetAdministrationShellSuite {
 		 * setters, additional tests for setters are needed. Currently, this is tested
 		 * implicitly
 		 */
-		// Create an AAS containing a reference to the created SubModel
-		AssetAdministrationShell aas = new AssetAdministrationShell();
-		aas.setIdShort(AASIDSHORT);
-		aas.setIdentification(AASID);
-		aas.addSubModel(retrieveBaselineSM());
+		// Create an AAS containing a reference to the created Submodel
+		AssetAdministrationShell aas = new AssetAdministrationShell(AASIDSHORT, AASID, new Asset("assetIdShort", new CustomId("assetId"), AssetKind.INSTANCE));
+		aas.addSubmodel(retrieveBaselineSM());
 		aas.setAssetReference(EXPECTED_ASSETREF);
 		aas.setDerivedFrom(EXPECTED_DERIVEDFROMREF);
 		aas.setAdministration(EXPECTED_ADMINISTRATIVEINFORMATION);
@@ -89,21 +100,19 @@ public abstract class AssetAdministrationShellSuite {
 	 * 
 	 * @return
 	 */
-	protected static SubModel retrieveBaselineSM() {
+	protected static Submodel retrieveBaselineSM() {
 		/*
 		 * ! Caution: If the Submodel is constructed in any way that is not using the
 		 * setters, additional tests for setters are needed. Currently, this is tested
 		 * implicitly
 		 */
 
-		// Create a SubModel containing no operations and one property
+		// Create a Submodel containing no operations and one property
 		Property p = new Property(PROPVAL);
 		p.setIdShort(PROPID);
 
-		SubModel sm = new SubModel();
-		sm.addSubModelElement(p);
-		sm.setIdShort(SMIDSHORT);
-		sm.setIdentification(SMID.getIdType(), SMID.getId());
+		Submodel sm = new Submodel(SMIDSHORT, SMID);
+		sm.addSubmodelElement(p);
 
 		return sm;
 	}
@@ -125,7 +134,7 @@ public abstract class AssetAdministrationShellSuite {
 	}
 
 	/**
-	 * Tests retrieving the contained SubModels
+	 * Tests retrieving the contained Submodels
 	 * 
 	 * @throws Exception
 	 */
@@ -133,16 +142,16 @@ public abstract class AssetAdministrationShellSuite {
 	public void testGetSubmodel() throws Exception {
 		IAssetAdministrationShell shell = retrieveShell();
 
-		// Check if the number of SubModels is as expected
-		assertEquals(1, shell.getSubModels().size());
+		// Check if the number of Submodels is as expected
+		assertEquals(1, shell.getSubmodels().size());
 
-		// Check if the contained SubModel id is as expected
-		assertTrue(shell.getSubModels().containsKey(SMIDSHORT));
+		// Check if the contained Submodel id is as expected
+		assertTrue(shell.getSubmodels().containsKey(SMIDSHORT));
 
 		// Check if the submodel has been retrieved correctly
-		ISubModel sm = shell.getSubModels().get(SMIDSHORT);
+		ISubmodel sm = shell.getSubmodels().get(SMIDSHORT);
 		IProperty prop = sm.getProperties().get(PROPID);
-		assertEquals(PROPVAL, prop.get());
+		assertEquals(PROPVAL, prop.getValue());
 	}
 
 	/**
@@ -167,13 +176,14 @@ public abstract class AssetAdministrationShellSuite {
 		// Create a submodel
 		String smId = "newSubmodelId";
 		String testId = "smIdTest";
-		SubModel subModel = new SubModel(Collections.singletonList(new Property("testProperty")));
-		subModel.setIdentification(IdentifierType.CUSTOM, testId);
-		subModel.setIdShort(smId);
+		Submodel subModel = new Submodel(smId, new ModelUrn(testId));
+		Property prop = new Property("prop1", ValueType.String);
+		prop.setValue("testProperty");
+		subModel.addSubmodelElement(prop);
 		
 		//Retrieve the aas
 		IAssetAdministrationShell shell = retrieveShell();
-		shell.addSubModel(subModel);
+		shell.addSubmodel(subModel);
 		
 		// Create the expected reference for assertion
 		List<IKey> expected1Keys = new ArrayList<>();
@@ -184,7 +194,7 @@ public abstract class AssetAdministrationShellSuite {
 		List<IKey> expected2Keys = new ArrayList<>();
 		expected2Keys.add(new Key(KeyElements.ASSETADMINISTRATIONSHELL, true, AASID.getId(), AASID.getIdType()));
 
-		expected2Keys.add(new Key(KeyElements.SUBMODEL, true, testId, IdentifierType.CUSTOM));
+		expected2Keys.add(new Key(KeyElements.SUBMODEL, true, testId, IdentifierType.IRI));
 		Reference expected2 = new Reference(expected2Keys);
 
 		Collection<IReference> smReferences = shell.getSubmodelReferences();

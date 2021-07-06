@@ -201,11 +201,12 @@
 					<aas:key type="ConceptDescription" local="true" idType="IRI">www.festo.com/dic/08111234</aas:key>
 				</aas:keys>
 			</aas:assetIdentificationModelRef>
-			<aas:kind>Instance</aas:kind>
+			<aas:kind>Type</aas:kind>
 		</aas:asset>
 		<aas:asset>
 			<aas:idShort>emptyAsset</aas:idShort>
 			<aas:identification idType="IRI">http://pk.festo.com/q30j38dlajx</aas:identification>
+			<aas:kind>Instance</aas:kind>
 		</aas:asset>
 	</aas:assets>
 	<aas:submodels>
@@ -233,34 +234,54 @@
 				</aas:keys>
 			</aas:semanticId>
 			<aas:qualifier>
-				<aas:qualifiers>
-					<aas:formula>
-						<aas:dependsOnRefs>
-							<aas:reference>
-								<aas:keys>
-									<aas:key local="false" type="GlobalReference" idType="IRDI">qualifier_reference</aas:key>
-								</aas:keys>
-							</aas:reference>
-						</aas:dependsOnRefs>
-					</aas:formula>
-				</aas:qualifiers>
-				<aas:qualifiers>
-					<aas:qualifier>
-						<aas:valueId>
+				<aas:formula>
+					<aas:dependsOnRefs>
+						<aas:reference>
 							<aas:keys>
-								<aas:key idType="IRI" local="false" type="Submodel">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
+								<aas:key local="false" type="GlobalReference" idType="IRDI">qualifier_reference</aas:key>
 							</aas:keys>
-						</aas:valueId>
-						<aas:value>qualifierValue</aas:value>
-						<aas:type>qualifierType</aas:type>
-						<aas:valueType>valueType</aas:valueType>
-						<aas:semanticId>
+						</aas:reference>
+					</aas:dependsOnRefs>
+				</aas:formula>
+				<aas:formula>
+					<aas:dependsOnRefs>
+						<aas:reference>
 							<aas:keys>
-								<aas:key idType="IRI" local="false" type="GlobalReference">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
+								<aas:key local="false" type="GlobalReference" idType="IRDI">qualifier_reference2</aas:key>
 							</aas:keys>
-						</aas:semanticId>
-					</aas:qualifier>
-				</aas:qualifiers>
+						</aas:reference>
+					</aas:dependsOnRefs>
+				</aas:formula>
+				<aas:qualifier>
+					<aas:valueId>
+						<aas:keys>
+							<aas:key idType="IRI" local="false" type="Submodel">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
+						</aas:keys>
+					</aas:valueId>
+					<aas:value>qualifierValue</aas:value>
+					<aas:type>qualifierType</aas:type>
+					<aas:valueType>anyType</aas:valueType>
+					<aas:semanticId>
+						<aas:keys>
+							<aas:key idType="IRI" local="false" type="GlobalReference">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
+						</aas:keys>
+					</aas:semanticId>
+				</aas:qualifier>
+				<aas:qualifier>
+					<aas:valueId>
+						<aas:keys>
+							<aas:key idType="IRI" local="false" type="Submodel">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
+						</aas:keys>
+					</aas:valueId>
+					<aas:value>qualifierValue2</aas:value>
+					<aas:type>qualifierType</aas:type>
+					<aas:valueType>anyType</aas:valueType>
+					<aas:semanticId>
+						<aas:keys>
+							<aas:key idType="IRI" local="false" type="GlobalReference">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
+						</aas:keys>
+					</aas:semanticId>
+				</aas:qualifier>
 			</aas:qualifier>
 			<aas:embeddedDataSpecification>
 				<aas:dataSpecificationContent>
@@ -298,23 +319,21 @@
 							</aas:keys>
 						</aas:semanticId>
 						<aas:qualifier>
-							<aas:qualifiers>
-								<aas:qualifier>
-									<aas:valueId>
-										<aas:keys>
-											<aas:key idType="IRI" local="false" type="Submodel">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
-										</aas:keys>
-									</aas:valueId>
-									<aas:value>qualifierValue</aas:value>
-									<aas:type>qualifierType</aas:type>
-									<aas:valueType>valueType</aas:valueType>
-									<aas:semanticId>
-										<aas:keys>
-											<aas:key idType="IRI" local="false" type="GlobalReference">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
-										</aas:keys>
-									</aas:semanticId>
-								</aas:qualifier>
-							</aas:qualifiers>
+							<aas:qualifier>
+								<aas:valueId>
+									<aas:keys>
+										<aas:key idType="IRI" local="false" type="Submodel">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
+									</aas:keys>
+								</aas:valueId>
+								<aas:value>qualifierValue</aas:value>
+								<aas:type>qualifierType</aas:type>
+								<aas:valueType>anyType</aas:valueType>
+								<aas:semanticId>
+									<aas:keys>
+										<aas:key idType="IRI" local="false" type="GlobalReference">http://www.zvei.de/demo/submodelDefinitions/87654346</aas:key>
+									</aas:keys>
+								</aas:semanticId>
+							</aas:qualifier>
 						</aas:qualifier>
 						<aas:embeddedDataSpecification>
 							<aas:dataSpecificationContent>
@@ -341,6 +360,11 @@
 								</aas:keys>
 							</aas:dataSpecification>
 						</aas:embeddedDataSpecification>
+						<aas:valueId>
+							<aas:keys>
+								<aas:key local="false" type="GlobalReference" idType="IRDI">0173-1#05-AAA650#002</aas:key>
+							</aas:keys>
+						</aas:valueId>
 						<aas:value>2000</aas:value>
 						<aas:valueType>double</aas:valueType>
 					</aas:property>
@@ -383,7 +407,7 @@
 								<aas:range>
 									<aas:idShort>range_id</aas:idShort>
 									<aas:min>10</aas:min>
-									<aas:valueType>int</aas:valueType>
+									<aas:valueType>integer</aas:valueType>
 								</aas:range>
 							</aas:submodelElement>
 						</aas:statements>
@@ -408,7 +432,7 @@
 						<aas:idShort>range_id</aas:idShort>
 						<aas:max>10</aas:max>
 						<aas:min>1</aas:min>
-						<aas:valueType>int</aas:valueType>
+						<aas:valueType>integer</aas:valueType>
 					</aas:range>
 				</aas:submodelElement>
 				<aas:submodelElement>
@@ -474,6 +498,39 @@
 					</aas:relationshipElement>
 				</aas:submodelElement>
 				<aas:submodelElement>
+					<aas:annotatedRelationshipElement>
+						<aas:idShort>annotatedRelationshipElement_ID</aas:idShort>
+						<aas:first>
+							<aas:keys>
+								<aas:key local="false" type="GlobalReference" idType="IRDI">0173-1#05-AAA650#003</aas:key>
+							</aas:keys>
+						</aas:first>
+						<aas:second>
+							<aas:keys>
+								<aas:key local="false" type="GlobalReference" idType="IRDI">0173-1#05-AAA650#004</aas:key>
+							</aas:keys>
+						</aas:second>
+						<aas:annotations>
+							<aas:dataElement>
+								<aas:property>
+									<aas:idShort>prop1</aas:idShort>
+									<aas:kind>Instance</aas:kind>
+									<aas:value>1</aas:value>
+									<aas:valueType>integer</aas:valueType>
+								</aas:property>
+							</aas:dataElement>
+							<aas:dataElement>
+								<aas:property>
+									<aas:idShort>prop2</aas:idShort>
+									<aas:kind>Instance</aas:kind>
+									<aas:value>2</aas:value>
+									<aas:valueType>integer</aas:valueType>
+								</aas:property>
+							</aas:dataElement>
+						</aas:annotations>
+					</aas:annotatedRelationshipElement>
+				</aas:submodelElement>
+				<aas:submodelElement>
 					<aas:operation>
 						<aas:idShort>operation_ID</aas:idShort>
 						<aas:inoutputVariable>
@@ -486,6 +543,7 @@
 												<aas:key local="false" type="GlobalReference" idType="IRDI">0173-1#05-AAA650#003</aas:key>
 											</aas:keys>
 										</aas:value>
+										<aas:kind>Template</aas:kind>
 									</aas:referenceElement>
 								</aas:value>
 							</aas:operationVariable>
@@ -497,6 +555,7 @@
 										<aas:idShort>file_ID</aas:idShort>
 										<aas:mimeType>file_mimetype</aas:mimeType>
 										<aas:value>file_value</aas:value>
+										<aas:kind>Template</aas:kind>
 									</aas:file>
 								</aas:value>
 							</aas:operationVariable>
@@ -506,6 +565,7 @@
 										<aas:idShort>blob_ID</aas:idShort>
 										<aas:value>YmxvYit2YWx1ZQ==</aas:value>
 										<aas:mimeType>blob_mimetype</aas:mimeType>
+										<aas:kind>Template</aas:kind>
 									</aas:blob>
 								</aas:value>
 							</aas:operationVariable>
@@ -520,6 +580,7 @@
 												<aas:key local="false" type="GlobalReference" idType="IRDI">0173-1#05-AAA650#002</aas:key>
 											</aas:keys>
 										</aas:value>
+										<aas:kind>Template</aas:kind>
 									</aas:referenceElement>
 								</aas:value>
 							</aas:operationVariable>
@@ -530,9 +591,8 @@
 		</aas:submodel>
 		<!-- This is a Submodel with only the minimal required information in it. To test for Nullpointers and such. -->
 		<aas:submodel>
-			<aas:idShort></aas:idShort>
-			<aas:identification>
-			</aas:identification>
+			<aas:idShort>testSubmodelIdShort2</aas:idShort>
+			<aas:identification idType="IRI">http://www.zvei.de/demo/submodel/12345679</aas:identification>
 			<aas:submodelElements></aas:submodelElements>
 		</aas:submodel>
 	</aas:submodels>

@@ -17,6 +17,16 @@ class Qualifier :
 	public ModelType<ModelTypes::Qualifier>,
 	public virtual vab::ElementMap
 {
+public:
+  struct Path {
+    static constexpr char ValueDataType[] = "valueDataType";
+    static constexpr char QualifierType[] = "qualifierType";
+    static constexpr char ValueType[] = "valueType";
+    static constexpr char SemanticId[] = "semanticId";
+    static constexpr char ValueId[] = "valueId";
+  };
+
+
 private:
 	Reference valueId;
 	Reference semanticId;

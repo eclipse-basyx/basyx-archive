@@ -1,22 +1,34 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.examples.mockup.devicemanager;
 
 import java.util.HashMap;
 
+import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.components.devicemanager.TCPControllableDeviceManagerComponent;
+import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.models.controlcomponent.ControlComponentChangeListener;
-import org.eclipse.basyx.submodel.metamodel.map.SubModel;
+import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
-import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
+import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
+import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.eclipse.basyx.vab.protocol.basyx.server.BaSyxTCPServer;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +41,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDeviceManagerComponent implements ControlComponentChangeListener {
-	
+
 	/**
 	 * Initiates a logger using the current class
 	 */
@@ -39,6 +51,8 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 	 * AAS server connection
 	 */
 	protected VABElementProxy aasServerConnection = null;
+
+	protected String aasPath;
 
 	
 	
@@ -52,18 +66,18 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		
 		
 		// Set registry that will be used by this service
-		setRegistry(new AASRegistryProxy("http://localhost:8080/basys.examples/Components/Directory/SQL"));
+		setRegistry(new AASRegistryProxy("http://localhost:8080/" + BaSyxExamplesContext.REGISTRYURL));
 		
 		
 		// Set service connection manager and create AAS server connection
-		setConnectionManager(new VABConnectionManager(new ExamplesPreconfiguredDirectory(), new HTTPConnectorProvider()));
+		setConnectionManager(new VABConnectionManager(new ExamplesPreconfiguredDirectory(), new HTTPConnectorFactory()));
 		// - Create AAS server connection
 		aasServerConnection = getConnectionManager().connectToVABElement("AASServer");
 		
 		
 		// Set AAS server VAB object ID, AAS server URL, and AAS server path prefix
 		setAASServerObjectID("AASServer");
-		setAASServerURL("http://localhost:8080/basys.examples/Components/BaSys/1.0/aasServer");
+		setAASServerURL("http://localhost:8080/" + BaSyxExamplesContext.AASSERVERURL);
 	}
 
 	
@@ -76,7 +90,7 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		super.start();
 		
 		// Create the device AAS and sub model structure
-		createDeviceAASAndSubModels();
+		createDeviceAASAndSubmodels();
 		
 		// Register AAS and sub model descriptors in directory (push AAS descriptor to server)
 		getRegistry().register(getAASDescriptor());
@@ -87,7 +101,7 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 	/**
 	 * Create the device AAS and sub model structure
 	 */
-	protected void createDeviceAASAndSubModels() {
+	protected void createDeviceAASAndSubmodels() {
 		// Register URNs of managed VAB objects
 		addShortcut("AAS",        new ModelUrn("urn:de.FHG:devices.es.iese:aas:1.0:3:x-509#001"));
 		addShortcut("Status",     new ModelUrn("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#001"));
@@ -96,30 +110,32 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		AssetAdministrationShell aas = new AssetAdministrationShell();
 		// - Populate AAS
 		aas.setIdShort("DeviceIDShort");
+		aas.setIdentification(lookupURN("AAS"));
 	
 		// The device also brings a sub model structure with an own ID that is being pushed on the server
 		// - Create generic sub model and add properties
-		SubModel statusSM = new SubModel();
+		Submodel statusSM = new Submodel();
 		// - Set submodel ID
 		statusSM.setIdShort("Status");
 		//   - Property status: indicate device status
 		Property statusProp = new Property("offline");
 		statusProp.setIdShort("status");
-		statusSM.addSubModelElement(statusProp);
+		statusSM.addSubmodelElement(statusProp);
 		//   - Property statistics: export invocation statistics for every service
 		//     - invocations: indicate total service invocations. Properties are not persisted in this example,
 		//                    therefore we start counting always at 0.
 		Property invocationsProp = new Property(0);
 		invocationsProp.setIdShort("invocations");
-		statusSM.addSubModelElement(invocationsProp);
+		statusSM.addSubmodelElement(invocationsProp);
 		// - Add the submodel to the AAS
-		aas.addSubModel(statusSM);
+		aas.addSubmodel(statusSM);
 		
 		// Push the AAS and submodels to the server
 		// - Transfer device AAS to server
-		aasServerConnection.createValue("/aas", aas);
+		aasServerConnection.setValue(VABPathTools.append(AASAggregatorProvider.PREFIX, VABPathTools.encodePathElement(aas.getIdentification().getId())), aas);
 		// - Transfer device sub model to server
-		aasServerConnection.createValue("/aas/submodels", statusSM);
+		aasPath = AASAggregatorProvider.PREFIX + "/" + VABPathTools.encodePathElement(aas.getIdentification().getId()) + "/aas";
+		aasServerConnection.setValue(VABPathTools.concatenatePaths(aasPath, "submodels", statusSM.getIdShort()), statusSM);
 		
 		// Register URNs of control component VAB object
 		addShortcut("ControlComponent", new ModelUrn("urn:de.FHG:devices.es.iese:controlComponentSM:1.0:3:x-509#001"));
@@ -146,10 +162,10 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 	protected AASDescriptor getAASDescriptor() {
 		// Create AAS and sub model descriptors
 		AASDescriptor aasDescriptor = new AASDescriptor(lookupURN("AAS"), getAASEndpoint(lookupURN("AAS")));
-		addSubModelDescriptorURI(aasDescriptor, lookupURN("Status"), "Status");
+		addSubmodelDescriptorURI(aasDescriptor, lookupURN("Status"), "Status");
 		
 		// Add descriptor for control component sub model
-		addSubModelDescriptorURI(aasDescriptor, lookupURN("ControlComponent"),
+		addSubmodelDescriptorURI(aasDescriptor, lookupURN("ControlComponent"),
 				"basyx://127.0.0.1:" + controlComponentServerPort);
 		
 		// Return AAS, sub model descriptors, and added control component sub model descriptor
@@ -177,15 +193,15 @@ public class BaSyxTCPControlManufacturingDeviceManager extends TCPControllableDe
 		// Check what was being received. This check is performed based on a prefix that he device has to provide);
 		// - Update of device status
 		if (hasPrefix(rxStr, "status:"))
-			aasServerConnection.setModelPropertyValue("/aas/submodels/Status/" + SubmodelElementProvider.PROPERTIES + "/status/value", removePrefix(rxStr, "status"));
+			aasServerConnection.setValue(aasPath + "/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/status/value", removePrefix(rxStr, "status"));
 		// - Device indicates service invocation
 		if (hasPrefix(rxStr, "invocation:")) {
 			// Start of process
 			if (hasPrefix(rxStr, "invocation:start")) {
 				// Read and increment invocation counter
-				HashMap<String, Object> property = (HashMap<String, Object>) aasServerConnection.getModelPropertyValue("/aas/submodels/Status/" + SubmodelElementProvider.PROPERTIES + "/invocations");
+				HashMap<String, Object> property = (HashMap<String, Object>) aasServerConnection.getValue(aasPath + "/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/invocations");
 				int invocations = (int) property.get("value");
-				aasServerConnection.setModelPropertyValue("/aas/submodels/Status/" + SubmodelElementProvider.PROPERTIES + "/invocations/value", ++invocations);
+				aasServerConnection.setValue(aasPath + "/submodels/Status/submodel/" + MultiSubmodelElementProvider.ELEMENTS + "/invocations/value", ++invocations);
 			}
 			
 			// End of process

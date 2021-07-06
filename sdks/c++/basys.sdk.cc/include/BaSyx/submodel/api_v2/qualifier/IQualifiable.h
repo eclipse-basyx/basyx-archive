@@ -2,16 +2,19 @@
 #define BASYX_SUBMODEL_API_V2_QUALIFIER_IQUALIFIABLE_H
 
 #include <BaSyx/submodel/api_v2/constraint/IFormula.h>
-#include <BaSyx/submodel/api_v2/constraint/IQualifier.h>
 
 #include <BaSyx/submodel/simple/constraint/Formula.h>
-#include <BaSyx/submodel/simple/constraint/Qualifier.h>
 
 #include <vector>
 
 namespace basyx {
 namespace submodel {
+
+namespace simple { class Qualifier; }
+
 namespace api {
+
+class IQualifier;
 
 class IQualifiable
 {

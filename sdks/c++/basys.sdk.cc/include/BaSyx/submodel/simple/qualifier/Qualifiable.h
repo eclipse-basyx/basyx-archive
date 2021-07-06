@@ -3,6 +3,7 @@
 
 #include <BaSyx/submodel/api_v2/qualifier/IQualifiable.h>
 
+#include <BaSyx/submodel/simple/constraint/Qualifier.h>
 
 namespace basyx {
 namespace submodel {

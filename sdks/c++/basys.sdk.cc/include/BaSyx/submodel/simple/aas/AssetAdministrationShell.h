@@ -16,6 +16,8 @@ namespace simple {
 
 class AssetAdministrationShell : public api::IAssetAdministrationShell
 {
+public:
+	using asset_t = basyx::submodel::simple::Asset;
 private:
 	Identifiable identifiable;
 	HasDataSpecification dataSpecification;
@@ -43,19 +45,26 @@ public:
 	virtual void setCategory(const std::string & category) override;
 	virtual simple::LangStringSet & getDescription() override;
 	virtual const simple::LangStringSet & getDescription() const override;
-	virtual const IReferable * const getParent() const override;
+	virtual void setParent(api::IReferable * parent) override;
+	virtual IReferable * getParent() const override;
+	virtual simple::Reference getReference() const override;
 
 	// Inherited via IIdentifiable
-	virtual const AdministrativeInformation & getAdministrativeInformation() const override;
-	virtual AdministrativeInformation & getAdministrativeInformation() override;
+	virtual const api::IAdministrativeInformation & getAdministrativeInformation() const override;
+	virtual api::IAdministrativeInformation & getAdministrativeInformation() override;
 
 	virtual Identifier getIdentification() const override;
 
-	virtual bool hasAdministrativeInformation() const;
+	virtual bool hasAdministrativeInformation() const override;
 
 	// Inherited via IHasDataSpecification
 	virtual void addDataSpecification(const Reference & reference) override;
 	virtual const std::vector<Reference> getDataSpecificationReference() const override;
+
+	// Inherited via IModelType
+	virtual ModelTypes GetModelType() const override;
+	virtual KeyElements getKeyElementType() const override { return KeyElements::AssetAdministrationShell; };
+	virtual Key getKey(bool local = true) const override;
 };
 
 }

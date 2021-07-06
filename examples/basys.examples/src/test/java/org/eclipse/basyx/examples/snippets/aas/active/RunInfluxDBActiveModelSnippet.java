@@ -1,7 +1,16 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.examples.snippets.aas.active;
 
 import org.eclipse.basyx.examples.snippets.aas.active.tasks.InfluxDBTask;
-import org.eclipse.basyx.submodel.restapi.SubModelProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.tools.aas.active.ActiveModel;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProviderHelper;
@@ -28,7 +37,7 @@ public class RunInfluxDBActiveModelSnippet {
 	@Test
 	public void snippet() throws Exception {
 		// Create the model provider for the active model
-		IModelProvider modelProvider = new SubModelProvider();
+		IModelProvider modelProvider = new SubmodelProvider();
 		modelProvider.createValue("temperature", VABLambdaProviderHelper.createSimple(() -> {
 			return 30d + (Math.random() * 10d - 5d);
 		}, null));

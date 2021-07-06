@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<rdf:RDF xmlns="https://w3id.org/basyx/c4i2ssn#"
-     xml:base="https://w3id.org/basyx/c4i2ssn"
+<rdf:RDF xmlns="https://www.w3id.org/basyx/c4i2ssn#"
+     xml:base="https://www.w3id.org/basyx/c4i2ssn"
      xmlns:schema="http://schema.org/"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:terms="http://purl.org/dc/terms/"
@@ -12,9 +12,9 @@
      xmlns:vann="http://purl.org/vocab/vann/"
      xmlns:foaf="http://xmlns.com/foaf/0.1/"
      xmlns:dc="http://purl.org/dc/elements/1.1/">
-    <owl:Ontology rdf:about="https://w3id.org/basyx/c4i2ssn">
-        <owl:versionIRI rdf:resource="https://w3id.org/basyx/c4i2ssn/0.0.1"/>
-        <owl:imports rdf:resource="https://w3id.org/basyx/c4i"/>
+    <owl:Ontology rdf:about="https://www.w3id.org/basyx/c4i2ssn">
+        <owl:versionIRI rdf:resource="https://www.w3id.org/basyx/c4i2ssn/0.0.1"/>
+        <owl:imports rdf:resource="https://www.w3id.org/basyx/c4i"/>
 		
 		<dc:contributor>
             <rdf:Description>
@@ -75,28 +75,28 @@
     
 
 
-    <!-- https://w3id.org/basyx/c4i#associatedWithCapability -->
+    <!-- https://www.w3id.org/basyx/c4i#associatedWithCapability -->
 
-    <rdf:Description rdf:about="https://w3id.org/basyx/c4i#associatedWithCapability">
+    <rdf:Description rdf:about="https://www.w3id.org/basyx/c4i#associatedWithCapability">
         <owl:propertyChainAxiom rdf:parseType="Collection">
             <rdf:Description rdf:about="http://www.w3.org/ns/ssn/hasSubSystem"/>
-            <rdf:Description rdf:about="https://w3id.org/basyx/c4i#hasCapability"/>
+            <rdf:Description rdf:about="https://www.w3id.org/basyx/c4i#hasCapability"/>
         </owl:propertyChainAxiom>
     </rdf:Description>
     
 
 
-    <!-- https://w3id.org/basyx/c4i#hasCapability -->
+    <!-- https://www.w3id.org/basyx/c4i#hasCapability -->
 
-    <owl:ObjectProperty rdf:about="https://w3id.org/basyx/c4i#hasCapability">
-        <owl:equivalentProperty rdf:resource="https://w3id.org/basyx/c4i2ssn#hasSystemCapability"/>
+    <owl:ObjectProperty rdf:about="https://www.w3id.org/basyx/c4i#hasCapability">
+        <owl:equivalentProperty rdf:resource="https://www.w3id.org/basyx/c4i2ssn#hasSystemCapability"/>
     </owl:ObjectProperty>
     
 
 
-    <!-- https://w3id.org/basyx/c4i2ssn#hasSystemCapability -->
+    <!-- https://www.w3id.org/basyx/c4i2ssn#hasSystemCapability -->
 
-    <owl:ObjectProperty rdf:about="https://w3id.org/basyx/c4i2ssn#hasSystemCapability"/>
+    <owl:ObjectProperty rdf:about="https://www.w3id.org/basyx/c4i2ssn#hasSystemCapability"/>
     
 
 
@@ -117,9 +117,9 @@
     
 
 
-    <!-- https://w3id.org/basyx/c4i#Capability -->
+    <!-- https://www.w3id.org/basyx/c4i#Capability -->
 
-    <owl:Class rdf:about="https://w3id.org/basyx/c4i#Capability">
+    <owl:Class rdf:about="https://www.w3id.org/basyx/c4i#Capability">
         <owl:equivalentClass rdf:resource="http://www.w3.org/ns/ssn/systems/SystemCapability"/>
     </owl:Class>
     

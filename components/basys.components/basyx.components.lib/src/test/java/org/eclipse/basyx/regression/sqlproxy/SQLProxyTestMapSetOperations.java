@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.regression.sqlproxy;
 
 import static org.junit.Assert.assertTrue;
@@ -46,7 +55,7 @@ public class SQLProxyTestMapSetOperations {
 		sqlRootElement.drop();
 
 		// Create new table in database for root element
-		sqlRootElement.create();
+		sqlRootElement.createRootTableIfNotExists();
 
 		// Create new SQL map
 		Map<String, Object> sqlMap = sqlRootElement.createMap(1);

@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.extensions.aas.directory.tagged.proxy;
 
 import java.util.Collection;
@@ -53,7 +62,7 @@ public class TaggedDirectoryProxy extends AASRegistryProxy implements IAASTagged
 
 	@SuppressWarnings("unchecked")
 	private Set<TaggedAASDescriptor> performTagRequest(String tagList) {
-		Collection<Map<String, Object>> desc = (Collection<Map<String, Object>>) taggedProvider.getModelPropertyValue(TaggedDirectoryProvider.API_ACCESS + tagList);
+		Collection<Map<String, Object>> desc = (Collection<Map<String, Object>>) taggedProvider.getValue(TaggedDirectoryProvider.API_ACCESS + tagList);
 		return desc.stream().map(m -> TaggedAASDescriptor.createAsFacade(m)).collect(Collectors.toSet());
 	}
 

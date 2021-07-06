@@ -1,5 +1,5 @@
-#ifndef BASYX_API_V2_SDK_ICAPABILITY_H
-#define BASYX_API_V2_SDK_ICAPABILITY_H
+#ifndef BASYX_SUBMODEL_API_V2_SUBMODELELEMENT_ICAPABILITY_H
+#define BASYX_SUBMODEL_API_V2_SUBMODELELEMENT_ICAPABILITY_H
 
 #include <BaSyx/submodel/api_v2/submodelelement/ISubmodelElement.h>
 
@@ -12,6 +12,8 @@ class ICapability
 {
 public:
   ~ICapability() = 0;
+
+  virtual KeyElements getKeyElementType() const override { return KeyElements::Capability; };
 };
 
 inline ICapability::~ICapability() = default;
@@ -19,4 +21,4 @@ inline ICapability::~ICapability() = default;
 }
 }
 }
-#endif //BASYX_API_V2_SDK_ICAPABILITY_H
+#endif /* BASYX_SUBMODEL_API_V2_SUBMODELELEMENT_ICAPABILITY_H */

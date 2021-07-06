@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.qualifier;
 
 import static org.junit.Assert.assertEquals;
@@ -56,16 +65,34 @@ public class TestAdministrativeInformation {
 	}
 	
 	@Test
-	public void testSetVersion() {
+	public void testSetVersionInformation() {
 		String newVersionString = "2.0";
-		information.setVersion(newVersionString);
+		String newRevisionString = "2.0.1";
+		information.setVersionInformation(newVersionString, newRevisionString);
 		assertEquals(newVersionString, information.getVersion());
+		assertEquals(newRevisionString, information.getRevision());
+	}
+	
+	@Test(expected = RuntimeException.class)
+	public void testSetVersionInformationExceptionEmptyString() {
+		String newVersionString = "";
+		String newRevisionString = "2.0.1";
+		information.setVersionInformation(newVersionString, newRevisionString);
+	}
+	
+	@Test(expected = RuntimeException.class)
+	public void testSetVersionInformationExceptionNullString() {
+		String newVersionString = null;
+		String newRevisionString = "2.0.1";
+		information.setVersionInformation(newVersionString, newRevisionString);
 	}
 	
 	@Test
-	public void testSetRevision() {
-		String newRevisionString = "2.0.1";
-		information.setRevision(newRevisionString);
+	public void testSetVersionInformationNoRevision() {
+		String newVersionString = "";
+		String newRevisionString = "";
+		information.setVersionInformation(newVersionString, newRevisionString);
+		assertEquals(newVersionString, information.getVersion());
 		assertEquals(newRevisionString, information.getRevision());
 	}
 	

@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.examples.snippets.vab.provider;
 
 import static org.junit.Assert.assertEquals;
@@ -47,7 +56,7 @@ public class FileSystemProviderClass {
 		IModelProvider provider = new FileSystemProvider(fs, basePath, rootElement, true);
 
 		// The interface is equal to the interface used in e.g. the HashMapProvider
-		int previouslyCreated = (Integer) provider.getModelPropertyValue("/myInteger");
+		int previouslyCreated = (Integer) provider.getValue("/myInteger");
 		assertEquals(3, previouslyCreated);
 
 		// When creating elements, the internal directory and file structure represent the changes
@@ -55,7 +64,7 @@ public class FileSystemProviderClass {
 
 		// Properties are serialized and stored in the file that corresponds to their path
 		String expected = "Max Mustermann";
-		String byProvider = (String) provider.getModelPropertyValue("/name");
+		String byProvider = (String) provider.getValue("/name");
 		String byFileSystem = fs.readFile(basePath + "/name");
 		String byFSDeserialized = (String) gsonTools.deserialize(byFileSystem);
 		assertEquals(expected, byProvider);

@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.map.qualifier;
 
 import java.util.Map;
@@ -12,7 +21,7 @@ import org.eclipse.basyx.vab.model.VABModelMap;
  */
 public class LangString extends VABModelMap<Object> {
 	private static final String LANGUAGE = "language";
-	private static final String DESCRIPTION = "description";
+	private static final String DESCRIPTION = "text";
 	
 	private LangString() {
 	}
@@ -42,6 +51,17 @@ public class LangString extends VABModelMap<Object> {
 		LangString ret = new LangString();
 		ret.setMap(map);
 		return ret;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static boolean isLangString(Object value) {
+		if(!(value instanceof Map<?, ?>)) {
+			return false;
+		}
+		
+		Map<String, Object> map = (Map<String, Object>) value;
+		
+		return map.get(LANGUAGE) instanceof String && map.get(DESCRIPTION) instanceof String;
 	}
 	
 	/**

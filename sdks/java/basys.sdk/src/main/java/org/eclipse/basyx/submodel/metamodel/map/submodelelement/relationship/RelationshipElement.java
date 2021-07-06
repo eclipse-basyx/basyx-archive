@@ -1,7 +1,17 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.relationship.IRelationshipElement;
@@ -29,9 +39,6 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 	public RelationshipElement() {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
-
-		put(FIRST, null);
-		put(SECOND, null);
 	}
 
 	/**
@@ -41,12 +48,23 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 	 * @param second
 	 *            Second element in the relationship taking the role of the object.
 	 */
-	public RelationshipElement(Reference first, Reference second) {
+	public RelationshipElement(IReference first, IReference second) {
 		// Add model type
 		putAll(new ModelType(MODELTYPE));
 		
 		put(FIRST, first);
 		put(SECOND, second);
+	}
+	
+	/**
+	 * Constructor with only mandatory attributes
+	 * @param idShort
+	 * @param first
+	 * @param second
+	 */
+	public RelationshipElement(String idShort, IReference first, IReference second) {
+		this(first, second);
+		setIdShort(idShort);
 	}
 	
 	/**
@@ -56,9 +74,32 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 	 * @return a RelationshipElement object, that behaves like a facade for the given map
 	 */
 	public static RelationshipElement createAsFacade(Map<String, Object> obj) {
+		if (obj == null) {
+			return null;
+		}
+		
+		if (!isValid(obj)) {
+			throw new MetamodelConstructionException(RelationshipElement.class, obj);
+		}
+		
+		
 		RelationshipElement ret = new RelationshipElement();
 		ret.setMap(obj);
 		return ret;
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	@SuppressWarnings("unchecked")
+	public static boolean isValid(Map<String, Object> obj) {
+		return SubmodelElement.isValid(obj) &&
+				obj.containsKey(FIRST) &&
+				obj.containsKey(SECOND) &&
+				Reference.isValid((Map<String, Object>)obj.get(FIRST)) &&
+				Reference.isValid((Map<String, Object>)obj.get(SECOND));
 	}
 
 	/**
@@ -67,7 +108,7 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 	public static boolean isRelationshipElement(Map<String, Object> map) {
 		String modelType = ModelType.createAsFacade(map).getName();
 		// Either model type is set or the element type specific attributes are contained
-		return MODELTYPE.equals(modelType) || (map.containsKey(FIRST) && map.containsKey(SECOND));
+		return MODELTYPE.equals(modelType) || (modelType == null && map.containsKey(FIRST) && map.containsKey(SECOND));
 	}
 
 	public void setFirst(IReference first) {
@@ -75,7 +116,6 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 		
 	}
 
-	@Override
 	@SuppressWarnings("unchecked")
 	public IReference getFirst() {
 		return Reference.createAsFacade((Map<String, Object>) get(RelationshipElement.FIRST));
@@ -86,7 +126,6 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 		
 	}
 
-	@Override
 	@SuppressWarnings("unchecked")
 	public IReference getSecond() {
 		return Reference.createAsFacade((Map<String, Object>) get(RelationshipElement.SECOND));
@@ -95,5 +134,36 @@ public class RelationshipElement extends SubmodelElement implements IRelationshi
 	@Override
 	protected KeyElements getKeyElement() {
 		return KeyElements.RELATIONSHIPELEMENT;
+	}
+
+	@Override
+	public RelationshipElementValue getValue() {
+		return new RelationshipElementValue(getFirst(), getSecond());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setValue(Object value) {
+		if(RelationshipElementValue.isRelationshipElementValue(value)) {
+			RelationshipElementValue rev = 
+					RelationshipElementValue.createAsFacade((Map<String, Object>) value);
+			setValue(rev);
+		} else {
+			throw new IllegalArgumentException("Given Object is not an RelationshipElementValue");
+		}
+	}
+
+	@Override
+	public RelationshipElement getLocalCopy() {
+		// Return a shallow copy
+		RelationshipElement copy = new RelationshipElement();
+		copy.putAll(this);
+		return copy;
+	}
+
+	@Override
+	public void setValue(RelationshipElementValue value) {
+		setFirst(value.getFirst());
+		setSecond(value.getSecond());
 	}
 }

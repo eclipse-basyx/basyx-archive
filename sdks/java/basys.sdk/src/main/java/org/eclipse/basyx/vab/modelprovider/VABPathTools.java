@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.vab.modelprovider;
 
 import java.io.UnsupportedEncodingException;
@@ -6,6 +15,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 
 /**
@@ -229,10 +239,10 @@ public class VABPathTools {
 	}
 
 	/**
-	 * Check if the path to an VAB elements leads to an operation. In this case, the
-	 * element path conforms to /aas/submodels/{subModelId}/operations
+	 * Check if the path to an VAB elements leads to the invocation of an operation. In this case, the
+	 * element path conforms to /aas/submodels/{subModelId}/submodelElements/{operationId}/invoke
 	 */
-	public static boolean isOperationPath(String path) {
+	public static boolean isOperationInvokationPath(String path) {
 		// null-Paths are no operation paths
 		if (path == null) {
 			return false;
@@ -240,16 +250,18 @@ public class VABPathTools {
 
 		// Split path
 		String[] pathElements = splitPath(path);
-
-		// Look for the 'operation' element inside the path
-		for (String s : pathElements) {
-			if (s.equals("operations")) {
-				return true;
-			}
+		
+		if(pathElements.length == 0) {
+			return false;
 		}
 
-		// No operation
-		return false;
+		// Check if last path element is "invoke" or "operations" is contained anywhere
+		return pathElements[pathElements.length - 1].startsWith(Operation.INVOKE) || isOperationPath(path);
+	}
+
+	private static boolean isOperationPath(String path) {
+		String lowerCasePath = path.toLowerCase();
+		return lowerCasePath.startsWith("operations/") || path.toLowerCase().contains("/operations/");
 	}
 
 	/**
@@ -359,6 +371,79 @@ public class VABPathTools {
 	public static void checkPathForNull(String path) throws MalformedRequestException {
 		if (path == null) {
 			throw new MalformedRequestException("Path is not allowed to be null");
+		}
+	}
+	
+	/**
+	 * Strips the last path element if it is "invoke"
+	 * 
+	 * @param path
+	 * @return path without last element "invoke" or unchanged path
+	 */
+	public static String stripInvokeFromPath(String path) {
+		
+		if(path == null)
+			return null;
+		
+		if(getLastElement(path).startsWith(Operation.INVOKE)) {
+			return getParentPath(path);
+		}
+		
+		return path;
+	}
+	
+	/**
+	 * Gets the path from a URL
+	 * e.g "http://localhost:8080/path/to/test.file" results in "/path/to/test.file"
+	 * 
+	 * @param url
+	 * @return the path from the URL
+	 */
+	public static String getPathFromURL(String url) {
+		if(url == null) {
+			return null;
+		}
+		
+		if(url.contains("://")) {
+			
+			// Find the ":" and and remove the "http://" from the url
+			int index = url.indexOf(":") + 3;
+			url = url.substring(index);
+			
+			// Find the first "/" from the URL (now without the "http://") and remove everything before that
+			index = url.indexOf("/");
+			url = url.substring(index);
+			
+			// Recursive call to deal with more than one server parts 
+			// (e.g. basyx://127.0.0.1:6998//https://localhost/test/)
+			return getPathFromURL(url);
+		} else {
+			// Make sure the path has a / at the start
+			if(!url.startsWith("/")) {
+				url = "/" + url;
+			}
+			return url;
+		}
+	}
+
+	/**
+	 * Harmonizes a path so that it will always and with the suffix and no ending
+	 * slash (even if the suffix contains one).
+	 * 
+	 * @param path
+	 *            to harmonize
+	 * @param suffix
+	 *            to check for existance and append if necessary
+	 * @return harmonized path
+	 */
+	public static String harmonizePathWithSuffix(String path, String suffix) {
+		String strippedPath = stripSlashes(path);
+		String strippedSuffix = stripSlashes(suffix);
+
+		if (strippedPath.endsWith("/" + strippedSuffix)) {
+			return strippedPath;
+		} else {
+			return VABPathTools.concatenatePaths(strippedPath, strippedSuffix);
 		}
 	}
 }

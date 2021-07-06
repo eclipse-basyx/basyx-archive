@@ -3,7 +3,7 @@
 
 #include <BaSyx/submodel/api_v2/qualifier/IIdentifiable.h>
 #include <BaSyx/submodel/map_v2/qualifier/Referable.h>
-#include <BaSyx/submodel/simple/qualifier/AdministrativeInformation.h>
+#include <BaSyx/submodel/map_v2/qualifier/AdministrativeInformation.h>
 
 namespace basyx {
 namespace submodel {
@@ -13,26 +13,30 @@ class Identifiable :
 	public virtual api::IIdentifiable,
 	public Referable
 {
+public:
+  struct Path {
+    static constexpr char IdType[] = "idType";
+    static constexpr char Id[] = "id";
+    static constexpr char AdministrativeInformation[] = "administrativeInformation";
+    static constexpr char Identifier[] = "identification";
+  };
 private:
-//	Referable referable;
-	simple::AdministrativeInformation administrativeInformation;
+	map::AdministrativeInformation administrativeInformation;
 public:
 	virtual ~Identifiable() = default;
 
 	// Constructors
 	Identifiable(const std::string & idShort, const simple::Identifier & identifier);
 
-	//// Member-access
-	//inline const Referable & getReferable() const noexcept { return this->referable; };
-	//inline Referable & getReferable() noexcept { return this->referable; };
-
-	bool hasAdministrativeInformation() const noexcept;
+	bool hasAdministrativeInformation() const noexcept override;
 
 	// Inherited via IIdentifiable
-	virtual const simple::AdministrativeInformation & getAdministrativeInformation() const override;
-	virtual simple::AdministrativeInformation & getAdministrativeInformation() override;
+	const api::IAdministrativeInformation & getAdministrativeInformation() const override;
+	api::IAdministrativeInformation & getAdministrativeInformation() override;
 
 	virtual simple::Identifier getIdentification() const override;
+
+    void setAdministrativeInformation(const AdministrativeInformation & administrativeInformation);
 };
 
 }

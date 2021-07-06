@@ -1,0 +1,37 @@
+pipeline {
+  agent {
+    kubernetes {
+      label 'basyx-' + env.BRANCH_NAME + '-' + env.BUILD_NUMBER
+      yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: cpp
+    image: iesetps/basyx-ci-cpp:latest
+    resources:
+      requests:
+        memory: "4Gi"
+        cpu: "2.00"
+      limits:
+        memory: "4Gi"
+        cpu: "2.00"
+    command:
+    - cat
+    tty: true
+"""
+    }
+  }
+  stages {
+      stage('C++ SDK Tests') {
+          steps {
+              container('cpp') {
+                  sh '''
+                     chmod +x ./ci/build_cpp.sh
+                     ./ci/build_cpp.sh
+                     '''
+              }
+          }
+      }
+  }
+}

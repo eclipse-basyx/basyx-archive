@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.submodel.metamodel.connected.submodelelement.dataelement;
 
 import static org.junit.Assert.assertEquals;
@@ -9,7 +18,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.MultiLanguageProperty;
-import org.eclipse.basyx.submodel.restapi.PropertyProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelElementProvider;
 import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.support.TypeDestroyingProvider;
@@ -36,7 +45,7 @@ public class TestConnectedMultiLanguageProperty {
 		MLP = new MultiLanguageProperty(ref, langStrings);
 		
 		VABConnectionManagerStub manager = new VABConnectionManagerStub(
-				new PropertyProvider(new TypeDestroyingProvider(new VABLambdaProvider(MLP))));
+				new SubmodelElementProvider(new TypeDestroyingProvider(new VABLambdaProvider(MLP))));
 
 		// Retrieve the ConnectedContainerProperty
 		connectedMLP = new ConnectedMultiLanguageProperty(manager.connectToVABElement(""));

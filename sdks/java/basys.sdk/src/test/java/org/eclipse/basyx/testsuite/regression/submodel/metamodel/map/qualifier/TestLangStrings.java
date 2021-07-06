@@ -1,6 +1,17 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.qualifier;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -73,6 +84,20 @@ public class TestLangStrings {
 		languageSet.add(LANGUAGE1);
 		languageSet.add(LANGUAGE2);
 		assertEquals(languageSet, langStrings.getLanguages());
+	}
+	
+	@Test
+	public void testIsLangStrings() {
+		LangStrings langStrings = new LangStrings(LANGUAGE1, TEXT1);
+		
+		assertTrue(LangStrings.isLangStrings(langStrings));
+		
+		LangString langString = new LangString(LANGUAGE1, TEXT1);
+		langString.put("language", null);
+		
+		langStrings.add(langString);
+		
+		assertFalse(LangStrings.isLangStrings(langStrings));
 	}
 	
 }

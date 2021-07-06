@@ -1,7 +1,17 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.map.dataspecification;
 
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IValueReferencePair;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IIdentifiable;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -25,10 +35,7 @@ public class ValueReferencePair extends VABModelMap<Object> implements IValueRef
 	/**
 	 * Constructor
 	 */
-	public ValueReferencePair() {
-		setValue(null);
-		setValueId(null);
-	}
+	public ValueReferencePair() {}
 
 	/**
 	 * Constructs a reference based on an {@link IIdentifiable} and additional
@@ -54,10 +61,27 @@ public class ValueReferencePair extends VABModelMap<Object> implements IValueRef
 		if (map == null) {
 			return null;
 		}
-
+		
+		if (!isValid(map)) {
+			throw new MetamodelConstructionException(ValueReferencePair.class, map);
+		}
+		
 		ValueReferencePair ret = new ValueReferencePair();
 		ret.setMap(map);
 		return ret;
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	@SuppressWarnings("unchecked")
+	public static boolean isValid(Map<String, Object> map) {
+		return map != null &&
+				map.containsKey(VALUE) && 
+				map.containsKey(VALUEID) &&
+				Reference.isValid((Map<String, Object>)map.get(VALUEID));
 	}
 
 	@Override

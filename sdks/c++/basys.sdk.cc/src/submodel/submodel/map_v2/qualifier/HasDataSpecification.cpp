@@ -7,11 +7,13 @@ using namespace basyx::submodel;
 using namespace basyx::submodel::api;
 using namespace basyx::submodel::map;
 
+constexpr char HasDataSpecification::Path::DataSpecification[];
+
 HasDataSpecification::HasDataSpecification()
 	: vab::ElementMap()
 	, dataSpecification()
 {
-	this->map.insertKey("dataSpecification", basyx::object::make_object_ref(&dataSpecification));
+	this->map.insertKey(Path::DataSpecification, this->dataSpecification);
 }
 
 void HasDataSpecification::addDataSpecification(const simple::Reference & reference)

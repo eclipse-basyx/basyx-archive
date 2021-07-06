@@ -1,5 +1,15 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.components.devicemanager;
 
+import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
@@ -77,7 +87,7 @@ public abstract class DeviceManagerComponent extends BaseBaSyxService {
 	 * Returns the actual endpoint of the AAS managed by this component
 	 */
 	protected String getAASEndpoint(ModelUrn aasURN) {
-		return VABPathTools.concatenatePaths(getAASServerURL(), "/aas", aasURN.getEncodedURN());
+		return VABPathTools.concatenatePaths(getAASServerURL(), AASAggregatorProvider.PREFIX, aasURN.getEncodedURN(), "/aas");
 	}
 	
 	/**
@@ -88,9 +98,9 @@ public abstract class DeviceManagerComponent extends BaseBaSyxService {
 	 * 
 	 * @return Sub model descriptor endpoint points to default AAS server location and contains default prefix path
 	 */
-	protected SubmodelDescriptor addSubModelDescriptorURI(AASDescriptor aasDescriptor, ModelUrn subModelURN, String subModelId) {
+	protected SubmodelDescriptor addSubmodelDescriptorURI(AASDescriptor aasDescriptor, ModelUrn subModelURN, String subModelId) {
 		// Create sub model descriptor
-		String submodelEndpoint = VABPathTools.concatenatePaths(getAASServerURL(), "/aas/submodels", subModelId);
+		String submodelEndpoint = VABPathTools.concatenatePaths(getAASServerURL(), AASAggregatorProvider.PREFIX, VABPathTools.encodePathElement(aasDescriptor.getIdentifier().getId()), "/aas/submodels", subModelId);
 		SubmodelDescriptor submodelDescriptor = new SubmodelDescriptor(subModelId, subModelURN, submodelEndpoint);
 		
 		// Add sub model descriptor to AAS descriptor

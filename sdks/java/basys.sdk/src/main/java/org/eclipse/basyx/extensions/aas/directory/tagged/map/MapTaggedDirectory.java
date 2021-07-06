@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.extensions.aas.directory.tagged.map;
 
 import java.util.HashSet;
@@ -7,7 +16,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
-import org.eclipse.basyx.aas.registration.memory.MapRegistry;
+import org.eclipse.basyx.aas.registration.memory.AASRegistry;
+import org.eclipse.basyx.aas.registration.memory.MapRegistryHandler;
 import org.eclipse.basyx.extensions.aas.directory.tagged.api.IAASTaggedDirectory;
 import org.eclipse.basyx.extensions.aas.directory.tagged.api.TaggedAASDescriptor;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
@@ -19,8 +29,7 @@ import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
  * @author schnicke
  *
  */
-public class MapTaggedDirectory extends MapRegistry implements IAASTaggedDirectory {
-
+public class MapTaggedDirectory extends AASRegistry implements IAASTaggedDirectory {
 	private Map<String, Set<TaggedAASDescriptor>> tagMap;
 
 	/**
@@ -31,7 +40,7 @@ public class MapTaggedDirectory extends MapRegistry implements IAASTaggedDirecto
 	 * @param tagMap
 	 */
 	public MapTaggedDirectory(Map<String, AASDescriptor> rootMap, Map<String, Set<TaggedAASDescriptor>> tagMap) {
-		super(rootMap);
+		super(new MapRegistryHandler(rootMap));
 		this.tagMap = tagMap;
 	}
 
@@ -72,7 +81,7 @@ public class MapTaggedDirectory extends MapRegistry implements IAASTaggedDirecto
 	@Override
 	public void delete(IIdentifier aasIdentifier) {
 		// Let MapRegistry take care of the registry part and only manage the tags
-		AASDescriptor desc = descriptorMap.get(aasIdentifier.getId());
+		AASDescriptor desc = super.lookupAAS(aasIdentifier);
 		super.delete(aasIdentifier);
 
 		if (desc instanceof TaggedAASDescriptor) {

@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.factory.xml.converters.qualifier;
 
 import java.util.Map;
@@ -21,17 +30,17 @@ public class HasSemanticsXMLConverter {
 	
 
 	/**
-	 * Populates a given IHasSemantics object with the data form the given XML
+	 * Populates a given HasSemantics object with the data form the given XML
 	 * 
 	 * @param xmlObject the XML map containing the &lt;aas:semanticId&gt; tag
-	 * @param hasSemantics the IHasDataSpecification object to be populated -treated as Map here-
+	 * @param hasSemantics the HasSemantics object to be populated
 	 */
 	@SuppressWarnings("unchecked")
-	public static void populateHasSemantics(Map<String, Object> xmlObject, Map<String, Object> hasSemantics) {
-		//The IHasSemantics object has to be treated as Map here, as the Interface has no Setters
-		
+	public static void populateHasSemantics(Map<String, Object> xmlObject, HasSemantics hasSemantics) {
 		Map<String, Object> xmlSemanticIDObj = (Map<String, Object>) xmlObject.get(SEMANTIC_ID);
-		hasSemantics.put(HasSemantics.SEMANTICID, ReferenceXMLConverter.parseReference(xmlSemanticIDObj));
+		if (xmlSemanticIDObj != null) {
+			hasSemantics.setSemanticId(ReferenceXMLConverter.parseReference(xmlSemanticIDObj));
+		}
 	}
 	
 	

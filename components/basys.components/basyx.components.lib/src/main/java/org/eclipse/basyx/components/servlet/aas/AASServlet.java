@@ -1,8 +1,17 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.components.servlet.aas;
 
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.restapi.AASModelProvider;
-import org.eclipse.basyx.aas.restapi.VABMultiSubmodelProvider;
+import org.eclipse.basyx.aas.restapi.MultiSubmodelProvider;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 
 /**
@@ -11,7 +20,7 @@ import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
  * @author kuhn
  *
  */
-public class AASServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
+public class AASServlet extends VABHTTPInterface<MultiSubmodelProvider> {
 
 	/**
 	 * ID of serialized instances
@@ -22,7 +31,7 @@ public class AASServlet extends VABHTTPInterface<VABMultiSubmodelProvider> {
 	 * Default constructor - based on a VABMultiSubmodelProvider
 	 */
 	public AASServlet() {
-		super(new VABMultiSubmodelProvider());
+		super(new MultiSubmodelProvider());
 	}
 
 	/**

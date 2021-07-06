@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.map.dataspecification;
 
 import java.util.ArrayList;
@@ -37,22 +46,7 @@ public class DataSpecificationIEC61360Content extends VABModelMap<Object> implem
 	/**
 	 * Constructor
 	 */
-	public DataSpecificationIEC61360Content() {
-		// Default values
-		put(PREFERREDNAME, null);
-		put(SHORTNAME, null);
-		put(UNIT, null);
-		put(UNITID, null);
-		put(SOURCEOFDEFINITION, null);
-		put(SYMBOL, null);
-		put(DATATYPE, null);
-		put(DEFINITION, null);
-		put(VALUEFORMAT, null);
-		put(VALUELIST, null);
-		put(VALUE, null);
-		put(VALUEID, null);
-		put(LEVELTYPE, null);
-	}
+	public DataSpecificationIEC61360Content() {}
 
 	/**
 	 * Constructor

@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.vab.modelprovider.api;
 
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
@@ -17,7 +26,7 @@ public interface IModelProvider {
 	 *            Path to the requested value
 	 * @return Object type is assumed to be [Integer | ... | Collection]
 	 */
-	public Object getModelPropertyValue(String path) throws ProviderException;
+	public Object getValue(String path) throws ProviderException;
 
 	/**
 	 * Sets or overrides existing value in a given path
@@ -27,7 +36,7 @@ public interface IModelProvider {
 	 * @param newValue
 	 *            Updated value
 	 */
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException;
+	public void setValue(String path, Object newValue) throws ProviderException;
 
 	/**
 	 * Create a new value under the given path

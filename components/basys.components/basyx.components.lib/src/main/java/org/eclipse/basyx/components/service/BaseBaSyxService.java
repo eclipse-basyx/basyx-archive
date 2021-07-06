@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.components.service;
 
 import java.util.HashMap;
@@ -5,7 +14,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.manager.ConnectedAssetAdministrationShellManager;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
-import org.eclipse.basyx.aas.registration.api.IAASRegistryService;
+import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.components.configuration.ConfigurableComponent;
 import org.eclipse.basyx.components.configuration.builder.BaSyxServiceConfigurationBuilder;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
@@ -55,7 +64,7 @@ public abstract class BaseBaSyxService implements BaSyxService, ConfigurableComp
 	/**
 	 * Registry proxy reference that will be used for registering sub models
 	 */
-	protected IAASRegistryService registryProxy = null;
+	protected IAASRegistry registryProxy = null;
 
 
 	
@@ -243,7 +252,7 @@ public abstract class BaseBaSyxService implements BaSyxService, ConfigurableComp
 	/**
 	 * Set AAS registry proxy
 	 */
-	protected void setRegistry(IAASRegistryService regProxy) {
+	protected void setRegistry(IAASRegistry regProxy) {
 		registryProxy = regProxy;
 	}
 
@@ -251,7 +260,7 @@ public abstract class BaseBaSyxService implements BaSyxService, ConfigurableComp
 	/**
 	 * Get AAS registry proxy reference
 	 */
-	protected IAASRegistryService getRegistry() {
+	protected IAASRegistry getRegistry() {
 		return registryProxy;
 	}
 }

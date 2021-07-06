@@ -25,12 +25,12 @@ protected:
 protected:
 	void SetUp() override
 	{
-	  view = util::make_unique<impl_t>("TestView");
-    referable = util::make_unique<impl_ref_t>("TestReferable");
+	    view = util::make_unique<impl_t>("TestView");
+        referable = util::make_unique<impl_ref_t>("TestReferable");
 	}
 
 	void TearDown() override
-	{	}
+	{}
 };
 
 TYPED_TEST_CASE(ViewTest, ImplTypes);

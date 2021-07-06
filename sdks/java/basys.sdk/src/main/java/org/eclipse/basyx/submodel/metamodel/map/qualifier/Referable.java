@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.map.qualifier;
 
 import java.util.ArrayList;
@@ -5,7 +14,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IReferable;
+import org.eclipse.basyx.submodel.metamodel.api.qualifier.IdShortValidator;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
@@ -13,6 +24,8 @@ import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyType;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Key;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.vab.model.VABModelMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Referable class
@@ -21,6 +34,8 @@ import org.eclipse.basyx.vab.model.VABModelMap;
  *
  */
 public class Referable extends VABModelMap<Object> implements IReferable {
+	private static Logger logger = LoggerFactory.getLogger(Referable.class);
+
 	public static final String IDSHORT="idShort";
 	
 	public static final String CATEGORY="category";
@@ -37,16 +52,14 @@ public class Referable extends VABModelMap<Object> implements IReferable {
 	public Referable() {
 		// Identifies an element within its name space (String)
 		put(IDSHORT, "");
-		// Coded value that gives further meta information w.r.t. to the type of the
-		// element. It affects the
-		// expected existence of attributes and the applicability of constraints.
-		// (String)
-		put(CATEGORY, "");
-		// Description or comments on the element (String)
-		
-		put(DESCRIPTION, new LangStrings());
-		// Reference to the parent of this element (Referable)
-		put(PARENT, null);
+	}
+	
+	/**
+	 * Constructor with mandatory attribute
+	 * @param idShort
+	 */
+	public Referable(String idShort) {
+		setIdShort(idShort);
 	}
 
 	/**
@@ -68,8 +81,6 @@ public class Referable extends VABModelMap<Object> implements IReferable {
 		put(CATEGORY, category);
 		// Description or comments on the element
 		put(DESCRIPTION, description);
-		// Reference to the parent of this element (Referable)
-		put(PARENT, null);
 	}
 
 	/**
@@ -83,12 +94,43 @@ public class Referable extends VABModelMap<Object> implements IReferable {
 		if (map == null) {
 			return null;
 		}
-
+		
+		if (!isValid(map)) {
+			throw new MetamodelConstructionException(Referable.class, map);
+		}
 		Referable ret = new Referable();
 		ret.setMap(map);
 		ret.setElementType(type);
 
-		return ret;
+		return ret;	
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	public static boolean isValid(Map<String, Object> map) {
+		return map != null && map.get(Referable.IDSHORT) != null;
+	}
+	
+	/**
+	 * Creates a Referable object from a map
+	 * without checking the mandatory attributes present
+	 * @param map
+	 * @param type
+	 * @return
+	 */
+	public static Referable createAsFacadeNonStrict(Map<String, Object> map, KeyElements type) {
+		if (map == null) {
+			return null;
+		}
+		
+		Referable ret = new Referable();
+		ret.setMap(map);
+		ret.setElementType(type);
+
+		return ret;	
 	}
 
 	@Override
@@ -114,6 +156,15 @@ public class Referable extends VABModelMap<Object> implements IReferable {
 	}
 
 	public void setIdShort(String idShort) {
+		if(!IdShortValidator.isValid(idShort)) {
+			/*
+			 * Currently, the AASX package explorer does support creating arbitrary
+			 * idShorts. Thus, if this is an exception, AASX files created with the AASX
+			 * package explorer may not be loadable 
+			 * TODO: Replace this with a RuntimeException
+			 */
+			logger.warn("The passed idShort " + idShort + " is not valid! It has to satisfy the RegEx " + IdShortValidator.IDSHORT_REGEX);
+		}
 		put(Referable.IDSHORT, idShort);
 	}
 

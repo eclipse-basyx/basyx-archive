@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.vab.protocol.opcua;
 
 import org.eclipse.basyx.vab.gateway.ConnectorProviderMapper;
@@ -45,10 +54,10 @@ public class TestVABOpcUa {
         clientMapper.addConnectorProvider("opc.tcp", new OpcUaConnectorProvider());
         try {
             clientMapper.getConnector("opc.tcp://opcua.demo-this.com:51210/UA/SampleServer")
-                    .setModelPropertyValue("0:Objects/2:Data/2:Static/2:AnalogScalar/2:Int32Value", 42);
+                    .setValue("0:Objects/2:Data/2:Static/2:AnalogScalar/2:Int32Value", 42);
 
             Object ret = clientMapper.getConnector("opc.tcp://opcua.demo-this.com:51210/UA/SampleServer")
-                    .getModelPropertyValue("0:Objects/2:Data/2:Static/2:AnalogScalar/2:Int32Value");
+                    .getValue("0:Objects/2:Data/2:Static/2:AnalogScalar/2:Int32Value");
             Assert.assertEquals("42", ret);
         } catch (Exception e) {
             // TODO Auto-generated catch block

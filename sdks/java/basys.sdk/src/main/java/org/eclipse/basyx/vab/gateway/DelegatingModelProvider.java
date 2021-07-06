@@ -1,9 +1,18 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.vab.gateway;
 
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.factory.java.ModelProxyFactory;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorFactory;
 
 /**
  * IModelProvider that delegates all calls to a Connector to enable gateway
@@ -17,19 +26,19 @@ public class DelegatingModelProvider implements IModelProvider {
 	// Provider that provides the connectors
 	private ModelProxyFactory proxyFactory;
 
-	public DelegatingModelProvider(IConnectorProvider connectorProvider) {
+	public DelegatingModelProvider(IConnectorFactory connectorFactory) {
 		super();
-		this.proxyFactory = new ModelProxyFactory(connectorProvider);
+		this.proxyFactory = new ModelProxyFactory(connectorFactory);
 	}
 
 	@Override
-	public Object getModelPropertyValue(String path) throws ProviderException {
-		return getProvider(path).getModelPropertyValue("");
+	public Object getValue(String path) throws ProviderException {
+		return getProvider(path).getValue("");
 	}
 
 	@Override
-	public void setModelPropertyValue(String path, Object newValue) throws ProviderException {
-		getProvider(path).setModelPropertyValue("", newValue);
+	public void setValue(String path, Object newValue) throws ProviderException {
+		getProvider(path).setValue("", newValue);
 	}
 
 	@Override

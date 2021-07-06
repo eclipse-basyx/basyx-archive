@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.vab.modelprovider.filesystem;
 
 import org.eclipse.basyx.testsuite.regression.vab.modelprovider.SimpleVABElement;
@@ -8,7 +17,7 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.modelprovider.filesystem.FileSystemProvider;
 import org.eclipse.basyx.vab.modelprovider.filesystem.filesystem.FileSystem;
 import org.eclipse.basyx.vab.modelprovider.filesystem.filesystem.GenericFileSystem;
-import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.ConnectorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +37,7 @@ public class TestFileSystemProvider extends TestProvider {
 	@Override
 	protected VABConnectionManager getConnectionManager() {
 		if (connManager == null) {
-			connManager = new VABConnectionManager(new TestsuiteDirectory(), new ConnectorProvider() {
+			connManager = new VABConnectionManager(new TestsuiteDirectory(), new ConnectorFactory() {
 				@Override
 				protected IModelProvider createProvider(String addr) {
 

@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
-<rdf:RDF xmlns="http://www.basys40.de/kb/c4i.owl#"
-     xml:base="http://www.basys40.de/kb/c4i.owl"
+<rdf:RDF xmlns="https://www.w3id.org/basyx/c4i#"
+     xml:base="https://www.w3id.org/basyx/c4i"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-     xmlns:c4i="http://www.basys40.de/kb/c4i.owl#"
+     xmlns:c4i="https://www.w3id.org/basyx/c4i#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      xmlns:foaf="http://xmlns.com/foaf/0.1/"
      xmlns:dc="http://purl.org/dc/elements/1.1/">
-    <owl:Ontology rdf:about="https://w3id.org/basyx/c4i">
-        <owl:versionIRI rdf:resource="https://w3id.org/basyx/c4i/0.0.1"/>
+    <owl:Ontology rdf:about="https://www.w3id.org/basyx/c4i">
+        <owl:versionIRI rdf:resource="https://www.w3id.org/basyx/c4i/0.0.1"/>
         <dc:contributor>
             <rdf:Description>
                 <foaf:name>Siwara Schmitt</foaf:name>
@@ -73,19 +73,19 @@ The work on this ontology was funded by the German Federal Ministry of Education
     
 
 
-    <!-- https://w3id.org/basyx/c4i#associatedWithCapability -->
+    <!-- https://www.w3id.org/basyx/c4i#associatedWithCapability -->
 
-    <owl:ObjectProperty rdf:about="https://w3id.org/basyx/c4i#associatedWithCapability">
-        <rdfs:range rdf:resource="https://w3id.org/basyx/c4i#Capability"/>
+    <owl:ObjectProperty rdf:about="https://www.w3id.org/basyx/c4i#associatedWithCapability">
+        <rdfs:range rdf:resource="https://www.w3id.org/basyx/c4i#Capability"/>
         <rdfs:comment xml:lang="en">States the existence of a relationship between a Thing and a Capability. A relationship can be that a sub sub ... part of a Thing has some capability.</rdfs:comment>
     </owl:ObjectProperty>
     
 
 
-    <!-- https://w3id.org/basyx/c4i#hasCapability -->
+    <!-- https://www.w3id.org/basyx/c4i#hasCapability -->
 
-    <owl:ObjectProperty rdf:about="https://w3id.org/basyx/c4i#hasCapability">
-        <rdfs:subPropertyOf rdf:resource="https://w3id.org/basyx/c4i#associatedWithCapability"/>
+    <owl:ObjectProperty rdf:about="https://www.w3id.org/basyx/c4i#hasCapability">
+        <rdfs:subPropertyOf rdf:resource="https://www.w3id.org/basyx/c4i#associatedWithCapability"/>
         <rdfs:comment xml:lang="en">The relation between a Thing and a Capability the Thing offers.</rdfs:comment>
     </owl:ObjectProperty>
     
@@ -102,9 +102,9 @@ The work on this ontology was funded by the German Federal Ministry of Education
     
 
 
-    <!-- https://w3id.org/basyx/c4i#Capability -->
+    <!-- https://www.w3id.org/basyx/c4i#Capability -->
 
-    <owl:Class rdf:about="https://w3id.org/basyx/c4i#Capability">
+    <owl:Class rdf:about="https://www.w3id.org/basyx/c4i#Capability">
         <rdfs:comment xml:lang="de">Ressourcenneutrales Potential einen Effekt, im Sinne eines Übergangs von einen Start- in einen Zielzustand, zu erzielen.</rdfs:comment>
         <rdfs:comment xml:lang="en">The resource neutral potential to achieve an effect, in the sense of a transition from a start to an end state.</rdfs:comment>
         <rdfs:label xml:lang="en">Capability</rdfs:label>

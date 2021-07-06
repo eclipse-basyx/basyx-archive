@@ -4,8 +4,8 @@
  *      Author: wendel
  */
 
-#ifndef BASYX_SERVER_BASYXTCPSELECTSERVER_H_
-#define BASYX_SERVER_BASYXTCPSELECTSERVER_H_
+#ifndef BASYX_SERVER_TCPSELECTSERVER_H
+#define BASYX_SERVER_TCPSELECTSERVER_H
 
 #include <BaSyx/vab/core/IModelProvider.h>
 #include <BaSyx/vab/provider/native/frame/BaSyxNativeFrameProcessor.h>
@@ -115,4 +115,4 @@ private:
 }
 }
 
-#endif
+#endif /* BASYX_SERVER_TCPSELECTSERVER_H */

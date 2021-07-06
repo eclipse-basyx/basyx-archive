@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.vab.model;
 
 import java.util.Collection;
@@ -5,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.basyx.submodel.metamodel.connected.ConnectedElement;
 import org.eclipse.basyx.vab.support.TypeDestroyer;
 
 /**
@@ -23,7 +33,7 @@ import org.eclipse.basyx.vab.support.TypeDestroyer;
 */
 
 public class VABModelMap<V extends Object> implements Map<String, V> {
-	Map<String, V> map;
+	protected Map<String, V> map;
 
 	/**
 	 * Default constructor
@@ -183,6 +193,12 @@ public class VABModelMap<V extends Object> implements Map<String, V> {
 		return result;
 	}
 
+	/**
+	 * VABModelMaps are assumed to be equal iff they are containing the same data
+	 * independent of the used containers. <br>
+	 * In consequence, it does not matter if a collection is represented as Set or
+	 * as List, as long as the same elements are contained.
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean equals(Object obj) {
@@ -190,6 +206,9 @@ public class VABModelMap<V extends Object> implements Map<String, V> {
 			return true;
 		if (obj == null)
 			return false;
+		if (obj instanceof ConnectedElement) {
+			obj = ((ConnectedElement) obj).getElemLive();
+		}
 		if (!Map.class.isAssignableFrom(obj.getClass()))
 			return false;
 
@@ -199,14 +218,15 @@ public class VABModelMap<V extends Object> implements Map<String, V> {
 		Map<String, Object> otherMap = TypeDestroyer.destroyType(otherVAB);
 
 		if (map == null) {
-			if (otherMap != null)
-				return false;
+			return otherMap == null;
 		} else {
 			Map<String, Object> thisMap = TypeDestroyer.destroyType((Map<String, Object>) map);
-			if (!thisMap.equals(otherMap)) {
-				return false;
-			}
+			return thisMap.equals(otherMap);
 		}
-		return true;
+	}
+
+	@Override
+	public String toString() {
+		return map.toString();
 	}
 }

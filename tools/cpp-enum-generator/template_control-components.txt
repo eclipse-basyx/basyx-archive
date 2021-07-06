@@ -1,0 +1,80 @@
+; Comments must start with ; all other lines will be present in the corresponding file
+; Indicate a source-code file by $FILE_ENDING$-tag and the corresponding file ending
+; at the end of the file. i.e.: "$FILE_ENDING cpp". If $FILE_ENDING$ is not set, ".hpp" will be used.
+; Other tags that can be used are:
+; $ENUM_CLASS$     : Class name of enum, obtained from file name
+; $ENUM_CLASS_CAP$ : Class name of enum in uppercase
+; $FIRST_ENUM$     : The first enum in the list of enums
+; $MIDDLE_ENUM$    : All enums that are in between first and last enum.
+; $LAST_ENUM$      : The last enum in the list of enums
+; $SIZE$           : The number of enums
+; $CONSTANT$       : Define a costant, i.e.: $CONSTSANT$ NAME value, usage in document with $NAME$
+;
+;
+$CONSTANT$ NAMESPACE controlcomponent
+#ifndef BASYX_CONTROLCOMPONENT_ENUM_$ENUM_CLASS_CAP$_H
+#define BASYX_CONTROLCOMPONENT_ENUM_$ENUM_CLASS_CAP$_H
+
+#include <string>
+
+namespace basyx {
+namespace $NAMESPACE$ {
+
+enum class $ENUM_CLASS$ {
+    $FIRST_ENUM$,
+    $MIDDLE_ENUM$,
+    $LAST_ENUM$,
+};
+
+class $ENUM_CLASS$_
+{
+public:
+    static $ENUM_CLASS$ from_string(const std::string & name);
+    static const char * to_string($ENUM_CLASS$ value);
+};
+
+
+}
+}
+
+#endif
+$FILE_ENDING$ h
+#include <BaSyx/$NAMESPACE$/enumerations/$ENUM_CLASS$.h>
+
+#include <array>
+#include <algorithm>
+#include <memory>
+#include <string>
+
+using namespace basyx::controlcomponent;
+
+using enum_pair_t = std::pair<const char*, $ENUM_CLASS$>;
+
+static const std::array<enum_pair_t, $SIZE$> string_to_enum = 
+{
+    std::make_pair("$FIRST_ENUM$",  $ENUM_CLASS$::$FIRST_ENUM$),
+    std::make_pair("$MIDDLE_ENUM$", $ENUM_CLASS$::$MIDDLE_ENUM$),
+    std::make_pair("$LAST_ENUM$", $ENUM_CLASS$::$LAST_ENUM$),
+};
+
+$ENUM_CLASS$ $ENUM_CLASS$_::from_string(const std::string & name)
+{
+    auto pair = std::find_if(string_to_enum.begin(), string_to_enum.end(), 
+		[&name](const enum_pair_t & pair) {
+			return !name.compare(pair.first);
+	});
+
+    return pair->second;
+}
+
+const char * $ENUM_CLASS$_::to_string($ENUM_CLASS$ value)
+{
+    auto pair = std::find_if(string_to_enum.begin(), string_to_enum.end(), 
+		[value](const enum_pair_t & pair) {
+			return value == pair.second;
+	});
+
+    return pair->first;
+}
+
+$FILE_ENDING$ cpp

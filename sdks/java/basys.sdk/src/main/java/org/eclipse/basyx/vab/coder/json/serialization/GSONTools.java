@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.vab.coder.json.serialization;
 
 import java.io.ByteArrayInputStream;
@@ -7,6 +16,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Map;
@@ -19,6 +29,7 @@ import java.util.function.Supplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
@@ -59,6 +70,16 @@ public class GSONTools implements Serializer {
 	 * Type factory
 	 */
 	protected GSONToolsFactory toolsFactory = null;
+	
+	/**
+	 * Flag to remove null values from serialized JSON
+	 */
+	private boolean removeNull = true;
+	
+	/**
+	 * Flag to remove empty arrays from serialized JSON 
+	 */
+	private boolean removeEmpty = false;
 
 	/**
 	 * Constructor
@@ -66,6 +87,15 @@ public class GSONTools implements Serializer {
 	public GSONTools(GSONToolsFactory factory) {
 		// Store factory reference
 		toolsFactory = factory;
+	}
+	
+	/**
+	 * Constructor
+	 */
+	public GSONTools(GSONToolsFactory factory, boolean removeNull, boolean removeEmpty) {
+		this(factory);
+		this.removeNull = removeNull;
+		this.removeEmpty = removeEmpty;
 	}
 
 	/**
@@ -85,7 +115,14 @@ public class GSONTools implements Serializer {
 	@Override
 	public String serialize(Object obj) {
 		JsonElement elem = serializeObject(obj);
-		return elem.toString();
+		// Removing null value if the removeNull flag is on
+		if (removeNull) {
+			// Gson#toJson removes null automatically
+			Gson gson = new Gson();
+			return gson.toJson(elem);
+		} else {
+			return elem.toString();
+		}
 	}
 
 	/**
@@ -98,7 +135,7 @@ public class GSONTools implements Serializer {
 	private JsonElement serializeObject(Object obj) {
 		if (obj == null) {
 			return JsonNull.INSTANCE;
-		} else if (obj.getClass().isPrimitive() || isWrapperType(obj.getClass()) || obj instanceof String) {
+		} else if (obj.getClass().isPrimitive() || isWrapperType(obj.getClass()) || obj instanceof String || obj instanceof Number) {
 			return serializePrimitive(obj);
 		} else if (obj instanceof Map<?, ?>) {
 			return serializeMap((Map<String, Object>) obj);
@@ -149,7 +186,19 @@ public class GSONTools implements Serializer {
 			if (primitive.getAsString().contains(".")) {
 				return primitive.getAsDouble();
 			} else {
-				return primitive.getAsInt();
+				// Get value as Big integer
+				BigInteger tmp= primitive.getAsBigInteger();
+				if (BigInteger.valueOf(Integer.MAX_VALUE).compareTo(tmp) >= 0 && BigInteger.valueOf(Integer.MIN_VALUE).compareTo(tmp) <= 0) {
+					// convert to int
+					return primitive.getAsInt();
+				} else if (BigInteger.valueOf(Long.MAX_VALUE).compareTo(tmp) >= 0 && BigInteger.valueOf(Long.MIN_VALUE).compareTo(tmp) <= 0) {
+					// convert to long
+					return primitive.getAsLong();
+				} else {
+					// for types NonNegativeInteger, NonPositiveInteger, NegativeInteger,
+					// PositiveInteger
+					return tmp;
+				}
 			}
 		} else if (primitive.isBoolean()) {
 			return primitive.getAsBoolean();
@@ -157,6 +206,7 @@ public class GSONTools implements Serializer {
 			return primitive.getAsString();
 		}
 	}
+
 
 	/**
 	 * Serializes either string, number or boolean to a JsonPrimitive
@@ -219,7 +269,11 @@ public class GSONTools implements Serializer {
 	private JsonObject serializeMap(Map<String, Object> map) {
 		JsonObject obj = new JsonObject();
 		for (Entry<String, Object> entry : map.entrySet()) {
-			obj.add(entry.getKey(), serializeObject(entry.getValue()));
+			Object value = entry.getValue();
+			// Remove empty list if removeEmpty flag is on
+            if (!removeEmpty || !(value instanceof Collection<?> && ((Collection<?>)value).isEmpty())) {
+            	obj.add(entry.getKey(), serializeObject(value));
+        	}
 		}
 		return obj;
 	}

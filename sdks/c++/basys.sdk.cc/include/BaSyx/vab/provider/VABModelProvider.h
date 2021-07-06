@@ -17,7 +17,7 @@ namespace provider {
 
 class VABModelProvider : public vab::core::IModelProvider
 {
-private:
+protected:
 	basyx::log log;
 	basyx::object elements;
 public:

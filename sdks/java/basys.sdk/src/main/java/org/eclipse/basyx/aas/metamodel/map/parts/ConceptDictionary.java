@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.aas.metamodel.map.parts;
 
 import java.util.ArrayList;
@@ -5,6 +14,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.api.parts.IConceptDictionary;
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.parts.IConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -32,9 +42,17 @@ public class ConceptDictionary extends VABModelMap<Object> implements IConceptDi
 	 * Constructor
 	 */
 	public ConceptDictionary() {
-		putAll(new Referable());
 		put(CONCEPTDESCRIPTION, new ArrayList<IReference>());
 		put(CONCEPTDESCRIPTIONS, new ArrayList<IConceptDescription>());
+	}
+	
+	/**
+	 * Constructor accepting only mandatory attribute
+	 * @param idShort
+	 */
+	public ConceptDictionary(String idShort) {
+		this();
+		setIdShort(idShort);
 	}
 
 	public ConceptDictionary(Collection<IReference> ref) {
@@ -55,10 +73,23 @@ public class ConceptDictionary extends VABModelMap<Object> implements IConceptDi
 		if (map == null) {
 			return null;
 		}
-
+		
+		if (!isValid(map)) {
+			throw new MetamodelConstructionException(ConceptDictionary.class, map);
+		}
+		
 		ConceptDictionary ret = new ConceptDictionary();
 		ret.setMap(map);
 		return ret;
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	public static boolean isValid(Map<String, Object> map) {
+		return Referable.isValid(map);
 	}
 
 	@Override
@@ -82,7 +113,7 @@ public class ConceptDictionary extends VABModelMap<Object> implements IConceptDi
 	}
 
 	public void setIdShort(String idShort) {
-		Referable.createAsFacade(this, getKeyElement()).setIdShort(idShort);
+		Referable.createAsFacadeNonStrict(this, getKeyElement()).setIdShort(idShort);
 	}
 
 	public void setCategory(String category) {

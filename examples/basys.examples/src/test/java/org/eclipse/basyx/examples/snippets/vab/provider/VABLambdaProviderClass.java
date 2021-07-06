@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.examples.snippets.vab.provider;
 
 import static org.junit.Assert.assertEquals;
@@ -50,17 +59,17 @@ public class VABLambdaProviderClass {
 		IModelProvider provider = new VABLambdaProvider(rootElement);
 
 		// Static and dynamic properties are resolved to their primitive object value
-		assertEquals("myStaticString", provider.getModelPropertyValue("/static"));
-		assertEquals("myDynamicString", provider.getModelPropertyValue("/dynamic"));
+		assertEquals("myStaticString", provider.getValue("/static"));
+		assertEquals("myDynamicString", provider.getValue("/dynamic"));
 
 		// Now each time the dynamic property is read, it resolves its value through the given get operation
 		// - modify the source of the dynamic property
 		dynamicString = "newValue";
 		// - resolve the property
-		assertEquals("newValue", provider.getModelPropertyValue("/dynamic"));
+		assertEquals("newValue", provider.getValue("/dynamic"));
 
 		// The custom setter of the dynamic property in this example only allows string types...
-		provider.setModelPropertyValue("/dynamic", true);
-		assertEquals("newValue", provider.getModelPropertyValue("/dynamic"));
+		provider.setValue("/dynamic", true);
+		assertEquals("newValue", provider.getValue("/dynamic"));
 	}
 }

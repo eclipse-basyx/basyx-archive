@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.qualifier.qualifiable;
 
 import static org.junit.Assert.assertEquals;
@@ -29,7 +38,7 @@ public class TestQualifiable {
 	@Test
 	public void testConstructor1() {
 		Qualifiable qualifiable = new Qualifiable(FORMULA1);
-		assertEquals(Collections.singleton(FORMULA1), qualifiable.getQualifier());
+		assertEquals(Collections.singleton(FORMULA1), qualifiable.getQualifiers());
 	}
 	
 	@Test
@@ -39,14 +48,14 @@ public class TestQualifiable {
 		constraints.add(FORMULA2);
 		
 		Qualifiable qualifiable = new Qualifiable(constraints);
-		assertEquals(constraints, qualifiable.getQualifier());
+		assertEquals(constraints, qualifiable.getQualifiers());
 	}
 	
 	@Test
 	public void testSetQualifier() {
 		Qualifiable qualifiable = new Qualifiable(FORMULA1);
 		
-		qualifiable.setQualifier(Collections.singleton(FORMULA2));
-		assertEquals(Collections.singleton(FORMULA2), qualifiable.getQualifier());
+		qualifiable.setQualifiers(Collections.singleton(FORMULA2));
+		assertEquals(Collections.singleton(FORMULA2), qualifiable.getQualifiers());
 	}
 }

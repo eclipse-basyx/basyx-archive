@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.testsuite.regression.vab.modelprovider.lambda;
 
 import java.util.ArrayList;
@@ -15,7 +24,7 @@ import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProviderHelper;
-import org.eclipse.basyx.vab.protocol.api.ConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.ConnectorFactory;
 
 /**
  * Tests the functionality of the VABLambdaProvider according to the test cases
@@ -36,7 +45,7 @@ public class TestLambdaProvider extends TestProvider {
 	private static HashMap<String, Object> mapElement = (HashMap<String, Object>) structureElement.get("map");
 
 	protected VABConnectionManager connManager = new VABConnectionManager(new TestsuiteDirectory(),
-			new ConnectorProvider() {
+			new ConnectorFactory() {
 
 				@Override
 				protected IModelProvider createProvider(String addr) {

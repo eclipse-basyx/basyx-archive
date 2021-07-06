@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.examples.snippets.vab;
 
 import static org.junit.Assert.assertTrue;
@@ -7,13 +16,13 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import org.eclipse.basyx.components.servlet.vab.VABLambdaServlet;
-import org.eclipse.basyx.examples.TestContext;
+import org.eclipse.basyx.examples.contexts.BaSyxExamplesContext;
 import org.eclipse.basyx.examples.deployment.BaSyxDeployment;
 import org.eclipse.basyx.examples.support.directory.ExamplesPreconfiguredDirectory;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProviderHelper;
-import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorProvider;
+import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -35,7 +44,7 @@ import org.junit.Test;
  */
 public class DynamicPropertyLambda {
 
-	
+
 	/**
 	 * VAB connection manager backend
 	 * 
@@ -46,7 +55,7 @@ public class DynamicPropertyLambda {
 			new ExamplesPreconfiguredDirectory()
 				// Add example specific mappings
 			    .addMapping("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003",  "http://localhost:8080/basys.examples/Testsuite/components/BaSys/1.0/devicestatusVAB/"),
-			new HTTPConnectorProvider());
+			new HTTPConnectorFactory());
 
 	
 	/**
@@ -62,7 +71,7 @@ public class DynamicPropertyLambda {
 	public static BaSyxDeployment context = new BaSyxDeployment(
 				// Simulated servlets
 				// - BaSys topology with one AAS Server and one SQL directory
-				TestContext.sqlContext.
+				new BaSyxExamplesContext().
 					// Deploy example specific servlets to Tomcat server in this context
 					addServletMapping("/Testsuite/components/BaSys/1.0/devicestatusVAB/*", new VABLambdaServlet())
 			);
@@ -80,7 +89,7 @@ public class DynamicPropertyLambda {
 		// Server connections
 		// - Connect to VAB object by ID. The connection manager looks up this ID in
 		//   its directory
-		VABElementProxy connSubModel1 = this.connManager.connectToVABElement("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
+		VABElementProxy connSubmodel1 = this.connManager.connectToVABElement("urn:de.FHG:devices.es.iese:statusSM:1.0:3:x-509#003");
 
 		
 		// Create dynamic get/operation as Lambda expression, no set operation (null) is provided.
@@ -88,11 +97,11 @@ public class DynamicPropertyLambda {
 			return "dynamicExampleValue";
 		}, null);
 		// - Update property properties/dynamicExample with dynamic get/set operation
-		connSubModel1.createValue("dynamicExampleProperty", dynamicPropertyVal);
+		connSubmodel1.createValue("dynamicExampleProperty", dynamicPropertyVal);
 
 		// Read dynamicExample property
 		// - This will invoke the previously uploaded Lambda expression
-		Object propertyValue = connSubModel1.getModelPropertyValue("dynamicExampleProperty");
+		Object propertyValue = connSubmodel1.getValue("dynamicExampleProperty");
 		
 		
 		// Compare returned to expected values

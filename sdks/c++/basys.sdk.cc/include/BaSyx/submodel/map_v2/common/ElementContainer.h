@@ -5,6 +5,7 @@
 #include <BaSyx/submodel/map_v2/common/ElementFactory.h>
 #include <BaSyx/submodel/map_v2/qualifier/Referable.h>
 #include <BaSyx/submodel/map_v2/qualifier/Identifiable.h>
+#include <BaSyx/submodel/map_v2/reference/Reference.h>
 #include <BaSyx/submodel/map_v2/submodelelement/SubmodelElementFactory.h>
 #include <BaSyx/vab/ElementMap.h>
 
@@ -15,6 +16,10 @@ namespace basyx {
 namespace submodel {
 namespace map {
 
+struct ElementContainerPath {
+	static constexpr char IdShort[] = "idShort";
+};
+
 template<typename IElementType>
 class ElementContainer : public api::IElementContainer<IElementType>, public virtual vab::ElementMap
 {
@@ -22,20 +27,29 @@ public:
     using elementPtr_t = typename api::IElementContainer<IElementType>::elementPtr_t;
     using cache_t = std::unordered_map<std::string, elementPtr_t>;
 private:
+	api::IReferable * parent;
 	mutable cache_t cache;
+	basyx::object keyList;
 public:
 	using vab::ElementMap::ElementMap;
-	ElementContainer()
-		: vab::ElementMap(basyx::object::make_object_list())
+	ElementContainer(api::IReferable * parent = nullptr)
+		: vab::ElementMap(basyx::object::make_map())
+		, keyList(basyx::object::make_object_list())
+		, parent(parent)
 	{
 	};
 
 	virtual ~ElementContainer() = default;
 public:
+	basyx::object getKeyMap() { return this->keyList; };
+public:
 	virtual std::size_t size() const override;
+	virtual api::IReferable * getParent() const override;
+
 	virtual IElementType * const getElement(const std::string & idShort) const override;
 	virtual IElementType * const getElement(std::size_t n) const override;
 	virtual void addElement(elementPtr_t element) override;
+//	virtual std::vector<simple::Identifier> getIdentifierList();
 };
 
 template<typename IElementType>
@@ -45,20 +59,19 @@ std::size_t ElementContainer<IElementType>::size() const
 };
 
 template<typename IElementType>
+api::IReferable * ElementContainer<IElementType>::getParent() const
+{
+	return this->parent;
+};
+
+template<typename IElementType>
 IElementType * const ElementContainer<IElementType>::getElement(const std::string & idShort) const
 {
 	// Find element in object tree
-	auto & objectList = this->getMap().template Get<basyx::object::object_list_t&>();
-
-	auto objectIterator = std::find_if(
-		objectList.begin(), objectList.end(),
-		[&idShort](basyx::object & obj) {
-		const auto & id = obj.getProperty(map::Identifiable::Path::IdShort).Get<std::string&>();
-		return idShort == id;
-	});
+	auto && object = this->map.getProperty(idShort);
 
 	// element doesn't exist, remove from cache and return nullptr
-	if (objectIterator == objectList.end()) {
+	if (object.IsNull() || object.IsError()) {
 		this->cache.erase(idShort);
 		return nullptr;
 	}
@@ -67,7 +80,7 @@ IElementType * const ElementContainer<IElementType>::getElement(const std::strin
 		auto element = cache.find(idShort);
 		if (element == cache.end()) {
 			// not in cache, re-create elementPtr and return
-			elementPtr_t elementPtr = ElementFactory<IElementType>::Create(vab::ElementMap(*objectIterator));
+			elementPtr_t elementPtr = ElementFactory<IElementType>::Create(vab::ElementMap(object));
 			auto ptr = this->cache.emplace(idShort, std::move(elementPtr));
 			ptr.first->second.get();
 		}
@@ -85,13 +98,20 @@ IElementType * const ElementContainer<IElementType>::getElement(std::size_t n) c
 	if (n > this->size())
 		return nullptr;
 
-	// Find element in object tree
-	auto & objectList = this->getMap().template Get<basyx::object::object_list_t&>();
-	auto & obj = objectList.at(n);
+	// Iterate through object map
+	int i = 0;
+	
+	for(const auto & entry : map.Get<basyx::object::object_map_t&>())
+	{
+		if (i++ == n)
+		{
+			// Get id of object and create temporary
+			const auto & id = entry.first;
+			return this->getElement(id);
+		};
+	};
 
-	// Get id of object and create temporary
-	const auto & id = obj.getProperty(map::Identifiable::Path::IdShort).Get<std::string&>();
-	return this->getElement(id);
+	return nullptr;
 };
 
 
@@ -103,7 +123,11 @@ void ElementContainer<IElementType>::addElement(elementPtr_t element)
 	auto elementMap = dynamic_cast<vab::ElementMap*>(element.get());
 	if (elementMap != nullptr)
 	{
-		this->map.insert(elementMap->getMap());
+		// Get reference from element
+		map::Reference reference(element->getReference());
+
+		this->keyList.insert(reference.getMap());
+		this->map.insertKey(shortId, elementMap->getMap());
 		this->cache.emplace(shortId, std::move(element));
 	};
 };

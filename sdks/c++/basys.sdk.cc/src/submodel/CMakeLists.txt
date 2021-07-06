@@ -17,12 +17,15 @@ set_target_properties(${BASYX_SUBMODEL_LIB_SUFFIX} PROPERTIES VERSION ${PROJECT_
 set_target_properties(${BASYX_SUBMODEL_LIB_SUFFIX} PROPERTIES SOVERSION ${BASYX_PACKAGE_VERSION_MAJOR})
 set_target_properties(${BASYX_SUBMODEL_LIB_SUFFIX} PROPERTIES PREFIX "${CMAKE_STATIC_LIBRARY_PREFIX}${PROJECT_SHORTNAME}")
 target_include_directories(${BASYX_SUBMODEL_LIB_SUFFIX}
-INTERFACE ${CMAKE_INSTALL_PREFIX}/include
-       ${CMAKE_INSTALL_PREFIX}/include/${PROJECT_SHORTNAME})
-
+	PUBLIC 
+	    $<BUILD_INTERFACE:${BASYX_INCLUDE_DIR}>  
+		$<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>
+)
 
 target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
     PRIVATE
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/constexpr.cpp
+
 	    ${CMAKE_CURRENT_SOURCE_DIR}/submodel/enumerations/AssetKind.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/enumerations/DataTypeIEC61360.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/enumerations/LevelType.cpp
@@ -45,6 +48,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/parts/ConceptDictionary.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/parts/ConceptDescription.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/parts/View.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/qualifier/AdministrativeInformation.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/qualifier/HasDataSpecification.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/qualifier/Identifiable.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/qualifier/Qualifiable.cpp
@@ -66,6 +70,18 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/aas/AssetAdministrationShell.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/aas/Asset.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/LangStringSet.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/Timezone.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/AnyURI.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/DateTime.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/Date.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/DayTimeDuration.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/YearMonthDuration.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/Time.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/GYearMonth.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/GYear.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/GMonthDay.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/GDay.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/common/xsd_types/GMonth.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/constraint/Formula.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/constraint/Qualifier.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/dataspecification/DataSpecification.cpp
@@ -110,6 +126,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
 		${BASYX_SUBMODEL_INCLUDE_DIR}/enumerations/KeyType.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/enumerations/KeyElements.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/enumerations/IdentifiableElements.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/enumerations/Conversions.h
 	
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/aas/IAssetAdministrationShell.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/aas/IAsset.h
@@ -130,6 +147,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/parts/IConceptDescription.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/parts/IConceptDictionary.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/parts/IView.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/qualifier/IAdministrativeInformation.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/qualifier/IHasDataSpecification.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/qualifier/IHasKind.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/qualifier/IHasSemantics.h
@@ -148,6 +166,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/submodelelement/operation/IOperationVariable.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/submodelelement/property/IMultiLanguageProperty.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/submodelelement/property/IProperty.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/submodelelement/property/XSDAnySimpleType.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/submodelelement/property/IReferenceElement.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/submodelelement/IRelationshipElement.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/submodelelement/IAnnotatedRelationshipElement.h
@@ -159,6 +178,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/aas/AssetAdministrationShell.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/aas/Asset.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/ElementContainer.h
+        ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/SubModelContainer.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/ElementFactory.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/LangStringSet.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/ModelType.h
@@ -171,6 +191,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/parts/View.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/constraint/Formula.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/constraint/Qualifier.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/AdministrativeInformation.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/HasDataSpecification.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/Identifiable.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/Qualifiable.h
@@ -192,6 +213,18 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/aas/Asset.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/ElementContainer.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/LangStringSet.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/Timezone.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/AnyURI.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/DateTime.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/Date.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/DayTimeDuration.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/YearMonthDuration.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/Time.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/GYearMonth.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/GYear.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/GMonthDay.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/GDay.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/common/xsd_types/GMonth.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/constraint/Formula.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/constraint/Qualifier.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/dataspecification/DataSpecification.h
@@ -233,7 +266,20 @@ target_link_libraries(${BASYX_SUBMODEL_LIB_SUFFIX}
 add_library(basyx::submodel ALIAS ${BASYX_SUBMODEL_LIB_SUFFIX})
 add_library(${PROJECT_SHORTNAME}::${BASYX_SUBMODEL_LIB_SUFFIX} ALIAS ${BASYX_SUBMODEL_LIB_SUFFIX})
 
-diagnostics_print(${BASYX_SUBMODEL_LIB_SUFFIX})
+# Disable inheritance by dominance warning in MSVC
+if(MSVC)
+	target_compile_options(${BASYX_SUBMODEL_LIB_SUFFIX} PUBLIC /wd4250)
+endif()
+
+if(BASYX_IS_SUBMODULE)
+	set_target_properties(${BASYX_SUBMODEL_LIB_SUFFIX} PROPERTIES FOLDER BaSyx)
+endif()
+
+if(BASYX_VERBOSE_CMAKE_OUTPUT)
+	diagnostics_print(${BASYX_SUBMODEL_LIB_SUFFIX})
+endif()
+
+build_source_group(${BASYX_SUBMODEL_LIB_SUFFIX})
 
 ###############################################
 ###           Install section               ###

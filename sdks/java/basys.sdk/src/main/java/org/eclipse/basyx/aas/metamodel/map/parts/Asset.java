@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.aas.metamodel.map.parts;
 
 import java.util.Collection;
@@ -5,6 +14,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.AssetKind;
 import org.eclipse.basyx.aas.metamodel.api.parts.asset.IAsset;
+import org.eclipse.basyx.aas.metamodel.exception.MetamodelConstructionException;
 import org.eclipse.basyx.submodel.metamodel.api.dataspecification.IEmbeddedDataSpecification;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
@@ -49,8 +59,20 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 		putAll(new Identifiable());
 
 		// Default values
-		put(ASSETIDENTIFICATIONMODEL, null);
-		put(KIND, null);
+		setAssetKind(AssetKind.INSTANCE);
+	}
+	
+	/**
+	 * Constructor accepting only mandatory attributes
+	 * @param idShort
+	 * @param identification
+	 * @param kind
+	 */
+	public Asset(String idShort, IIdentifier identification, AssetKind kind) {
+		this();
+		setIdentification(identification);
+		setIdShort(idShort);
+		setAssetKind(kind);
 	}
 
 	/**
@@ -76,9 +98,24 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 		if (map == null) {
 			return null;
 		}
+		
+		if (!isValid(map)) {
+			throw new MetamodelConstructionException(Asset.class, map);
+		}
+		
 		Asset ret = new Asset();
 		ret.setMap(map);
 		return ret;
+	}
+	
+	/**
+	 * Check whether all mandatory elements for the metamodel
+	 * exist in a map
+	 * @return true/false
+	 */
+	public static boolean isValid(Map<String, Object> map) {
+		return Identifiable.isValid(map) && 
+				map.containsKey(Asset.KIND);
 	}
 
 	@Override
@@ -122,8 +159,12 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 		Identifiable.createAsFacade(this, getKeyElement()).setAdministration(information);
 	}
 
+	public void setIdentification(IIdentifier id) {
+		setIdentification(id.getIdType(), id.getId());
+	}
+
 	public void setIdentification(IdentifierType idType, String id) {
-		Identifiable.createAsFacade(this, getKeyElement()).setIdentification(idType, id);
+		Identifiable.createAsFacadeNonStrict(this, getKeyElement()).setIdentification(idType, id);
 	}
 
 	@Override
@@ -156,7 +197,7 @@ public class Asset extends VABModelMap<Object> implements IAsset {
 	}
 
 	public void setIdShort(String idShort) {
-		Referable.createAsFacade(this, getKeyElement()).setIdShort(idShort);
+		Referable.createAsFacadeNonStrict(this, getKeyElement()).setIdShort(idShort);
 	}
 
 	public void setCategory(String category) {

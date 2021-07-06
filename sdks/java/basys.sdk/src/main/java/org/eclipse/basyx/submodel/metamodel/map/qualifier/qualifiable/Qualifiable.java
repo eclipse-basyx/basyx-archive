@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable;
 
 import java.util.Collection;
@@ -16,16 +25,12 @@ import org.eclipse.basyx.vab.model.VABModelMap;
  *
  */
 public class Qualifiable extends VABModelMap<Object> implements IQualifiable {
-	public static final String CONSTRAINTS = "constraints";
+	public static final String QUALIFIERS = "qualifiers";
 
 	/**
 	 * Constructor
 	 */
-	public Qualifiable() {
-		// The instance of an element may be further qualified by one or more
-		// qualifiers.
-		put(CONSTRAINTS, null);
-	}
+	public Qualifiable() {}
 
 	/**
 	 * Constructor
@@ -38,16 +43,16 @@ public class Qualifiable extends VABModelMap<Object> implements IQualifiable {
 
 		// The instance of an element may be further qualified by one or more
 		// qualifiers.
-		put(CONSTRAINTS, qualifiers);
+		put(QUALIFIERS, qualifiers);
 	}
 
 	/**
 	 * Constructor
 	 */
-	public Qualifiable(Collection<Constraint> qualifier) {
+	public Qualifiable(Collection<Constraint> qualifiers) {
 		// The instance of an element may be further qualified by one or more
 		// qualifiers.
-		put(CONSTRAINTS, qualifier);
+		put(QUALIFIERS, qualifiers);
 	}
 
 	/**
@@ -67,15 +72,15 @@ public class Qualifiable extends VABModelMap<Object> implements IQualifiable {
 		return ret;
 	}
 
-	public void setQualifier(Collection<IConstraint> qualifiers) {
-		put(Qualifiable.CONSTRAINTS, qualifiers);
+	public void setQualifiers(Collection<IConstraint> qualifiers) {
+		put(Qualifiable.QUALIFIERS, qualifiers);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<IConstraint> getQualifier() {
+	public Collection<IConstraint> getQualifiers() {
 		// Transform set of maps to set of IConstraints
-		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) get(Qualifiable.CONSTRAINTS);
+		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) get(Qualifiable.QUALIFIERS);
 		Collection<IConstraint> ret = new HashSet<>();
 		if (set != null) {
 			for (Map<String, Object> m : set) {

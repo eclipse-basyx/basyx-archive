@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.vab.exception.provider;
 
 /**
@@ -32,6 +41,12 @@ public class ProviderException extends RuntimeException {
 		
 	public ProviderException(Exception e) {
 		super(e);
+	}
+
+
+	public ProviderException(String message, Throwable cause) {
+		super(cause);
+		this.message = message;
 	}
 
 

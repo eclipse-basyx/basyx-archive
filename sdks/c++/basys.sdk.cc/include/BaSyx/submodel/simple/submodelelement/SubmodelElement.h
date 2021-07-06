@@ -6,41 +6,58 @@
 #include <BaSyx/submodel/simple/qualifier/HasDataSpecification.h>
 #include <BaSyx/submodel/api_v2/qualifier/IHasKind.h>
 #include <BaSyx/submodel/simple/qualifier/Referable.h>
+#include <BaSyx/submodel/simple/qualifier/Qualifiable.h>
 
 
 namespace basyx {
 namespace submodel {
 namespace simple {
 
-class SubmodelElement : public virtual api::ISubmodelElement
+class SubmodelElement
+  : public api::ISubmodelElement
 {
 private:
 	HasDataSpecification dataSpecification;
 	ModelingKind kind;
 	Reference semanticId;
 	Referable referable;
+	Qualifiable qualifiable;
+	ModelTypes modelType;
 public:
 	SubmodelElement(const std::string & idShort, ModelingKind kind = ModelingKind::Instance);
 
-	virtual ~SubmodelElement() = default;
+	~SubmodelElement() = default;
 
 	// Inherited via IHasDataSemantics
-	virtual const api::IReference & getSemanticId() const override;
-	void setSemanticId(Reference reference);
+	const api::IReference & getSemanticId() const override;
+	void setSemanticId(const api::IReference & reference) override;
 
 	// Inherited via IHasDataSpecification
-	virtual void addDataSpecification(const Reference & reference) override;
-	virtual const std::vector<Reference> getDataSpecificationReference() const override;
+	void addDataSpecification(const Reference & reference) override;
+	const std::vector<Reference> getDataSpecificationReference() const override;
 
 	// Inherited via IReferable
-	virtual const std::string & getIdShort() const override;
-	virtual const std::string * const getCategory() const override;
-	virtual simple::LangStringSet & getDescription() override;
-	virtual const simple::LangStringSet & getDescription() const override;
-	virtual const IReferable * const getParent() const override;
+	const std::string & getIdShort() const override;
+	const std::string * const getCategory() const override;
+  	void setCategory(const std::string & category) override;
+	simple::LangStringSet & getDescription() override;
+	const simple::LangStringSet & getDescription() const override;
+	IReferable * getParent() const override;
+	void setParent(IReferable * parent) override;
+	Key getKey(bool local) const override;
+	simple::Reference getReference() const override;
 
 	// Inherited via IHasKind
-	virtual ModelingKind getKind() const override;
+	ModelingKind getKind() const override;
+
+	// Inherited via IQualifiable
+	std::vector<Formula> getFormulas() const override;
+	std::vector<Qualifier> getQualifiers() const override;
+	void addFormula(const api::IFormula & formula) override;
+	void addQualifier(const api::IQualifier & qualifier) override;
+
+  // Inherited vie IModelType
+  ModelTypes GetModelType() const override;
 };
 
 }

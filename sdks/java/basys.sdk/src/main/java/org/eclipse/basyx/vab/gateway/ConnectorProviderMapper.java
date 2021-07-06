@@ -1,10 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2021 the Eclipse BaSyx Authors
+ * 
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ ******************************************************************************/
 package org.eclipse.basyx.vab.gateway;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
+import org.eclipse.basyx.vab.protocol.api.IConnectorFactory;
 
 /**
  * Maps an incoming address to an IConnectorProvider based on the protocol used
@@ -15,9 +24,9 @@ import org.eclipse.basyx.vab.protocol.api.IConnectorProvider;
  * @author schnicke
  *
  */
-public class ConnectorProviderMapper implements IConnectorProvider {
+public class ConnectorProviderMapper implements IConnectorFactory {
 
-	private Map<String, IConnectorProvider> providerMap = new HashMap<>();
+	private Map<String, IConnectorFactory> providerMap = new HashMap<>();
 
 	/**
 	 * 
@@ -26,7 +35,7 @@ public class ConnectorProviderMapper implements IConnectorProvider {
 	 *            <i>basyx://</i>
 	 * @param provider
 	 */
-	public void addConnectorProvider(String prefix, IConnectorProvider provider) {
+	public void addConnectorProvider(String prefix, IConnectorFactory provider) {
 		providerMap.put(prefix, provider);
 	}
 
@@ -47,7 +56,7 @@ public class ConnectorProviderMapper implements IConnectorProvider {
 	 */
 	private String getPrefix(String addr) {
 		String prefix = addr.split("//")[0];
-		return prefix.replace(":", "");
+		return prefix.replaceFirst(":", "");
 	}
 
 }
