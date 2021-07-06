@@ -11,7 +11,6 @@ namespace basyx {
 namespace submodel {
 namespace map {
 
-
 class Qualifier : 
 	public api::IQualifier,
 	public ModelType<ModelTypes::Qualifier>,
@@ -38,6 +37,7 @@ public:
 		const std::string & valueType, 
 		const std::string & valueDataType, 
 		const api::IReference & valueId);
+	Qualifier(basyx::object);
 
 	Qualifier(const api::IQualifier & other);
 	Qualifier(const Qualifier & other) = default;

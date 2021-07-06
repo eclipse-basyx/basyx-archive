@@ -11,13 +11,12 @@ constexpr char Qualifier::Path::ValueType[];
 constexpr char Qualifier::Path::SemanticId[];
 constexpr char Qualifier::Path::ValueId[];
 
-
 Qualifier::Qualifier(const std::string & qualifierType, const std::string & valueType)
 {
 	this->map.insertKey(Path::QualifierType, qualifierType);
 	this->map.insertKey(Path::ValueType, valueType);
 	this->map.insertKey(Path::ValueId, this->valueId.getMap());
-};
+}
 
 Qualifier::Qualifier(const std::string & qualifierType,
 	const std::string & valueType,
@@ -29,7 +28,26 @@ Qualifier::Qualifier(const std::string & qualifierType,
 	this->map.insertKey(Path::QualifierType, qualifierType);
 	this->map.insertKey(Path::ValueType, valueType);
 	this->map.insertKey(Path::ValueId, this->valueId.getMap());
-};
+}
+
+Qualifier::Qualifier(basyx::object obj)
+  : ElementMap{}
+{
+  this->map.insertKey(Path::ValueType, obj.getProperty(Path::ValueType).GetStringContent());
+  this->map.insertKey(Path::QualifierType, obj.getProperty(Path::QualifierType).GetStringContent());
+
+  if ( not obj.getProperty(Path::ValueDataType).IsNull() )
+    this->map.insertKey(Path::ValueDataType, obj.getProperty(Path::ValueDataType).GetStringContent());
+
+  if ( not obj.getProperty(Path::ValueId).IsNull() )
+  {
+    this->valueId = Reference(obj.getProperty(Path::ValueId));
+    this->map.insertKey(Path::ValueId, this->valueId.getMap());
+  }
+
+  if ( not obj.getProperty(Path::SemanticId).IsNull() )
+    this->setSemanticId(util::make_unique<Reference>(obj.getProperty(Path::SemanticId)));
+}
 
 Qualifier::Qualifier(const api::IQualifier & qualifier)
 	: Qualifier( qualifier.getQualifierType(), qualifier.getValueType() )
@@ -39,17 +57,17 @@ Qualifier::Qualifier(const api::IQualifier & qualifier)
 
 	if (qualifier.getValueDataType() != nullptr)
 		this->setValueDataType(*qualifier.getValueDataType());
-};
+}
 
 const std::string Qualifier::getQualifierType() const
 {
 	return this->map.getProperty(Path::QualifierType).Get<std::string&>();
-};
+}
 
 const std::string Qualifier::getValueType() const
 {
 	return this->map.getProperty(Path::ValueType).Get<std::string&>();
-};
+}
 
 const std::string * const Qualifier::getValueDataType() const
 {
@@ -57,7 +75,7 @@ const std::string * const Qualifier::getValueDataType() const
 		return nullptr;
 
 	return &this->map.getProperty(Path::ValueDataType).Get<std::string&>();
-};
+}
 
 void Qualifier::setValueDataType(const std::string & valueDataType)
 {
@@ -70,12 +88,12 @@ const IReference * const Qualifier::getValueId() const
 		return nullptr;
 
 	return &this->valueId;
-};
+}
 
 void Qualifier::setValueId(const IReference & reference)
 {
 	this->valueId = reference.getKeys();
-};
+}
 
 bool Qualifier::operator!=(const IQualifier & other) const
 {
@@ -83,7 +101,7 @@ bool Qualifier::operator!=(const IQualifier & other) const
 		or this->getValueType() != other.getValueType()
 		or this->getValueDataType() != other.getValueDataType()
 		or this->getValueId() != other.getValueId();
-};
+}
 
 const IReference * Qualifier::getSemanticId() const
 {
