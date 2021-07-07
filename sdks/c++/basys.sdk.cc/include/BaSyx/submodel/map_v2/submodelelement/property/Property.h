@@ -2,7 +2,7 @@
 #define BASYX_SUBMODEL_MAP_V2_SUBMODELELEMENT_PROPERTY_PROPERTY_H
 
 #include <BaSyx/submodel/api_v2/submodelelement/property/IProperty.h>
-#include <BaSyx/submodel/map_v2/submodelelement/SubmodelElement.h>
+#include <BaSyx/submodel/map_v2/submodelelement/DataElement.h>
 #include <BaSyx/submodel/map_v2/common/ModelType.h>
 #include <BaSyx/submodel/map_v2/qualifier/Qualifiable.h>
 #include <BaSyx/submodel/api_v2/submodelelement/property/XSDAnySimpleType.h>
@@ -21,27 +21,25 @@ struct PropertyPath {
 
 template<typename T>
 class Property
-    : public virtual api::IProperty
-    , public virtual SubmodelElement
-    , public virtual vab::ElementMap
-    , public virtual Qualifiable
-    , public ModelType<ModelTypes::Property>
+  : public virtual api::IProperty
+  , public virtual vab::ElementMap
+  , public virtual DataElement
+  , public ModelType<ModelTypes::Property>
 {
 private:
   std::unique_ptr<Reference> valueId;
 
 public:
   Property(const std::string & idShort)
-      : SubmodelElement(idShort, ModelingKind::Instance)
+    : DataElement(idShort, ModelingKind::Instance)
   {
     this->setValueType(xsd_types::xsd_type<T>::getDataTypeDef());
-  };
+  }
 
   Property(const vab::ElementMap & elementMap)
-      : vab::ElementMap(elementMap.getMap())
-      , SubmodelElement(elementMap.getMap().getProperty(Referable::Path::IdShort).GetStringContent(), ModelingKind::Instance)
-  {
-  };
+    : vab::ElementMap(elementMap.getMap())
+    , DataElement(elementMap.getMap().getProperty(Referable::Path::IdShort).GetStringContent(), ModelingKind::Instance)
+  {}
 
   virtual ~Property() = default;
 
@@ -100,7 +98,7 @@ public:
     this->map.insertKey(PropertyPath::ValueId, this->valueId->getMap());
   }
 
-  virtual KeyElements getKeyElementType() const override { return KeyElements::Property; };
+  virtual KeyElements getKeyElementType() const override { return KeyElements::Property; }
 };
 
 }

@@ -14,14 +14,15 @@ namespace submodel {
 namespace map {
 
 class SubmodelElement
-  :	public virtual api::ISubmodelElement
+  : public virtual api::ISubmodelElement
   , public virtual vab::ElementMap
-  , public virtual Qualifiable
+  , public Qualifiable
   , public Referable
   , public HasDataSpecification
 {
 public:
-  struct Path {
+  struct Path
+  {
     static constexpr char Kind[] = "kind";
     static constexpr char SemanticId[] = "semanticId";
   };
@@ -29,18 +30,20 @@ private:
   std::unique_ptr<Reference> semanticId;
 
 public:
-    SubmodelElement(const std::string& idShort, ModelingKind kind = ModelingKind::Instance);
+  SubmodelElement(const std::string & idShort, ModelingKind kind = ModelingKind::Instance);
+  SubmodelElement(basyx::object);
 
-    virtual ~SubmodelElement() = default;
+  virtual ~SubmodelElement() = default;
 
-    // Inherited via IHasDataSemantics
-    virtual const api::IReference * getSemanticId() const override;
-    void setSemanticId(std::unique_ptr<Reference> reference);
+  // Inherited via IHasDataSemantics
+  virtual const api::IReference * getSemanticId() const override;
 
-    // Inherited via IHasKind
-    virtual ModelingKind getKind() const override;
+  void setSemanticId(std::unique_ptr<Reference> reference);
 
-    virtual KeyElements getKeyElementType() const override { return KeyElements::SubmodelElement; };
+  // Inherited via IHasKind
+  virtual ModelingKind getKind() const override;
+
+  virtual KeyElements getKeyElementType() const override { return KeyElements::SubmodelElement; };
 };
 
 }
