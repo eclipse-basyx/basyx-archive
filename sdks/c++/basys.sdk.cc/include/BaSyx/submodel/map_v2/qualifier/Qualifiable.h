@@ -19,8 +19,9 @@ public:
     static constexpr char Qualifier[] = "qualifier";
   };
 public:
-	Qualifiable() = default;
+	Qualifiable();
 	Qualifiable(const std::vector<simple::Formula> & formulas, const std::vector<simple::Qualifier> & qualifiers);
+	Qualifiable(basyx::object);
 
 	Qualifiable(const Qualifiable & other) = default;
 	Qualifiable(Qualifiable && other) noexcept = default;

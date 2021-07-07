@@ -9,10 +9,27 @@ using namespace basyx::submodel::map;
 
 constexpr char Qualifiable::Path::Qualifier[];
 
-Qualifiable::Qualifiable(const std::vector<simple::Formula> & formulas, const std::vector<simple::Qualifier> & qualifiers)
+Qualifiable::Qualifiable()
+  : ElementMap{}
 {
-	this->map.insertKey(Path::Qualifier, basyx::object::make_object_list());
-};
+  this->map.insertKey(Path::Qualifier, basyx::object::make_object_list());
+}
+
+Qualifiable::Qualifiable(const std::vector<simple::Formula> & formulas, const std::vector<simple::Qualifier> & qualifiers)
+  : Qualifiable()
+{
+  for (auto & formula : formulas)
+    this->addFormula(formula);
+
+  for (auto & qualifier : qualifiers)
+    this->addQualifier(qualifier);
+}
+
+Qualifiable::Qualifiable(basyx::object obj)
+  : ElementMap{}
+{
+  this->map.insertKey(Path::Qualifier, obj.getProperty(Path::Qualifier).Get<basyx::object::object_list_t>());
+}
 
 void Qualifiable::addFormula(const api::IFormula & formula)
 {

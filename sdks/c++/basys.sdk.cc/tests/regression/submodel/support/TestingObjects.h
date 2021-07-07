@@ -3,6 +3,8 @@
 
 #include <BaSyx/shared/object.h>
 #include <BaSyx/submodel/map_v2/common/LangStringSet.h>
+#include <BaSyx/submodel/map_v2/constraint/Formula.h>
+#include <BaSyx/submodel/map_v2/constraint/Qualifier.h>
 #include <BaSyx/submodel/map_v2/reference/Reference.h>
 #include <BaSyx/submodel/map_v2/qualifier/Referable.h>
 #include <BaSyx/submodel/map_v2/qualifier/HasDataSpecification.h>
@@ -96,6 +98,33 @@ static bool testingHasDataSpecification(HasDataSpecification & hasDataSpecificat
 {
   auto references = hasDataSpecification.getDataSpecificationReference();
   return references.at(0) == testingReference_2() and references.at(1) == testingReference_1();
+}
+
+static Formula testingFormula()
+{
+  Formula formula;
+
+  formula.addDependency(TestingObjects::map::testingReference_1());
+  formula.addDependency(TestingObjects::map::testingReference_2());
+
+  return formula;
+}
+
+static bool testingFormula(api::IFormula & formula)
+{
+  auto deps = formula.getDependencies();
+  return deps.at(0) == testingReference_1() and deps.at(1) == testingReference_2();
+}
+
+static Qualifier testingQualifier(int c = 1)
+{
+  return Qualifier{"Qualifier type " + std::to_string(c), "Value type " + std::to_string(c)};
+}
+
+static bool testingQualifier(api::IQualifier & qualifier, int c=1)
+{
+  return qualifier.getQualifierType() == ("Qualifier type " + std::to_string(c))
+          and qualifier.getValueType() == ("Value type " + std::to_string(c));
 }
 
 }

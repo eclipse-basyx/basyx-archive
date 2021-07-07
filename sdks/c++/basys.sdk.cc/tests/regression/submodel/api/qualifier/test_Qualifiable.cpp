@@ -4,6 +4,8 @@
 #include <BaSyx/submodel/simple/qualifier/Qualifiable.h>
 #include <BaSyx/submodel/map_v2/qualifier/Qualifiable.h>
 
+#include "support/TestingObjects.h"
+
 using namespace basyx::submodel;
 
 // Implementations to run tests for
@@ -34,6 +36,25 @@ TYPED_TEST(QualifiableTest, TestConstructor)
 {
 	ASSERT_EQ(this->qualifiable->getFormulas().size(), 0);
 	ASSERT_EQ(this->qualifiable->getQualifiers().size(), 0);
+}
+
+TYPED_TEST(QualifiableTest, TestListConstructor)
+{
+  using impl_t = typename TestFixture::impl_t;
+
+  std::vector<simple::Formula> formulas;
+  formulas.push_back(TestingObjects::map::testingFormula());
+
+  std::vector<simple::Qualifier> qualifiers;
+  qualifiers.push_back(TestingObjects::map::testingQualifier());
+  qualifiers.push_back(TestingObjects::map::testingQualifier(2));
+
+  impl_t qualifiable{formulas, qualifiers};
+
+  ASSERT_TRUE(TestingObjects::map::testingFormula(qualifiable.getFormulas().at(0)));
+
+  ASSERT_TRUE(TestingObjects::map::testingQualifier(qualifiable.getQualifiers().at(0)));
+  ASSERT_TRUE(TestingObjects::map::testingQualifier(qualifiable.getQualifiers().at(1), 2));
 }
 
 TYPED_TEST(QualifiableTest, TestAddFormula)
