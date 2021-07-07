@@ -12,21 +12,25 @@ namespace basyx {
 namespace submodel {
 namespace map {
 	
-class Blob : 
-	public virtual api::IBlob, 
-	public SubmodelElement,
-	public ModelType<ModelTypes::Blob>
+class Blob
+  : public virtual api::IBlob
+  , public virtual vab::ElementMap
+  , public SubmodelElement
+  , public ModelType<ModelTypes::Blob>
 {
 public:
-	struct constants {
+	struct Path {
 		static constexpr char mimeType[] = "mimeType";
 		static constexpr char value[] = "value";
 	};
+
 private:
-	std::string data;
 	MimeType mimeType;
+
 public:
 	Blob(const std::string & idShort, const std::string & mimeType);
+	Blob(basyx::object);
+
 	virtual ~Blob() = default;
 
 	const BlobType & getValue() const override;

@@ -5,46 +5,52 @@ namespace basyx {
 namespace submodel {
 namespace map {
 
-constexpr char Blob::constants::mimeType[];
-constexpr char Blob::constants::value[];
+constexpr char Blob::Path::mimeType[];
+constexpr char Blob::Path::value[];
 
 Blob::Blob(const std::string & idShort, const std::string & mimeType)
-  : SubmodelElement(idShort)
-  , vab::ElementMap{}
+  : vab::ElementMap{}
+  , SubmodelElement(idShort)
 {
-	this->map.insertKey(constants::mimeType, mimeType);
-	this->map.insertKey(constants::value, basyx::object::make_list<char>());
+	this->map.insertKey(Path::mimeType, mimeType);
+	this->map.insertKey(Path::value, basyx::object::make_list<char>());
+}
+
+Blob::Blob(basyx::object obj)
+  : vab::ElementMap{}
+  , SubmodelElement{obj}
+{
+  this->map.insertKey(Path::value, obj.getProperty(Path::value).Get<object::list_t<char>&>());
+  this->map.insertKey(Path::mimeType, obj.getProperty(Path::mimeType).GetStringContent());
 }
 
 const Blob::BlobType & Blob::getValue() const
 {
-	auto & value = this->map.getProperty(constants::value).Get<std::vector<char>&>();
+	auto & value = this->map.getProperty(Path::value).Get<std::vector<char>&>();
 	return value;
-};
-
+}
 
 void Blob::setValue(const Blob::BlobType & value)
 {
-	auto & blob = this->map.getProperty(constants::value).Get<std::vector<char>&>();
+	auto & blob = this->map.getProperty(Path::value).Get<std::vector<char>&>();
 	blob = value;
-};
+}
 
 void Blob::setValue(Blob::BlobType && value)
 {
-	auto & blob = this->map.getProperty(constants::value).Get<std::vector<char>&>();
+	auto & blob = this->map.getProperty(Path::value).Get<std::vector<char>&>();
 	blob = std::move(value);
-};
+}
 
 const std::string Blob::getMimeType() const
 {
-	return this->map.getProperty(constants::mimeType).Get<std::string&>();
-};
-
+	return this->map.getProperty(Path::mimeType).Get<std::string&>();
+}
 
 void Blob::setMimeType(const std::string & mimeType)
 {
-	this->map.insertKey(constants::mimeType, mimeType);
-};
+	this->map.insertKey(Path::mimeType, mimeType);
+}
 
 }
 }

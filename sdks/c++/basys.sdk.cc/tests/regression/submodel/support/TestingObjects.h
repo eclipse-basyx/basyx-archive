@@ -6,8 +6,9 @@
 #include <BaSyx/submodel/map_v2/constraint/Formula.h>
 #include <BaSyx/submodel/map_v2/constraint/Qualifier.h>
 #include <BaSyx/submodel/map_v2/reference/Reference.h>
-#include <BaSyx/submodel/map_v2/qualifier/Referable.h>
 #include <BaSyx/submodel/map_v2/qualifier/HasDataSpecification.h>
+#include <BaSyx/submodel/map_v2/qualifier/Qualifiable.h>
+#include <BaSyx/submodel/map_v2/qualifier/Referable.h>
 
 using namespace basyx;
 using namespace basyx::submodel;
@@ -125,6 +126,27 @@ static bool testingQualifier(api::IQualifier & qualifier, int c=1)
 {
   return qualifier.getQualifierType() == ("Qualifier type " + std::to_string(c))
           and qualifier.getValueType() == ("Value type " + std::to_string(c));
+}
+
+static Qualifiable testingQualifiable()
+{
+  Qualifiable qualifiable;
+
+  qualifiable.addFormula(testingFormula());
+  qualifiable.addQualifier(testingQualifier(3));
+  qualifiable.addQualifier(testingQualifier(1));
+
+  return qualifiable;
+}
+
+static bool testingQualifiable(api::IQualifiable &qualifiable)
+{
+  auto qualifiers = qualifiable.getQualifiers();
+  auto formulas = qualifiable.getFormulas();
+
+  return testingQualifier(qualifiers.at(0), 3)
+          and testingQualifier(qualifiers.at(1), 1)
+          and testingFormula(formulas.at(0));
 }
 
 }

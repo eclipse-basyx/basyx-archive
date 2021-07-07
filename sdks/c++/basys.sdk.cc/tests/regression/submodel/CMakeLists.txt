@@ -48,6 +48,7 @@ target_sources(${PROJECT_NAME}
 	map_v2/qualifier/test_Referable.cpp
 	map_v2/qualifier/test_HasDataSpecification.cpp
 	map_v2/qualifier/test_Qualifiable.cpp
+	map_v2/submodelelement/test_Blob.cpp
 
 	#### Support ####
 	support/TestingObjects.h
