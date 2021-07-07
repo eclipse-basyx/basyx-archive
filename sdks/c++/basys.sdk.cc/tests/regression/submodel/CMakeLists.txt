@@ -39,6 +39,7 @@ target_sources(${PROJECT_NAME}
 
 	map_v2/common/test_ElementContainer.cpp
 	map_v2/common/test_LangStringSet.cpp
+	map_v2/constraint/test_Formula.cpp
 	map_v2/constraint/test_Qualifier.cpp
 	map_v2/dataspecification/test_DataSpecification.cpp
 	map_v2/dataspecification/test_DataSpecificationIEC61360.cpp

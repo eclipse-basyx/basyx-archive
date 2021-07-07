@@ -25,6 +25,8 @@ public:
 	using vab::ElementMap::ElementMap;
 
 	Formula();
+	Formula(basyx::object);
+
 	Formula(const api::IFormula & other);
 	Formula(const Formula & other) = default;
 	Formula(Formula && other) noexcept = default;
@@ -35,6 +37,7 @@ public:
 	Formula(const std::vector<simple::Reference> & dependencies);
 
 	~Formula() = default;
+
 public:
 	virtual std::vector<simple::Reference> getDependencies() const;
 	virtual void addDependency(const api::IReference & reference);

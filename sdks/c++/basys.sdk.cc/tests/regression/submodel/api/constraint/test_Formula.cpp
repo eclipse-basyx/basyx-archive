@@ -4,6 +4,8 @@
 #include <BaSyx/submodel/simple/constraint/Formula.h>
 #include <BaSyx/submodel/map_v2/constraint/Formula.h>
 
+#include "support/TestingObjects.h"
+
 using namespace basyx::submodel;
 
 // Implementations to run tests for
@@ -33,6 +35,20 @@ TYPED_TEST_CASE(FormulaTest, ImplTypes);
 TYPED_TEST(FormulaTest, TestConstructor)
 {
 	ASSERT_TRUE(this->formula->getDependencies().empty());
+}
+
+TYPED_TEST(FormulaTest, TestListConstructor)
+{
+  using impl_t = typename TestFixture::impl_t;
+
+  std::vector<simple::Reference> dependencies;
+  dependencies.push_back(TestingObjects::map::testingReference_1());
+  dependencies.push_back(TestingObjects::map::testingReference_2());
+
+  impl_t formula(dependencies);
+
+  auto deps = formula.getDependencies();
+  ASSERT_EQ(dependencies, deps);
 }
 
 TYPED_TEST(FormulaTest, TestAdd)

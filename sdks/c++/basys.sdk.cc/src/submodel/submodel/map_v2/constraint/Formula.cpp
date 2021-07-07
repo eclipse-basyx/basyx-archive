@@ -8,9 +8,24 @@ using namespace basyx::submodel::map;
 constexpr char Formula::Path::Dependencies[];
 
 Formula::Formula()
+  : ElementMap{}
 {
 	this->map.insertKey(Path::Dependencies, basyx::object::make_object_list());
-};
+}
+
+Formula::Formula(basyx::object obj)
+  : Formula()
+{
+  auto & dependencies = obj.getProperty(Path::Dependencies).Get<object::object_list_t&>();
+  auto & objectList = this->map.getProperty(Path::Dependencies).Get<basyx::object::object_list_t&>();
+
+  for (const auto & dependency : dependencies)
+  {
+    map::Reference ref{ dependency };
+
+    objectList.emplace_back(ref.getMap());
+  }
+}
 
 Formula::Formula(const std::vector<simple::Reference> & dependencies)
 	: Formula()
@@ -22,13 +37,12 @@ Formula::Formula(const std::vector<simple::Reference> & dependencies)
 		map::Reference ref{ dependency };
 
 		objectList.emplace_back(ref.getMap());
-	};
-};
+	}
+}
 
 Formula::Formula(const api::IFormula & other)
 	: Formula(other.getDependencies())
-{
-};
+{}
 
 std::vector<simple::Reference> Formula::getDependencies() const
 {
@@ -44,7 +58,7 @@ std::vector<simple::Reference> Formula::getDependencies() const
 	};
 
 	return dependencies;
-};
+}
 
 void Formula::addDependency(const api::IReference & reference)
 {
@@ -52,5 +66,5 @@ void Formula::addDependency(const api::IReference & reference)
 
 	auto & objectList = this->map.getProperty(Path::Dependencies).Get<basyx::object::object_list_t&>();
 	objectList.emplace_back(ref.getMap());
-};
+}
 
