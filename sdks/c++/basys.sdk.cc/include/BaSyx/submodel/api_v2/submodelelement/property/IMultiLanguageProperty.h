@@ -16,10 +16,9 @@ class IMultiLanguageProperty : public virtual IDataElement
 public:
 	virtual ~IMultiLanguageProperty() = 0;
 
-	virtual ILangStringSet & getValue() = 0;
+	virtual const ILangStringSet * const getValue() = 0;
 
 	virtual const IReference * const getValueId() const = 0;
-	virtual void setValueId(const IReference & valueId) = 0;
 };
 
 inline IMultiLanguageProperty::~IMultiLanguageProperty() = default;

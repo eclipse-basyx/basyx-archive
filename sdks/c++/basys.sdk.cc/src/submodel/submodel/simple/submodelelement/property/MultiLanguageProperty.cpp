@@ -6,21 +6,19 @@ using namespace basyx::submodel::simple;
 
 MultiLanguageProperty::MultiLanguageProperty(const std::string & idShort, ModelingKind kind )
 	: SubmodelElement(idShort, kind)
-{
+{}
 
-};
-
-api::ILangStringSet & MultiLanguageProperty::getValue()
+const api::ILangStringSet * const MultiLanguageProperty::getValue()
 {
-	return this->value;
-};
+	return this->value.get();
+}
 
 const api::IReference * const MultiLanguageProperty::getValueId() const
 {
-	return &this->valueId;
-};
+	return this->valueId.get();
+}
 
-void MultiLanguageProperty::setValueId(const api::IReference & valueId)
+void MultiLanguageProperty::setValueId(std::unique_ptr<Reference> valueId)
 {
-	this->valueId = Reference( valueId.getKeys() );
-};
+	this->valueId = std::move(valueId);
+}

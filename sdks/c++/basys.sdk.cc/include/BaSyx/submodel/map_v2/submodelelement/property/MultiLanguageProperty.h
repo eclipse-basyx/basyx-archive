@@ -24,16 +24,20 @@ public:
     static constexpr char Kind[] = "kind";
   };
 private:
-	LangStringSet value;
-	Reference valueId;
+	std::unique_ptr<LangStringSet> value;
+	std::unique_ptr<Reference> valueId;
+
 public:
 	MultiLanguageProperty(const std::string & idShort, ModelingKind kind = ModelingKind::Instance);
+  MultiLanguageProperty(basyx::object);
+
 	virtual ~MultiLanguageProperty() = default;
 
-	virtual api::ILangStringSet & getValue() override;
+	virtual const api::ILangStringSet * const getValue() override;
+	void setValue(std::unique_ptr<LangStringSet>);
 
 	virtual const api::IReference * const getValueId() const override;
-	virtual void setValueId(const api::IReference & valueId) override;
+	virtual void setValueId(std::unique_ptr<Reference> valueId);
 
 	virtual KeyElements getKeyElementType() const override { return KeyElements::MultiLanguageProperty; };
 };

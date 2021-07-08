@@ -11,22 +11,49 @@ constexpr char MultiLanguageProperty::Path::Kind[];
 MultiLanguageProperty::MultiLanguageProperty(const std::string & idShort, ModelingKind kind)
 	: SubmodelElement(idShort, kind)
 {
-	this->map.insertKey(Path::Value, value.getMap());
-	this->map.insertKey(Path::ValueId, valueId.getMap());
   this->map.insertKey(Path::Kind, ModelingKind_::to_string(kind));
-};
+}
 
-api::ILangStringSet & MultiLanguageProperty::getValue()
+MultiLanguageProperty::MultiLanguageProperty(basyx::object obj)
+  : ElementMap{}
+  , SubmodelElement(obj)
 {
-	return this->value;
-};
+  if ( not obj.getProperty(Path::Value).IsNull() )
+  {
+    this->value = util::make_unique<LangStringSet>(obj.getProperty(Path::Value));
+    this->map.insertKey(Path::Value, this->value->getMap());
+  }
+
+  if ( not obj.getProperty(Path::ValueId).IsNull() )
+  {
+    this->valueId = util::make_unique<Reference>(obj.getProperty(Path::ValueId));
+    this->map.insertKey(Path::ValueId, this->valueId->getMap());
+  }
+}
+
+const api::ILangStringSet * const MultiLanguageProperty::getValue()
+{
+  if ( this->map.getProperty(Path::Value).IsNull() )
+    return nullptr;
+
+	return this->value.get();
+}
+
+void MultiLanguageProperty::setValue(std::unique_ptr<LangStringSet> langStringSet)
+{
+  this->value = std::move(langStringSet);
+  this->map.insertKey(Path::Value, this->value->getMap());
+}
 
 const api::IReference * const MultiLanguageProperty::getValueId() const
 {
-	return &this->valueId;
-};
+  if ( this->map.getProperty(Path::Value).IsNull() )
+    return nullptr;
+	return this->valueId.get();
+}
 
-void MultiLanguageProperty::setValueId(const api::IReference & valueId)
+void MultiLanguageProperty::setValueId(std::unique_ptr<Reference> valueId)
 {
-	this->valueId = Reference(valueId.getKeys());
-};
+	this->valueId = std::move(valueId);
+	this->map.insertKey(Path::ValueId, this->valueId->getMap());
+}

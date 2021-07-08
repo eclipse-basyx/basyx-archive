@@ -16,16 +16,16 @@ class MultiLanguageProperty :
 	public SubmodelElement
 {
 private:
-	LangStringSet value;
-	Reference valueId;
+	std::unique_ptr<LangStringSet> value;
+	std::unique_ptr<Reference> valueId;
 public:
 	MultiLanguageProperty(const std::string & idShort, ModelingKind kind = ModelingKind::Instance);
 	virtual ~MultiLanguageProperty() = default;
 
-	virtual api::ILangStringSet & getValue() override;
+	virtual const api::ILangStringSet * const getValue() override;
 
 	virtual const api::IReference * const getValueId() const override;
-	virtual void setValueId(const api::IReference & valueId) override;
+	virtual void setValueId(std::unique_ptr<Reference> valueId);
 };
 
 
