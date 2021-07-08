@@ -69,44 +69,59 @@ using namespace submodel;
     {
       return value.Get<bool>();
     }
+
+    static inline std::unique_ptr<bool> ptrFromXSDRepresentation(basyx::object value)
+    {
+      return util::make_unique<bool>(value.Get<bool>());
+    }
   };
 
   template<>
   struct xsd_type<int8_t>
   {
-      static const std::string getDataTypeDef()
-      {
-          return "byte";
-      }
+    static const std::string getDataTypeDef()
+    {
+      return "byte";
+    }
 
-      static const inline int8_t getXSDRepresentation(const int8_t & int_value)
-      {
-          return int_value;
-      }
+    static const inline int8_t getXSDRepresentation(const int8_t & int_value)
+    {
+      return int_value;
+    }
 
-      static const inline int8_t fromXSDRepresentation(basyx::object value)
-      {
-          return value.Get<int8_t>();
-      }
+    static const inline int8_t fromXSDRepresentation(basyx::object value)
+    {
+      return value.Get<int8_t>();
+    }
+
+    static inline std::unique_ptr<int8_t> ptrFromXSDRepresentation(basyx::object value)
+    {
+      return util::make_unique<int8_t>(value.Get<int8_t>());
+    }
   };
 
   template<>
   struct xsd_type<int16_t>
   {
-      static const std::string getDataTypeDef()
-      {
-          return "short";
-      }
+    static const std::string getDataTypeDef()
+    {
+      return "short";
+    }
 
-      static const inline int16_t getXSDRepresentation(const int16_t & short_value)
-      {
-          return short_value;
-      }
+    static const inline int16_t getXSDRepresentation(const int16_t & short_value)
+    {
+      return short_value;
+    }
 
-      static const inline int16_t fromXSDRepresentation(basyx::object value)
-      {
-          return value.Get<int16_t>();
-      }
+    static const inline int16_t fromXSDRepresentation(basyx::object value)
+    {
+      return value.Get<int16_t>();
+    }
+
+    static inline std::unique_ptr<int16_t> ptrFromXSDRepresentation(basyx::object value)
+    {
+      return util::make_unique<int16_t>(value.Get<int16_t>());
+    }
   };
 
   template<>
@@ -126,63 +141,83 @@ using namespace submodel;
     {
       return value.Get<int32_t>();
     }
+
+    static inline std::unique_ptr<int32_t> ptrFromXSDRepresentation(basyx::object value)
+    {
+      return util::make_unique<int32_t>(value.Get<int32_t>());
+    }
   };
 
   template<>
   struct xsd_type<int64_t>
   {
-      static const std::string getDataTypeDef()
-      {
-          return "long";
-      }
+    static const std::string getDataTypeDef()
+    {
+      return "long";
+    }
 
-      static const inline int64_t getXSDRepresentation(const int64_t & long_value)
-      {
-          return long_value;
-      }
+    static const inline int64_t getXSDRepresentation(const int64_t & long_value)
+    {
+      return long_value;
+    }
 
-      static const inline int64_t fromXSDRepresentation(basyx::object value)
-      {
-          return value.Get<int64_t>();
-      }
+    static const inline int64_t fromXSDRepresentation(basyx::object value)
+    {
+      return value.Get<int64_t>();
+    }
+
+    static inline std::unique_ptr<int64_t> ptrFromXSDRepresentation(basyx::object value)
+    {
+      return util::make_unique<int64_t>(value.Get<int64_t>());
+    }
   };
 
   template<>
   struct xsd_type<uint8_t>
   {
-      static const std::string getDataTypeDef()
-      {
-          return "unsignedByte";
-      }
+    static const std::string getDataTypeDef()
+    {
+      return "unsignedByte";
+    }
 
-      static const inline uint8_t getXSDRepresentation(const uint8_t & int_value)
-      {
-          return int_value;
-      }
+    static const inline uint8_t getXSDRepresentation(const uint8_t & int_value)
+    {
+      return int_value;
+    }
 
-      static const inline uint8_t fromXSDRepresentation(basyx::object value)
-      {
-          return value.Get<uint8_t>();
-      }
+    static const inline uint8_t fromXSDRepresentation(basyx::object value)
+    {
+      return value.Get<uint8_t>();
+    }
+
+    static inline std::unique_ptr<uint8_t> ptrFromXSDRepresentation(basyx::object value)
+    {
+      return util::make_unique<uint8_t>(value.Get<uint8_t>());
+    }
   };
 
   template<>
   struct xsd_type<uint16_t>
   {
-      static const std::string getDataTypeDef()
-      {
-          return "unsignedShort";
-      }
+    static const std::string getDataTypeDef()
+    {
+      return "unsignedShort";
+    }
 
-      static const inline uint16_t getXSDRepresentation(const uint16_t & ushort_value)
-      {
-          return ushort_value;
-      }
+    static const inline uint16_t getXSDRepresentation(const uint16_t & ushort_value)
+    {
+      return ushort_value;
+    }
 
-      static const inline uint16_t fromXSDRepresentation(basyx::object value)
-      {
-          return value.Get<uint16_t>();
-      }
+    static const inline uint16_t fromXSDRepresentation(basyx::object value)
+    {
+      return value.Get<uint16_t>();
+    }
+
+    static inline std::unique_ptr<uint16_t> ptrFromXSDRepresentation(basyx::object value)
+    {
+      return util::make_unique<uint16_t>(value.Get<uint16_t>());
+    }
   };
 
   template<>
@@ -202,25 +237,35 @@ using namespace submodel;
     {
       return value.Get<uint32_t>();
     }
+
+    static inline std::unique_ptr<uint32_t> ptrFromXSDRepresentation(basyx::object value)
+    {
+      return util::make_unique<uint32_t>(value.Get<uint32_t>());
+    }
   };
 
   template<>
   struct xsd_type<uint64_t>
   {
-      static const std::string getDataTypeDef()
-      {
-          return "unsignedLong";
-      }
+    static const std::string getDataTypeDef()
+    {
+      return "unsignedLong";
+    }
 
-      static const inline uint64_t getXSDRepresentation(const uint64_t & ulong_value)
-      {
-          return ulong_value;
-      }
+    static const inline uint64_t getXSDRepresentation(const uint64_t & ulong_value)
+    {
+      return ulong_value;
+    }
 
-      static const inline uint64_t fromXSDRepresentation(basyx::object value)
-      {
-          return value.Get<uint64_t>();
-      }
+    static const inline uint64_t fromXSDRepresentation(basyx::object value)
+    {
+      return value.Get<uint64_t>();
+    }
+
+    static inline std::unique_ptr<uint64_t> ptrFromXSDRepresentation(basyx::object value)
+    {
+      return util::make_unique<uint64_t>(value.Get<uint64_t>());
+    }
   };
 
   template<>
@@ -239,6 +284,11 @@ using namespace submodel;
     static const inline double fromXSDRepresentation(basyx::object value)
     {
       return value.Get<double>();
+    }
+
+    static inline std::unique_ptr<double> ptrFromXSDRepresentation(basyx::object value)
+    {
+      return util::make_unique<double>(value.Get<double>());
     }
   };
 
@@ -259,6 +309,11 @@ using namespace submodel;
     {
       return value.Get<float>();
     }
+
+    static inline std::unique_ptr<float> ptrFromXSDRepresentation(basyx::object value)
+    {
+      return util::make_unique<float>(value.Get<float>());
+    }
   };
 
   template<>
@@ -277,6 +332,11 @@ using namespace submodel;
     static const inline std::string fromXSDRepresentation(basyx::object value)
     {
       return value.GetStringContent();
+    }
+
+    static inline std::unique_ptr<std::string> ptrFromXSDRepresentation(basyx::object value)
+    {
+      return util::make_unique<std::string>(value.GetStringContent());
     }
   };
 
@@ -301,6 +361,11 @@ using namespace submodel;
     static const inline simple::AnyURI fromXSDRepresentation(basyx::object value)
     {
         return simple::AnyURI(value.Get<std::string>());
+    }
+
+    static inline std::unique_ptr<simple::AnyURI> ptrFromXSDRepresentation(basyx::object value)
+    {
+      return util::make_unique<simple::AnyURI>(value.Get<std::string>());
     }
   };
 
@@ -334,6 +399,19 @@ using namespace submodel;
 
       return simple::Date{date};
     }
+
+    static inline std::unique_ptr<simple::Date> ptrFromXSDRepresentation(basyx::object value)
+    {
+      tm date;
+      // Daylight Saving  is not in effect
+      date.tm_isdst = 0;
+
+      std::stringstream sstream;
+      sstream << value.GetStringContent();
+      sstream >> std::get_time(&date, format);
+
+      return util::make_unique<simple::Date>(date);
+    }
   };
 
   template<>
@@ -365,6 +443,19 @@ using namespace submodel;
       sstream >> std::get_time(&time, format);
 
       return simple::DateTime{time};
+    }
+
+    static inline std::unique_ptr<simple::DateTime> ptrFromXSDRepresentation(basyx::object value)
+    {
+      tm time;
+      // Daylight Saving Time is not in effect
+      time.tm_isdst = 0;
+
+      std::stringstream sstream;
+      sstream << value.GetStringContent();
+      sstream >> std::get_time(&time, format);
+
+      return util::make_unique<simple::DateTime>(time);
     }
   };
 
@@ -437,6 +528,32 @@ using namespace submodel;
 
       return simple::DayTimeDuration{std::chrono::duration<long>(seconds)};
     }
+
+    static inline std::unique_ptr<simple::DayTimeDuration> ptrFromXSDRepresentation(basyx::object value)
+    {
+      std::string xsd_str = value.GetStringContent();
+
+      long seconds = 0;
+
+      std::smatch match;
+      std::regex regex("\\d+D");
+      if (std::regex_search(xsd_str, match, regex))
+        seconds += std::stol(match.str()) * seconds_per_day;
+      regex = "\\d+H";
+      if (std::regex_search(xsd_str, match, regex))
+        seconds += std::stol(match.str()) * seconds_per_hour;
+      regex = "\\d+M";
+      if (std::regex_search(xsd_str, match, regex))
+        seconds += std::stol(match.str()) * seconds_per_minute;
+      regex = "\\d+S";
+      if (std::regex_search(xsd_str, match, regex))
+        seconds += std::stol(match.str());
+
+      if (xsd_str.find('-') == 0)
+        seconds *= -1;
+
+      return util::make_unique<simple::DayTimeDuration>(std::chrono::duration<long>(seconds));
+    }
   };
 
 
@@ -492,6 +609,26 @@ using namespace submodel;
 
       return yearMonthDuration;
     }
+
+    static inline std::unique_ptr<simple::YearMonthDuration> ptrFromXSDRepresentation(basyx::object value)
+    {
+      std::string xsd_str = value.GetStringContent();
+
+      int years = 0, months = 0;
+
+      std::smatch match;
+      std::regex regex("\\d+Y");
+      if (std::regex_search(xsd_str, match, regex))
+        years = std::stoi(match.str());
+      regex = "\\d+M";
+      if (std::regex_search(xsd_str, match, regex))
+        months = std::stoi(match.str());
+
+      if (xsd_str.find('-') == 0)
+        (years == 0) ? months *= -1 : years *= -1;
+
+      return util::make_unique<simple::YearMonthDuration>(years,months);
+    }
   };
 
   template<>
@@ -538,6 +675,23 @@ using namespace submodel;
 
       return simple::Time{hour, minute, second, timezone};
     }
+
+    static inline std::unique_ptr<simple::Time> ptrFromXSDRepresentation(basyx::object value)
+    {
+      std::string xsd_str = value.GetStringContent();
+
+      std::smatch match;
+      std::regex regex{"(\\d\\d):(\\d\\d):(\\d\\d(\\.\\d+)?)([Z|\\+|\\-].*)"};
+      std::regex_search(xsd_str, match, regex);
+
+      float second = 0;
+      uint8_t hour = std::stoi(match.str(1)); // first (\\d\\d)
+      uint8_t minute = std::stoi(match.str(2)); // second (\\d\\d)
+      second = std::stof(match.str(3)); // (\\d\\d(\\.\\d+)?) Two digits plus optional decimal point and arbitrary number of digits
+      std::string timezone = match.str(5); // ([Z|\+|\-]) "Z" or + or - and arbitrary characters
+
+      return util::make_unique<simple::Time>(hour, minute, second, timezone);
+    }
   };
 
   template<>
@@ -573,6 +727,21 @@ using namespace submodel;
 
       return simple::GYearMonth{year, month, timezone};
     }
+
+    static inline std::unique_ptr<simple::GYearMonth> ptrFromXSDRepresentation(basyx::object value)
+    {
+      std::string xsd_str = value.GetStringContent();
+
+      std::smatch match;
+      std::regex regex{"(-?\\d+)-(\\d\\d)([Z|\\+|\\-].*)"};
+      std::regex_search(xsd_str, match, regex);
+
+      int year = std::stoi(match.str(1)); // first (\\d+)
+      uint8_t month = std::stoi(match.str(2)); // second (\\d\\d)
+      std::string timezone = match.str(3);
+
+      return util::make_unique<simple::GYearMonth>(year, month, timezone);
+    }
   };
 
   template<>
@@ -607,6 +776,20 @@ using namespace submodel;
 
       return simple::GYear{year, timezone};
     }
+
+    static inline std::unique_ptr<simple::GYear> ptrFromXSDRepresentation(basyx::object value)
+    {
+      std::string xsd_str = value.GetStringContent();
+
+      std::smatch match;
+      std::regex regex{"(-?\\d+)([Z|\\+|\\-].*)"};
+      std::regex_search(xsd_str, match, regex);
+
+      int year = std::stoi(match.str(1)); // first (\\d+)
+      std::string timezone = match.str(2);
+
+      return util::make_unique<simple::GYear>(year, timezone);
+    }
   };
 
   template<>
@@ -639,6 +822,21 @@ using namespace submodel;
 
       return simple::GMonthDay{month, day, timezone};
     }
+
+    static inline std::unique_ptr<simple::GMonthDay> ptrFromXSDRepresentation(basyx::object value)
+    {
+      std::string xsd_str = value.GetStringContent();
+
+      std::smatch match;
+      std::regex regex{"\\-\\-(\\d\\d)\\-(\\d\\d)([Z|\\+|\\-].*)"};
+      std::regex_search(xsd_str, match, regex);
+
+      uint8_t month = std::stoi(match.str(1)); // first (\\d\\d)
+      uint8_t day = std::stoi(match.str(2)); // second (\\d\\d)
+      std::string timezone = match.str(3);
+
+      return util::make_unique<simple::GMonthDay>(month, day, timezone);
+    }
   };
 
   template<>
@@ -670,6 +868,20 @@ using namespace submodel;
 
       return simple::GDay{day, timezone};
     }
+
+    static inline std::unique_ptr<simple::GDay> ptrFromXSDRepresentation(basyx::object value)
+    {
+      std::string xsd_str = value.GetStringContent();
+
+      std::smatch match;
+      std::regex regex{"\\-\\-\\-(\\d\\d)([Z|\\+|\\-].*)"};
+      std::regex_search(xsd_str, match, regex);
+
+      uint8_t day = std::stoi(match.str(1)); // first (\\d\\d)
+      std::string timezone = match.str(2);
+
+      return util::make_unique<simple::GDay>(day, timezone);
+    }
   };
 
   template<>
@@ -700,6 +912,20 @@ using namespace submodel;
       std::string timezone = match.str(2);
 
       return simple::GMonth{month, timezone};
+    }
+
+    static inline std::unique_ptr<simple::GMonth> ptrFromXSDRepresentation(basyx::object value)
+    {
+      std::string xsd_str = value.GetStringContent();
+
+      std::smatch match;
+      std::regex regex{"\\-\\-(\\d\\d)([Z|\\+|\\-].*)"};
+      std::regex_search(xsd_str, match, regex);
+
+      uint8_t month = std::stoi(match.str(1)); // first (\\d\\d)
+      std::string timezone = match.str(2);
+
+      return util::make_unique<simple::GMonth>(month, timezone);
     }
   };
 
