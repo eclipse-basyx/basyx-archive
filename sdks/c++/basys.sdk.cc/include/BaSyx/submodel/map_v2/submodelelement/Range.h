@@ -11,6 +11,8 @@ namespace map {
 template<typename T>
 class Range 
   : public virtual api::IRange<T>
+  , public virtual vab::ElementMap
+  , public ModelType<ModelTypes::Range>
   , public DataElement
 {
 public:
@@ -24,6 +26,24 @@ public:
     : DataElement(idShort, kind)
   {
     this->map.template insertKey("dataTypeDef", ValueDataType::getDataTypeDef());
+  }
+
+  Range(basyx::object obj)
+    : DataElement(obj)
+  {
+    this->map.template insertKey("dataTypeDef", ValueDataType::getDataTypeDef());
+
+    if ( not obj.getProperty("min").IsNull() )
+    {
+      this->min = std::move(ValueDataType::ptrFromXSDRepresentation(obj.getProperty("min")));
+      this->map.insertKey("min", ValueDataType::getXSDRepresentation(*this->min));
+    }
+
+    if ( not obj.getProperty("max").IsNull() )
+    {
+      this->max = std::move(ValueDataType::ptrFromXSDRepresentation(obj.getProperty("max")));
+      this->map.insertKey("max", ValueDataType::getXSDRepresentation(*this->max));
+    }
   }
 
   const DataTypeDef & getDataTypeDef() const override
@@ -54,11 +74,6 @@ public:
   }
 
   KeyElements getKeyElementType() const override { return KeyElements::Range; };
-
-  ModelTypes GetModelType() const override
-  {
-    return ModelTypes::Range;
-  }
 };
 
 }

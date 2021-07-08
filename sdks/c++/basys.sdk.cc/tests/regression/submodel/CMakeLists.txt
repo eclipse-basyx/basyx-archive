@@ -50,6 +50,7 @@ target_sources(${PROJECT_NAME}
 	map_v2/qualifier/test_Qualifiable.cpp
     map_v2/submodelelement/file/test_Blob.cpp
 	map_v2/submodelelement/file/test_File.cpp
+	map_v2/submodelelement/test_Range.cpp
 
 	#### Support ####
 	support/TestingObjects.h

@@ -14,6 +14,7 @@ class DataElement
 {
 public:
   DataElement(const std::string & idShort, ModelingKind kind = ModelingKind::Instance);
+  inline DataElement(basyx::object obj) : SubmodelElement(obj){}
 
   virtual KeyElements getKeyElementType() const override { return KeyElements::DataElement; };
 };

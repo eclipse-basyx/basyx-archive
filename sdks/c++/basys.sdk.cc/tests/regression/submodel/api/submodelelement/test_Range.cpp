@@ -23,7 +23,7 @@ protected:
 protected:
   void SetUp() override
   {
-    this->range = util::make_unique<Impl>("id");
+    this->range = util::make_unique<Impl>(std::string("id"));
   }
 
   void TearDown() override

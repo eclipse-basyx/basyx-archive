@@ -9,6 +9,7 @@
 #include <BaSyx/submodel/map_v2/qualifier/HasDataSpecification.h>
 #include <BaSyx/submodel/map_v2/qualifier/Qualifiable.h>
 #include <BaSyx/submodel/map_v2/qualifier/Referable.h>
+#include <BaSyx/submodel/map_v2/submodelelement/SubmodelElement.h>
 
 using namespace basyx;
 using namespace basyx::submodel;
@@ -54,7 +55,7 @@ static submodel::map::Reference testingReference_2()
 
 static Referable testingReferable_1()
 {
-  Referable referable{std::string("test id 1")};
+  Referable referable {std::string("test id 1")};
 
   referable.setCategory("testing category 1");
   referable.setDescription(testingLangString());
@@ -64,14 +65,12 @@ static Referable testingReferable_1()
 
 static bool testingReferable_1(api::IReferable & ref)
 {
-  return *ref.getCategory() == "testing category 1"
-         and ref.getIdShort() == "test id 1"
-         and ref.getDescription() == testingLangString();
+  return *ref.getCategory() == "testing category 1" and ref.getIdShort() == "test id 1" and ref.getDescription() == testingLangString();
 }
 
 static Referable testingReferable_2()
 {
-  Referable referable{std::string("test id 2")};
+  Referable referable {std::string("test id 2")};
 
   referable.setCategory("testing category 2");
   referable.setDescription(testingLangString());
@@ -81,16 +80,14 @@ static Referable testingReferable_2()
 
 static bool testingReferable_2(api::IReferable & ref)
 {
-  return *ref.getCategory() == "testing category 2"
-         and ref.getIdShort() == "test id 2"
-         and ref.getDescription() == testingLangString();
+  return *ref.getCategory() == "testing category 2" and ref.getIdShort() == "test id 2" and ref.getDescription() == testingLangString();
 }
 
 static HasDataSpecification testingHasDataSpecification()
 {
   HasDataSpecification hasDataSpecification;
-  hasDataSpecification.addDataSpecification(simple::Reference{testingReference_2()});
-  hasDataSpecification.addDataSpecification(simple::Reference{testingReference_1()});
+  hasDataSpecification.addDataSpecification(simple::Reference {testingReference_2()});
+  hasDataSpecification.addDataSpecification(simple::Reference {testingReference_1()});
 
   return hasDataSpecification;
 }
@@ -119,13 +116,12 @@ static bool testingFormula(api::IFormula & formula)
 
 static Qualifier testingQualifier(int c = 1)
 {
-  return Qualifier{"Qualifier type " + std::to_string(c), "Value type " + std::to_string(c)};
+  return Qualifier {"Qualifier type " + std::to_string(c), "Value type " + std::to_string(c)};
 }
 
-static bool testingQualifier(api::IQualifier & qualifier, int c=1)
+static bool testingQualifier(api::IQualifier & qualifier, int c = 1)
 {
-  return qualifier.getQualifierType() == ("Qualifier type " + std::to_string(c))
-          and qualifier.getValueType() == ("Value type " + std::to_string(c));
+  return qualifier.getQualifierType() == ("Qualifier type " + std::to_string(c)) and qualifier.getValueType() == ("Value type " + std::to_string(c));
 }
 
 static Qualifiable testingQualifiable()
@@ -139,14 +135,32 @@ static Qualifiable testingQualifiable()
   return qualifiable;
 }
 
-static bool testingQualifiable(api::IQualifiable &qualifiable)
+static bool testingQualifiable(api::IQualifiable & qualifiable)
 {
   auto qualifiers = qualifiable.getQualifiers();
   auto formulas = qualifiable.getFormulas();
 
-  return testingQualifier(qualifiers.at(0), 3)
-          and testingQualifier(qualifiers.at(1), 1)
-          and testingFormula(formulas.at(0));
+  return testingQualifier(qualifiers.at(0), 3) and testingQualifier(qualifiers.at(1), 1) and testingFormula(formulas.at(0));
+}
+
+}
+namespace object {
+
+static basyx::object testingSubmodelElement()
+{
+  basyx::object object = map::testingReferable_1().getMap();
+  object.insert(map::testingHasDataSpecification().getMap());
+  object.insert(map::testingQualifiable().getMap());
+  object.insertKey(SubmodelElement::Path::Kind, ModelingKind_::to_string(ModelingKind::Instance));
+
+  return object;
+}
+
+static bool testingSubmodelElement(SubmodelElement & submodelElement)
+{
+  return TestingObjects::map::testingReferable_1(submodelElement)
+          and TestingObjects::map::testingHasDataSpecification(submodelElement)
+          and TestingObjects::map::testingQualifiable(submodelElement);
 }
 
 }
