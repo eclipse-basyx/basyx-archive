@@ -21,9 +21,11 @@ public:
     static constexpr char Kind[] = "kind";
   };
 private:
-    Reference value;
+    std::unique_ptr<Reference> value;
 public:
     ReferenceElement(const std::string& idShort, ModelingKind kind = ModelingKind::Instance);
+    ReferenceElement(basyx::object);
+
     virtual ~ReferenceElement() = default;
 
     virtual const api::IReference* const getValue() const override;

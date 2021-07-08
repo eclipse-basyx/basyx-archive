@@ -48,7 +48,7 @@ TYPED_TEST(AnnotatedRelationshipElementTest, TestAddAnnotation)
 {
   using referenceElement_t = typename TestFixture::referenceElement_t;
 
-  auto annotation = util::make_unique<referenceElement_t>("test reference element");
+  auto annotation = util::make_unique<referenceElement_t>(std::string{"test reference element"});
   this->annotatedRelationshipElement->addAnnotation(std::move(annotation));
 
   ASSERT_EQ(this->annotatedRelationshipElement->getAnnotation().getElement(0)->getIdShort(), "test reference element");

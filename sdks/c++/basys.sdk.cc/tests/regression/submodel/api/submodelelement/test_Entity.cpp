@@ -52,7 +52,7 @@ TYPED_TEST(EntityTest, TestStatement)
 
   impl_t test_entity(EntityType::CoManagedEntity, "test");
 
-  auto re = util::make_unique<referenceElement_t>("ReferenceElement");
+  auto re = util::make_unique<referenceElement_t>(std::string{"ReferenceElement"});
 
   test_entity.addStatement(std::move(re));
 
