@@ -16,12 +16,20 @@ File::File(const std::string & idShort, const std::string & mimeType)
 	this->map.insertKey(Path::Value, std::string(""));
 }
 
+File::File(basyx::object obj)
+  : vab::ElementMap{}
+  , SubmodelElement{obj}
+{
+  this->map.insertKey(Path::Value, obj.getProperty(Path::Value).GetStringContent());
+  this->map.insertKey(Path::MimeType, obj.getProperty(Path::MimeType).GetStringContent());
+}
+
 File::File(const File & other)
   : SubmodelElement(other.getIdShort(), other.getKind())
   , vab::ElementMap(other.getMap())
 {}
 
-const std::string File::getPath() const
+const PathType File::getPath() const
 {
 	return this->map.getProperty(Path::Value).Get<std::string&>();
 }

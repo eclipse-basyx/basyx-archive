@@ -22,17 +22,15 @@ public:
 		static constexpr char MimeType[] = "mimeType";
 		static constexpr char Value[] = "value";
 	};
-private:
-	std::string path;
-	std::string mimeType;
 public:
 	File(const std::string & idShort, const std::string & mimeType);
+	File(basyx::object);
 	File(const File & other);
 
 	virtual ~File() = default;
 
-	const std::string getPath() const override;
-	void setPath(const std::string & value) override;
+	const PathType getPath() const override;
+	void setPath(const PathType & value) override;
 
 	const std::string getMimeType() const override;
 	void setMimeType(const std::string & mimeType) override;
