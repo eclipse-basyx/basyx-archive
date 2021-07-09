@@ -26,15 +26,15 @@ namespace basyx
 						static constexpr const char Description[] = "AASAdministrativeInformationType";
 						static constexpr const char NodeHandle[] = "AASAdministrativeInformationType";
 
-						static constexpr const char BrowseText_Version[] = "PropertyType::Version";
+						static constexpr const char BrowseText_Version[] = "Version";
 						static constexpr const char DisplayName_Version[] = "Version";
-						static constexpr const char Description_Version[] = "AASAdministrativeInformationType::PropertyType::Version";
-						static constexpr const char NodeHandle_Version[] = "AASAdministrativeInformationType::PropertyType::Version";
+						static constexpr const char Description_Version[] = "AASAdministrativeInformationType::Version";
+						static constexpr const char NodeHandle_Version[] = "AASAdministrativeInformationType::Version";
 
-						static constexpr const char BrowseText_Revision[] = "PropertyType::Revision";
+						static constexpr const char BrowseText_Revision[] = "Revision";
 						static constexpr const char DisplayName_Revision[] = "Revision";
-						static constexpr const char Description_Revision[] = "AASAdministrativeInformationType::PropertyType::Revision";
-						static constexpr const char NodeHandle_Revision[] = "AASAdministrativeInformationType::PropertyType::Revision";
+						static constexpr const char Description_Revision[] = "AASAdministrativeInformationType::Revision";
+						static constexpr const char NodeHandle_Revision[] = "AASAdministrativeInformationType::Revision";
 					};
 
 					static basyx::opcua::NodeId getNodeId(int32_t t_ns)

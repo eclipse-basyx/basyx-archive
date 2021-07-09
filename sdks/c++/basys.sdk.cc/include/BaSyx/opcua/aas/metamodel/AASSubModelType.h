@@ -33,7 +33,7 @@ namespace basyx
 						static constexpr const char Description_ReferenceDataSpec[] = "AASReferenceType::DataSpecification";
 						static constexpr const char NodeHandle_ReferenceDataSpec[] = "AASReferenceType::DataSpecification";
 
-						static constexpr const char BrowseText_PropertyKind[] = "PropertyType::Kind";
+						static constexpr const char BrowseText_PropertyKind[] = "Kind";
 						static constexpr const char DisplayName_PropertyKind[] = "Kind";
 						static constexpr const char Description_PropertyKind[] = "AASSubmodelType::PropertyType::Kind";
 						static constexpr const char NodeHandle_PropertyKind[] = "AASSubmodelType::PropertyType::Kind";

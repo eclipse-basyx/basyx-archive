@@ -31,17 +31,17 @@ namespace basyx
 						static constexpr const char  Description[] = "AASPropertyType";
 						static constexpr const char  NodeHandle[] = "AASPropertyType";
 
-						static constexpr const char  BrowseText_Value[] = "PropertyType::Value";
+						static constexpr const char  BrowseText_Value[] = "Value";
 						static constexpr const char  DisplayName_Value[] = "Value";
 						static constexpr const char  Description_Value[] = "AASPropertyType::Value";
 						static constexpr const char  NodeHandle_Value[] = "AASPropertyType::Value";
 
-						static constexpr const char  BrowseText_ValueType[] = "PropertyType::ValueType";
+						static constexpr const char  BrowseText_ValueType[] = "ValueType";
 						static constexpr const char  DisplayName_ValueType[] = "ValueType";
 						static constexpr const char  Description_ValueType[] = "AASPropertyType::ValueType";
 						static constexpr const char  NodeHandle_ValueType[] = "AASPropertyType::ValueType";
 
-						static constexpr const char  BrowseText_ReferenceValueId[] = "AASReferenceType::ValueId";
+						static constexpr const char  BrowseText_ReferenceValueId[] = "ValueId";
 						static constexpr const char  DisplayName_ReferenceValueId[] = "ValueId";
 						static constexpr const char  Description_ReferenceValueId[] = "AASPropertyType::AASReferenceType::ValueId";
 						static constexpr const char  NodeHandle_ReferenceValueId[] = "AASPropertyType::AASReferenceType::ValueId";

@@ -25,15 +25,15 @@ namespace basyx
 						static constexpr const char Description[] = "AASIdentifierType";
 						static constexpr const char NodeHandle[] = "AASIdentifierType";
 
-						static constexpr const char BrowseText_ID[] = "PropertyType::id";
-						static constexpr const char DisplayName_ID[] = "id";
-						static constexpr const char Description_ID[] = "AASIdentifierType::PropertyType::id";
-						static constexpr const char NodeHandle_ID[] = "AASIdentifierType::AASIdentifierType::id";
+						static constexpr const char BrowseText_ID[] = "Id";
+						static constexpr const char DisplayName_ID[] = "Id";
+						static constexpr const char Description_ID[] = "AASIdentifierType::Id";
+						static constexpr const char NodeHandle_ID[] = "AASIdentifierType::Id";
 
-						static constexpr const char BrowseText_IdType[] = "PropertyType::idType";
-						static constexpr const char DisplayName_IdType[] = "idType";
-						static constexpr const char Description_IdType[] = "AASIdentifierType::PropertyType::idType";
-						static constexpr const char NodeHandle_IdType[] = "AASIdentifierType::AASIdentifierType::idType";
+						static constexpr const char BrowseText_IdType[] = "IdType";
+						static constexpr const char DisplayName_IdType[] = "IdType";
+						static constexpr const char Description_IdType[] = "AASIdentifierType::IdType";
+						static constexpr const char NodeHandle_IdType[] = "AASIdentifierType::AASIdentifierType:IdType";
 					};
 
 					static basyx::opcua::NodeId getNodeId(int32_t t_ns)

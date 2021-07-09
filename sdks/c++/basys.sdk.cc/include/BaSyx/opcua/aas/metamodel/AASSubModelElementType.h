@@ -28,12 +28,12 @@ namespace basyx
 						static constexpr const char Description[] = "AASSubModelElementType";
 						static constexpr const char NodeHandle[] = "AASSubModelElementType";
 
-						static constexpr const char BrowseText_Kind[] = "AASSubModelElementType::Kind";
+						static constexpr const char BrowseText_Kind[] = "Kind";
 						static constexpr const char DisplayName_Kind[] = "Kind";
 						static constexpr const char Description_Kind[] = "AASSubModelElementType::Kind";
 						static constexpr const char NodeHandle_Kind[] = "AASSubModelElementType::Kind";
 
-						static constexpr const char BrowseText_Qualifier[] = "AASSubModelElementType::<Qualifier>";
+						static constexpr const char BrowseText_Qualifier[] = "<Qualifier>";
 						static constexpr const char DisplayName_Qualifier[] = "<Qualifier>";
 						static constexpr const char Description_Qualifier[] = "AASSubModelElementType::Qualifier";
 						static constexpr const char NodeHandle_Qualifier[] = "AASSubModelElementType::Qualifier";

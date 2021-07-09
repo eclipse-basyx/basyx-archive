@@ -24,15 +24,15 @@ namespace basyx
 						static constexpr const char Description[] = "IAASReferableType";
 						static constexpr const char NodeHandle[] = "IAASReferableType";
 
-						static constexpr const char BrowseText_Category[] = "PropertyType::Category";
+						static constexpr const char BrowseText_Category[] = "Category";
 						static constexpr const char DisplayName_Category[] = "Category";
-						static constexpr const char Description_Category[] = "IAASReferableType::PropertyType::Category";
-						static constexpr const char NodeHandle_Category[] = "IAASReferableType::PropertyType::Category";
+						static constexpr const char Description_Category[] = "IAASReferableType::Category";
+						static constexpr const char NodeHandle_Category[] = "IAASReferableType::Category";
 
-						static constexpr const char BrowseText_IdShort[] = "PropertyType::idShort";
-						static constexpr const char DisplayName_IdShort[] = "idShort";
-						static constexpr const char Description_IdShort[] = "IAASReferableType::PropertyType::idShort";
-						static constexpr const char NodeHandle_IdShort[] = "IAASReferableType::PropertyType::idShort";
+						static constexpr const char BrowseText_IdShort[] = "IdShort";
+						static constexpr const char DisplayName_IdShort[] = "IdShort";
+						static constexpr const char Description_IdShort[] = "IAASReferableType::IdShort";
+						static constexpr const char NodeHandle_IdShort[] =  "IAASReferableType::IdShort";
 					};
 
 					static basyx::opcua::NodeId getNodeId(int32_t t_ns)
