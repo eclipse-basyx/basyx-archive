@@ -2,6 +2,7 @@
 #include <BaSyx/opcua/common/Utilities.h>
 #include <BaSyx/opcua/common/NodeId.h>
 #include <BaSyx/opcua/common/QualifiedName.h>
+#include <BaSyx/opcua/common/LocalizedText.h>
 #include <BaSyx/opcua/common/ObjectAttributes.h>
 #include <BaSyx/opcua/common/ObjectTypeAttributes.h>
 #include <BaSyx/opcua/common/VariableAttributes.h>
@@ -199,6 +200,34 @@ namespace basyx
                 auto scalar_ = Variant<std::string>::scalar(*vStr.get_UAVariant());
 
                 ASSERT_EQ(scalar_, "test string");
+            }
+
+            TEST_F(OPCUAUtilitiesTest, LocalizedText)
+            {
+                using namespace basyx::opcua;
+
+                LocalizedText l0;
+                ASSERT_EQ(l0.getLocale(), std::string());
+                ASSERT_EQ(l0.getText(), std::string());
+
+                LocalizedText l1("en-US", "foo");
+                ASSERT_EQ(l1.getLocale(), "en-US");
+                ASSERT_EQ(l1.getText(), "foo");
+
+                LocalizedText l2("de-DE", "foö");
+                ASSERT_EQ(l2.getLocale(), "de-DE");
+                ASSERT_EQ(l2.getText(), "foö");
+
+                LocalizedText l3("en-US;de-DE", "foo;foö");
+                ASSERT_EQ(l3.getLocale(), "en-US;de-DE");
+                ASSERT_EQ(l3.getText(), "foo;foö");
+
+                ASSERT_EQ(l1.toString(), "(en-US)foo");
+
+                LocalizedText l4;
+                l4 = l1;
+                ASSERT_TRUE(l4 == l1);
+
             }
         }
     }

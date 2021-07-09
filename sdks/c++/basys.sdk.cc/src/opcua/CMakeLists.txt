@@ -22,6 +22,12 @@ target_sources(${BASYX_OPCUA_LIBRARY_NAME}
 	${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/api/AASApiSubModelElement.h
 	${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/api/AASApiNodeIdHelpers.h
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/api/AASApiMetamodelHelpers.h
+    ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/api_v2/ApiAssetAdminstrationShell.h
+    ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/api_v2/ApiSubmodel.h
+    ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/api_v2/ApiProperty.h
+    ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/api_v2/ApiHelpers.h
+    ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/api_v2/ApiMetamodelUtilities.h
+    ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/provider/AASObjectDeserializer.h
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/provider/AASModelProviderCommon.h
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/provider/AASProviderApiParseHelpers.h
 	${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/provider/AASAggregatorProvider.h
@@ -58,10 +64,15 @@ target_sources(${BASYX_OPCUA_LIBRARY_NAME}
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/model/AASModelNode.h
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/model/AASProperty.h
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/model/AASSubModel.h
-    ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/model/AASSubModelElement.h
+    ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/node/MetamodelTypes.h
+    ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/node/ModelNodeManager.h
+    ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/node/AssetAdministrationShellNodeManager.h
+    ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/node/PropertyNodeManager.h
+    ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/node/SubmodelNodeManager.h
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/common/NodeCommon.h
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/common/Utilities.h
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/common/BrowseName.h
+    ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/common/LocalizedText.h
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/common/BrowsePath.h
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/common/NodeDescription.h
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/common/NodeId.h
@@ -96,6 +107,7 @@ target_sources(${BASYX_OPCUA_LIBRARY_NAME}
     ${CMAKE_CURRENT_SOURCE_DIR}/client/Subscription.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/Utilities.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/NodeId.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/LocalizedText.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/ExpandedNodeId.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/QualifiedName.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/common/ObjectAttributes.cpp
@@ -134,6 +146,8 @@ target_sources(${BASYX_OPCUA_LIBRARY_NAME}
 	${CMAKE_CURRENT_SOURCE_DIR}/aas/metamodel/AASAssetAdministrationShellType.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/aas/api/AASApiSubModelHelpers.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/aas/api/AASApiMetamodelHelpers.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/aas/api_v2/ApiHelpers.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/aas/api_v2/ApiMetamodelUtilities.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/aas/provider/AASModelProviderCommon.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/aas/provider/AASProviderApiParseHelpers.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/typesmap/TypesMap.cpp

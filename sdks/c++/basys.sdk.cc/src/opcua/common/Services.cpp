@@ -581,6 +581,31 @@ namespace basyx
         }
 
         template<>
+        UA_StatusCode Services<Client>::getNodeDescription(const NodeId & t_node, LocalizedText & t_description)
+        {
+            return ClientServices::getNodeDescription(m_connector, t_node, t_description);
+        }
+
+        template<>
+        UA_StatusCode Services<Server>::getNodeDescription(const NodeId & t_node, LocalizedText & t_description)
+        {
+            return ServerServices::getNodeDescription(m_connector, t_node, t_description);
+        }
+
+
+        template<>
+        UA_StatusCode Services<Client>::setNodeDescription(const NodeId & t_node, const LocalizedText & t_description)
+        {
+            return ClientServices::setNodeDescription(m_connector, t_node, t_description);
+        }
+
+        template<>
+        UA_StatusCode Services<Server>::setNodeDescription(const NodeId & t_node, const LocalizedText & t_description)
+        {
+            return ServerServices::setNodeDescription(m_connector, t_node, t_description);
+        }
+
+        template<>
         NodeId Services<Server>::getChildReferencesWithBrowseName(const NodeId & t_node,
             const BrowseName & t_browseName,
             const NodeId & t_referenceType)

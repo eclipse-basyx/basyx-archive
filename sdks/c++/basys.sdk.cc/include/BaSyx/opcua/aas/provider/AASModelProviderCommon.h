@@ -68,6 +68,10 @@ namespace basyx
                 static constexpr char name[] = "name";
                 static constexpr char id[] = "id";
                 static constexpr char idType[] = "idType";
+                static constexpr char description[] = "description";
+                static constexpr char language[] = "language;";
+                static constexpr char text[] = "text";
+                static constexpr char category[] = "category";
             };
 
             inline std::string KindtoString(const Kind& t_kind) {

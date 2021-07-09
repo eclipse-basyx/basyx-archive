@@ -40,6 +40,10 @@ namespace basyx
             constexpr char Element::name[];
             constexpr char Element::id[];
             constexpr char Element::idType[];
+            constexpr char Element::description[];
+            constexpr char Element::language[];
+            constexpr char Element::text[];
+            constexpr char Element::category[];
         }
     }
 }

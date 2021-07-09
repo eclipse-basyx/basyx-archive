@@ -50,11 +50,8 @@ namespace basyx
                 return *this;
             }
 
-            template<typename BN>
-            BrowsePath(BN b) {}
-
-            template<typename BN, typename ...Args>
-            BrowsePath(BN b, Args ...) {}
+            template<typename ...Args>
+            BrowsePath(Args&& ... paths) : vector({paths ...}){}
 
             BrowsePath(const std::string& t_browsePathString)
             {

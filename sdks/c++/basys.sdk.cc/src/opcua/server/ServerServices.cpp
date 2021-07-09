@@ -658,5 +658,26 @@ namespace basyx
 			return NodeId::nullNode().getUANode();
 		}
 
+        UA_StatusCode ServerServices::getNodeDescription(Server & t_server, const NodeId & t_node, LocalizedText& t_description)
+        {
+            UA_LocalizedText description;
+
+            UA_StatusCode status = UA_Server_readDescription(t_server.getUAServer(), t_node.getUANode(), &description);
+
+            t_description = LocalizedText(description);
+
+            return status;
+        }
+
+        UA_StatusCode ServerServices::setNodeDescription(Server & t_server, const NodeId & t_node, const LocalizedText & t_description)
+        {
+            std::string locale = t_description.getLocale();
+            std::string text = t_description.getText();
+
+            UA_LocalizedText desc = UA_LOCALIZEDTEXT(const_cast<char*>(locale.c_str()), const_cast<char*>(text.c_str()));
+
+            return UA_Server_writeDescription(t_server.getUAServer(), t_node.getUANode(), desc);
+        }
+
 	}
 }

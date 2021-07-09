@@ -8,6 +8,7 @@
 #include <BaSyx/opcua/common/NodeId.h>
 #include <BaSyx/opcua/common/ExpandedNodeId.h>
 #include <BaSyx/opcua/common/QualifiedName.h>
+#include <BaSyx/opcua/common/LocalizedText.h>
 #include <BaSyx/opcua/common/ObjectAttributes.h>
 #include <BaSyx/opcua/common/ObjectTypeAttributes.h>
 #include <BaSyx/opcua/common/VariableAttributes.h>
@@ -161,6 +162,9 @@ namespace basyx
 				const BrowseName& t_browseName,
 				const NodeId& t_referenceType);
 
+            static UA_StatusCode getNodeDescription(Server& t_server, const NodeId& t_node, LocalizedText& t_description);
+
+            static UA_StatusCode setNodeDescription(Server & t_server, const NodeId & t_node, const LocalizedText& t_description);
 
 			template<class TYPE>
 			static UA_StatusCode readValue(Server& t_server, const NodeId& t_nodeId, TYPE& t_value)

@@ -155,6 +155,10 @@ namespace basyx
                 const BrowseName& t_browseName,
                 const NodeId& t_referenceType);
 
+            UA_StatusCode getNodeDescription(const NodeId & t_node, LocalizedText& t_description);
+
+            UA_StatusCode setNodeDescription(const NodeId & t_node, const LocalizedText& t_description);
+
         private:
             CONNECTOR_TYPE& m_connector;
         };
@@ -431,6 +435,17 @@ namespace basyx
         NodeId Services<Server>::getChildReferencesWithBrowseName(const NodeId & t_node,
             const BrowseName & t_browseName,
             const NodeId & t_referenceType);
+        template<>
+        UA_StatusCode Services<Client>::getNodeDescription(const NodeId & t_node, LocalizedText & t_description);
+
+        template<>
+        UA_StatusCode Services<Server>::getNodeDescription(const NodeId & t_node, LocalizedText & t_description);
+
+        template<>
+        UA_StatusCode Services<Client>::setNodeDescription(const NodeId & t_node, const LocalizedText & t_description);
+
+        template<>
+        UA_StatusCode Services<Server>::setNodeDescription(const NodeId & t_node, const LocalizedText & t_description);
     }
 }
 #endif

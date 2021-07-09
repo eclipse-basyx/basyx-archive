@@ -31,7 +31,7 @@ namespace basyx
                 }
             };
 
-            TEST_F(OPCUAClientServicesTest, getChildReferences)
+            void testChildReferences()
             {
                 using namespace basyx::opcua;
 
@@ -40,7 +40,6 @@ namespace basyx
                 client.connect();
 
                 Services<Client> services(client);
-
 
                 auto children = services.getChildReferences(
                     NodeId(UA_NodeIdType::UA_NODEIDTYPE_NUMERIC, 85),
@@ -87,6 +86,44 @@ namespace basyx
                 ASSERT_TRUE(iter != children.end());
 
                 client.disconnect();
+            }
+
+            void testNodeDescription()
+            {
+                using namespace basyx::opcua;
+
+                Client client("opc.tcp://localhost:7000", shared::Namespaces::BASYX_NS_URI);
+
+                client.connect();
+
+                Services<Client> services(client);
+
+                UA_StatusCode status = services.addObjectNode(
+                    NodeId::string("foo"),
+                    NodeId::numeric(85),
+                    NodeId::numeric(UA_NS0ID_BASEOBJECTTYPE),
+                    NodeId::numeric(UA_NS0ID_HASCOMPONENT),
+                    QualifiedName(0, "foo"),
+                    ObjectAttributes("foo", "foo description", "en-US")
+                );
+
+                ASSERT_EQ(status, UA_STATUSCODE_GOOD);
+
+                LocalizedText description;
+
+                status = services.getNodeDescription(NodeId::string("foo"), description);
+
+                ASSERT_EQ(status, UA_STATUSCODE_GOOD);
+                ASSERT_EQ(description.getLocale(), "en-US");
+                ASSERT_EQ(description.getText(), "foo description");
+
+                client.disconnect();
+            }
+
+            TEST_F(OPCUAClientServicesTest, clientServices)
+            {
+                testChildReferences();
+                testNodeDescription();
             }
         }
     }

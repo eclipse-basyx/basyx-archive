@@ -9,6 +9,7 @@ add_executable(tests_opcua)
 
 target_sources(tests_opcua
     PRIVATE
+	"OPCUATestSetup.h"
 	"modelprovider/test_OPCUAModelProvider.cpp"
 	"modelprovider/test_OPCUALegacyModelVABAccess.cpp"
 	"modelprovider/test_OPCUAModelProviderTypeMeta.cpp"
@@ -16,6 +17,12 @@ target_sources(tests_opcua
 	"utilities/test_OPCUAUtilities.cpp"
 	"utilities/test_OPUAClientServices.cpp"
 	"utilities/test_ModeProviderUtilities.cpp"
+	"node/test_AssetAdministrationShellNodeManager.cpp"
+	"node/test_SubmodelNodeManager.cpp"
+	"node/test_PropertyNodeManager.cpp"
+	"api/test_ApiAssetAdminstrationShell.cpp"
+	"api/test_ApiSubmodel.cpp"
+	"api/test_ApiProperty.cpp"
 )
 
 target_link_libraries(tests_opcua basyx::util basyx::shared lib::gtest basyx::vab tests::support basyx::submodel tests::main basyx::opcua)
