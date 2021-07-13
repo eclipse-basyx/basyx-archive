@@ -59,14 +59,27 @@ class Generator:
                 for constant in self.constants.keys():
                     line = line.replace(constant, self.constants[constant])
                 if "$FIRST_ENUM$" in line:
-                    out_file.write(line.replace("$FIRST_ENUM$", self.first_element))
+                    out_file.write(self.__enum_replace__(line, self.first_element))
                 elif "$LAST_ENUM$" in line:
-                    out_file.write(line.replace("$LAST_ENUM$", self.last_element))
+                    out_file.write(self.__enum_replace__(line, self.last_element))
                 elif "$MIDDLE_ENUM$" in line:
                     for enum_elem in self.other_elements:
-                        out_file.write(line.replace("$MIDDLE_ENUM$", enum_elem))
+                        out_file.write(self.__enum_replace__(line, enum_elem))
                 else:
                     out_file.write(line)
+    
+    def __enum_replace__(self, line, element):
+        replace_symbols = re.findall(r'\$(..)\$', line)
+        if len(replace_symbols) > 0:
+            replace_characters = list(replace_symbols[0])
+            new_element = re.sub(replace_characters[0], replace_characters[1], element)
+            line = re.sub(r'\$FIRST_ENUM\$\$..\$', new_element, line)
+            line = re.sub(r'\$MIDDLE_ENUM\$\$..\$', new_element, line)
+            line = re.sub(r'\$LAST_ENUM\$\$..\$', new_element, line)
+        line = re.sub(r'\$FIRST_ENUM\$', element, line)
+        line = re.sub(r'\$MIDDLE_ENUM\$', element, line)
+        line = re.sub(r'\$LAST_ENUM\$', element, line)
+        return line
     
     def get_files(self, template_path, output_path):
         line_templates = list()

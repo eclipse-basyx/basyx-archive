@@ -7,6 +7,7 @@
 ; $FIRST_ENUM$  : The first enum in the list of enums
 ; $MIDDLE_ENUM$ : All enums that are in between first and last enum.
 ; $LAST_ENUM$   : The last enum in the list of enums
+; $FIRST_ENUM$$:_$ : Replaces ':' with '_', works for all enums
 ; $SIZE$        : The number of enums
 ; $CONSTANT$    : Define a costant, i.e.: $CONSTSANT$ NAME value, usage in document with $NAME$
 ;
@@ -21,9 +22,9 @@ namespace basyx {
 namespace $NAMESPACE$ {
 
 enum class $ENUM_CLASS$ {
-    $FIRST_ENUM$,
-    $MIDDLE_ENUM$,
-    $LAST_ENUM$,
+    $FIRST_ENUM$$:_$,
+    $MIDDLE_ENUM$$:_$,
+    $LAST_ENUM$$:_$,
 };
 
 class $ENUM_CLASS$_
@@ -52,9 +53,9 @@ using enum_pair_t = std::pair<const char*, $ENUM_CLASS$>;
 
 static const std::array<enum_pair_t, $SIZE$> string_to_enum = 
 {
-    std::make_pair("$FIRST_ENUM$",  $ENUM_CLASS$::$FIRST_ENUM$),
-    std::make_pair("$MIDDLE_ENUM$", $ENUM_CLASS$::$MIDDLE_ENUM$),
-    std::make_pair("$LAST_ENUM$", $ENUM_CLASS$::$LAST_ENUM$),
+    std::make_pair("$FIRST_ENUM$",  $ENUM_CLASS$::$FIRST_ENUM$$:_$),
+    std::make_pair("$MIDDLE_ENUM$", $ENUM_CLASS$::$MIDDLE_ENUM$$:_$),
+    std::make_pair("$LAST_ENUM$", $ENUM_CLASS$::$LAST_ENUM$$:_$),
 };
 
 $ENUM_CLASS$ $ENUM_CLASS$_::from_string(const std::string & name)
