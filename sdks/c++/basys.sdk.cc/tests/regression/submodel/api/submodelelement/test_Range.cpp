@@ -35,7 +35,7 @@ TYPED_TEST_CASE(RangeTest, ImplTypes);
 
 TYPED_TEST(RangeTest, TestGetDataTypeDef)
 {
-  ASSERT_EQ(this->range->getDataTypeDef(), "int");
+  ASSERT_EQ(this->range->getDataTypeDef(), XsdTypes_::to_string(XsdTypes::xsd_int));
 }
 
 TYPED_TEST(RangeTest, TestMaxMin)

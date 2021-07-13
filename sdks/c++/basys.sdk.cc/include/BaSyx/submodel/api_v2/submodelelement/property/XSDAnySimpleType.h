@@ -6,6 +6,7 @@
 #include <chrono>
 #include <iomanip>
 #include <regex>
+#include <sstream>
 
 #include <BaSyx/submodel/simple/common/xsd_types/AnyURI.h>
 #include <BaSyx/submodel/simple/common/xsd_types/DateTime.h>
@@ -18,8 +19,8 @@
 #include <BaSyx/submodel/simple/common/xsd_types/GMonthDay.h>
 #include <BaSyx/submodel/simple/common/xsd_types/GDay.h>
 #include <BaSyx/submodel/simple/common/xsd_types/GMonth.h>
-#include <sstream>
 
+#include <BaSyx/submodel/enumerations/XsdTypes.h>
 
 namespace basyx {
 namespace xsd_types {
@@ -48,7 +49,7 @@ using namespace submodel;
     static constexpr int fail_vab_type_not_supported() { static_assert("Type not supported by VAB!"); return 0; };
     static const std::string getDataTypeDef()
     {
-      return "Not supported!";
+      return XsdTypes_::to_string(XsdTypes::xsd_NotSupported);
     };
   };
 
@@ -57,7 +58,7 @@ using namespace submodel;
   {
     static const std::string getDataTypeDef()
     {
-      return "boolean";
+      return XsdTypes_::to_string(XsdTypes::xsd_boolean);
     }
 
     static const inline bool getXSDRepresentation(const bool & bool_value)
@@ -81,7 +82,7 @@ using namespace submodel;
   {
     static const std::string getDataTypeDef()
     {
-      return "byte";
+      return XsdTypes_::to_string(XsdTypes::xsd_byte);
     }
 
     static const inline int8_t getXSDRepresentation(const int8_t & int_value)
@@ -105,7 +106,7 @@ using namespace submodel;
   {
     static const std::string getDataTypeDef()
     {
-      return "short";
+      return XsdTypes_::to_string(XsdTypes::xsd_short);
     }
 
     static const inline int16_t getXSDRepresentation(const int16_t & short_value)
@@ -129,7 +130,7 @@ using namespace submodel;
   {
     static const std::string getDataTypeDef()
     {
-      return "int";
+      return XsdTypes_::to_string(XsdTypes::xsd_int);
     }
 
     static const inline int32_t getXSDRepresentation(const int32_t & int_value)
@@ -153,7 +154,7 @@ using namespace submodel;
   {
     static const std::string getDataTypeDef()
     {
-      return "long";
+      return XsdTypes_::to_string(XsdTypes::xsd_long);
     }
 
     static const inline int64_t getXSDRepresentation(const int64_t & long_value)
@@ -177,7 +178,7 @@ using namespace submodel;
   {
     static const std::string getDataTypeDef()
     {
-      return "unsignedByte";
+      return XsdTypes_::to_string(XsdTypes::xsd_unsignedByte);
     }
 
     static const inline uint8_t getXSDRepresentation(const uint8_t & int_value)
@@ -201,7 +202,7 @@ using namespace submodel;
   {
     static const std::string getDataTypeDef()
     {
-      return "unsignedShort";
+      return XsdTypes_::to_string(XsdTypes::xsd_unsignedShort);
     }
 
     static const inline uint16_t getXSDRepresentation(const uint16_t & ushort_value)
@@ -225,7 +226,7 @@ using namespace submodel;
   {
     static const std::string getDataTypeDef()
     {
-      return "unsignedInt";
+      return XsdTypes_::to_string(XsdTypes::xsd_unsignedInt);
     }
 
     static const inline uint32_t getXSDRepresentation(const uint32_t & uint_value)
@@ -249,7 +250,7 @@ using namespace submodel;
   {
     static const std::string getDataTypeDef()
     {
-      return "unsignedLong";
+      return XsdTypes_::to_string(XsdTypes::xsd_unsignedLong);
     }
 
     static const inline uint64_t getXSDRepresentation(const uint64_t & ulong_value)
@@ -273,7 +274,7 @@ using namespace submodel;
   {
     static const std::string getDataTypeDef()
     {
-      return "double";
+      return XsdTypes_::to_string(XsdTypes::xsd_double);
     }
 
     static const inline double getXSDRepresentation(const double & double_value)
@@ -297,7 +298,7 @@ using namespace submodel;
   {
     static const std::string getDataTypeDef()
     {
-      return "float";
+      return XsdTypes_::to_string(XsdTypes::xsd_float);
     }
 
     static const inline float getXSDRepresentation(const float & float_value)
@@ -321,7 +322,7 @@ using namespace submodel;
   {
     static const std::string getDataTypeDef()
     {
-      return "string";
+      return XsdTypes_::to_string(XsdTypes::xsd_string);
     }
 
     static const inline std::string getXSDRepresentation(const std::string & string)
@@ -345,7 +346,7 @@ using namespace submodel;
   {
     static const std::string getDataTypeDef()
     {
-      return "anyuri";
+      return XsdTypes_::to_string(XsdTypes::xsd_anyuri);
     }
 
     static const inline std::string getXSDRepresentation(const simple::AnyURI & uri)
@@ -376,7 +377,7 @@ using namespace submodel;
 
     static const std::string getDataTypeDef()
     {
-      return "date";
+      return XsdTypes_::to_string(XsdTypes::xsd_date);
     }
 
     static const inline std::string getXSDRepresentation(const simple::Date & date)
@@ -421,7 +422,7 @@ using namespace submodel;
 
     static const std::string getDataTypeDef()
     {
-      return "dateTime";
+      return XsdTypes_::to_string(XsdTypes::xsd_dateTime);
     }
 
     static const inline std::string getXSDRepresentation(const simple::DateTime & dateTime)
@@ -468,7 +469,7 @@ using namespace submodel;
 
     static const std::string getDataTypeDef()
     {
-      return "dayTimeDuration";
+      return XsdTypes_::to_string(XsdTypes::xsd_dayTimeDuration);
     }
 
     static const inline std::string getXSDRepresentation(const simple::DayTimeDuration & dayTimeDuration)
@@ -480,7 +481,7 @@ using namespace submodel;
         xsd_str = "-";
         duration *= -1;
       }
-      
+
       xsd_str += "P";
       if (duration / seconds_per_day)
       {
@@ -562,7 +563,7 @@ using namespace submodel;
   {
     static const std::string getDataTypeDef()
     {
-      return "yearMonthDuration";
+      return XsdTypes_::to_string(XsdTypes::xsd_yearMonthDuration);
     }
 
     static const inline std::string getXSDRepresentation(const simple::YearMonthDuration & yearMonthDuration)
@@ -636,7 +637,7 @@ using namespace submodel;
   {
     static const std::string getDataTypeDef()
     {
-      return "time";
+      return XsdTypes_::to_string(XsdTypes::xsd_time);
     }
 
     static const inline std::string getXSDRepresentation(const simple::Time & time)
@@ -699,7 +700,7 @@ using namespace submodel;
   {
     static const std::string getDataTypeDef()
     {
-      return "gYearMonth";
+      return XsdTypes_::to_string(XsdTypes::xsd_gYearMonth);
     }
 
     static const inline std::string getXSDRepresentation(const simple::GYearMonth & date)
@@ -749,7 +750,7 @@ using namespace submodel;
   {
     static const std::string getDataTypeDef()
     {
-      return "gYear";
+      return XsdTypes_::to_string(XsdTypes::xsd_gYear);
     }
 
     static const inline std::string getXSDRepresentation(const simple::GYear & year)
@@ -797,7 +798,7 @@ using namespace submodel;
   {
     static const std::string getDataTypeDef()
     {
-      return "gMonthDay";
+      return XsdTypes_::to_string(XsdTypes::xsd_gMonthDay);
     }
 
     static const inline std::string getXSDRepresentation(const simple::GMonthDay & monthDay)
@@ -844,7 +845,7 @@ using namespace submodel;
   {
     static const std::string getDataTypeDef()
     {
-      return "gDay";
+      return XsdTypes_::to_string(XsdTypes::xsd_gDay);
     }
 
     static const inline std::string getXSDRepresentation(const simple::GDay & day)
@@ -889,7 +890,7 @@ using namespace submodel;
   {
     static const std::string getDataTypeDef()
     {
-      return "gMonth";
+      return XsdTypes_::to_string(XsdTypes::xsd_gMonth);
     }
 
     static const inline std::string getXSDRepresentation(const simple::GMonth & month)

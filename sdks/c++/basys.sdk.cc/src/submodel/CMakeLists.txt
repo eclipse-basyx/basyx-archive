@@ -38,6 +38,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/enumerations/KeyType.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/enumerations/KeyElements.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/enumerations/IdentifiableElements.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/enumerations/XsdTypes.cpp
 	
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/aas/AssetAdministrationShell.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/aas/Asset.cpp
@@ -136,6 +137,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
 		${BASYX_SUBMODEL_INCLUDE_DIR}/enumerations/KeyElements.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/enumerations/IdentifiableElements.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/enumerations/Conversions.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/enumerations/XsdTypes.h
 	
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/aas/IAssetAdministrationShell.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/api_v2/aas/IAsset.h
@@ -190,7 +192,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/SubModelContainer.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/ElementFactory.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/LangStringSet.h
-        ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/ModelType.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/common/ModelType.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/dataspecification/DataSpecificationIEC61360.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/dataspecification/DataSpecificationPhysicalUnit.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/dataspecification/DataSpecification.h

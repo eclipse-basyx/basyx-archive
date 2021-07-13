@@ -2,6 +2,7 @@
 #include <BaSyx/submodel/simple/submodelelement/property/Property.h>
 #include <BaSyx/submodel/map_v2/submodelelement/property/Property.h>
 #include <BaSyx/submodel/simple/common/xsd_types/AnyURI.h>
+#include <BaSyx/submodel/enumerations/XsdTypes.h>
 
 using namespace basyx::submodel;
 
@@ -65,14 +66,14 @@ TYPED_TEST(PropertyTest, TestGetKeyElementType)
 TYPED_TEST(PropertyTest, TestAnyURI)
 {
   map::Property<simple::AnyURI> map_uri_prop("id");
-  ASSERT_EQ(map_uri_prop.getValueType(), std::string("anyuri"));
+  ASSERT_EQ(map_uri_prop.getValueType(), XsdTypes_::to_string(XsdTypes::xsd_anyuri));
 }
 
 TYPED_TEST(PropertyTest, TestSafeDateTime)
 {
   map::Property<simple::DateTime> dateTime_property("test id");
   std::string valueType = dateTime_property.getValueType();
-  ASSERT_EQ(valueType, std::string("dateTime"));
+  ASSERT_EQ(valueType, XsdTypes_::to_string(XsdTypes::xsd_dateTime));
 
   //Try to add a DateTime
   time_t t = 1563002200;
@@ -90,7 +91,7 @@ TYPED_TEST(PropertyTest, TestSafeDate)
 {
   map::Property<simple::Date> date_property("test id");
   std::string valueType = date_property.getValueType();
-  ASSERT_EQ(valueType, std::string("date"));
+  ASSERT_EQ(valueType, XsdTypes_::to_string(XsdTypes::xsd_date));
 
   //Try to add a Date
   tm date;
@@ -113,7 +114,7 @@ TYPED_TEST(PropertyTest, TestSafeDate)
 TYPED_TEST(PropertyTest, TestSafeDayTimeDuration)
 {
   map::Property<simple::DayTimeDuration> duration_property("test id");
-  ASSERT_EQ(duration_property.getValueType(), std::string("dayTimeDuration"));
+  ASSERT_EQ(duration_property.getValueType(), XsdTypes_::to_string(XsdTypes::xsd_dayTimeDuration));
 
   std::vector<std::pair<long, std::string>> test_cases = {
       {0, "P"},
@@ -143,7 +144,7 @@ TYPED_TEST(PropertyTest, TestSafeDayTimeDuration)
 TYPED_TEST(PropertyTest, TestSafeYearMonthDuration)
 {
   map::Property<simple::YearMonthDuration> duration_property("test id");
-  ASSERT_EQ(duration_property.getValueType(), std::string("yearMonthDuration"));
+  ASSERT_EQ(duration_property.getValueType(), XsdTypes_::to_string(XsdTypes::xsd_yearMonthDuration));
 
   std::vector<std::tuple<int, int, int, int, std::string>> test_cases = {
       {0, 0, 0, 0, "P"},
@@ -169,7 +170,7 @@ TYPED_TEST(PropertyTest, TestSafeYearMonthDuration)
 TYPED_TEST(PropertyTest, TestTime)
 {
   map::Property<simple::Time> time_property("test id");
-  ASSERT_EQ(time_property.getValueType(), std::string("time"));
+  ASSERT_EQ(time_property.getValueType(), XsdTypes_::to_string(XsdTypes::xsd_time));
 
   std::vector<std::tuple<uint8_t, uint8_t, float, std::string, std::string>> test_cases = {
       {0, 0, 0, "Z", "00:00:00Z"},
@@ -195,7 +196,7 @@ TYPED_TEST(PropertyTest, TestTime)
 TYPED_TEST(PropertyTest, TestGregorianYearMonth)
 {
   map::Property<simple::GYearMonth> gregorianYearMonth_property("test id");
-  ASSERT_EQ(gregorianYearMonth_property.getValueType(), std::string("gYearMonth"));
+  ASSERT_EQ(gregorianYearMonth_property.getValueType(), XsdTypes_::to_string(XsdTypes::xsd_gYearMonth));
 
   std::vector<std::tuple<int, uint8_t, std::string, std::string>> test_cases = {
       {0, 01, "Z", "0000-01Z"},
@@ -221,7 +222,7 @@ TYPED_TEST(PropertyTest, TestGregorianYearMonth)
 TYPED_TEST(PropertyTest, TestGregorianYear)
 {
   map::Property<simple::GYear> gregorianYear_property("test id");
-  ASSERT_EQ(gregorianYear_property.getValueType(), std::string("gYear"));
+  ASSERT_EQ(gregorianYear_property.getValueType(), XsdTypes_::to_string(XsdTypes::xsd_gYear));
 
   std::vector<std::tuple<int, std::string, std::string>> test_cases = {
       {0, "Z", "0000Z"},
@@ -247,7 +248,7 @@ TYPED_TEST(PropertyTest, TestGregorianYear)
 TYPED_TEST(PropertyTest, TestGregorianMonthDay)
 {
   map::Property<simple::GMonthDay> gregorianMonthDay_property("test id");
-  ASSERT_EQ(gregorianMonthDay_property.getValueType(), std::string("gMonthDay"));
+  ASSERT_EQ(gregorianMonthDay_property.getValueType(), XsdTypes_::to_string(XsdTypes::xsd_gMonthDay));
 
   std::vector<std::tuple<uint8_t, uint8_t, std::string, std::string, uint8_t, uint8_t>> test_cases = {
       {1, 1, "Z", "--01-01Z", 1, 1},
@@ -271,7 +272,7 @@ TYPED_TEST(PropertyTest, TestGregorianMonthDay)
 TYPED_TEST(PropertyTest, TestGregorianDay)
 {
   map::Property<simple::GDay> gregorianDay_property("test id");
-  ASSERT_EQ(gregorianDay_property.getValueType(), std::string("gDay"));
+  ASSERT_EQ(gregorianDay_property.getValueType(), XsdTypes_::to_string(XsdTypes::xsd_gDay));
 
   std::vector<std::tuple<uint8_t, std::string, std::string, uint8_t>> test_cases = {
       {1, "Z", "---01Z", 1},
@@ -294,7 +295,7 @@ TYPED_TEST(PropertyTest, TestGregorianDay)
 TYPED_TEST(PropertyTest, TestGregorianMonth)
 {
   map::Property<simple::GMonth> gregorianMonth_property("test id");
-  ASSERT_EQ(gregorianMonth_property.getValueType(), std::string("gMonth"));
+  ASSERT_EQ(gregorianMonth_property.getValueType(), XsdTypes_::to_string(XsdTypes::xsd_gMonth));
 
   std::vector<std::tuple<uint8_t, std::string, std::string, uint8_t>> test_cases = {
       {1, "Z", "--01Z", 1},
