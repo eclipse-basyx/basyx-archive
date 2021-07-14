@@ -8,7 +8,6 @@ namespace basyx {
 namespace submodel {
 namespace simple {
 
-template<typename T>
 class OperationVariable : 
 	public virtual SubmodelElement, 
 	public virtual api::IOperationVariable
@@ -16,14 +15,14 @@ class OperationVariable :
 private:
 	std::unique_ptr<ISubmodelElement> value;
 public:
-	OperationVariable(const std::string & idShort) : SubmodelElement(idShort, Kind::Type)
-	{};
+	OperationVariable(const std::string & idShort)
+	  : SubmodelElement(idShort, ModelingKind::Template)
+	{}
 
 	OperationVariable(const std::string & idShort, std::unique_ptr<ISubmodelElement> value)
 		: SubmodelElement(idShort, ModelingKind::Template)
 		, value(std::move(value))
-	{
-	};
+	{}
 
 	OperationVariable(const OperationVariable & other) = default;
 	OperationVariable(OperationVariable && other) noexcept = default;

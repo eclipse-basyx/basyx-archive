@@ -131,8 +131,8 @@ std::unique_ptr<map::SubmodelElement> SubmodelElementFactory::Create(const vab::
       return util::make_unique<MultiLanguageProperty>(elementMap.getMap());
 //    case ModelTypes::Operation:
 //      return util::make_unique<Operation>(elementMap.getMap());
-//    case ModelTypes::OperationVariable:
-//      return util::make_unique<OperationVariable>(elementMap.getMap());
+    case ModelTypes::OperationVariable:
+      return util::make_unique<OperationVariable>(elementMap.getMap());
     case ModelTypes::Property:
       return SubmodelElementFactory::CreateProperty(elementMap);
     case ModelTypes::Range:
