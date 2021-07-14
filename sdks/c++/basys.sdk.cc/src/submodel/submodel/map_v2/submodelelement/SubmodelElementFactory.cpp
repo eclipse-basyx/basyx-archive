@@ -125,8 +125,8 @@ std::unique_ptr<map::SubmodelElement> SubmodelElementFactory::Create(const vab::
 //      return util::make_unique<Capability>(elementMap.getMap());
     case ModelTypes::File:
       return util::make_unique<File>(elementMap.getMap());
-//    case ModelTypes::Entity:
-//      return util::make_unique<Entity>(elementMap.getMap());
+    case ModelTypes::Entity:
+      return util::make_unique<Entity>(elementMap.getMap());
     case ModelTypes::MultiLanguageProperty:
       return util::make_unique<MultiLanguageProperty>(elementMap.getMap());
 //    case ModelTypes::Operation:

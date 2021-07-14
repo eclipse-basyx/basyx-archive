@@ -17,6 +17,29 @@ Entity::Entity(EntityType entityType, const std::string & idShort, ModelingKind 
   this->map.insertKey(Path::Statement, statements.getMap());
 }
 
+Entity::Entity(basyx::object obj)
+  : SubmodelElement(obj)
+{
+  this->map.insertKey(Path::EntityType, obj.getProperty(Path::EntityType).GetStringContent());
+  this->map.insertKey(Path::Statement, statements.getMap());
+
+  if ( not obj.getProperty(Path::Asset).IsNull() )
+  {
+    Reference asset{obj.getProperty(Path::Asset)};
+    this->setAssetRef(asset);
+  }
+
+  if ( not obj.getProperty(Path::Statement).IsNull() )
+  {
+    auto obj_statements = obj.getProperty(Path::Statement).Get<object::hash_map_t<object>>();
+    for (auto statement : obj_statements)
+    {
+      auto new_statement = SubmodelElementFactory::Create(statement.second);
+      this->addStatement(std::move(new_statement));
+    }
+  }
+}
+
 api::IElementContainer<api::ISubmodelElement> & Entity::getStatement()
 {
   return this->statements;

@@ -10,6 +10,7 @@
 #include <BaSyx/submodel/map_v2/qualifier/Qualifiable.h>
 #include <BaSyx/submodel/map_v2/qualifier/Referable.h>
 #include <BaSyx/submodel/map_v2/submodelelement/SubmodelElement.h>
+#include <BaSyx/submodel/map_v2/submodelelement/file/File.h>
 
 using namespace basyx;
 using namespace basyx::submodel;
@@ -141,6 +142,21 @@ static bool testingQualifiable(api::IQualifiable & qualifiable)
   auto formulas = qualifiable.getFormulas();
 
   return testingQualifier(qualifiers.at(0), 3) and testingQualifier(qualifiers.at(1), 1) and testingFormula(formulas.at(0));
+}
+
+static File testingFile(int i=0)
+{
+  File file{"testing file " + std::to_string(i), "testing mime type"};
+  file.setPath("some testing path");
+  return file;
+}
+
+static bool testingFile(api::ISubmodelElement & submodelElement, int i=0)
+{
+  api::IFile & file = dynamic_cast<api::IFile&>(submodelElement);
+  return (file.getIdShort() == ("testing file " + std::to_string(i)))
+          and (file.getPath() == "some testing path")
+          and (file.getMimeType() == "testing mime type");
 }
 
 }

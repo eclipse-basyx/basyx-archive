@@ -1,4 +1,5 @@
 #include <BaSyx/submodel/simple/submodelelement/Entity.h>
+#include <BaSyx/submodel/map_v2/submodelelement/Entity.h>
 
 
 namespace basyx {

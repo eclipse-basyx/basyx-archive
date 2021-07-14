@@ -12,6 +12,7 @@ namespace map {
 class Entity 
   : public virtual api::IEntity
   , public SubmodelElement
+  , public ModelType<ModelTypes::Entity>
 {
 public:
   struct Path {
@@ -27,6 +28,7 @@ private:
 
 public:
   Entity(EntityType, const std::string &, ModelingKind kind = ModelingKind::Instance);
+  Entity(basyx::object);
 
   api::IElementContainer<ISubmodelElement> & getStatement() override;
   void addStatement(std::unique_ptr<SubmodelElement>);
@@ -38,7 +40,6 @@ public:
 
   virtual ModelingKind getKind() const override;
   virtual KeyElements getKeyElementType() const override { return KeyElements::Entity; };
-  virtual ModelTypes GetModelType() const override { return ModelTypes::Entity; };
 };
 
 }

@@ -52,6 +52,7 @@ target_sources(${PROJECT_NAME}
 	map_v2/submodelelement/file/test_File.cpp
 	map_v2/submodelelement/property/test_MultiLanguageProperty.cpp
 	map_v2/submodelelement/property/test_ReferenceElement.cpp
+	map_v2/submodelelement/test_Entity.cpp
 	map_v2/submodelelement/test_Range.cpp
 
 	#### Support ####
