@@ -1,7 +1,7 @@
 #ifndef BASYX_SUBMODEL_SIMPLE_DATASPECIFICATION_SUBMODELELEMENTFACTORY_H
 #define BASYX_SUBMODEL_SIMPLE_DATASPECIFICATION_SUBMODELELEMENTFACTORY_H
 
-#include <BaSyx/submodel/api_v2/submodelelement/ISubmodelElement.h>
+#include <BaSyx/submodel/map_v2/submodelelement/SubmodelElement.h>
 
 #include <BaSyx/vab/ElementMap.h>
 
@@ -16,9 +16,10 @@ public:
     static constexpr char Value[] = "value";
   };
 private:
-	static std::unique_ptr<api::ISubmodelElement> CreateProperty(const vab::ElementMap & elementMap);
+  static std::unique_ptr<map::SubmodelElement> CreateProperty(const vab::ElementMap & elementMap);
+  static std::unique_ptr<map::SubmodelElement> CreateRange(const vab::ElementMap & elementMap);
 public:
-	static std::unique_ptr<api::ISubmodelElement> Create(const vab::ElementMap & elementMap);
+	static std::unique_ptr<map::SubmodelElement> Create(const vab::ElementMap & elementMap);
 };
 
 }
