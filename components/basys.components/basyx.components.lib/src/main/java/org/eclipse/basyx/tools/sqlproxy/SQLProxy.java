@@ -304,7 +304,7 @@ public abstract class SQLProxy extends SQLConnector {
 		// - Null value check, in case that entry was not in database
 		if (result.get("type") == null) return null;
 		// - De-serialize table entry
-		return SQLTableRow.getValueFromString(sqlRootElement, Integer.parseInt((String) result.get("type")), (String) result.get("value"));
+		return SQLTableRow.getValueFromString(sqlRootElement, (int) result.get("type"), (String) result.get("value"));
 	}
 
 	

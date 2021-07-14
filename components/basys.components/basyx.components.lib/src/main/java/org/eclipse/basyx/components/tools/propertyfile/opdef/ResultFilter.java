@@ -46,7 +46,9 @@ public class ResultFilter {
 		
 		// Process all SQL results
 		try {
-			while (sqlResult.next()) {result.add(sqlResult.getString((String) columnName[0]));}
+			while (sqlResult.next()) {
+				result.add(sqlResult.getString((String) columnName[0]));
+			}
 		} catch (SQLException e) {
 			logger.error("Could not get string set from sqlResult", e);
 		}
@@ -68,7 +70,9 @@ public class ResultFilter {
 		
 		// Process all SQL results
 		try {
-			while (sqlResult.next()) {result.add(sqlResult.getString((String) columnName[0]));}
+			while (sqlResult.next()) {
+				result.add(sqlResult.getString((String) columnName[0]));
+			}
 		} catch (SQLException e) {
 			logger.error("Could not get string collection from sqlResult", e);
 		}
@@ -92,8 +96,8 @@ public class ResultFilter {
 		try {
 			while (sqlResult.next()) {
 				// Process columns
-				for (Object columnName: columnNames) {
-					result.put((String) columnName, sqlResult.getString((String) columnName));
+				for (Object columnName : columnNames) {
+					result.put((String) columnName, sqlResult.getObject((String) columnName));
 				}
 			}
 		} catch (SQLException e) {
@@ -123,7 +127,7 @@ public class ResultFilter {
 				
 				// Process columns
 				for (Object columnName: columnNames) {
-					listElement.put((String) columnName, sqlResult.getString((String) columnName));
+					listElement.put((String) columnName, sqlResult.getObject((String) columnName));
 				}
 				
 				// Add list element to result
