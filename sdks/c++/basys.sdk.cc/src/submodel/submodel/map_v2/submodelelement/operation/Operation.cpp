@@ -17,19 +17,54 @@ Operation::Operation(const std::string & idShort, basyx::object invokable)
 	this->map.insertKey(Path::InputVariable, inputVariables.getMap());
 	this->map.insertKey(Path::OutputVariable, outputVariables.getMap());
 	this->map.insertKey(Path::InoutputVariable, inOutVariables.getMap());
-};
+}
 
-IElementContainer<ISubmodelElement> & Operation::getInputVariables()
+Operation::Operation(basyx::object obj)
+	: SubmodelElement(obj)
+{
+	this->map.insertKey(Path::Invokable, obj.getProperty(Path::Invokable));
+
+	if ( not obj.getProperty(Path::InputVariable).IsNull() )
+	{
+		for (auto ov : obj.getProperty(Path::InputVariable).Get<object::object_map_t>())
+		{
+		  auto elem = util::make_unique<OperationVariable>(ov.second);
+			this->inputVariables.addElement(std::move(elem));
+		}
+	}
+
+	if ( not obj.getProperty(Path::OutputVariable).IsNull() )
+	{
+		for (auto ov : obj.getProperty(Path::OutputVariable).Get<object::object_map_t>())
+		{
+			this->outputVariables.addElement(util::make_unique<OperationVariable>(ov.second));
+		}
+	}
+
+	if ( not obj.getProperty(Path::InoutputVariable).IsNull() )
+	{
+		for (auto ov : obj.getProperty(Path::InoutputVariable).Get<object::object_map_t>())
+		{
+			this->inOutVariables.addElement(util::make_unique<OperationVariable>(ov.second));
+		}
+	}
+
+	this->map.insertKey(Path::InputVariable, inputVariables.getMap());
+	this->map.insertKey(Path::OutputVariable, outputVariables.getMap());
+	this->map.insertKey(Path::InoutputVariable, inOutVariables.getMap());
+}
+
+IElementContainer<IOperationVariable> & Operation::getInputVariables()
 {
 	return this->inputVariables;
 }
 
-IElementContainer<ISubmodelElement> & Operation::getOutputVariables()
+IElementContainer<IOperationVariable> & Operation::getOutputVariables()
 {
 	return this->outputVariables;
 }
 
-IElementContainer<ISubmodelElement> & Operation::getInOutputVariables()
+IElementContainer<IOperationVariable> & Operation::getInOutputVariables()
 {
 	return this->inOutVariables;
 }
@@ -37,4 +72,19 @@ IElementContainer<ISubmodelElement> & Operation::getInOutputVariables()
 basyx::object Operation::invoke(basyx::object args)
 {
 	return this->invokable.invoke(args);
+}
+
+void Operation::addInputVariable(std::unique_ptr<OperationVariable> operationVariable)
+{
+  this->inputVariables.addElement(std::move(operationVariable));
+}
+
+void Operation::addOutputVariable(std::unique_ptr<OperationVariable> operationVariable)
+{
+  this->outputVariables.addElement(std::move(operationVariable));
+}
+
+void Operation::addInOutVariable(std::unique_ptr<OperationVariable> operationVariable)
+{
+  this->inOutVariables.addElement(std::move(operationVariable));
 }

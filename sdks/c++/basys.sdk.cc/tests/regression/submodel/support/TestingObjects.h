@@ -11,6 +11,7 @@
 #include <BaSyx/submodel/map_v2/qualifier/Referable.h>
 #include <BaSyx/submodel/map_v2/submodelelement/SubmodelElement.h>
 #include <BaSyx/submodel/map_v2/submodelelement/file/File.h>
+#include <BaSyx/submodel/map_v2/submodelelement/operation/OperationVariable.h>
 
 using namespace basyx;
 using namespace basyx::submodel;
@@ -157,6 +158,19 @@ static bool testingFile(api::ISubmodelElement & submodelElement, int i=0)
   return (file.getIdShort() == ("testing file " + std::to_string(i)))
           and (file.getPath() == "some testing path")
           and (file.getMimeType() == "testing mime type");
+}
+
+static OperationVariable testingOperationVariable(int i=0)
+{
+  OperationVariable ov{"testing id " + std::to_string(i), util::make_unique<File>(testingFile(2))};
+
+  return ov;
+}
+
+static bool testingOperationVariable(api::IOperationVariable & ov, int i=0)
+{
+  return (ov.getIdShort() == "testing id " + std::to_string(i))
+          and testingFile(ov.getValue(), 2);
 }
 
 }

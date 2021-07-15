@@ -19,9 +19,9 @@ class IOperation : public virtual ISubmodelElement
 public:
 	virtual ~IOperation() = 0;
 
-	virtual IElementContainer<ISubmodelElement> & getInputVariables() = 0;
-	virtual IElementContainer<ISubmodelElement> & getOutputVariables() = 0;
-	virtual IElementContainer<ISubmodelElement> & getInOutputVariables() = 0;
+	virtual IElementContainer<IOperationVariable> & getInputVariables() = 0;
+	virtual IElementContainer<IOperationVariable> & getOutputVariables() = 0;
+	virtual IElementContainer<IOperationVariable> & getInOutputVariables() = 0;
 
 	virtual basyx::object invoke(basyx::object args) = 0;
 };

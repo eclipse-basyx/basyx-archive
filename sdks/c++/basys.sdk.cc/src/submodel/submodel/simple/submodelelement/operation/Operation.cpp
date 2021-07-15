@@ -9,17 +9,17 @@ basyx::submodel::simple::Operation::Operation(const std::string & idShort)
 {
 };
 
-IElementContainer<ISubmodelElement> & Operation::getInputVariables()
+IElementContainer<IOperationVariable> & Operation::getInputVariables()
 {
 	return this->inputVariables;
 }
 
-IElementContainer<ISubmodelElement> & Operation::getOutputVariables()
+IElementContainer<IOperationVariable> & Operation::getOutputVariables()
 {
 	return this->outputVariables;
 }
 
-IElementContainer<ISubmodelElement> & Operation::getInOutputVariables()
+IElementContainer<IOperationVariable> & Operation::getInOutputVariables()
 {
 	return this->inOutVariables;
 }
@@ -27,4 +27,19 @@ IElementContainer<ISubmodelElement> & Operation::getInOutputVariables()
 basyx::object Operation::invoke(basyx::object args)
 {
 	return this->invokable;
+}
+
+void Operation::addInputVariable(std::unique_ptr<OperationVariable> operationVariable)
+{
+  this->inputVariables.addElement(std::move(operationVariable));
+}
+
+void Operation::addOutputVariable(std::unique_ptr<OperationVariable> operationVariable)
+{
+  this->outputVariables.addElement(std::move(operationVariable));
+}
+
+void Operation::addInOutVariable(std::unique_ptr<OperationVariable> operationVariable)
+{
+  this->inOutVariables.addElement(std::move(operationVariable));
 }

@@ -2,7 +2,7 @@
 #define BASYX_SUBMODEL_MAP_V2_SUBMODELELEMENT_OPERATION_OPERATION_H
 
 #include <BaSyx/submodel/api_v2/submodelelement/operation/IOperation.h>
-#include <BaSyx/submodel/map_v2/submodelelement/SubmodelElement.h>
+#include <BaSyx/submodel/map_v2/submodelelement/operation/OperationVariable.h>
 #include <BaSyx/submodel/map_v2/common/ElementContainer.h>
 #include <BaSyx/submodel/map_v2/common/ModelType.h>
 
@@ -23,20 +23,25 @@ public:
     static constexpr char InoutputVariable[] = "inoutputVariable";
   };
 private:
-	ElementContainer<ISubmodelElement> inputVariables;
-	ElementContainer<ISubmodelElement> outputVariables;
-	ElementContainer<ISubmodelElement> inOutVariables;
+	ElementContainer<api::IOperationVariable> inputVariables;
+	ElementContainer<api::IOperationVariable> outputVariables;
+	ElementContainer<api::IOperationVariable> inOutVariables;
 	basyx::object invokable;
 public:
 	Operation(const std::string & idShort, basyx::object invokable);
+  Operation(basyx::object obj);
 	
 	~Operation() = default;
 
 	// Inherited via IOperation
-	virtual api::IElementContainer<ISubmodelElement> & getInputVariables() override;
-	virtual api::IElementContainer<ISubmodelElement> & getOutputVariables() override;
-	virtual api::IElementContainer<ISubmodelElement> & getInOutputVariables() override;
+	virtual api::IElementContainer<api::IOperationVariable> & getInputVariables() override;
+	virtual api::IElementContainer<api::IOperationVariable> & getOutputVariables() override;
+	virtual api::IElementContainer<api::IOperationVariable> & getInOutputVariables() override;
 	virtual basyx::object invoke(basyx::object args) override;
+
+  void addInputVariable(std::unique_ptr<OperationVariable> operationVariable);
+  void addOutputVariable(std::unique_ptr<OperationVariable> operationVariable);
+  void addInOutVariable(std::unique_ptr<OperationVariable> operationVariable);
 
 	virtual KeyElements getKeyElementType() const override { return KeyElements::Operation; };
 };

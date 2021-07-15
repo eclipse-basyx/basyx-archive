@@ -50,6 +50,7 @@ target_sources(${PROJECT_NAME}
 	map_v2/qualifier/test_Qualifiable.cpp
     map_v2/submodelelement/file/test_Blob.cpp
 	map_v2/submodelelement/file/test_File.cpp
+	map_v2/submodelelement/operation/test_Operation.cpp
 	map_v2/submodelelement/operation/test_OperationVariable.cpp
 	map_v2/submodelelement/property/test_MultiLanguageProperty.cpp
 	map_v2/submodelelement/property/test_ReferenceElement.cpp
