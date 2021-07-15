@@ -25,6 +25,7 @@ private:
 
 public:
   RelationshipElement(const Reference & first, const Reference & second, const std::string & idShort, ModelingKind kind = ModelingKind::Instance);
+  RelationshipElement(basyx::object);
 
   const Reference & getFirst() const override;
   const Reference & getSecond() const override;

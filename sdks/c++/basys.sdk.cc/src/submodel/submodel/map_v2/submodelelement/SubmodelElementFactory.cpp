@@ -139,8 +139,8 @@ std::unique_ptr<map::SubmodelElement> SubmodelElementFactory::Create(const vab::
       return SubmodelElementFactory::CreateRange(elementMap);
     case ModelTypes::ReferenceElement:
       return util::make_unique<ReferenceElement>(elementMap.getMap());
-//    case ModelTypes::RelationshipElement:
-//      return util::make_unique<RelationshipElement>(elementMap.getMap());
+    case ModelTypes::RelationshipElement:
+      return util::make_unique<RelationshipElement>(elementMap.getMap());
 //    case ModelTypes::SubmodelElementCollection:
 //      return util::make_unique<SubmodelElementCollection>(elementMap.getMap());
 	default:

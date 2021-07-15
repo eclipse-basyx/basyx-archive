@@ -17,6 +17,15 @@ RelationshipElement::RelationshipElement(const Reference & first, const Referenc
   this->map.insertKey(Path::Second, second.getMap());
 }
 
+RelationshipElement::RelationshipElement(basyx::object obj)
+  : SubmodelElement{obj}
+  , first{obj.getProperty(Path::First)}
+  , second{obj.getProperty(Path::Second)}
+{
+  this->map.insertKey(Path::First, this->first.getMap());
+  this->map.insertKey(Path::Second, this->second.getMap());
+}
+
 const Reference & RelationshipElement::getFirst() const
 {
   return first;
