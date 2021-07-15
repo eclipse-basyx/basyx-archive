@@ -17,7 +17,7 @@ class AnnotatedRelationshipElement
 private:
   ElementContainer<IDataElement> annotations;
 public:
-  AnnotatedRelationshipElement(const Referable &, const Referable &, const std::string & idShort, ModelingKind kind = ModelingKind::Instance);
+  AnnotatedRelationshipElement(const Reference &, const Reference &, const std::string & idShort, ModelingKind kind = ModelingKind::Instance);
 
   const api::IElementContainer<IDataElement> & getAnnotation() const override;
   void addAnnotation(std::unique_ptr<DataElement> dataElement);

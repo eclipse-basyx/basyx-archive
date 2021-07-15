@@ -11,13 +11,13 @@ namespace api {
  * Mandatory members: first, second
  */
 class IRelationshipElement
-    : public virtual ISubmodelElement
+  : public virtual ISubmodelElement
 {
 public:
   virtual ~IRelationshipElement() = 0;
 
-  virtual const IReferable & getFirst() const = 0;
-  virtual const IReferable & getSecond() const = 0;
+  virtual const IReference & getFirst() const = 0;
+  virtual const IReference & getSecond() const = 0;
 
   virtual KeyElements getKeyElementType() const override { return KeyElements::RelationshipElement; };
 };

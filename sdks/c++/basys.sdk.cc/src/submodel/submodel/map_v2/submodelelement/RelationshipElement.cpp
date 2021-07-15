@@ -8,7 +8,7 @@ namespace map {
 constexpr char RelationshipElement::Path::First[];
 constexpr char RelationshipElement::Path::Second[];
 
-RelationshipElement::RelationshipElement(const Referable & first, const Referable & second, const std::string & idShort, ModelingKind kind)
+RelationshipElement::RelationshipElement(const Reference & first, const Reference & second, const std::string & idShort, ModelingKind kind)
   : SubmodelElement(idShort, kind)
   , first(first)
   , second(second)
@@ -17,12 +17,12 @@ RelationshipElement::RelationshipElement(const Referable & first, const Referabl
   this->map.insertKey(Path::Second, second.getMap());
 }
 
-const api::IReferable & RelationshipElement::getFirst() const
+const Reference & RelationshipElement::getFirst() const
 {
   return first;
 }
 
-const api::IReferable & RelationshipElement::getSecond() const
+const Reference & RelationshipElement::getSecond() const
 {
   return second;
 }

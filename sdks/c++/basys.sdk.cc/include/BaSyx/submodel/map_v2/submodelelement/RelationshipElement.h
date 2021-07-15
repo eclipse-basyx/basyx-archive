@@ -19,13 +19,15 @@ public:
     static constexpr char First[] = "first";
     static constexpr char Second[] = "second";
   };
-private:
-  Referable first, second;
-public:
-  RelationshipElement(const Referable & first, const Referable & second, const std::string & idShort, ModelingKind kind = ModelingKind::Instance);
 
-  const IReferable & getFirst() const override;
-  const IReferable & getSecond() const override;
+private:
+  Reference first, second;
+
+public:
+  RelationshipElement(const Reference & first, const Reference & second, const std::string & idShort, ModelingKind kind = ModelingKind::Instance);
+
+  const Reference & getFirst() const override;
+  const Reference & getSecond() const override;
 
   virtual KeyElements getKeyElementType() const override { return KeyElements::RelationshipElement; };
 };

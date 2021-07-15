@@ -11,24 +11,30 @@ using namespace basyx::submodel;
 
 // Implementations to run tests for
 using ImplTypes = ::testing::Types<
-	std::tuple<simple::AnnotatedRelationshipElement, simple::Referable, simple::ReferenceElement>,
-	std::tuple<map::AnnotatedRelationshipElement, map::Referable, map::ReferenceElement>
+	std::tuple<simple::AnnotatedRelationshipElement, simple::Reference, simple::ReferenceElement>,
+	std::tuple<map::AnnotatedRelationshipElement, map::Reference, map::ReferenceElement>
 >;
 
 template<class Impl>
 class AnnotatedRelationshipElementTest :public ::testing::Test {
 public:
   using impl_t = typename std::tuple_element<0, Impl>::type;
-  using referable_t = typename std::tuple_element<1, Impl>::type;
+  using reference_t = typename std::tuple_element<1, Impl>::type;
   using referenceElement_t = typename std::tuple_element<2, Impl>::type;
 
 protected:
 	std::unique_ptr<impl_t> annotatedRelationshipElement;
+  std::unique_ptr<simple::Key> firstKey;
+  std::unique_ptr<simple::Key> secondKey;
+
 protected:
-	void SetUp() override
-	{
-	  referable_t first(std::string("first"));
-	  referable_t second(std::string("second"));
+  void SetUp() override
+  {
+    this->firstKey = util::make_unique<simple::Key>(basyx::submodel::KeyElements::SubmodelElement, true, KeyType::IdShort, "first value");
+    this->secondKey = util::make_unique<simple::Key>(KeyElements::RelationshipElement, false, KeyType::IdShort, "first value");
+
+    reference_t first(*firstKey);
+    reference_t second(*secondKey);
 		this->annotatedRelationshipElement = util::make_unique<impl_t>(first, second, "test annotatedRelationshipElement");
 	}
 

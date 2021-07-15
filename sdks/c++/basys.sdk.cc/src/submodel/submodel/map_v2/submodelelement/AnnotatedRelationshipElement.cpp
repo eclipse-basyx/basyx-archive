@@ -7,7 +7,7 @@ namespace map {
 
 constexpr char AnnotatedRelationshipElement::Path::Annotation[];
 
-AnnotatedRelationshipElement::AnnotatedRelationshipElement(const Referable & first, const Referable & second, const std::string & idShort, ModelingKind kind)
+AnnotatedRelationshipElement::AnnotatedRelationshipElement(const Reference & first, const Reference & second, const std::string & idShort, ModelingKind kind)
   : RelationshipElement(first, second, idShort, kind)
 {
   this->map.insertKey(Path::Annotation, this->annotations.getMap());

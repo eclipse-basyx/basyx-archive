@@ -5,7 +5,7 @@ namespace basyx {
 namespace submodel {
 namespace simple {
 
-AnnotatedRelationshipElement::AnnotatedRelationshipElement(const Referable & first, const Referable & second, const std::string & idShort, ModelingKind kind)
+AnnotatedRelationshipElement::AnnotatedRelationshipElement(const Reference & first, const Reference & second, const std::string & idShort, ModelingKind kind)
   : RelationshipElement(first, second, idShort, kind)
 {}
 
