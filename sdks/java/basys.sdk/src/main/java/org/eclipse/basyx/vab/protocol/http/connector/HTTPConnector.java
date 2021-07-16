@@ -270,7 +270,11 @@ public class HTTPConnector implements IBaSyxConnector {
 	}
 
 	private ProviderException handleProcessingException(HttpMethod method, int statusCode) {
-		return ExceptionToHTTPCodeMapper.mapToException(statusCode, "[HTTP " + method.name() + "] Failed to request " + this.address + " with mediatype " + this.mediaType);
+		if (statusCode == 0) {
+			return ExceptionToHTTPCodeMapper.mapToException(404, "[HTTP " + method.name() + "] Failed to request " + this.address + " with mediatype " + this.mediaType);
+		} else {
+			return ExceptionToHTTPCodeMapper.mapToException(statusCode, "[HTTP " + method.name() + "] Failed to request " + this.address + " with mediatype " + this.mediaType);
+		}
 	}
 	
 	/**
