@@ -11,19 +11,23 @@ namespace submodel {
 namespace simple {
 
 
-class SubmodelElementCollection : 
-	public SubmodelElement,
-	public api::ISubmodelElementCollection
+class SubmodelElementCollection
+  : public SubmodelElement
+  , public api::ISubmodelElementCollection
 {
 private:
 	ElementContainer<ISubmodelElement> elementContainer;
 	bool ordered;
 	bool allowDuplicates;
+
 public:
 	SubmodelElementCollection(const std::string & idShort, ModelingKind = ModelingKind::Instance, bool ordered = false, bool allowDuplicates = false);
+
 	virtual ~SubmodelElementCollection() = default;
 
 	virtual api::IElementContainer<ISubmodelElement> & getSubmodelElements() override;
+
+	void addElement(std::unique_ptr<SubmodelElement>);
 
 	virtual bool isOrdered() const override;
 	virtual bool isAllowDuplicates() const override;

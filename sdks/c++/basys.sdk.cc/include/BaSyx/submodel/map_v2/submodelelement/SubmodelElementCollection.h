@@ -12,10 +12,10 @@ namespace submodel {
 namespace map {
 
 
-class SubmodelElementCollection : 
-	public api::ISubmodelElementCollection,
-	public SubmodelElement,
-	public ModelType<ModelTypes::SubmodelElementCollection>
+class SubmodelElementCollection
+  : public api::ISubmodelElementCollection
+  , public SubmodelElement
+  , public ModelType<ModelTypes::SubmodelElementCollection>
 {
 public:
 	struct Path {
@@ -23,13 +23,19 @@ public:
 		static constexpr char Ordered[] = "ordered";
 		static constexpr char AllowDuplicates[] = "allowDuplicates";
 	};
+
 private:
 	ElementContainer<ISubmodelElement> elementContainer;
+
 public:
 	SubmodelElementCollection(const std::string & idShort, ModelingKind Kind = ModelingKind::Instance, bool ordered = false, bool allowDuplicates = false);
+  SubmodelElementCollection(basyx::object);
+
 	virtual ~SubmodelElementCollection() = default;
 
 	virtual api::IElementContainer<ISubmodelElement> & getSubmodelElements() override;
+
+	void addElement(std::unique_ptr<SubmodelElement>);
 
 	virtual bool isOrdered() const override;
 	virtual bool isAllowDuplicates() const override;
