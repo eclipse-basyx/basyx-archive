@@ -3,6 +3,8 @@
 #include <BaSyx/util/util.h>
 
 #include <BaSyx/submodel/map_v2/submodelelement/AnnotatedRelationshipElement.h>
+#include <BaSyx/submodel/map_v2/submodelelement/BasicEvent.h>
+#include <BaSyx/submodel/map_v2/submodelelement/Capability.h>
 #include <BaSyx/submodel/map_v2/submodelelement/Entity.h>
 #include <BaSyx/submodel/map_v2/submodelelement/Range.h>
 #include <BaSyx/submodel/map_v2/submodelelement/SubmodelElementCollection.h>
@@ -15,7 +17,6 @@
 #include <BaSyx/submodel/map_v2/submodelelement/property/ReferenceElement.h>
 
 #include <BaSyx/submodel/enumerations/XsdTypes.h>
-#include <BaSyx/submodel/map_v2/submodelelement/Capability.h>
 
 using namespace basyx;
 using namespace basyx::submodel;
@@ -118,8 +119,8 @@ std::unique_ptr<map::SubmodelElement> SubmodelElementFactory::Create(const vab::
 	{
 //    case ModelTypes::AnnotatedRelationshipElement:
 //      return util::make_unique<AnnotatedRelationshipElement>(elementMap.getMap());
-//    case ModelTypes::BasicEvent:
-//      return util::make_unique<BasicEvent>(elementMap.getMap());
+    case ModelTypes::BasicEvent:
+      return util::make_unique<BasicEvent>(elementMap.getMap());
     case ModelTypes::Blob:
       return util::make_unique<Blob>(elementMap.getMap());
     case ModelTypes::Capability:

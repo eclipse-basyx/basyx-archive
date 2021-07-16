@@ -57,6 +57,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/reference/Reference.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/SubModel.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/AnnotatedRelationshipElement.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/BasicEvent.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/Capability.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/DataElement.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/map_v2/submodelelement/Entity.cpp
@@ -109,6 +110,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/reference/Reference.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/SubModel.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/submodelelement/AnnotatedRelationshipElement.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/submodelelement/BasicEvent.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/submodelelement/DataElement.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/submodelelement/Capability.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/submodel/simple/submodelelement/RelationshipElement.cpp
@@ -211,6 +213,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/qualifier/Referable.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/reference/Reference.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/AnnotatedRelationshipElement.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/BasicEvent.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/Capability.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/DataElement.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/map_v2/submodelelement/Entity.h
@@ -263,6 +266,7 @@ target_sources(${BASYX_SUBMODEL_LIB_SUFFIX}
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/reference/Key.h
         ${BASYX_SUBMODEL_INCLUDE_DIR}/simple/reference/Reference.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/submodelelement/AnnotatedRelationshipElement.h
+		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/submodelelement/BasicEvent.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/submodelelement/Capability.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/submodelelement/DataElement.h
 		${BASYX_SUBMODEL_INCLUDE_DIR}/simple/submodelelement/RelationshipElement.h
