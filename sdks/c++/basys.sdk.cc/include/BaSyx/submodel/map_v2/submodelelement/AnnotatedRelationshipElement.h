@@ -20,14 +20,18 @@ public:
   };
 private:
   ElementContainer<IDataElement> annotations;
+  ModelType<ModelTypes::AnnotatedRelationshipElement> modelType;
 
 public:
   AnnotatedRelationshipElement(const Reference & first, const Reference & second, const std::string & idShort, ModelingKind kind = ModelingKind::Instance);
+  AnnotatedRelationshipElement(basyx::object);
 
   const api::IElementContainer<IDataElement> & getAnnotation() const override;
   void addAnnotation(std::unique_ptr<DataElement> );
 
   virtual KeyElements getKeyElementType() const override { return KeyElements::AnnotatedRelationshipElement; };
+
+  ModelTypes GetModelType() const override;
 };
 
 }

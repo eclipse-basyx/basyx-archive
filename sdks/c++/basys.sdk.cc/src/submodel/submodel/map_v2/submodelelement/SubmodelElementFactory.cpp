@@ -117,8 +117,8 @@ std::unique_ptr<map::SubmodelElement> SubmodelElementFactory::Create(const vab::
 
 	switch (modelType)
 	{
-//    case ModelTypes::AnnotatedRelationshipElement:
-//      return util::make_unique<AnnotatedRelationshipElement>(elementMap.getMap());
+    case ModelTypes::AnnotatedRelationshipElement:
+      return util::make_unique<AnnotatedRelationshipElement>(elementMap.getMap());
     case ModelTypes::BasicEvent:
       return util::make_unique<BasicEvent>(elementMap.getMap());
     case ModelTypes::Capability:
