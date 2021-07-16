@@ -15,6 +15,7 @@
 #include <BaSyx/submodel/map_v2/submodelelement/property/ReferenceElement.h>
 
 #include <BaSyx/submodel/enumerations/XsdTypes.h>
+#include <BaSyx/submodel/map_v2/submodelelement/Capability.h>
 
 using namespace basyx;
 using namespace basyx::submodel;
@@ -121,8 +122,8 @@ std::unique_ptr<map::SubmodelElement> SubmodelElementFactory::Create(const vab::
 //      return util::make_unique<BasicEvent>(elementMap.getMap());
     case ModelTypes::Blob:
       return util::make_unique<Blob>(elementMap.getMap());
-//    case ModelTypes::Capability:
-//      return util::make_unique<Capability>(elementMap.getMap());
+    case ModelTypes::Capability:
+      return util::make_unique<Capability>(elementMap.getMap());
     case ModelTypes::File:
       return util::make_unique<File>(elementMap.getMap());
     case ModelTypes::Entity:
