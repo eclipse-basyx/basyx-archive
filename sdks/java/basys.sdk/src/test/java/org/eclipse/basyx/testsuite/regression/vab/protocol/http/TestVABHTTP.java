@@ -22,8 +22,10 @@ import javax.ws.rs.core.MediaType;
 
 import org.eclipse.basyx.testsuite.regression.vab.modelprovider.TestProvider;
 import org.eclipse.basyx.testsuite.regression.vab.support.RecordingProvider;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
+import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
@@ -66,6 +68,16 @@ public class TestVABHTTP extends TestProvider {
 	@Test
 	public void testRootURL() {
 		performRequest("http://localhost:8080/basys.sdk/Testsuite/SimpleVAB");
+	}
+
+	/**
+	 * Tests, if the provider throws a ResourceNotFoundException, if the HTTP endpoint
+	 * could not be reached
+	 */
+	@Test(expected = ResourceNotFoundException.class)
+	public void testResourceNotFound() {
+		IModelProvider httpProvider = new HTTPConnectorFactory().getConnector("notFound");
+		httpProvider.getValue("");
 	}
 
 	/**
