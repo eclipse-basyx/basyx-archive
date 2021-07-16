@@ -2,7 +2,7 @@
 #define BASYX_SUBMODEL_MAP_V2_SUBMODELELEMENT_FILE_BLOB_H
 
 #include <BaSyx/submodel/api_v2/submodelelement/file/IBlob.h>
-#include <BaSyx/submodel/map_v2/submodelelement/SubmodelElement.h>
+#include <BaSyx/submodel/map_v2/submodelelement/DataElement.h>
 #include <BaSyx/submodel/map_v2/common/ModelType.h>
 
 #include <vector>
@@ -15,7 +15,7 @@ namespace map {
 class Blob
   : public virtual api::IBlob
   , public virtual vab::ElementMap
-  , public SubmodelElement
+  , public DataElement
   , public ModelType<ModelTypes::Blob>
 {
 public:

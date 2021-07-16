@@ -9,14 +9,14 @@ constexpr char MultiLanguageProperty::Path::ValueId[];
 constexpr char MultiLanguageProperty::Path::Kind[];
 
 MultiLanguageProperty::MultiLanguageProperty(const std::string & idShort, ModelingKind kind)
-	: SubmodelElement(idShort, kind)
+	: DataElement(idShort, kind)
 {
   this->map.insertKey(Path::Kind, ModelingKind_::to_string(kind));
 }
 
 MultiLanguageProperty::MultiLanguageProperty(basyx::object obj)
   : ElementMap{}
-  , SubmodelElement(obj)
+  , DataElement(obj)
 {
   if ( not obj.getProperty(Path::Value).IsNull() )
   {

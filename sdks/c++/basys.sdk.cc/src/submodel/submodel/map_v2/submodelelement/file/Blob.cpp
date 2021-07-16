@@ -10,7 +10,7 @@ constexpr char Blob::Path::value[];
 
 Blob::Blob(const std::string & idShort, const std::string & mimeType)
   : vab::ElementMap{}
-  , SubmodelElement(idShort)
+  , DataElement(idShort)
 {
 	this->map.insertKey(Path::mimeType, mimeType);
 	this->map.insertKey(Path::value, basyx::object::make_list<char>());
@@ -18,7 +18,7 @@ Blob::Blob(const std::string & idShort, const std::string & mimeType)
 
 Blob::Blob(basyx::object obj)
   : vab::ElementMap{}
-  , SubmodelElement{obj}
+  , DataElement{obj}
 {
   this->map.insertKey(Path::value, obj.getProperty(Path::value).Get<object::list_t<char>&>());
   this->map.insertKey(Path::mimeType, obj.getProperty(Path::mimeType).GetStringContent());

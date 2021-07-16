@@ -9,7 +9,7 @@ constexpr char File::Path::MimeType[];
 constexpr char File::Path::Value[];
 
 File::File(const std::string & idShort, const std::string & mimeType)
-  : SubmodelElement(idShort)
+  : DataElement(idShort)
   , vab::ElementMap{}
 {
 	this->map.insertKey(Path::MimeType, mimeType);
@@ -18,14 +18,14 @@ File::File(const std::string & idShort, const std::string & mimeType)
 
 File::File(basyx::object obj)
   : vab::ElementMap{}
-  , SubmodelElement{obj}
+  , DataElement{obj}
 {
   this->map.insertKey(Path::Value, obj.getProperty(Path::Value).GetStringContent());
   this->map.insertKey(Path::MimeType, obj.getProperty(Path::MimeType).GetStringContent());
 }
 
 File::File(const File & other)
-  : SubmodelElement(other.getIdShort(), other.getKind())
+  : DataElement(other.getIdShort(), other.getKind())
   , vab::ElementMap(other.getMap())
 {}
 

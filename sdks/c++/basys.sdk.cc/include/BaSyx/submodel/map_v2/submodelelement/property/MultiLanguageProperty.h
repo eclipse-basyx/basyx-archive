@@ -2,7 +2,7 @@
 #define BASYX_SUBMODEL_MAP_V2_SUBMODELELEMENT_PROPERTY_MULTILANGUAGEPROPERTY_H
 
 #include <BaSyx/submodel/api_v2/submodelelement/property/IMultiLanguageProperty.h>
-#include <BaSyx/submodel/map_v2/submodelelement/SubmodelElement.h>
+#include <BaSyx/submodel/map_v2/submodelelement/DataElement.h>
 #include <BaSyx/submodel/map_v2/reference/Reference.h>
 #include <BaSyx/submodel/map_v2/common/LangStringSet.h>
 #include <BaSyx/submodel/map_v2/common/ModelType.h>
@@ -14,7 +14,7 @@ namespace map {
 
 class MultiLanguageProperty : 
 	public api::IMultiLanguageProperty,
-	public SubmodelElement,
+	public DataElement,
 	public ModelType<ModelTypes::MultiLanguageProperty>
 {
 public:

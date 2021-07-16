@@ -25,7 +25,7 @@ using namespace basyx::submodel::map;
 
 constexpr char SubmodelElementFactory::Path::Value[];
 
-std::unique_ptr<map::SubmodelElement> SubmodelElementFactory::CreateProperty(const vab::ElementMap & elementMap)
+std::unique_ptr<map::DataElement> SubmodelElementFactory::CreateProperty(const vab::ElementMap & elementMap)
 {
 	auto object = elementMap.getMap();
 	auto value = object.getProperty(Path::Value);
@@ -50,7 +50,7 @@ std::unique_ptr<map::SubmodelElement> SubmodelElementFactory::CreateProperty(con
 	return nullptr;
 }
 
-std::unique_ptr<map::SubmodelElement> SubmodelElementFactory::CreateRange(const vab::ElementMap & elementMap)
+std::unique_ptr<map::DataElement> SubmodelElementFactory::CreateRange(const vab::ElementMap & elementMap)
 {
   auto object = elementMap.getMap();
   auto & type_string = object.getProperty("dataTypeDef").GetStringContent();
@@ -121,33 +121,56 @@ std::unique_ptr<map::SubmodelElement> SubmodelElementFactory::Create(const vab::
 //      return util::make_unique<AnnotatedRelationshipElement>(elementMap.getMap());
     case ModelTypes::BasicEvent:
       return util::make_unique<BasicEvent>(elementMap.getMap());
-    case ModelTypes::Blob:
-      return util::make_unique<Blob>(elementMap.getMap());
     case ModelTypes::Capability:
       return util::make_unique<Capability>(elementMap.getMap());
-    case ModelTypes::File:
-      return util::make_unique<File>(elementMap.getMap());
     case ModelTypes::Entity:
       return util::make_unique<Entity>(elementMap.getMap());
-    case ModelTypes::MultiLanguageProperty:
-      return util::make_unique<MultiLanguageProperty>(elementMap.getMap());
     case ModelTypes::Operation:
       return util::make_unique<Operation>(elementMap.getMap());
     case ModelTypes::OperationVariable:
       return util::make_unique<OperationVariable>(elementMap.getMap());
+    case ModelTypes::RelationshipElement:
+      return util::make_unique<RelationshipElement>(elementMap.getMap());
+    case ModelTypes::SubmodelElementCollection:
+      return util::make_unique<SubmodelElementCollection>(elementMap.getMap());
+
+    //DataElements
+    case ModelTypes::File:
+    case ModelTypes::Blob:
+    case ModelTypes::MultiLanguageProperty:
+    case ModelTypes::Property:
+    case ModelTypes::Range:
+    case ModelTypes::ReferenceElement:
+      return CreateDataElement(elementMap);
+
+  	default:
+	  	return nullptr;
+	};
+	
+	return nullptr;
+}
+
+std::unique_ptr<map::DataElement> SubmodelElementFactory::CreateDataElement(const vab::ElementMap & elementMap)
+{
+  ModelTypes modelType = ModelType<ModelTypes::SubmodelElement>(elementMap.getMap()).GetModelType();
+
+  switch (modelType)
+  {
     case ModelTypes::Property:
       return SubmodelElementFactory::CreateProperty(elementMap);
     case ModelTypes::Range:
       return SubmodelElementFactory::CreateRange(elementMap);
     case ModelTypes::ReferenceElement:
       return util::make_unique<ReferenceElement>(elementMap.getMap());
-    case ModelTypes::RelationshipElement:
-      return util::make_unique<RelationshipElement>(elementMap.getMap());
-    case ModelTypes::SubmodelElementCollection:
-      return util::make_unique<SubmodelElementCollection>(elementMap.getMap());
-	default:
-		return nullptr;
-	};
-	
-	return nullptr;
+    case ModelTypes::MultiLanguageProperty:
+      return util::make_unique<MultiLanguageProperty>(elementMap.getMap());
+    case ModelTypes::Blob:
+      return util::make_unique<Blob>(elementMap.getMap());
+    case ModelTypes::File:
+      return util::make_unique<File>(elementMap.getMap());
+      
+    default:
+      return nullptr;
+  }
+  return nullptr;
 }
