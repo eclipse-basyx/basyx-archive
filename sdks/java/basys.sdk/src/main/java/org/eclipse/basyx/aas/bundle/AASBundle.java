@@ -9,6 +9,7 @@
  ******************************************************************************/
 package org.eclipse.basyx.aas.bundle;
 
+import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
@@ -37,6 +38,28 @@ public class AASBundle {
 
 	public Set<ISubmodel> getSubmodels() {
 		return submodels;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(aas, submodels);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AASBundle other = (AASBundle) obj;
+		return Objects.equals(this.aas, other.aas) && Objects.equals(this.submodels, other.submodels);
+	}
+
+	@Override
+	public String toString() {
+		return "AASBundle [aas=" + aas + ", submodels=" + submodels + "]";
 	}
 
 }
