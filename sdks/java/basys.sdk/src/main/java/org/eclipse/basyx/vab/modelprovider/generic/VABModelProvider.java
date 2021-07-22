@@ -14,6 +14,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.eclipse.basyx.vab.exception.provider.NotAnInvokableException;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.exception.provider.ResourceAlreadyExistsException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
@@ -130,27 +131,51 @@ public class VABModelProvider implements IModelProvider {
 
 	private Object runRunnable(Object childElement) {
 		Runnable runnable = (Runnable) childElement;
-		runnable.run();
+		try {
+			runnable.run();
+		} catch (ProviderException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ProviderException(e);
+		}
 		return null;
 	}
 
 	@SuppressWarnings("unchecked")
 	private Object runConsumer(Object childElement, Object... parameters) {
 		Consumer<Object> consumer = (Consumer<Object>) childElement;
-		consumer.accept(parameters);
+		try {
+			consumer.accept(parameters);
+		} catch (ProviderException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ProviderException(e);
+		}
 		return null;
 	}
 
 	@SuppressWarnings("unchecked")
 	private Object runSupplier(Object childElement) {
 		Supplier<Object> supplier = (Supplier<Object>) childElement;
-		return supplier.get();
+		try {
+			return supplier.get();
+		} catch (ProviderException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ProviderException(e);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private Object runFunction(Object childElement, Object... parameters) {
 		Function<Object[], Object> function = (Function<Object[], Object>) childElement;
-		return function.apply(parameters);
+		try {
+			return function.apply(parameters);
+		} catch (ProviderException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ProviderException(e);
+		}
 	}
 
 	/**

@@ -27,6 +27,8 @@ import org.eclipse.basyx.vab.exception.provider.ProviderException;
  *
  */
 public class SimpleVABElement extends HashMap<String, Object> {
+	public static final String EXCEPTION_MESSAGE = "Exception description";
+
 	private static final long serialVersionUID = 3942399852711325850L;
 
 	private static Object consumed;
@@ -112,7 +114,7 @@ public class SimpleVABElement extends HashMap<String, Object> {
 		});
 
 		functions.put("providerException", (Function<Object[], Object>) (param) -> {
-			throw new ProviderException("Exception description");
+			throw new ProviderException(EXCEPTION_MESSAGE);
 		});
 		functions.put("nullException", (Function<Object[], Object>) (param) -> {
 			throw new NullPointerException();

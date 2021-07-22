@@ -10,6 +10,8 @@
 package org.eclipse.basyx.testsuite.regression.vab.protocol.http;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -23,10 +25,15 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.http.client.ClientProtocolException;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.testsuite.regression.vab.modelprovider.SimpleVABElement;
 import org.eclipse.basyx.testsuite.regression.vab.modelprovider.TestProvider;
 import org.eclipse.basyx.testsuite.regression.vab.support.RecordingProvider;
+import org.eclipse.basyx.vab.coder.json.metaprotocol.Message;
+import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
+import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
@@ -100,7 +107,6 @@ public class TestVABHTTP extends TestProvider {
 		String parameterRequest = "test?a=1,2&b=3,4";
 
 		performRequestNoException(RECORDER_URL + parameterRequest);
-
 		List<String> paths = recorder.getPaths();
 
 		assertEquals(1, paths.size());
@@ -137,6 +143,34 @@ public class TestVABHTTP extends TestProvider {
 		
 		Object retStr = recorder.getValue(parameterRequest);
 		assertEquals(strToSend, retStr);
+	}
+	
+	@Test
+	public void invokeExceptionFunction() {
+		VABElementProxy connVABElement = connManager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
+		try {
+			connVABElement.invokeOperation("operations/providerException/" + Operation.INVOKE);
+			fail();
+		} catch (ProviderException e) {
+			List<Message> msg = e.getMessages();
+			assertEquals(2, msg.size());
+			String msgText = msg.get(1).getText();
+			assertTrue(msgText.contains("ProviderException: " + SimpleVABElement.EXCEPTION_MESSAGE));
+		}
+	}
+
+	@Test
+	public void invokeNullPointerExceptionFunction() {
+		VABElementProxy connVABElement = connManager.connectToVABElement("urn:fhg:es.iese:vab:1:1:simplevabelement");
+		try {
+			connVABElement.invokeOperation("operations/nullException/" + Operation.INVOKE);
+			fail();
+		} catch (ProviderException e) {
+			List<Message> msg = e.getMessages();
+			assertEquals(2, msg.size());
+			String msgText = msg.get(1).getText();
+			assertTrue(msgText.contains("ProviderException: " + NullPointerException.class.getName()));
+		}
 	}
 
 	/**

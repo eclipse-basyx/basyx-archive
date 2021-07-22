@@ -9,6 +9,10 @@
  ******************************************************************************/
 package org.eclipse.basyx.vab.exception.provider;
 
+import java.util.List;
+
+import org.eclipse.basyx.vab.coder.json.metaprotocol.Message;
+
 /**
  * Used to indicate by a ModelProvider,
  * that a given request was malformed. <br>
@@ -35,5 +39,9 @@ public class MalformedRequestException extends ProviderException {
 	
 	public MalformedRequestException(Exception e) {
 		super(e);
+	}
+	
+	public MalformedRequestException(List<Message> msgs) {
+		super(msgs);
 	}
 }
