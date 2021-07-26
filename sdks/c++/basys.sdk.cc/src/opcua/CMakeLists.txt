@@ -15,13 +15,6 @@ set_target_properties(${BASYX_OPCUA_LIBRARY_NAME} PROPERTIES SOVERSION ${BASYX_P
 
 target_sources(${BASYX_OPCUA_LIBRARY_NAME}
   PRIVATE
-	${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/api/AASApiNode.h
-	${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/api/AASApiAssetAdminstrationShell.h
-	${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/api/AASApiSubModel.h
-    ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/api/AASApiSubModelHelpers.h
-	${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/api/AASApiSubModelElement.h
-	${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/api/AASApiNodeIdHelpers.h
-    ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/api/AASApiMetamodelHelpers.h
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/api_v2/ApiAssetAdminstrationShell.h
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/api_v2/ApiSubmodel.h
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/api_v2/ApiProperty.h
@@ -31,9 +24,9 @@ target_sources(${BASYX_OPCUA_LIBRARY_NAME}
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/provider/AASModelProviderCommon.h
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/provider/AASProviderApiParseHelpers.h
 	${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/provider/AASAggregatorProvider.h
-    ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/provider/AASAggregatorProviderHelpers.h
 	${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/provider/AASSubmodelProvider.h
-	${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/provider/AASSubmodelProviderHelpers.h
+    ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/provider/AASAggregatorHelpers.h
+    ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/provider/AASSubmodelHelpers.h
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/metamodel/AASAdministrativeInformationType.h
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/metamodel/AASAssetType.h
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/metamodel/AASAssetAdministrationShellType.h
@@ -60,10 +53,7 @@ target_sources(${BASYX_OPCUA_LIBRARY_NAME}
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/metamodel/DictionaryEntryIdShort.h
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/metamodel/IAASIdentifiableType.h
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/metamodel/IAASReferableType.h
-    ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/model/AASAssetAdministrationShell.h
-    ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/model/AASModelNode.h
-    ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/model/AASProperty.h
-    ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/model/AASSubModel.h
+    ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/node/MetamodelNodeUtils.h
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/node/MetamodelTypes.h
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/node/ModelNodeManager.h
     ${BASYX_OPCUA_LIBRARY_INCLUDE_DIR}/aas/node/AssetAdministrationShellNodeManager.h
@@ -144,8 +134,6 @@ target_sources(${BASYX_OPCUA_LIBRARY_NAME}
 	${CMAKE_CURRENT_SOURCE_DIR}/aas/metamodel/AASSubmodelElementCollectionType.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/aas/metamodel/AASReferenceElementType.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/aas/metamodel/AASAssetAdministrationShellType.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/aas/api/AASApiSubModelHelpers.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/aas/api/AASApiMetamodelHelpers.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/aas/api_v2/ApiHelpers.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/aas/api_v2/ApiMetamodelUtilities.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/aas/provider/AASModelProviderCommon.cpp
