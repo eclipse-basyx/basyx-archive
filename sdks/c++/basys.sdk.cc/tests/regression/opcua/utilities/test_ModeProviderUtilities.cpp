@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include <BaSyx/opcua/server/Server.h>
 #include <BaSyx/vab/core/util/VABPath.h>
-#include <BaSyx/opcua/aas/provider/AASAggregatorProviderHelpers.h>
+#include <BaSyx/opcua/aas/provider/AASProviderApiParseHelpers.h>
 
 namespace basyx
 {
@@ -10,8 +10,6 @@ namespace basyx
 		namespace opcua
 		{
 			using namespace basyx::opcua;
-			using namespace basyx::opcua::aas;
-			using namespace basyx::opcua::aas::metamodel;
 			using namespace basyx::submodel::map;
 
 			class OPCUAModeProviderUtilitiesTest : public ::testing::Test

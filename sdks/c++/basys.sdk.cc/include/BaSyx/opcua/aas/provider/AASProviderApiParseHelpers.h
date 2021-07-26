@@ -5,7 +5,6 @@
 #include <BaSyx/shared/types.h>
 #include <BaSyx/vab/core/util/VABPath.h>
 #include <BaSyx/opcua/common/Utilities.h>
-#include <BaSyx/opcua/aas/api/ApiResponse.h>
 #include <BaSyx/opcua/aas/provider/AASModelProviderCommon.h>
 
 namespace basyx
