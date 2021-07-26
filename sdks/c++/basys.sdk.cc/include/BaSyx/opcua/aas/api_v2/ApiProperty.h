@@ -76,6 +76,7 @@ namespace basyx
             inline UA_StatusCode ApiProperty<CONNECTOR_TYPE>::createProperty(const Property_t<TYPE>& t_property)
             {
                 using namespace aas::metamodel;
+                using namespace basyx::xsd_types;
 
                 t_property.getDescription();
 
@@ -125,7 +126,7 @@ namespace basyx
                 CHECK_STATUS_LOG_ERR_AND_RETURN(m_logger, status, "Property IdShort cannot be written");
 
                 // Set the value
-                status = services.writeValue(valueNode, t_property.getValue());
+                status = services.writeValue(valueNode, xsd_type<TYPE>::getXSDRepresentation(t_property.getValue()));
                 CHECK_STATUS_LOG_ERR_AND_RETURN(m_logger, status, "Property cannot be written");
 
                 // Set ValueType
@@ -217,21 +218,62 @@ namespace basyx
                         return createProperty<std::string>(*prop);
                 }
                 // Complex types are encoded as string
-                else if ((valueType == AASPropertyType::TypeName::anyUri) ||
-                    (valueType == AASPropertyType::TypeName::date) ||
-                    (valueType == AASPropertyType::TypeName::time) ||
-                    (valueType == AASPropertyType::TypeName::dayTimeDuration) ||
-                    (valueType == AASPropertyType::TypeName::yearMonthDuration) ||
-                    (valueType == AASPropertyType::TypeName::dateTime) ||
-                    (valueType == AASPropertyType::TypeName::gDay) ||
-                    (valueType == AASPropertyType::TypeName::gMonth) ||
-                    (valueType == AASPropertyType::TypeName::gMonthDay) ||
-                    (valueType == AASPropertyType::TypeName::gYear) ||
-                    (valueType == AASPropertyType::TypeName::gYearMonth))
-
-                    if (auto prop = dynamic_cast<const Property<std::string>*>(&t_property))
-                        return createProperty<std::string>(*prop);
-
+                else if (valueType == AASPropertyType::TypeName::anyUri)
+                {
+                    if (auto prop = dynamic_cast<const Property<AnyURI_t>*>(&t_property))
+                        return createProperty<AnyURI_t>(*prop);
+                }
+                else if (valueType == AASPropertyType::TypeName::date)
+                {
+                    if (auto prop = dynamic_cast<const Property<Date_t>*>(&t_property))
+                        return createProperty<Date_t>(*prop);
+                }
+                else if (valueType == AASPropertyType::TypeName::time)
+                {
+                    if (auto prop = dynamic_cast<const Property<Time_t>*>(&t_property))
+                        return createProperty<Time_t>(*prop);
+                }
+                else if (valueType == AASPropertyType::TypeName::dayTimeDuration)
+                {
+                    if (auto prop = dynamic_cast<const Property<DayTimeDuration_t>*>(&t_property))
+                        return createProperty<DayTimeDuration_t>(*prop);
+                }
+                else if (valueType == AASPropertyType::TypeName::yearMonthDuration)
+                {
+                    if (auto prop = dynamic_cast<const Property<YearMonthDuration_t>*>(&t_property))
+                        return createProperty<YearMonthDuration_t>(*prop);
+                }
+                else if (valueType == AASPropertyType::TypeName::dateTime)
+                {
+                    if (auto prop = dynamic_cast<const Property<DateTime_t>*>(&t_property))
+                        return createProperty<DateTime_t>(*prop);
+                }
+                else if (valueType == AASPropertyType::TypeName::gDay)
+                {
+                    if (auto prop = dynamic_cast<const Property<GDay_t>*>(&t_property))
+                        return createProperty<GDay_t>(*prop);
+                }
+                else if (valueType == AASPropertyType::TypeName::gMonth)
+                {
+                    if (auto prop = dynamic_cast<const Property<GMonth_t>*>(&t_property))
+                        return createProperty<GMonth_t>(*prop);
+                }
+                else if (valueType == AASPropertyType::TypeName::gMonthDay)
+                {
+                    if (auto prop = dynamic_cast<const Property<GMonthDay_t>*>(&t_property))
+                        return createProperty<GMonthDay_t>(*prop);
+                }
+                else if (valueType == AASPropertyType::TypeName::gYear)
+                {
+                    if (auto prop = dynamic_cast<const Property<GYear_t>*>(&t_property))
+                        return createProperty<GYear_t>(*prop);
+                }
+                else if (valueType == AASPropertyType::TypeName::gYearMonth)
+                {
+                    if (auto prop = dynamic_cast<const Property<GYearMonth_t>*>(&t_property))
+                        return createProperty<GYearMonth_t>(*prop);
+                }
+                else;
                 m_logger.error("Value Type - [ " + valueType + " ] unknown");
 
                 return UA_STATUSCODE_BADUNEXPECTEDERROR;
