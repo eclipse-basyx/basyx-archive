@@ -20,6 +20,7 @@ using BaSyx.Models.Connectivity.Descriptors;
 using BaSyx.Models.Communication;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json.Linq;
 
 namespace BaSyx.API.Http.Controllers
 {
@@ -382,7 +383,7 @@ namespace BaSyx.API.Http.Controllers
         [Consumes("application/json")]
         [ProducesResponseType(typeof(Result), 400)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult Shell_InvokeOperationByIdShort(string submodelIdShort, string idShortPathToOperation, [FromBody] InvocationRequest invocationRequest, [FromQuery] bool async)
+        public IActionResult Shell_InvokeOperationByIdShort(string submodelIdShort, string idShortPathToOperation, [FromBody] JObject invocationRequest, [FromQuery] bool async)
         {
             if (serviceProvider.SubmodelRegistry.IsNullOrNotFound(submodelIdShort, out IActionResult result, out ISubmodelServiceProvider provider))
                 return result;

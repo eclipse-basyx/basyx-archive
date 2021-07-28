@@ -53,6 +53,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\basyx-core\BaSyx.API\BaSyx.API.csproj" />
+    <ProjectReference Include="..\..\basyx-core\BaSyx.Utils.DependencyInjection\BaSyx.Utils.DependencyInjection.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">

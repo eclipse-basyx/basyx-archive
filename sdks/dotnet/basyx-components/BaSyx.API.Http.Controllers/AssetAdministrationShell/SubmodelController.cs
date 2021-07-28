@@ -23,6 +23,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using System.Linq;
 using System.IO;
+using Newtonsoft.Json;
+using BaSyx.Utils.DependencyInjection;
 
 namespace BaSyx.API.Http.Controllers
 {
@@ -323,23 +325,26 @@ namespace BaSyx.API.Http.Controllers
         [Consumes("application/json")]
         [ProducesResponseType(typeof(Result), 400)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult InvokeOperationByIdShort(string idShortPathToOperation, [FromBody] InvocationRequest invocationRequest, [FromQuery] bool async)
+        public IActionResult InvokeOperationByIdShort(string idShortPathToOperation, [FromBody] JObject invocationRequest, [FromQuery] bool async)
         {
             if (string.IsNullOrEmpty(idShortPathToOperation))
                 return ResultHandling.NullResult(nameof(idShortPathToOperation));
             if (invocationRequest == null)
                 return ResultHandling.NullResult(nameof(invocationRequest));
 
+            var serializer = JsonSerializer.Create(new DependencyInjectionJsonSerializerSettings());
+            var req = invocationRequest.ToObject<InvocationRequest>(serializer);
+
             idShortPathToOperation = HttpUtility.UrlDecode(idShortPathToOperation);
 
             if (async)
             {
-                IResult<CallbackResponse> result = serviceProvider.InvokeOperationAsync(idShortPathToOperation, invocationRequest);
+                IResult<CallbackResponse> result = serviceProvider.InvokeOperationAsync(idShortPathToOperation, req);
                 return result.CreateActionResult(CrudOperation.Invoke);
             }
             else
             {
-                IResult<InvocationResponse> result = serviceProvider.InvokeOperation(idShortPathToOperation, invocationRequest);
+                IResult<InvocationResponse> result = serviceProvider.InvokeOperation(idShortPathToOperation, req);
                 return result.CreateActionResult(CrudOperation.Invoke);
             }
         }

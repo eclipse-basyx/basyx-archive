@@ -144,7 +144,7 @@
             <response code="400">Bad Request</response>
             <response code="404">Submodel / Method handler not found</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellController.Shell_InvokeOperationByIdShort(System.String,System.String,BaSyx.Models.Communication.InvocationRequest,System.Boolean)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellController.Shell_InvokeOperationByIdShort(System.String,System.String,Newtonsoft.Json.Linq.JObject,System.Boolean)">
             <summary>
             Invokes a specific operation from the Submodel synchronously or asynchronously
             </summary>
@@ -348,7 +348,7 @@
             <response code="400">Bad Request</response>
             <response code="404">Submodel / Method handler not found</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellRepositoryController.ShellRepo_InvokeOperationByIdShort(System.String,System.String,System.String,BaSyx.Models.Communication.InvocationRequest,System.Boolean)">
+        <member name="M:BaSyx.API.Http.Controllers.AssetAdministrationShellRepositoryController.ShellRepo_InvokeOperationByIdShort(System.String,System.String,System.String,Newtonsoft.Json.Linq.JObject,System.Boolean)">
             <summary>
             Invokes a specific operation from the Submodel synchronously or asynchronously
             </summary>
@@ -480,7 +480,7 @@
             <response code="400">Bad Request</response>
             <response code="404">Method handler not found</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelController.InvokeOperationByIdShort(System.String,BaSyx.Models.Communication.InvocationRequest,System.Boolean)">
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelController.InvokeOperationByIdShort(System.String,Newtonsoft.Json.Linq.JObject,System.Boolean)">
             <summary>
             Invokes a specific operation from the Submodel synchronously or asynchronously
             </summary>
@@ -634,7 +634,7 @@
             <response code="400">Bad Request</response>
             <response code="404">Submodel / Method handler not found</response>
         </member>
-        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryController.SubmodelRepo_InvokeOperationById(System.String,System.String,BaSyx.Models.Communication.InvocationRequest,System.Boolean)">
+        <member name="M:BaSyx.API.Http.Controllers.SubmodelRepositoryController.SubmodelRepo_InvokeOperationById(System.String,System.String,Newtonsoft.Json.Linq.JObject,System.Boolean)">
             <summary>
             Invokes a specific operation from the Submodel synchronously or asynchronously
             </summary>

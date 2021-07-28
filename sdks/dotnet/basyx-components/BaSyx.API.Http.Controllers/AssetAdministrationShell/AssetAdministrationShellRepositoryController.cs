@@ -19,6 +19,7 @@ using BaSyx.Models.Communication;
 using System.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json.Linq;
 
 namespace BaSyx.API.Http.Controllers
 {
@@ -433,7 +434,7 @@ namespace BaSyx.API.Http.Controllers
         [Consumes("application/json")]
         [ProducesResponseType(typeof(Result), 400)]
         [ProducesResponseType(typeof(Result), 404)]
-        public IActionResult ShellRepo_InvokeOperationByIdShort(string aasId, string submodelIdShort, string idShortPathToOperation, [FromBody] InvocationRequest invocationRequest, [FromQuery] bool async)
+        public IActionResult ShellRepo_InvokeOperationByIdShort(string aasId, string submodelIdShort, string idShortPathToOperation, [FromBody] JObject invocationRequest, [FromQuery] bool async)
         {
             if (serviceProvider.IsNullOrNotFound(aasId, out IActionResult result, out IAssetAdministrationShellServiceProvider provider))
                 return result;
