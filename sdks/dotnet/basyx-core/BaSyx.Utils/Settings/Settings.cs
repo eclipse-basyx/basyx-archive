@@ -58,19 +58,22 @@ namespace BaSyx.Utils.Settings
         public const string FileExtension = ".xml";
         public const string MiscellaneousConfig = "Miscellaneous";
 
-        public static SettingsCollection SettingsCollection { get; }
+        public static SettingsCollection SettingsCollection { get; } = new SettingsCollection();
 
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+       
         private FileWatcher fileWatcher;
 
-        static Settings()
+        protected Settings()
+        { }
+
+        public static void AutoLoadSettings()
         {
-            SettingsCollection = new SettingsCollection();
             string[] files = Directory.GetFiles(ExecutingDirectory, "*Settings.xml", SearchOption.TopDirectoryOnly);
-            if(files?.Length > 0)
+            if (files?.Length > 0)
             {
                 List<Assembly> assemblies = AssemblyUtils.GetLoadedAssemblies();
-               
+
                 for (int i = 0; i < files.Length; i++)
                 {
                     try
@@ -81,35 +84,31 @@ namespace BaSyx.Utils.Settings
                             .SelectMany(a => a.GetTypes())
                             .Where(t => t.Name == rootName);
 
-                        if(settingsTypes?.Count() > 0)
+                        if (settingsTypes?.Count() > 0)
                             foreach (var settingsType in settingsTypes)
                             {
-                                try 
+                                try
                                 {
                                     Settings setting = LoadSettingsFromFile(files[i], settingsType);
                                     if (setting != null)
                                         SettingsCollection.Add(setting);
                                     else
                                         throw new InvalidOperationException("LoadSettingsFromFile returned null");
-                                } 
+                                }
                                 catch (Exception exp)
                                 {
                                     logger.Info(exp, "Cannot load settings of type: " + rootName + " because type is either never used or not referenced");
-                                    continue; 
+                                    continue;
                                 }
-                            }                           
+                            }
                     }
                     catch (Exception e)
                     {
                         logger.Warn(e, "Cannot load settings file: " + files[i]);
                     }
                 }
-
             }
         }
-
-        protected Settings()
-        { }
 
         public virtual void ConfigureSettingsWatcher(FileSystemChanged settingsFileChangedHandler)
         {
