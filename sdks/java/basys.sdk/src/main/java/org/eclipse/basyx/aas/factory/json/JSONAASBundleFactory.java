@@ -17,7 +17,6 @@ import java.util.Set;
 
 import org.eclipse.basyx.aas.bundle.AASBundle;
 import org.eclipse.basyx.aas.bundle.AASBundleFactory;
-import org.eclipse.basyx.aas.factory.json.JSONToMetamodelConverter;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.parts.Asset;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
@@ -58,6 +57,6 @@ public class JSONAASBundleFactory {
 		Collection<Submodel> submodels = converter.parseSubmodels();
 		Collection<Asset> assets = converter.parseAssets();
 
-		return new AASBundleFactory().createFromRaw(shells, submodels, assets);
+		return new AASBundleFactory().create(shells, submodels, assets);
 	}
 }

@@ -23,7 +23,6 @@ import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.IIdentifiable;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IKey;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
-import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +45,8 @@ public class AASBundleFactory {
 	 * @param assets
 	 * @return
 	 */
-	public Set<AASBundle> create(Collection<IAssetAdministrationShell> shells, Collection<ISubmodel> submodels, Collection<IAsset> assets) {
+	public Set<AASBundle> create(Collection<? extends IAssetAdministrationShell> shells,
+			Collection<? extends ISubmodel> submodels, Collection<? extends IAsset> assets) {
 		Set<AASBundle> bundles = new HashSet<>();
 
 		for (IAssetAdministrationShell shell : shells) {
@@ -66,7 +66,7 @@ public class AASBundleFactory {
 		return shell.getAsset() == null && shell.getAssetReference() != null;
 	}
 
-	private void setAsset(Collection<IAsset> assets, IAssetAdministrationShell shell) {
+	private void setAsset(Collection<? extends IAsset> assets, IAssetAdministrationShell shell) {
 		// Retrieve asset
 		try {
 			IReference assetRef = shell.getAssetReference();
@@ -82,14 +82,6 @@ public class AASBundleFactory {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public Set<AASBundle> createFromRaw(Collection<AssetAdministrationShell> shells, Collection<Submodel> submodels, Collection<Asset> assets) {
-		Collection<IAssetAdministrationShell> castedShells = (Collection<IAssetAdministrationShell>) (Collection<?>) shells;
-		Collection<ISubmodel> castedSubmodels = (Collection<ISubmodel>) (Collection<?>) submodels;
-		Collection<IAsset> castedAssets = (Collection<IAsset>) (Collection<?>) assets;
-		return create(castedShells, castedSubmodels, castedAssets);
-	}
-
 	/**
 	 * Retrieves the Submodels belonging to an AAS
 	 * 
@@ -97,7 +89,8 @@ public class AASBundleFactory {
 	 * @param shell
 	 * @return
 	 */
-	private Set<ISubmodel> retrieveSubmodelsForAAS(Collection<ISubmodel> submodels, IAssetAdministrationShell shell) {
+	private Set<ISubmodel> retrieveSubmodelsForAAS(Collection<? extends ISubmodel> submodels,
+			IAssetAdministrationShell shell) {
 		Set<ISubmodel> currentSM = new HashSet<>();
 
 		for (IReference submodelRef : shell.getSubmodelReferences()) {
