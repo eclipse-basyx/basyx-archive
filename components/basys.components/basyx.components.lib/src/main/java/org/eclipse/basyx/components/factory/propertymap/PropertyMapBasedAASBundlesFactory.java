@@ -101,7 +101,7 @@ public class PropertyMapBasedAASBundlesFactory {
 		Map<String, Submodel> submodels = getSubmodels(properties, submodelProperties);
 		List<AssetAdministrationShell> shells = getAssetAdministrationShells(properties, submodels, assets);
 
-		return new AASBundleFactory().createFromRaw(shells, submodels.values(), assets.values());
+		return new AASBundleFactory().create(shells, submodels.values(), assets.values());
 	}
 
 	private static List<AssetAdministrationShell> getAssetAdministrationShells(Map<String, Object> properties, Map<String, Submodel> submodels, Map<String, Asset> assets) {

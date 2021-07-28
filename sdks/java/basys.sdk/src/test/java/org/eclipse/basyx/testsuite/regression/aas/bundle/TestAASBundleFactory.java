@@ -33,7 +33,7 @@ public class TestAASBundleFactory {
 		Asset asset = new Asset("assetIdShort", new CustomId("assetId"), AssetKind.INSTANCE);
 		
 		AssetAdministrationShell shell = new AssetAdministrationShell("aasIdShort", new CustomId("aasId"), asset);
-		new AASBundleFactory().createFromRaw(Collections.singleton(shell), Collections.emptySet(),
+		new AASBundleFactory().create(Collections.singleton(shell), Collections.emptySet(),
 				Collections.singleton(asset));
 	}
 }
