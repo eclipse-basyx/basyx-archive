@@ -72,13 +72,10 @@ public class SubmodelProviderTest {
 	 * <p>
 	 * The test counts as successful if it finished without any exceptions thrown.
 	 */
-	@Test
-	public void testIdShortWithKeywords() {
+	public void testPropertyIdShortsWithKeywords() {
 	    final String base_path = SMPROVIDER_PATH_PREFIX + MultiSubmodelElementProvider.ELEMENTS + "/keywords/";
-
 	    VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
 
-	    // Properties
 	    for (String keyword : SimpleAASSubmodel.KEYWORDS) {
 	        Property prop = new Property();
 	        prop.setIdShort(keyword + "Property");
@@ -91,8 +88,11 @@ public class SubmodelProviderTest {
 	        submodelElement.setValue(path + "/value", "Test");
 	        submodelElement.deleteValue(path);
 	    }
+	}
 
-	    // Operations
+	public void testOperationIdShortsWithKeywords() {
+		final String base_path = SMPROVIDER_PATH_PREFIX + MultiSubmodelElementProvider.ELEMENTS + "/keywords/";
+		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
 	    for (String keyword : SimpleAASSubmodel.KEYWORDS) {
             Operation op = new Operation();
             op.setIdShort(keyword + "Operation");
@@ -108,8 +108,13 @@ public class SubmodelProviderTest {
             submodelElement.invokeOperation(path + "/invoke", param);
             submodelElement.deleteValue(path);
         }
+	}
 
-	    // SubmodelElementCollections
+	@Test
+	public void testSMElementCollectionIdShortWithKeywords() {
+		final String base_path = SMPROVIDER_PATH_PREFIX + MultiSubmodelElementProvider.ELEMENTS + "/keywords/";
+		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
+
 	    for (String keyword : SimpleAASSubmodel.KEYWORDS) {
             SubmodelElementCollection smc = new SubmodelElementCollection();
             smc.setIdShort(keyword + "Property");
@@ -688,7 +693,7 @@ public class SubmodelProviderTest {
 		}		
 	}
 	
-	private Map<String, Object> wrapParameter(String name, Object value) {
+	protected Map<String, Object> wrapParameter(String name, Object value) {
 		Map<String, Object> param = new HashMap<>();
 		param.put(Identifiable.IDSHORT, name);
 		param.put(Property.VALUE, value);
