@@ -54,7 +54,7 @@ public class MapTaggedDirectory extends AASRegistry implements IAASTaggedDirecto
 	@Override
 	public Set<TaggedAASDescriptor> lookupTag(String tag) {
 		if (tagMap.containsKey(tag)) {
-			return tagMap.get(tag);
+			return new HashSet<>(tagMap.get(tag));
 		} else {
 			return new HashSet<>();
 		}
