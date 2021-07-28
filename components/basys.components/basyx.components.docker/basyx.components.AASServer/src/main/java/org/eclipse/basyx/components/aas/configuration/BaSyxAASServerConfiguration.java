@@ -27,12 +27,14 @@ public class BaSyxAASServerConfiguration extends BaSyxConfiguration {
 
 	// Default BaSyx AAS configuration
 	public static final String DEFAULT_BACKEND = AASServerBackend.INMEMORY.toString();
+	public static final String DEFAULT_HOSTPATH = "";
 	public static final String DEFAULT_SOURCE = "";
 	public static final String DEFAULT_REGISTRY = "";
 	public static final String DEFAULT_EVENTS = AASEventBackend.NONE.toString();
 
 	// Configuration keys
 	public static final String REGISTRY = "registry.path";
+	public static final String HOSTPATH = "registry.host";
 	public static final String BACKEND = "aas.backend";
 	public static final String SOURCE = "aas.source";
 	public static final String EVENTS = "aas.events";
@@ -48,6 +50,7 @@ public class BaSyxAASServerConfiguration extends BaSyxConfiguration {
 		defaultProps.put(BACKEND, DEFAULT_BACKEND);
 		defaultProps.put(SOURCE, DEFAULT_SOURCE);
 		defaultProps.put(REGISTRY, DEFAULT_REGISTRY);
+		defaultProps.put(HOSTPATH, DEFAULT_HOSTPATH);
 		defaultProps.put(EVENTS, DEFAULT_EVENTS);
 		return defaultProps;
 	}
@@ -77,17 +80,33 @@ public class BaSyxAASServerConfiguration extends BaSyxConfiguration {
 	 * Constructor with initial configuration values
 	 * 
 	 * @param backend
-	 *            The backend for the AASServer
+	 *                    The backend for the AASServer
 	 * @param source
-	 *            The file source for the AASServer (e.g. an .aasx file)
+	 *                    The file source for the AASServer (e.g. an .aasx file)
 	 * @param registryUrl
-	 *            The url to the registry
+	 *                    The url to the registry
 	 */
 	public BaSyxAASServerConfiguration(AASServerBackend backend, String source, String registryUrl) {
-		super(getDefaultProperties());
-		setAASBackend(backend);
-		setAASSource(source);
+		this(backend, source);
 		setRegistry(registryUrl);
+	}
+
+	/**
+	 * Constructor with initial configuration values
+	 * 
+	 * @param backend
+	 *                    The backend for the AASServer
+	 * @param source
+	 *                    The file source for the AASServer (e.g. an .aasx file)
+	 * @param registryUrl
+	 *                    The url to the registry
+	 * @param hostPath
+	 *                    The root path to the aas component, when it is deployed. Address could be used for
+	 *                    registration at a registry.
+	 */
+	public BaSyxAASServerConfiguration(AASServerBackend backend, String source, String registryUrl, String hostPath) {
+		this(backend, source, registryUrl);
+		setHostpath(hostPath);
 	}
 
 	/**
@@ -98,7 +117,7 @@ public class BaSyxAASServerConfiguration extends BaSyxConfiguration {
 	}
 
 	public void loadFromEnvironmentVariables() {
-		String[] properties = { REGISTRY, BACKEND, SOURCE, EVENTS };
+		String[] properties = { REGISTRY, BACKEND, SOURCE, EVENTS, HOSTPATH };
 		loadFromEnvironmentVariables(ENV_PREFIX, properties);
 	}
 
@@ -137,5 +156,13 @@ public class BaSyxAASServerConfiguration extends BaSyxConfiguration {
 
 	public void setRegistry(String registryPath) {
 		setProperty(REGISTRY, registryPath);
+	}
+
+	public String getHostpath() {
+		return getProperty(HOSTPATH);
+	}
+
+	public void setHostpath(String hostPath) {
+		setProperty(HOSTPATH, hostPath);
 	}
 }
