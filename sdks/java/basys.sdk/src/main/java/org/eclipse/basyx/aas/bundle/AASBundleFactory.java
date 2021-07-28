@@ -50,18 +50,8 @@ public class AASBundleFactory {
 		Set<AASBundle> bundles = new HashSet<>();
 
 		for (IAssetAdministrationShell shell : shells) {
-			// Retrieve asset
-			try {
-				IReference assetRef = shell.getAssetReference();
-				IAsset asset = getByReference(assetRef, assets);
-				((AssetAdministrationShell) shell).setAsset((Asset) asset);
-			} catch (ResourceNotFoundException e) {
-				// Enables parsing external aasx-files without any keys in assetref
-				if (shell.getAssetReference().getKeys().size() > 0) {
-					logger.warn("Can't find asset with id " + shell.getAssetReference().getKeys().get(0).getValue() + " for AAS " + shell.getIdShort() + "; If the asset is not provided in another way, this is an error!");
-				} else {
-					logger.warn("Can't find asset for AAS " + shell.getIdShort() + "; If the asset is not provided in another way, this is an error!");
-				}
+			if (shouldSetAsset(shell)) {
+				setAsset(assets, shell);
 			}
 
 			// Retrieve submodels
@@ -70,6 +60,26 @@ public class AASBundleFactory {
 		}
 
 		return bundles;
+	}
+
+	private boolean shouldSetAsset(IAssetAdministrationShell shell) {
+		return shell.getAsset() == null && shell.getAssetReference() != null;
+	}
+
+	private void setAsset(Collection<IAsset> assets, IAssetAdministrationShell shell) {
+		// Retrieve asset
+		try {
+			IReference assetRef = shell.getAssetReference();
+			IAsset asset = getByReference(assetRef, assets);
+			((AssetAdministrationShell) shell).setAsset((Asset) asset);
+		} catch (ResourceNotFoundException e) {
+			// Enables parsing external aasx-files without any keys in assetref
+			if (shell.getAssetReference().getKeys().size() > 0) {
+				logger.warn("Can't find asset with id " + shell.getAssetReference().getKeys().get(0).getValue() + " for AAS " + shell.getIdShort() + "; If the asset is not provided in another way, this is an error!");
+			} else {
+				logger.warn("Can't find asset for AAS " + shell.getIdShort() + "; If the asset is not provided in another way, this is an error!");
+			}
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -112,7 +122,8 @@ public class AASBundleFactory {
 	 * @return
 	 * @throws ResourceNotFoundException
 	 */
-	private <T extends IIdentifiable> T getByReference(IReference ref, Collection<T> identifiable) throws ResourceNotFoundException {
+	private <T extends IIdentifiable> T getByReference(IReference ref, Collection<T> identifiable)
+			throws ResourceNotFoundException {
 		IKey lastKey = null;
 		// It may be that only one key fits to the Submodel contained in the XML
 		for (IKey key : ref.getKeys()) {
@@ -128,8 +139,5 @@ public class AASBundleFactory {
 		} else {
 			throw new ResourceNotFoundException("Could not resolve reference with last key '" + lastKey.getValue() + "'");
 		}
-
-		// If no identifiable is found, indicate it by throwing an exception
-
 	}
 }
