@@ -192,7 +192,7 @@ public class TestAASXToMetamodelConverter {
 
 	}
 
-	private void checkBundle(Set<AASBundle> bundles, IAssetAdministrationShell aas, ISubmodel sm) {
+	private <T extends AASBundle> void checkBundle(Set<T> bundles, IAssetAdministrationShell aas, ISubmodel sm) {
 		assertEquals(1, bundles.size());
 		AASBundle bundle = bundles.stream().findFirst().get();
 

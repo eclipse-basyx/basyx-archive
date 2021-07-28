@@ -25,6 +25,7 @@ import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
 import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.bundle.AASBundle;
 import org.eclipse.basyx.aas.bundle.AASBundleHelper;
+import org.eclipse.basyx.aas.factory.aasx.AASXToMetamodelConverter;
 import org.eclipse.basyx.aas.factory.aasx.SubmodelFileEndpointLoader;
 import org.eclipse.basyx.aas.factory.json.JSONAASBundleFactory;
 import org.eclipse.basyx.aas.factory.xml.XMLAASBundleFactory;
@@ -207,7 +208,7 @@ public class AASServerComponent implements IComponent {
 		logger.info("Loading aas from aasx \"" + aasxPath + "\"");
 
 		// Instantiate the aasx package manager
-		AASXPackageManager packageManager = new AASXPackageManager(aasxPath);
+		AASXToMetamodelConverter packageManager = new AASXPackageManager(aasxPath);
 
 		// Unpack the files referenced by the aas
 		packageManager.unzipRelatedFiles();

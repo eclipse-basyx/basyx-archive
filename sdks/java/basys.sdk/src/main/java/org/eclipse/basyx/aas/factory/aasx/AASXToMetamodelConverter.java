@@ -87,11 +87,13 @@ public class AASXToMetamodelConverter {
 		aasxRoot = OPCPackage.open(stream);
 	}
 
-	public Set<AASBundle> retrieveAASBundles() throws IOException, ParserConfigurationException, SAXException, InvalidFormatException {
+	@SuppressWarnings("unchecked")
+	public <T extends AASBundle> Set<T> retrieveAASBundles()
+			throws IOException, ParserConfigurationException, SAXException, InvalidFormatException {
 
 		// If the XML was already parsed return cached Bundles
 		if (bundles != null) {
-			return bundles;
+			return (Set<T>) bundles;
 		}
 
 		loadAASX();
@@ -101,7 +103,7 @@ public class AASXToMetamodelConverter {
 
 		bundles = new AASBundleFactory().create(converter.parseAAS(), converter.parseSubmodels(), converter.parseAssets());
 
-		return bundles;
+		return (Set<T>) bundles;
 	}
 
 	private void loadAASX() throws IOException, InvalidFormatException {
@@ -158,7 +160,7 @@ public class AASXToMetamodelConverter {
 	 */
 	private List<String> parseReferencedFilePathsFromAASX() throws IOException, ParserConfigurationException, SAXException, InvalidFormatException {
 
-		Set<AASBundle> bundles = retrieveAASBundles();
+		Set<? extends AASBundle> bundles = retrieveAASBundles();
 
 		List<ISubmodel> submodels = new ArrayList<>();
 

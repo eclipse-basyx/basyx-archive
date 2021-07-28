@@ -15,9 +15,15 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.eclipse.basyx.aas.bundle.AASBundle;
 import org.eclipse.basyx.aas.factory.aasx.AASXToMetamodelConverter;
-
+import org.xml.sax.SAXException;
 
 /**
  * @deprecated Renamed and moved to SDK. Please use AASXToMetamodelConverter
@@ -36,5 +42,22 @@ public class AASXPackageManager extends AASXToMetamodelConverter {
 		URI uri = AASXPackageManager.class.getProtectionDomain().getCodeSource().getLocation().toURI();
 		URI parent = new File(uri).getParentFile().toURI();
 		return Paths.get(parent);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Set<org.eclipse.basyx.support.bundle.AASBundle> retrieveAASBundles()
+			throws IOException, ParserConfigurationException, SAXException, InvalidFormatException {
+		Set<? extends AASBundle> bundles = super.retrieveAASBundles();
+		return repackAASBundle(bundles);
+	}
+
+	/**
+	 * @param bundles
+	 * @return
+	 */
+	private Set<org.eclipse.basyx.support.bundle.AASBundle> repackAASBundle(Set<? extends AASBundle> bundles) {
+		return bundles.stream().map(b -> new org.eclipse.basyx.support.bundle.AASBundle(b.getAAS(), b.getSubmodels()))
+				.collect(Collectors.toSet());
 	}
 }
