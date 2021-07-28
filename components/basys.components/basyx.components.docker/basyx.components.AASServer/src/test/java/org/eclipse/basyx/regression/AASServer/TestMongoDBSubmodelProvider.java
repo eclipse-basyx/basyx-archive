@@ -17,7 +17,10 @@ import java.util.Map;
 import org.eclipse.basyx.components.aas.mongodb.MongoDBAASAggregator;
 import org.eclipse.basyx.components.aas.mongodb.MongoDBSubmodelAPI;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
 import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
+import org.eclipse.basyx.testsuite.regression.submodel.restapi.SimpleAASSubmodel;
 import org.eclipse.basyx.testsuite.regression.submodel.restapi.SubmodelProviderTest;
 import org.eclipse.basyx.testsuite.regression.vab.protocol.http.TestsuiteDirectory;
 import org.eclipse.basyx.vab.manager.VABConnectionManager;
@@ -52,6 +55,25 @@ public class TestMongoDBSubmodelProvider extends SubmodelProviderTest {
 			});
 		}
 		return connManager;
+	}
+
+	/**
+	 * Invoking operations are not supported
+	 */
+	@Override
+	@Test
+	public void testOperationIdShortsWithKeywords() {
+		final String base_path = SMPROVIDER_PATH_PREFIX + MultiSubmodelElementProvider.ELEMENTS + "/keywords/";
+		VABElementProxy submodelElement = getConnectionManager().connectToVABElement(submodelAddr);
+		for (String keyword : SimpleAASSubmodel.KEYWORDS) {
+			Operation op = new Operation();
+			op.setIdShort(keyword + "Operation");
+
+			String path = base_path + op.getIdShort();
+			submodelElement.setValue(path, op);
+			submodelElement.getValue(path);
+			submodelElement.deleteValue(path);
+		}
 	}
 
 	/**
@@ -97,18 +119,20 @@ public class TestMongoDBSubmodelProvider extends SubmodelProviderTest {
 	/**
 	 * Now 4 instead of 8 elements
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testReadSubmodelElements() {
 		VABElementProxy submodel = getConnectionManager().connectToVABElement(submodelAddr);
 		Collection<Map<String, Object>> set = (Collection<Map<String, Object>>) submodel
 				.getValue("/submodel/submodelElements");
-		assertEquals(4, set.size());
+		assertEquals(5, set.size());
 	}
 
 	/**
 	 * Operations are not supported
 	 */
+	@Override
 	@Test
 	public void testReadSingleOperation() {
 	}
