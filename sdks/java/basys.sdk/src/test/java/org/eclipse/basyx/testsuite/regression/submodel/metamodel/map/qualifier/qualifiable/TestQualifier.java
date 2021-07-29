@@ -10,10 +10,11 @@
 package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.qualifier.qualifiable;
 
 import static org.junit.Assert.assertEquals;
-
+import java.util.HashMap;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
+import org.eclipse.basyx.submodel.metamodel.map.modeltype.ModelType;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifier;
 import org.eclipse.basyx.submodel.metamodel.map.reference.Reference;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
@@ -95,4 +96,11 @@ public class TestQualifier {
 		qualifier.setSemanticId(reference);
 		assertEquals(reference, qualifier.getSemanticId());
 	}
+	
+	@SuppressWarnings("unchecked")
+    @Test
+    public void testModelType() {
+	    HashMap<String, Object> modelType = (HashMap<String, Object>)qualifier.get(ModelType.MODELTYPE);
+        assertEquals(Qualifier.MODELTYPE, modelType.get(ModelType.NAME));
+    }
 }
