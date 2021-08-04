@@ -10,9 +10,12 @@
 package org.eclipse.basyx.vab.coder.json.provider;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+
+import javax.servlet.ServletOutputStream;
 
 import org.eclipse.basyx.vab.coder.json.metaprotocol.Result;
 import org.eclipse.basyx.vab.coder.json.serialization.DefaultTypeFactory;
@@ -313,6 +316,23 @@ public class JSONProvider<ModelProvider extends IModelProvider> {
 						
 
 			providerBackend.createValue(path, parameter);
+
+			// Send response
+			outputStream.write("".getBytes(StandardCharsets.UTF_8));
+		} catch (Exception e) {
+			sendException(outputStream, e);
+		}
+	}
+
+	/**
+	 * Uploads a resource at given path
+	 * @param path
+	 * @param fileContent
+	 * @param outputStream
+	 */
+	public void processBaSysUpload(String path, InputStream fileContent, ServletOutputStream outputStream) {
+		try {
+			providerBackend.createValue(path, fileContent);
 
 			// Send response
 			outputStream.write("".getBytes(StandardCharsets.UTF_8));
