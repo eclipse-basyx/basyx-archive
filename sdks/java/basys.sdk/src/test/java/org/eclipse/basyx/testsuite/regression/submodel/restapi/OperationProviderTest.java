@@ -236,7 +236,8 @@ public class OperationProviderTest {
 	
 	@SuppressWarnings("unchecked")
 	private Collection<IOperationVariable> invokeSync(OperationProvider provider, InvocationRequest request) {
-		InvocationResponse response = InvocationResponse.createAsFacade((Map<String, Object>) opProviderOut.invokeOperation("invoke", request));
+		InvocationResponse response = InvocationResponse
+				.createAsFacade((Map<String, Object>) provider.invokeOperation("invoke", request));
 		return response.getOutputArguments();
 	}
 	
