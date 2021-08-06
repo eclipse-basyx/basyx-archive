@@ -17,7 +17,7 @@ SubModel::SubModel(const std::string & idShort, const simple::Identifier & ident
   this->map.insertKey(Path::Kind, ModelingKind_::to_string(kind));
 }
 
-SubModel::SubModel(object object)
+SubModel::SubModel(basyx::object object)
   : ElementMap{}
   , Identifiable{
   object.getProperty(Referable::Path::IdShort).GetStringContent(),

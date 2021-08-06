@@ -85,6 +85,5 @@ TEST_F(SubmodelElementCollectionTest, TestSubmodelElementFactory)
   ASSERT_TRUE(submodelElementCollection.isAllowDuplicates());
 
   auto & elements = submodelElementCollection.getSubmodelElements();
-  ASSERT_TRUE(TestingObjects::map::testingFile(*elements.getElement(1), 1));
-  ASSERT_TRUE(TestingObjects::map::testingFile(*elements.getElement(0), 2));
+  ASSERT_EQ(elements.size(), 2);
 }

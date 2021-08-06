@@ -42,9 +42,9 @@ TEST_F(AnnotatedRelationshipElementTest, TestObjectConstructorWithStatements)
   ASSERT_EQ(TestingObjects::map::testingReference_2(), are.getSecond());
 
   auto & annotations = are.getAnnotation();
-  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement(0)));
-  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement(1), 4));
-  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement(2), 8));
+  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement("testing file 0")));
+  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement("testing file 4"), 4));
+  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement("testing file 8"), 8));
 }
 
 TEST_F(AnnotatedRelationshipElementTest, TestCopiedObject)
@@ -67,9 +67,9 @@ TEST_F(AnnotatedRelationshipElementTest, TestCopiedObject)
   ASSERT_EQ(TestingObjects::map::testingReference_2(), copied.getSecond());
 
   auto & annotations = copied.getAnnotation();
-  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement(0)));
-  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement(1), 4));
-  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement(2), 8));
+  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement("testing file 0")));
+  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement("testing file 4"), 4));
+  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement("testing file 8"), 8));
 }
 
 TEST_F(AnnotatedRelationshipElementTest, TestSubmodelElementFactory)
@@ -95,9 +95,9 @@ TEST_F(AnnotatedRelationshipElementTest, TestSubmodelElementFactory)
   ASSERT_EQ(TestingObjects::map::testingReference_2(), are.getSecond());
 
   auto & annotations = are.getAnnotation();
-  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement(0)));
-  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement(1), 4));
-  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement(2), 8));
+  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement("testing file 0")));
+  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement("testing file 4"), 4));
+  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement("testing file 8"), 8));
 }
 
 TEST_F(AnnotatedRelationshipElementTest, TestSubmodelElementFactoryCopied)
@@ -120,7 +120,7 @@ TEST_F(AnnotatedRelationshipElementTest, TestSubmodelElementFactoryCopied)
   ASSERT_EQ(TestingObjects::map::testingReference_2(), are_copied.getSecond());
 
   auto & annotations = are_copied.getAnnotation();
-  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement(0)));
-  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement(1), 4));
-  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement(2), 8));
+  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement("testing file 0")));
+  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement("testing file 4"), 4));
+  ASSERT_TRUE(TestingObjects::map::testingFile(*annotations.getElement("testing file 8"), 8));
 }

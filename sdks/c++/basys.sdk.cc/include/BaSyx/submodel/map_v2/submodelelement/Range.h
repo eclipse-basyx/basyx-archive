@@ -25,13 +25,13 @@ public:
   Range(const std::string & idShort, ModelingKind kind = ModelingKind::Instance)
     : DataElement(idShort, kind)
   {
-    this->map.template insertKey("dataTypeDef", ValueDataType::getDataTypeDef());
+    this->map.insertKey("dataTypeDef", ValueDataType::getDataTypeDef());
   }
 
   Range(basyx::object obj)
     : DataElement(obj)
   {
-    this->map.template insertKey("dataTypeDef", ValueDataType::getDataTypeDef());
+	  this->map.insertKey("dataTypeDef", ValueDataType::getDataTypeDef());
 
     if ( not obj.getProperty("min").IsNull() )
     {

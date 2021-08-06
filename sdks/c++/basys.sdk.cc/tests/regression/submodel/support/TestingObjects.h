@@ -120,7 +120,7 @@ static bool testingFormula(api::IFormula & formula)
 
 static Qualifier testingQualifier(int c = 1)
 {
-  return Qualifier {"Qualifier type " + std::to_string(c), "Value type " + std::to_string(c)};
+  return {"Qualifier type " + std::to_string(c), "Value type " + std::to_string(c)};
 }
 
 static bool testingQualifier(api::IQualifier & qualifier, int c = 1)

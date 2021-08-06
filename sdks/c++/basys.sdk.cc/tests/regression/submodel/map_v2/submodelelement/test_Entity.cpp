@@ -92,8 +92,8 @@ TEST_F(EntityTest, TestSubmodelElementFactory)
   ASSERT_TRUE(TestingObjects::object::testingSubmodelElement(entity));
   ASSERT_EQ(entity.getEntityType(), EntityType::SelfManagedEntity);
   auto & statements_from_obj = entity.getStatement();
-  ASSERT_TRUE(TestingObjects::map::testingFile(*statements_from_obj.getElement(1)));
-  ASSERT_TRUE(TestingObjects::map::testingFile(*statements_from_obj.getElement(0), 1));
+  ASSERT_TRUE(TestingObjects::map::testingFile(*statements_from_obj.getElement("testing file 0")));
+  ASSERT_TRUE(TestingObjects::map::testingFile(*statements_from_obj.getElement("testing file 1"), 1));
 
   ASSERT_EQ(TestingObjects::map::testingReference_1(), *entity.getAssetRef());
 }

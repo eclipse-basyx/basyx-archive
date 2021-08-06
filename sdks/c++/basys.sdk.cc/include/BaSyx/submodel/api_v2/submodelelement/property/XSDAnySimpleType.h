@@ -221,6 +221,32 @@ using namespace submodel;
     }
   };
 
+#ifdef _MSC_VER 
+  template<>
+  struct xsd_type<long>
+  {
+	  static const std::string getDataTypeDef()
+	  {
+		  return XsdTypes_::to_string(XsdTypes::xsd_long);
+	  }
+
+	  static const inline long getXSDRepresentation(const long & uint_value)
+	  {
+		  return uint_value;
+	  }
+
+	  static const inline long fromXSDRepresentation(basyx::object value)
+	  {
+		  return value.Get<long>();
+	  }
+
+	  static inline std::unique_ptr<long> ptrFromXSDRepresentation(basyx::object value)
+	  {
+		  return util::make_unique<long>(value.Get<long>());
+	  }
+  };
+#endif
+
   template<>
   struct xsd_type<uint32_t>
   {
