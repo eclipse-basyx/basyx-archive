@@ -63,7 +63,7 @@ namespace basyx
 			using Operation = basyx::submodel::map::Operation;
 			using IOperationVariable = basyx::submodel::api::IOperationVariable;
 			template<typename TYPE>
-			using OperationVariable_t = basyx::submodel::map::OperationVariable<TYPE>;
+			using OperationVariable_t = basyx::submodel::map::OperationVariable;
 			using SubmodelElement = basyx::submodel::map::SubmodelElement;
 			using Kind = basyx::submodel::ModelingKind;
 			using KeyElements = basyx::submodel::KeyElements;
