@@ -9,13 +9,7 @@
             "value": "http://customer.com/assets/KHBVZJSQKIY",
             "idType": "IRI"
           }
-        ],
-        "kind": "Type",
-        "idShort": "assetId1",
-        "identification": {
-        	"idType": "IRI",
-        	"id": "assetId1"
-        }
+        ]
       },
       "submodels": [
         {
