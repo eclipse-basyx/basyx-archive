@@ -9,10 +9,14 @@
  ******************************************************************************/
 package org.eclipse.basyx.components.aas.configuration;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.basyx.components.configuration.BaSyxConfiguration;
+
+import com.google.gson.Gson;
 
 /**
  * Represents a BaSyx server configuration for an AAS Server with any backend,
@@ -28,6 +32,7 @@ public class BaSyxAASServerConfiguration extends BaSyxConfiguration {
 	// Default BaSyx AAS configuration
 	public static final String DEFAULT_BACKEND = AASServerBackend.INMEMORY.toString();
 	public static final String DEFAULT_HOSTPATH = "";
+	public static final String DEFAULT_SUBMODELS = "[]";
 	public static final String DEFAULT_SOURCE = "";
 	public static final String DEFAULT_REGISTRY = "";
 	public static final String DEFAULT_EVENTS = AASEventBackend.NONE.toString();
@@ -35,6 +40,7 @@ public class BaSyxAASServerConfiguration extends BaSyxConfiguration {
 	// Configuration keys
 	public static final String REGISTRY = "registry.path";
 	public static final String HOSTPATH = "registry.host";
+	public static final String SUBMODELS = "registry.submodels";
 	public static final String BACKEND = "aas.backend";
 	public static final String SOURCE = "aas.source";
 	public static final String EVENTS = "aas.events";
@@ -51,6 +57,7 @@ public class BaSyxAASServerConfiguration extends BaSyxConfiguration {
 		defaultProps.put(SOURCE, DEFAULT_SOURCE);
 		defaultProps.put(REGISTRY, DEFAULT_REGISTRY);
 		defaultProps.put(HOSTPATH, DEFAULT_HOSTPATH);
+		defaultProps.put(SUBMODELS, DEFAULT_SUBMODELS);
 		defaultProps.put(EVENTS, DEFAULT_EVENTS);
 		return defaultProps;
 	}
@@ -95,14 +102,14 @@ public class BaSyxAASServerConfiguration extends BaSyxConfiguration {
 	 * Constructor with initial configuration values
 	 * 
 	 * @param backend
-	 *                    The backend for the AASServer
+	 *            The backend for the AASServer
 	 * @param source
-	 *                    The file source for the AASServer (e.g. an .aasx file)
+	 *            The file source for the AASServer (e.g. an .aasx file)
 	 * @param registryUrl
-	 *                    The url to the registry
+	 *            The url to the registry
 	 * @param hostPath
-	 *                    The root path to the aas component, when it is deployed. Address could be used for
-	 *                    registration at a registry.
+	 *            The root path to the aas component, when it is deployed. Address
+	 *            could be used for registration at a registry.
 	 */
 	public BaSyxAASServerConfiguration(AASServerBackend backend, String source, String registryUrl, String hostPath) {
 		this(backend, source, registryUrl);
@@ -158,11 +165,33 @@ public class BaSyxAASServerConfiguration extends BaSyxConfiguration {
 		setProperty(REGISTRY, registryPath);
 	}
 
+	public List<String> getSubmodels() {
+		return parseSubmodels(getProperty(SUBMODELS));
+	}
+
+	public void setSubmodels(List<String> submodels) {
+		setProperty(SUBMODELS, serializeSubmodels(submodels));
+	}
+
 	public String getHostpath() {
 		return getProperty(HOSTPATH);
 	}
 
 	public void setHostpath(String hostPath) {
 		setProperty(HOSTPATH, hostPath);
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<String> parseSubmodels(String property) {
+		List<String> fromJson = new Gson().fromJson(property, List.class);
+		if (fromJson == null) {
+			return new ArrayList<>();
+		} else {
+			return fromJson;
+		}
+	}
+
+	private String serializeSubmodels(List<String> submodels) {
+		return new Gson().toJson(submodels);
 	}
 }

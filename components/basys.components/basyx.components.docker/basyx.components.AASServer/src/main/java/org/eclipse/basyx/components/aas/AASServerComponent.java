@@ -14,6 +14,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -29,6 +30,8 @@ import org.eclipse.basyx.aas.factory.aasx.AASXToMetamodelConverter;
 import org.eclipse.basyx.aas.factory.aasx.SubmodelFileEndpointLoader;
 import org.eclipse.basyx.aas.factory.json.JSONAASBundleFactory;
 import org.eclipse.basyx.aas.factory.xml.XMLAASBundleFactory;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.AASDescriptor;
+import org.eclipse.basyx.aas.metamodel.map.descriptor.SubmodelDescriptor;
 import org.eclipse.basyx.aas.registration.api.IAASRegistry;
 import org.eclipse.basyx.aas.registration.proxy.AASRegistryProxy;
 import org.eclipse.basyx.aas.restapi.api.IAASAPIFactory;
@@ -45,7 +48,9 @@ import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxMongoDBConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxMqttConfiguration;
 import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPIFactory;
+import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxHTTPServer;
@@ -154,7 +159,7 @@ public class AASServerComponent implements IComponent {
 			modifyFilePaths(contextConfig.getHostname(), contextConfig.getPort(), contextConfig.getContextPath());
 
 			// 3. Register the initial AAS
-			registerAAS();
+			registerEnvironment();
 		}
 
 		logger.info("Start the server");
@@ -268,7 +273,24 @@ public class AASServerComponent implements IComponent {
 		}
 	}
 
-	private void registerAAS() {
+	private void registerEnvironment() {
+		if (aasConfig.getSubmodels().isEmpty()) {
+			registerFullAAS();
+		} else {
+			registerSubmodelsFromWhitelist();
+		}
+	}
+
+	private void registerSubmodelsFromWhitelist() {
+		logger.info("Register from whitelist");
+		List<AASDescriptor> descriptors = registry.lookupAll();
+		List<String> smWhitelist = aasConfig.getSubmodels();
+		for (String s : smWhitelist) {
+			updateSMEndpoint(s, descriptors);
+		}
+	}
+
+	private void registerFullAAS() {
 		if (registry == null) {
 			logger.info("No registry specified, skipped registration");
 			return;
@@ -277,6 +299,65 @@ public class AASServerComponent implements IComponent {
 		String baseUrl = getComponentBasePath();
 		String aggregatorPath = VABPathTools.concatenatePaths(baseUrl, AASAggregatorProvider.PREFIX);
 		AASBundleHelper.register(registry, aasBundles, aggregatorPath);
+	}
+
+	private void updateSMEndpoint(String smId, List<AASDescriptor> descriptors) {
+		descriptors.forEach(desc -> {
+			Collection<SubmodelDescriptor> smDescriptors = desc.getSubmodelDescriptors();
+			SubmodelDescriptor smDescriptor = findSMDescriptor(smId, smDescriptors);
+			updateSMEndpoint(smDescriptor);
+			registry.register(desc.getIdentifier(), smDescriptor);
+		});
+	}
+
+	private void updateSMEndpoint(SubmodelDescriptor smDescriptor) {
+		String smEndpoint = getSMEndpoint(smDescriptor.getIdentifier());
+		String firstEndpoint = smDescriptor.getFirstEndpoint();
+		if (firstEndpoint.isEmpty()) {
+			smDescriptor.removeEndpoint("");
+		} else if (firstEndpoint.equals("/submodel")) {
+			smDescriptor.removeEndpoint("/submodel");
+		}
+		smDescriptor.addEndpoint(smEndpoint);
+	}
+
+	private SubmodelDescriptor findSMDescriptor(String smId, Collection<SubmodelDescriptor> smDescriptors) {
+		for (SubmodelDescriptor smDesc : smDescriptors) {
+			if (smDesc.getIdentifier().getId().equals(smId)) {
+				return smDesc;
+			}
+		}
+		return null;
+	}
+
+	private String getSMEndpoint(IIdentifier smId) {
+		String aasId = getAASIdFromSMId(smId);
+		String encodedAASId = VABPathTools.encodePathElement(aasId);
+		String aasBasePath = VABPathTools.concatenatePaths(getComponentBasePath(), encodedAASId, "aas");
+		String smIdShort = getSMIdShortFromSMId(smId);
+		return VABPathTools.concatenatePaths(aasBasePath, "submodels", smIdShort, "submodel");
+	}
+
+	private String getSMIdShortFromSMId(IIdentifier smId) {
+		for (AASBundle bundle : aasBundles) {
+			for (ISubmodel sm : bundle.getSubmodels()) {
+				if (smId.getId().equals(sm.getIdentification().getId())) {
+					return sm.getIdShort();
+				}
+			}
+		}
+		throw new ResourceNotFoundException("Submodel in registry whitelist not found in AASBundle");
+	}
+
+	private String getAASIdFromSMId(IIdentifier smId) {
+		for (AASBundle bundle : aasBundles) {
+			for (ISubmodel sm : bundle.getSubmodels()) {
+				if (smId.getId().equals(sm.getIdentification().getId())) {
+					return bundle.getAAS().getIdentification().getId();
+				}
+			}
+		}
+		throw new ResourceNotFoundException("Submodel in registry whitelist does not belong to any AAS in AASBundle");
 	}
 
 	private String getComponentBasePath() {
