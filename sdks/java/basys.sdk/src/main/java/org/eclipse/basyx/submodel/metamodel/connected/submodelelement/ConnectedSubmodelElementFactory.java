@@ -31,6 +31,7 @@ import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.operation.
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.relationship.ConnectedAnnotatedRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.relationship.ConnectedRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.Capability;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
@@ -137,6 +138,8 @@ public class ConnectedSubmodelElementFactory {
 			return new ConnectedOperation(proxy);
 		} else if(BasicEvent.isBasicEvent(mapContent)) {
 			return new ConnectedBasicEvent(proxy);
+		} else if (Capability.isCapability(mapContent)) {
+			return new ConnectedCapability(proxy);
 		} else {
 			return null;
 		}

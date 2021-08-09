@@ -32,6 +32,7 @@ import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.operati
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.relationship.AnnotatedRelationshipElementXMLConverter;
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.relationship.RelationshipElementXMLConverter;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
+import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ICapability;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IBlob;
@@ -50,6 +51,7 @@ import org.eclipse.basyx.submodel.metamodel.map.qualifier.HasSemantics;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.haskind.HasKind;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifiable;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.Capability;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
@@ -132,6 +134,10 @@ public class SubmodelElementXMLConverter {
 		else if (xmlObject.containsKey(BasicEventXMLConverter.BASIC_EVENT)) {
 			xmlObject = (Map<String, Object>) xmlObject.get(BasicEventXMLConverter.BASIC_EVENT);
 			return BasicEventXMLConverter.parseBasicEvent(xmlObject);
+		}
+		else if (xmlObject.containsKey(CapabilityXMLConverter.CAPABILITY)) {
+			xmlObject = (Map<String, Object>) xmlObject.get(CapabilityXMLConverter.CAPABILITY);
+			return CapabilityXMLConverter.parseCapability(xmlObject);
 		}
 		else if (xmlObject.containsKey(EntityXMLConverter.ENTITY)) {
 			xmlObject = (Map<String, Object>) xmlObject.get(EntityXMLConverter.ENTITY);
@@ -273,6 +279,8 @@ public class SubmodelElementXMLConverter {
 						document, (IAnnotatedRelationshipElement) submodelElement);
 			case Operation.MODELTYPE:
 				return OperationXMLConverter.buildOperation(document, (IOperation) submodelElement);
+			case Capability.MODELTYPE:
+				return CapabilityXMLConverter.buildCapability(document, (ICapability) submodelElement);
 			default:
 				return null;
 		}

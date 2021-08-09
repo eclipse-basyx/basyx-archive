@@ -386,6 +386,11 @@
 					</aas:basicEvent>
 				</aas:submodelElement>
 				<aas:submodelElement>
+					<aas:capability>
+						<aas:idShort>capability_id</aas:idShort>
+					</aas:capability>
+				</aas:submodelElement>
+				<aas:submodelElement>
 					<aas:entity>
 						<aas:idShort>entity_id</aas:idShort>
 						<aas:assetRef>
