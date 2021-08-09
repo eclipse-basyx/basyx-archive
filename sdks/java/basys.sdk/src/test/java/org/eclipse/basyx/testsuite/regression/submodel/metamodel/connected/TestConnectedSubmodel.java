@@ -56,7 +56,7 @@ public class TestConnectedSubmodel extends TestSubmodelSuite {
 	public void build() {
 
 		Submodel reference = getReferenceSubmodel();
-		// Create an operation
+		@SuppressWarnings("unchecked")
 		Operation op = new Operation((Function<Object[], Object> & Serializable) obj -> {
 			return (int) obj[0] + (int) obj[1];
 		});
