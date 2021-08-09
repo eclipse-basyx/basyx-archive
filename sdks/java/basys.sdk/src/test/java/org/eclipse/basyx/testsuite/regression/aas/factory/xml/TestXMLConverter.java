@@ -56,6 +56,7 @@ import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.dataspecification.DataSpecificationIEC61360Content;
 import org.eclipse.basyx.submodel.metamodel.map.parts.ConceptDescription;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.LangStrings;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.Capability;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
@@ -393,7 +394,7 @@ public class TestXMLConverter {
 	private void checkSubmodelElements(ISubmodel submodel) {
 		Map<String, ISubmodelElement> submodelElements = (Map<String, ISubmodelElement>)
 				((Map<String, Object>)submodel).get(Submodel.SUBMODELELEMENT);
-		assertEquals(13, submodelElements.size());
+				assertEquals(14, submodelElements.size());
 		
 		ISubmodelElement element = submodelElements.get("rotationSpeed");
 		assertTrue(element instanceof Property);
@@ -417,6 +418,9 @@ public class TestXMLConverter {
 		keys = basicEvent.getObserved().getKeys();
 		assertEquals(1, keys.size());
 		assertEquals("http://www.zvei.de/demo/submodelDefinitions/87654346", keys.get(0).getValue());
+
+		element = submodelElements.get("capability_id");
+		assertTrue(element instanceof Capability);
 		
 		element = submodelElements.get("entity_id");
 		assertTrue(element instanceof Entity);

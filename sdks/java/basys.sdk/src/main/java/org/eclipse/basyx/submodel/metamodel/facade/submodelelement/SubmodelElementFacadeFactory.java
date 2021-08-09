@@ -12,6 +12,7 @@ package org.eclipse.basyx.submodel.metamodel.facade.submodelelement;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.Capability;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
@@ -64,6 +65,8 @@ public class SubmodelElementFacadeFactory {
 			return Operation.createAsFacade(submodelElement);
 		} else if (BasicEvent.isBasicEvent(submodelElement)) {
 			return BasicEvent.createAsFacade(submodelElement);
+		} else if (Capability.isCapability(submodelElement)) {
+			return Capability.createAsFacade(submodelElement);
 		} else {
 			throw new RuntimeException("Can not create a submodel element from given map: " + submodelElement);
 		}
