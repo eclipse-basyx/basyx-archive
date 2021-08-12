@@ -29,8 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class AASAggregatorProxy implements IAASAggregator {
+	protected IModelProvider provider;
 	private static Logger logger = LoggerFactory.getLogger(AASRegistryProxy.class);
-	private IModelProvider provider;
 	
 	/**
 	 * Constructor for an AAS aggregator proxy based on a HTTP connection
