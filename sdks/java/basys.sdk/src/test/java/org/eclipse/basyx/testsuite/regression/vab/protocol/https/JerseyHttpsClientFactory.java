@@ -28,6 +28,7 @@ import java.security.SecureRandom;
  *
  */
 public class JerseyHttpsClientFactory {
+	private static final String PROTOCOL = "TLSv1.2";
 
 	/**
 	 * Returns an HTTPS client
@@ -36,7 +37,7 @@ public class JerseyHttpsClientFactory {
 	 * @throws NoSuchAlgorithmException
 	 */
     public static Client getJerseyHTTPSClient() throws KeyManagementException, NoSuchAlgorithmException {
-        SSLContext sslContext = getSslContext();
+        SSLContext sslContext = getSslContext(PROTOCOL);
         HostnameVerifier allHostsValid = new DefaultHostNameVerifier();
 
         return ClientBuilder.newBuilder()
@@ -47,14 +48,15 @@ public class JerseyHttpsClientFactory {
 
     /**
      * Retrieves an SSL Context
-     * with TLSv1 protocol
+     * with given protocol
+     * @param protocol
      * @return
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    private static SSLContext getSslContext() throws NoSuchAlgorithmException,
+    private static SSLContext getSslContext(String protocol) throws NoSuchAlgorithmException,
                                                      KeyManagementException {
-        SSLContext sslContext = SSLContext.getInstance("TLSv1");
+        SSLContext sslContext = SSLContext.getInstance(protocol);
 
         KeyManager[] keyManagers = null;
         TrustManager[] trustManager = {new DefaultTrustManager()};
