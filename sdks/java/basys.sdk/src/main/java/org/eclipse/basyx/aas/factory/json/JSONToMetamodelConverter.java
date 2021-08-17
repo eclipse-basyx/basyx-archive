@@ -55,27 +55,27 @@ public class JSONToMetamodelConverter {
 
 	@SuppressWarnings("unchecked")
 	private AssetAdministrationShell parseAssetAdministrationShell(Object mapObject) {
-		AssetAdministrationShell parsedAAS = AssetAdministrationShell.createAsFacade((Map<String, Object>) mapObject);
+		Map<String, Object> aasMap = (Map<String, Object>) mapObject;
 		// Fix Asset - Asset in json-Serialization is just a reference 
-		Map<String, Object> assetRefMap = (Map<String, Object>) parsedAAS.get(AssetAdministrationShell.ASSET);
+		Map<String, Object> assetRefMap = (Map<String, Object>) aasMap.get(AssetAdministrationShell.ASSET);
 		if (assetRefMap.get(Reference.KEY) == null && assetRefMap.get(Asset.KIND) != null) {
 			// => Is already an asset, => does not need to be fixed
-			return parsedAAS;
+			return AssetAdministrationShell.createAsFacade((Map<String, Object>) mapObject);
 		}
-		parsedAAS.put(AssetAdministrationShell.ASSETREF, assetRefMap);
+		aasMap.put(AssetAdministrationShell.ASSETREF, assetRefMap);
 		
 		// Now try to find the Asset and add it to the AssetAdministrationShell
-		IReference assetRef = parsedAAS.getAssetReference();
+		IReference assetRef = Reference.createAsFacade((Map<String, Object>) aasMap.get(AssetAdministrationShell.ASSETREF));
 		IKey lastKey = assetRef.getKeys().get(assetRef.getKeys().size() - 1);
 		String idValue = lastKey.getValue();
 		for (Asset asset : assetBuf) {
 			if (asset.getIdentification().getId().equals(idValue)) {
-				parsedAAS.put(AssetAdministrationShell.ASSET, asset);
+				aasMap.put(AssetAdministrationShell.ASSET, asset);
 				break;
 			}
 		}
 
-		return parsedAAS;
+		return AssetAdministrationShell.createAsFacade((Map<String, Object>) mapObject);
 	}
 	
 	/**
