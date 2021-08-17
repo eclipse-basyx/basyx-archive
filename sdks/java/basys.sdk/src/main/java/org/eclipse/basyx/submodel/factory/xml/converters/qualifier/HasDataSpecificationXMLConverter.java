@@ -113,7 +113,7 @@ public class HasDataSpecificationXMLConverter {
 	}
 
 	/**
-	 * Populates a given XML map with the data form a given IHasDataSpecification object<br>
+	 * Populates a given XML map with the data from a given IHasDataSpecification object<br>
 	 * Creates the &lt;aas:embeddedDataSpecification&gt; tag in the given root
 	 * 
 	 * @param document the XML document

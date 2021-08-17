@@ -92,7 +92,7 @@ public class IdentifiableXMLConverter {
 	
 	
 	/**
-	 * Populates a given XML map with the data form a given IIdentifiable object<br>
+	 * Populates a given XML map with the data from a given IIdentifiable object<br>
 	 * Creates the &lt;aas:administration&gt; and &lt;aas:identification&gt; tags in the given root
 	 * 
 	 * @param document the XML document

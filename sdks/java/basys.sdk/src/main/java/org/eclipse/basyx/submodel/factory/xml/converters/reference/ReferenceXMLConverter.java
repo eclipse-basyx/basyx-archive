@@ -126,7 +126,7 @@ public class ReferenceXMLConverter {
 	}
 	
 	/**
-	 * Builds XML form a given Collection of IReference objects
+	 * Builds XML from a given Collection of IReference objects
 	 * 
 	 * @param document   the XML document
 	 * @param references a Collection of IReference objects to be converted to XML
@@ -137,7 +137,7 @@ public class ReferenceXMLConverter {
 	}
 
 	/**
-	 * Builds XML form a given Collection of IReference objects
+	 * Builds XML from a given Collection of IReference objects
 	 * 
 	 * @param document    the XML document
 	 * @param references  a Collection of IReference objects to be converted to XML
@@ -162,7 +162,7 @@ public class ReferenceXMLConverter {
 	
 	
 	/**
-	 * Builds XML form a given single IReference object
+	 * Builds XML from a given single IReference object
 	 * 
 	 * @param document the XML document
 	 * @param reference the IReference object to be converted to XML
@@ -174,7 +174,7 @@ public class ReferenceXMLConverter {
 	}
 	
 	/**
-	 * Builds XML form a given single IReference object
+	 * Builds XML from a given single IReference object
 	 * 
 	 * @param document    the XML document
 	 * @param reference   the IReference object to be converted to XML
@@ -190,7 +190,7 @@ public class ReferenceXMLConverter {
 	}
 
 	/**
-	 * Builds XML form a given IKey object
+	 * Builds XML from a given IKey object
 	 * 
 	 * @param document   the XML document
 	 * @param key        the IKey object to be converted to XML

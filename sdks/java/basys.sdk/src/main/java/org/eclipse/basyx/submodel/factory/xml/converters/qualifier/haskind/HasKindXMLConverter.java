@@ -50,7 +50,7 @@ public class HasKindXMLConverter {
 	
 	
 	/**
-	 * Populates a given XML map with the data form a given IHasKind object<br>
+	 * Populates a given XML map with the data from a given IHasKind object<br>
 	 * Creates the &lt;aas:kind&gt; tag in the given root
 	 * 
 	 * @param document the XML document
