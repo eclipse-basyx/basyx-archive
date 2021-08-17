@@ -23,7 +23,7 @@ import org.w3c.dom.Element;
 
 /**
  * Parses &lt;aas:relationshipElement&gt; and builds the RelationshipElement object from it <br>
- * Builds &lt;aas:relationshipElement&gt; form a given RelationshipElement object
+ * Builds &lt;aas:relationshipElement&gt; from a given RelationshipElement object
  * 
  * @author conradi
  *

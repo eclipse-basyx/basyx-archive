@@ -27,7 +27,7 @@ import org.w3c.dom.Element;
 
 /**
  * Parses &lt;aas:operation&gt; and builds the Operation object from it <br>
- * Builds &lt;aas:operation&gt; form a given Operation object
+ * Builds &lt;aas:operation&gt; from a given Operation object
  * 
  * @author conradi
  *

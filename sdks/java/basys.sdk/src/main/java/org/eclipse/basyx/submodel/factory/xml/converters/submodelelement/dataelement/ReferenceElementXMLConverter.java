@@ -21,7 +21,7 @@ import org.w3c.dom.Element;
 
 /**
  * Parses &lt;aas:referenceElement&gt; and builds the ReferenceElement object from it <br>
- * Builds &lt;aas:referenceElement&gt; form a given ReferenceElement object
+ * Builds &lt;aas:referenceElement&gt; from a given ReferenceElement object
  * 
  * @author conradi
  *

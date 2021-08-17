@@ -93,7 +93,7 @@ public class LangStringsXMLConverter {
 	
 	
 	/**
-	 * Builds XML form a given LangStrings object
+	 * Builds XML from a given LangStrings object
 	 * 
 	 * @param document the XML document
 	 * @param root the root Element where the &lt;aas:langString&gt; tags should be in
@@ -104,7 +104,7 @@ public class LangStringsXMLConverter {
 	}
 
 	/**
-	 * Builds XML form a given LangStrings object with a custom langString tagName
+	 * Builds XML from a given LangStrings object with a custom langString tagName
 	 * 
 	 * @param document the XML document
 	 * @param root the root Element where the &lt;langString&gt; tags should be in
