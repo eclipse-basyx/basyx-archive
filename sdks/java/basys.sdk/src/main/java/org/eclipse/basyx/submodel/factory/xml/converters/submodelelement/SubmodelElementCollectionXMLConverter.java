@@ -22,7 +22,7 @@ import org.w3c.dom.Element;
 
 /**
  * Parses &lt;aas:submodelElementCollection&gt; and builds the SubmodelElementCollection object from it <br>
- * Builds &lt;aas:submodelElementCollection&gt; form a given SubmodelElementCollection object
+ * Builds &lt;aas:submodelElementCollection&gt; from a given SubmodelElementCollection object
  * 
  * @author conradi
  *

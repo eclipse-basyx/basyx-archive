@@ -20,7 +20,7 @@ import org.w3c.dom.Element;
 
 /**
  * Parses &lt;aas:range&gt; and builds the Range object from it <br>
- * Builds &lt;aas:range&gt; form a given Range object
+ * Builds &lt;aas:range&gt; from a given Range object
  * 
  * @author conradi
  *

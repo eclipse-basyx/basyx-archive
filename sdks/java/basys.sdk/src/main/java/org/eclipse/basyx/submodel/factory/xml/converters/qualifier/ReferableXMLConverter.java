@@ -93,7 +93,7 @@ public class ReferableXMLConverter {
 	
 	
 	/**
-	 * Populates a given XML map with the data form a given IReferable object<br>
+	 * Populates a given XML map with the data from a given IReferable object<br>
 	 * Creates the relevant tags in the given root
 	 * 
 	 * @param document the XML document

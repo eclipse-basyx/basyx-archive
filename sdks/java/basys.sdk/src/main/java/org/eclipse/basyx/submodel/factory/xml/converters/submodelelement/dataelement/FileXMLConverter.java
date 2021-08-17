@@ -20,7 +20,7 @@ import org.w3c.dom.Element;
 
 /**
  * Parses &lt;aas:file&gt; and builds the File object from it <br>
- * Builds &lt;aas:file&gt; form a given File object
+ * Builds &lt;aas:file&gt; from a given File object
  * 
  * @author conradi
  *

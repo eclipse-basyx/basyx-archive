@@ -27,7 +27,7 @@ import org.w3c.dom.Element;
 
 /**
  * Parses &lt;aas:entity&gt; and builds the Entity object from it <br>
- * Builds &lt;aas:entity&gt; form a given Entity object
+ * Builds &lt;aas:entity&gt; from a given Entity object
  * 
  * @author conradi
  *
