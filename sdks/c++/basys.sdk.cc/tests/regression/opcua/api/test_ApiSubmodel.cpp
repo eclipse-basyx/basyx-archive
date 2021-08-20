@@ -77,12 +77,12 @@ namespace basyx
                 {
                     if(prop->getIdShort() == "prop_i32")
                     {
-                        ASSERT_EQ(prop->getValueType(), "xsd:int");
+                        ASSERT_EQ(prop->getValueType(), "int");
                         ASSERT_EQ(dynamic_cast<map::Property<int>*>(prop.get())->getValue(), 23);
                     }
                     if(prop->getIdShort() == "prop_str")
                     {
-                        ASSERT_EQ(prop->getValueType(), "xsd:string");
+                        ASSERT_EQ(prop->getValueType(), "string");
                         ASSERT_EQ(dynamic_cast<map::Property<std::string>*>(prop.get())->getValue(), "string property");
                     }
                 }

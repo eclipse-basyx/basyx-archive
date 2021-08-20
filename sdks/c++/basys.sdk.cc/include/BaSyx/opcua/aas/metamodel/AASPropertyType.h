@@ -49,29 +49,29 @@ namespace basyx
 
 					struct TypeName
 					{
-						static constexpr const char bool_[] = "xsd:boolean";
-						static constexpr const char int8[] = "xsd:byte";
-						static constexpr const char uint8[] = "xsd:unsignedByte";
-						static constexpr const char int16[] = "xsd:short";
-						static constexpr const char uint16[] = "xsd:unsignedShort";
-						static constexpr const char int32[] = "xsd:int";
-						static constexpr const char uint32[] = "xsd:unsignedInt";
-						static constexpr const char int64[] = "xsd:long";
-						static constexpr const char uint64[] = "xsd:unsignedLong";
-						static constexpr const char float_[] = "xsd:float";
-						static constexpr const char double_[] = "xsd:double";
-						static constexpr const char string_[] = "xsd:string";
-						static constexpr const char anyUri[] = "xsd:anyuri";
-						static constexpr const char date[] = "xsd:date";
-						static constexpr const char time[] = "xsd:time";
-						static constexpr const char dayTimeDuration[] = "xsd:dayTimeDuration";
-						static constexpr const char yearMonthDuration[] = "xsd:yearMonthDuration";
-						static constexpr const char dateTime[] = "xsd:dateTime";
-						static constexpr const char gDay[] = "xsd:gDay";
-						static constexpr const char gMonth[] = "xsd:gMonth";
-						static constexpr const char gMonthDay[] = "xsd:gMonthDay";
-						static constexpr const char gYear[] = "xsd:gYear";
-						static constexpr const char gYearMonth[] = "xsd:gYearMonth";
+						static constexpr const char bool_[] = "boolean";
+						static constexpr const char int8[] = "byte";
+						static constexpr const char uint8[] = "unsignedByte";
+						static constexpr const char int16[] = "short";
+						static constexpr const char uint16[] = "unsignedShort";
+						static constexpr const char int32[] = "int";
+						static constexpr const char uint32[] = "unsignedInt";
+						static constexpr const char int64[] = "long";
+						static constexpr const char uint64[] = "unsignedLong";
+						static constexpr const char float_[] = "float";
+						static constexpr const char double_[] = "double";
+						static constexpr const char string_[] = "string";
+						static constexpr const char anyUri[] = "anyuri";
+						static constexpr const char date[] = "date";
+						static constexpr const char time[] = "time";
+						static constexpr const char dayTimeDuration[] = "dayTimeDuration";
+						static constexpr const char yearMonthDuration[] = "yearMonthDuration";
+						static constexpr const char dateTime[] = "dateTime";
+						static constexpr const char gDay[] = "gDay";
+						static constexpr const char gMonth[] = "gMonth";
+						static constexpr const char gMonthDay[] = "gMonthDay";
+						static constexpr const char gYear[] = "gYear";
+						static constexpr const char gYearMonth[] = "gYearMonth";
 					};
 
 					static basyx::opcua::NodeId getNodeId(int32_t t_ns)

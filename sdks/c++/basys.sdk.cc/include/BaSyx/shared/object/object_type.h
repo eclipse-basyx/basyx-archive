@@ -15,13 +15,13 @@ struct dataTypeMapper
 template<>
 struct dataTypeMapper<float>
 {
-	static constexpr char datatype_string[] = "xsd:float";
+	static constexpr char datatype_string[] = "float";
 };
 
 template<>
 struct dataTypeMapper<int>
 {
-	static constexpr char datatype_string[] = "xsd:integer";
+	static constexpr char datatype_string[] = "integer";
 };
 
 namespace basyx {
