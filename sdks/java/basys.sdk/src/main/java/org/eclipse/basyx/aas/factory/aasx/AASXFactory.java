@@ -148,7 +148,9 @@ public class AASXFactory {
 	 * @return UUID
 	 */
 	private static String createUniqueID() {
-		return UUID.randomUUID().toString();
+		// only letters or underscore as start of id allowed
+		// https://www.w3.org/TR/1999/REC-xml-names-19990114/#ns-qualnames
+		return "id_" + UUID.randomUUID().toString();
 	}
 	
 	/**
