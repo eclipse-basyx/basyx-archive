@@ -6,9 +6,7 @@
 #include <BaSyx/shared/object.h>
 #include <BaSyx/shared/types.h>
 #include <BaSyx/vab/core/util/VABPath.h>
-//#include <BaSyx/opcua/aas/model/AASModelHelpers.h>
 #include <BaSyx/opcua/aas/metamodel/AASMetamodelAliases.h>
-#include <BaSyx/opcua/aas/api/ApiResponse.h>
 
 namespace basyx
 {

@@ -61,7 +61,7 @@ namespace basyx
                 // Get and Set ValueType
                 std::string otherAttr;
                 ASSERT_EQ(api.getValueType("foo_prop_i32", otherAttr), UA_STATUSCODE_GOOD);
-                ASSERT_EQ(otherAttr, "int");
+                ASSERT_EQ(otherAttr, "xsd:int");
                 ASSERT_EQ(api.setValueType("foo_prop_i32", "integer"), UA_STATUSCODE_GOOD);
                 ASSERT_EQ(api.getValueType("foo_prop_i32", otherAttr), UA_STATUSCODE_GOOD);
                 ASSERT_EQ(otherAttr, "integer");

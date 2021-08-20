@@ -2,8 +2,10 @@
 #define AAS_OBJECT_DESERIALIZER_H
 
 #include <BaSyx/opcua/aas/node/MetamodelTypes.h>
+#include <BaSyx/opcua/aas/metamodel/AASMetamodel.h>
 #include <BaSyx/opcua/aas/provider/AASModelProviderCommon.h>
 #include <BaSyx/opcua/aas/api_v2/ApiMetamodelUtilities.h>
+#include <BaSyx/submodel/api_v2/submodelelement/property/XSDAnySimpleType.h>
 
 namespace basyx
 {
@@ -84,6 +86,7 @@ namespace basyx
                 template<typename TYPE>
                 static std::unique_ptr<Property_t<TYPE>> makeProperty(basyx::object t_object)
                 {
+                    using namespace basyx::xsd_types;
                     std::string idShort, kind, valueType, category;
              
                     auto idShortObj   = t_object.getProperty(Element::idShort);
@@ -100,8 +103,7 @@ namespace basyx
                     auto keys = makeKeys(t_object);
 
                     auto prop = util::make_unique<Property_t<TYPE>>(idShort);
-
-                    TYPE value = (valueObj.getError() != basyx::object::error::PropertyNotFound) ? valueObj.Get<TYPE>() : TYPE();
+                    TYPE value = xsd_type<TYPE>::fromXSDRepresentation(valueObj);
                     prop->setValue(value);
                     prop->setCategory(category);
                     prop->setValueId(Reference(keys));
@@ -158,19 +160,19 @@ namespace basyx
                    }
                    else if (valueType == AASPropertyType::TypeName::uint8)
                    {
-                       auto prop = makeProperty<int32_t>(convertObjectValue<uint8_t,int32_t>(t_object));
+                       auto prop = makeProperty<int32_t>(convertObjectValue<uint8_t, uint64_t>(t_object));
                        prop->setValueType(AASPropertyType::TypeName::int8);
                        return t_sm.submodelElements().addElement(std::move(prop));
                    }
                    else if (valueType == AASPropertyType::TypeName::int16)
                    {
-                       auto prop = makeProperty<int32_t>(convertObjectValue<int16_t, int32_t>(t_object));
+                       auto prop = makeProperty<int32_t>(convertObjectValue<int16_t, uint64_t>(t_object));
                        prop->setValueType(AASPropertyType::TypeName::int8);
                        return t_sm.submodelElements().addElement(std::move(prop));
                    }
                    else if (valueType == AASPropertyType::TypeName::uint16)
                    {
-                       auto prop = makeProperty<int32_t>(convertObjectValue<uint16_t, int32_t>(t_object));
+                       auto prop = makeProperty<int32_t>(convertObjectValue<uint16_t, uint64_t>(t_object));
                        prop->setValueType(AASPropertyType::TypeName::int8);
                        return t_sm.submodelElements().addElement(std::move(prop));
                    }
@@ -178,28 +180,25 @@ namespace basyx
                        return t_sm.submodelElements().addElement(std::move(makeProperty<int32_t>(t_object)));
                    else if (valueType == AASPropertyType::TypeName::uint32)
                    {
-                       auto prop = makeProperty<int32_t>(convertObjectValue<uint32_t, int32_t>(t_object));
-                       logger.warn("Property [" + idShort + "] casting from uint32 to int32 can result in data loss");
+                       auto prop = makeProperty<int32_t>(convertObjectValue<uint32_t, uint64_t>(t_object));
                        prop->setValueType(AASPropertyType::TypeName::int8);
                        return t_sm.submodelElements().addElement(std::move(prop));
                    }
                    else if (valueType == AASPropertyType::TypeName::int64)
                    {
-                       auto prop = makeProperty<int32_t>(convertObjectValue<int64_t, int32_t>(t_object));
-                       logger.warn("Property [" + idShort + "] casting from int64 to int32 can result in data loss");
+                       auto prop = makeProperty<int32_t>(convertObjectValue<int64_t, uint64_t>(t_object));
                        prop->setValueType(AASPropertyType::TypeName::int8);
                        return t_sm.submodelElements().addElement(std::move(prop));
                    }
                    else if (valueType == AASPropertyType::TypeName::uint64)
                    {
-                       auto prop = makeProperty<int32_t>(convertObjectValue<uint64_t, int32_t>(t_object));
-                       logger.warn("Property [" + idShort + "] casting from uint64 to int32 can result in data loss");
+                       auto prop = makeProperty<int32_t>(convertObjectValue<uint64_t, uint64_t>(t_object));
                        prop->setValueType(AASPropertyType::TypeName::int8);
                        return t_sm.submodelElements().addElement(std::move(prop));
                    }
                    else if (valueType == AASPropertyType::TypeName::float_)
                    {
-                       auto prop = makeProperty<double>(convertObjectValue<float, double>(t_object));
+                       auto prop = makeProperty<float>(convertObjectValue<float, float>(t_object));
                        prop->setValueType(AASPropertyType::TypeName::float_);
                        return t_sm.submodelElements().addElement(std::move(prop));
                    }

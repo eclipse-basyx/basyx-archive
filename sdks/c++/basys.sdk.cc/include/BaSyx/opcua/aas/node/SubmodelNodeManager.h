@@ -5,6 +5,7 @@
 #include <BaSyx/opcua/common/Utilities.h>
 #include <BaSyx/opcua/aas/metamodel/AASSubModelType.h>
 #include <BaSyx/opcua/aas/node/ModelNodeManager.h>
+#include <BaSyx/opcua/aas/node/MetamodelNodeUtils.h>
 
 namespace basyx
 {
@@ -41,7 +42,6 @@ namespace basyx
                 virtual UA_StatusCode remove(const std::string& t_idShort) const override;
 
                 virtual std::vector<std::tuple<NodeId, std::string>> retrieveAll() const override;
-
             private:
                 mutable opcua::Services<CONNECTOR_TYPE> m_services;
             };
@@ -79,56 +79,25 @@ namespace basyx
             template<typename CONNECTOR_TYPE>
             inline UA_StatusCode SubmodelNodeManager<CONNECTOR_TYPE>::retrieve(const std::string & t_idShort, NodeId & t_outNode) const
             {
-                using namespace aas::metamodel;
+                MetamodelNodeUtils<CONNECTOR_TYPE> nodeUtils(m_services.getConnector());
 
-                t_outNode = NodeId::nullNode();
-
-                auto nsIdx = m_services.getNameSpaceIndex(opcua::shared::Namespaces::BASYX_NS_URI);
-
-                // Get the children
-                std::vector<NodeId> smNodes = m_services.getChildReferences(
-                    this->m_parent_node, NodeId::numeric(UA_NS0ID_HASCOMPONENT)
-                );
-
-                // Filter the node
-                for (const NodeId& node : smNodes)
-                {
-                    if (m_services.getHasTypeDefinition(node) == this->m_metamodel_node)
-                    {
-                        std::string identifier;
-
-                        BrowseName smBrowseName = m_services.getBrowseNameFromNodeId(node);
-
-                        if(smBrowseName.getText().empty())
-                            return UA_STATUSCODE_BADNOTFOUND;
-
-                        if (shared::string::getInstanceName(smBrowseName.getText()) == t_idShort)
-                        {
-                            t_outNode = node;
-
-                            return UA_STATUSCODE_GOOD;
-                        }                 
-                    }
-                }
-                return UA_STATUSCODE_BADNOTFOUND;
+                t_outNode = nodeUtils.filterNode(t_idShort, this->m_parent_node, this->m_metamodel_node);
+                if (t_outNode.isNull())
+                    return UA_STATUSCODE_BADNOTFOUND;
+                return UA_STATUSCODE_GOOD;
             }
 
             /* Removes the SM node with the given idShort */
             template<typename CONNECTOR_TYPE>
             inline UA_StatusCode SubmodelNodeManager<CONNECTOR_TYPE>::remove(const std::string & t_idShort) const
             {
-                NodeId smNode;
-                
+                NodeId smNode;  
+                          
                 UA_StatusCode status = retrieve(t_idShort, smNode);
-
                 if (smNode.isNull())
-                    return UA_STATUSCODE_BADNOTFOUND;
-
-                
+                    return UA_STATUSCODE_BADNOTFOUND;      
                 if (status != UA_STATUSCODE_GOOD)
                     return status;
-
-
                 return m_services.deleteNode(smNode);
             }
 
@@ -136,26 +105,12 @@ namespace basyx
             template<typename CONNECTOR_TYPE>
             inline std::vector<std::tuple<NodeId, std::string>> SubmodelNodeManager<CONNECTOR_TYPE>::retrieveAll() const
             {
-                std::vector<std::tuple<NodeId, std::string>> smNodeIdIdentTuple;
+                MetamodelNodeUtils<CONNECTOR_TYPE> nodeUtils(m_services.getConnector());
 
-                // Get the children
-                std::vector<NodeId> childNodes = m_services.getChildReferences(
-                    this->m_parent_node, NodeId::numeric(UA_NS0ID_HASCOMPONENT)
-                );
-
-                // Filter the node
-                for (const NodeId& node : childNodes)
-                {
-                    if (m_services.getHasTypeDefinition(node) == this->m_metamodel_node)
-                    {
-                        BrowseName smBrowseName = m_services.getBrowseNameFromNodeId(node);
-
-                        smNodeIdIdentTuple.emplace_back(std::make_tuple(node, shared::string::getInstanceName(smBrowseName.getText())));
-                    }
-                }
-
-                return smNodeIdIdentTuple;
+                return nodeUtils.filterNodes(this->m_parent_node, this->m_metamodel_node);
             }
+
+
 }
     }
 }

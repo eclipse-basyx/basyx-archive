@@ -7,7 +7,7 @@
 #include <BaSyx/vab/core/IModelProvider.h>
 #include <BaSyx/opcua/common/Services.h>
 #include <BaSyx/opcua/aas/provider/AASModelProviderCommon.h>
-#include <BaSyx/opcua/aas/provider/AASAggregatorProviderHelpers.h>
+#include <BaSyx/opcua/aas/provider/AASAggregatorHelpers.h>
 #include <BaSyx/opcua/aas/provider/AASSubmodelProvider.h>
 
 namespace basyx
@@ -19,7 +19,7 @@ namespace basyx
             template<typename CONNECTOR_TYPE = basyx::opcua::Client>
             class AASAggregatorProvider : public vab::core::IModelProvider
             {
-                static constexpr const char loggerName[] = "basyx::opcua::aas::AASAggregatorProvider";
+                static constexpr const char loggerName[] = "AASAggregatorProvider";
             public:
 
                 AASAggregatorProvider(const std::string & t_endpoint, const NodeId & t_rootNode);
@@ -35,40 +35,31 @@ namespace basyx
                 {
                     if (t_path.empty())
                     {
-                        m_logger.error("Emtpy path");
-
-                        return basyx::object::make_error(basyx::object::error::MalformedRequest);
-                    }
-
-                    auto obj{ basyx::object::make_null() };
-
-                    return parseAggregatorApi(t_path, RequestType::GET, obj);
+                        m_logger.error("Path cannot be empty");
+                        return basyx::object::make_error(basyx::object::error::MalformedRequest, "Path cannot be empty");
+                    }             
+                    return parseGet(t_path);
                 }
 
                 /* REST PUT */
                 virtual basyx::object::error setModelPropertyValue(const std::string& t_path, const basyx::object t_newValue) override
                 {
-                    if (t_newValue.IsNull())
+                    if (t_path.empty())
                     {
-                        m_logger.error("Body cannot be null");
-
+                        m_logger.error("Path cannot be empty");
                         return basyx::object::error::MalformedRequest;
                     }
-                    else if (t_path.empty())
-                    {
-                        m_logger.error("Emtpy path");
-
-                        return basyx::object::error::MalformedRequest;
-                    }
-
-                    auto value{ t_newValue };
-
-                    return  parseAggregatorApi(t_path, RequestType::CREATE, value).getError();
+                    return parsePut(t_path, t_newValue);
                 }
 
                 /* REST POST */
                 virtual basyx::object::error createValue(const std::string& t_path, const basyx::object t_newValue) override
                 {
+                    if (t_path.empty())
+                    {
+                        m_logger.error("Path cannot be empty");
+                        return basyx::object::error::MalformedRequest;
+                    }
                     return basyx::object::error::None;
                 }
 
@@ -81,43 +72,30 @@ namespace basyx
                 /* REST DELETE */
                 virtual basyx::object::error deleteValue(const std::string& t_path) override
                 {
-                    auto obj{ basyx::object::make_null() };
-
-                    return parseAggregatorApi(t_path, RequestType::DELETE_, obj).getError();
+                    if (t_path.empty())
+                    {
+                        m_logger.error("Path cannot be empty");
+                        return basyx::object::error::MalformedRequest;
+                    }
+                    return parseDelete(t_path);
                 }
 
                 /* REST POST */
                 virtual basyx::object invokeOperation(const std::string& t_path, basyx::object t_parameters) override
                 {
-                    if (t_parameters.IsNull())
+                    if (t_path.empty())
                     {
-                        m_logger.error("Body cannot be null");
-
-                        return basyx::object::make_error(basyx::object::error::MalformedRequest);
+                        m_logger.error("Path cannot be empty");
+                        return basyx::object::make_error(basyx::object::error::MalformedRequest, "Path cannot be empty");
                     }
-                    else if (t_path.empty())
-                    {
-                        m_logger.error("Emtpy path");
-
-                        return basyx::object::make_error(basyx::object::error::MalformedRequest);
-                    }
-
-                    return parseAggregatorApi(t_path, RequestType::INVOKE, t_parameters);
+                    return m_submodelProvider->invokeOperation(t_path, t_parameters);
                 }
 
             private:
-                basyx::object parseAggregatorApi(const std::string& t_path,
-                    RequestType t_reqType,
-                    basyx::object& t_body);
-
-                basyx::object delegateGetInvoke(const std::string& t_path,
-                    RequestType t_reqType,
-                    basyx::object& t_body);
-
-                basyx::object delegateCreateUpdateDelete(const std::string& t_path,
-                    RequestType t_reqType,
-                    basyx::object t_value);
-
+                basyx::object parseGet(const std::string& t_path);
+                basyx::object::error parsePut(const std::string& t_path, basyx::object t_value);
+                basyx::object::error parseDelete(const std::string& t_path);
+                NodeId getAASNode(const std::string& t_identifier);
             private:
                 std::unique_ptr<CONNECTOR_TYPE> m_connector;
                 std::unique_ptr<IModelProvider> m_submodelProvider;
@@ -137,8 +115,6 @@ namespace basyx
                 m_connector->setRootNode(t_rootNode);
 
                 m_connector->connect();
-
-                m_submodelProvider = util::make_unique<AASSubmodelProvider<Client>>(*m_connector.get(), t_rootNode);
 
                 metamodel::AASMetamodel::define<Client>(m_connector->getNamespaceIndexDefault(), *m_connector.get());
             }
@@ -208,123 +184,96 @@ namespace basyx
 
 
             template<typename CONNECTOR_TYPE>
-            inline basyx::object AASAggregatorProvider<CONNECTOR_TYPE>::parseAggregatorApi(const std::string & t_path,
-                RequestType t_reqType,
-                basyx::object & t_body)
+            inline basyx::object AASAggregatorProvider<CONNECTOR_TYPE>::parseGet(const std::string & t_path)
             {
-                if (t_path.empty())
-                {
-                    return basyx::object::make_error(basyx::object::error::MalformedRequest, "vab path is empty");
-                }
-
-                vab::core::VABPath path{ t_path };
-
                 auto idTuple{ AASProviderApiParseHelpers::parseIdentifiers(vab::core::VABPath(t_path)) };
 
-                /* shells*/
-                /* GET */
+                AASAggregatorHelpers<CONNECTOR_TYPE> aggregator(*m_connector, m_rootNode);
                 if (t_path == Element::shells)
+                    return aggregator.getShells();
+                else if (AASProviderApiParseHelpers::isApiShellsAASId(t_path))
                 {
-                    auto response = AASAggregatorProviderHelpers::handleAASList<CONNECTOR_TYPE>(*m_connector.get(),
-                        m_rootNode,
-                        t_reqType,
-                        t_body);
-
-                    if (response != ApiResponse::OK)
-                    {
-                        return ApiResponse_::ApiResponseToError(response, ApiResponse_::toString(response));
-                    }
-                    else
-                    {
-                        return t_body;
-                    }
+                    return aggregator.getShellsAasId(std::get<AAS_ID>(idTuple));
                 }
-                /* shells/{aasID}*/
-                /* GET, CREATE, UPDATE, DELETE */
-                else if (AASProviderApiParseHelpers::isApiShellsAASId(path))
+                else if (AASProviderApiParseHelpers::isApiShellsAASIdAAS(t_path))
                 {
-                    auto response = AASAggregatorProviderHelpers::handleAASListIdentifier<CONNECTOR_TYPE>(*m_connector.get(),
-                        m_rootNode,
-                        std::get<AAS_ID>(idTuple),
-                        t_reqType,
-                        t_body);
-
-                    if (response != ApiResponse::OK)
-                    {
-                        return ApiResponse_::ApiResponseToError(response, ApiResponse_::toString(response));
-                    }
-                    else
-                    {
-                        return t_body;
-                    }
+                    return aggregator.getShellsAasId(std::get<AAS_ID>(idTuple));
                 }
-                /* shells/{aasID}/aas*/
-                /* GET */
-                else if (AASProviderApiParseHelpers::isApiShellsAASIdAAS(path))
+                else if (AASProviderApiParseHelpers::isAPISubmodels(t_path))
                 {
-                    auto response = AASAggregatorProviderHelpers::handleAASListIdentifierAAS(*m_connector.get(),
-                        m_rootNode,
-                        std::get<AAS_ID>(idTuple),
-                        t_reqType,
-                        t_body);
-
-                    if (response != ApiResponse::OK)
-                    {
-                        return ApiResponse_::ApiResponseToError(response, ApiResponse_::toString(response));
-                    }
-                    else
-                    {
-                        return t_body;
-                    }
+                    return aggregator.getShellsAasidAasSubmodels(std::get<AAS_ID>(idTuple));
                 }
                 else
                 {
-                    if ((t_reqType == RequestType::GET) || (t_reqType == RequestType::INVOKE))
-                    {
-                        return delegateGetInvoke(t_path, t_reqType, t_body);
-                    }
-                    else
-                    {
-                        return delegateCreateUpdateDelete(t_path, t_reqType, t_body);
-                    }
+                    NodeId  aasNode = getAASNode(std::get<AAS_ID>(idTuple));
+
+                    if (aasNode.isNull())
+                        return basyx::object::make_error(basyx::object::error::ProviderException);
+
+                    m_submodelProvider = util::make_unique<AASSubmodelProvider<CONNECTOR_TYPE>>(*m_connector.get(), aasNode);
+                    return m_submodelProvider->getModelPropertyValue(t_path);
                 }
             }
 
             template<typename CONNECTOR_TYPE>
-            inline basyx::object AASAggregatorProvider<CONNECTOR_TYPE>::delegateGetInvoke(const std::string & t_path,
-                RequestType t_reqType,
-                basyx::object & t_body)
-            {
-                if (t_reqType == RequestType::GET)
-                {
-                    return  m_submodelProvider->getModelPropertyValue(t_path);
-                }
-                else if (t_reqType == RequestType::INVOKE)
-                {
-                    return m_submodelProvider->invokeOperation(t_path, t_body);
-                }
-                return basyx::object::make_error(basyx::object::error::ProviderException);
-            }
-
-            template<typename CONNECTOR_TYPE>
-            inline basyx::object AASAggregatorProvider<CONNECTOR_TYPE>::delegateCreateUpdateDelete(const std::string & t_path,
-                RequestType t_reqType,
+            inline basyx::object::error AASAggregatorProvider<CONNECTOR_TYPE>::parsePut(const std::string & t_path,
                 basyx::object t_value)
             {
-                basyx::object::error response = basyx::object::error::None;
+                auto idTuple{ AASProviderApiParseHelpers::parseIdentifiers(vab::core::VABPath(t_path)) };
 
-                /* An UPDATE request is also treated as CREATE */
-                if (t_reqType == RequestType::CREATE)
+                AASAggregatorHelpers<CONNECTOR_TYPE> aggregator(*m_connector, m_rootNode);
+                if (AASProviderApiParseHelpers::isApiShellsAASId(t_path))
                 {
-
-                    response = m_submodelProvider->setModelPropertyValue(t_path, t_value);
-
+                    return aggregator.putShellsAasId(std::get<AAS_ID>(idTuple), t_value);
                 }
-                else if (t_reqType == RequestType::DELETE_)
+                else
                 {
-                    response = m_submodelProvider->deleteValue(t_path);
+                    NodeId  aasNode = getAASNode(std::get<AAS_ID>(idTuple));
+
+                    if (aasNode.isNull())
+                        return basyx::object::error::ProviderException;
+
+                    m_submodelProvider = util::make_unique<AASSubmodelProvider<CONNECTOR_TYPE>>(*m_connector.get(), aasNode);
+                    return m_submodelProvider->setModelPropertyValue(t_path, t_value);
+                }               
+            }
+
+            template<typename CONNECTOR_TYPE>
+            inline basyx::object::error AASAggregatorProvider<CONNECTOR_TYPE>::parseDelete(const std::string & t_path)
+            {
+                auto idTuple{ AASProviderApiParseHelpers::parseIdentifiers(vab::core::VABPath(t_path)) };
+
+                AASAggregatorHelpers<CONNECTOR_TYPE> aggregator(*m_connector, m_rootNode);
+                if (AASProviderApiParseHelpers::isApiShellsAASId(t_path))
+                {
+                    return aggregator.deleteShellsAasId(std::get<AAS_ID>(idTuple));
                 }
-                return basyx::object::make_error(response);
+                else
+                {
+                    NodeId  aasNode = getAASNode(std::get<AAS_ID>(idTuple));
+
+                    if (aasNode.isNull())
+                        return basyx::object::error::ProviderException;
+
+                    m_submodelProvider = util::make_unique<AASSubmodelProvider<CONNECTOR_TYPE>>(*m_connector.get(), aasNode);
+                    return m_submodelProvider->deleteValue(t_path);
+                }
+            }
+            template<typename CONNECTOR_TYPE>
+            inline NodeId AASAggregatorProvider<CONNECTOR_TYPE>::getAASNode(const std::string& t_identifier)
+            {
+                NodeId aasNode;
+
+                AssetAdministrationShellNodeManager<CONNECTOR_TYPE> aasNodeMgr(*m_connector.get(), m_rootNode);
+                UA_StatusCode status = aasNodeMgr.retrieve(t_identifier, aasNode);
+
+                if (status != UA_STATUSCODE_GOOD)
+                {
+                    m_logger.error("Node for AssetAdministrationShell ["+ t_identifier + "] could not be retrieved - " +
+                        shared::diag::getErrorString(status));
+                    return NodeId::nullNode();
+                }
+                return aasNode;
             }
         }
     }

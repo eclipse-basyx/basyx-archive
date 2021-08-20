@@ -42,11 +42,11 @@ namespace basyx
                 {
 
                     m_server = std::make_shared< Server>(PORT, shared::Namespaces::BASYX_NS_URI);
-
+                    
                     m_server->initialize();
-
+                    
                     m_server->runInBackground();
-
+                    
                     while (!m_server->isServerUp());
 
                     c_provider = std::make_shared<aas::AASAggregatorProvider<>>(
@@ -96,7 +96,7 @@ namespace basyx
 
                 values = c_provider->getModelPropertyValue("shells");
 
-                ASSERT_TRUE(values.IsError());
+                ASSERT_TRUE(values.empty());
 
                 /* Indentifier mistmatch between model and path */
                 basyx::object::error response = c_provider->setModelPropertyValue("shells/i40.fab", AAS());
