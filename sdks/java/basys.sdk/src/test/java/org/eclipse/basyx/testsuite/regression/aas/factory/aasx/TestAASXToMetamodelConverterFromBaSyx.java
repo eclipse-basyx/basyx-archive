@@ -83,6 +83,10 @@ public class TestAASXToMetamodelConverterFromBaSyx {
 	// https://www.w3.org/TR/1999/REC-xml-names-19990114/#ns-qualnames
 	private static final String ID_REGEX_FULL = "Id=\"([A-z]|_).*";
 
+	private static final String TARGET_PATH_REGEX_START = "Target=.*";
+	private static final String TARGET_PATH_REGEX_FULL = "Target=\"/.*";
+	private static final String DOCPROPS_PATH_REGEX = "Target=\"docProps.*";
+
 	private int bundleSize;
 	private int submodelSize;
 	private int submodelElementsSize;
@@ -144,7 +148,8 @@ public class TestAASXToMetamodelConverterFromBaSyx {
 	}
 
 	/**
-	 * Tests if the ids start with a letter or underscore.
+	 * Tests if the ids start with a letter or underscore and if the paths are
+	 * absolute.
 	 * 
 	 * @throws IOException
 	 * @throws ParserConfigurationException
@@ -162,6 +167,56 @@ public class TestAASXToMetamodelConverterFromBaSyx {
 
 		assertIdsBeginWithLetterOrUnderscore(relStringIds);
 		assertIdsBeginWithLetterOrUnderscore(originRelStringIds);
+
+		// this step is necessary for compatibility reasons with AASXPackageExplorer
+		List<String> relStringPaths = findPathCandidates(relString);
+		List<String> originRelStringPaths = findPathCandidates(originRelString);
+
+		assertPathsAreAbsolute(relStringPaths);
+		assertPathsAreAbsolute(originRelStringPaths);
+	}
+
+	/**
+	 * Check if elements of the given path list adhere to the target path regEx.
+	 * This step is necessary for compatibility reasons with AASXPackageExplorer.
+	 * 
+	 * @param pathStringList
+	 */
+	private void assertPathsAreAbsolute(List<String> pathStringList) {
+		assertStringListRegExCheck(pathStringList, TARGET_PATH_REGEX_FULL);
+	}
+
+	/**
+	 * Split the given string at every whitespace and returns all elements that
+	 * start with "Target=". This step is necessary for compatibility reasons with
+	 * AASXPackageExplorer.
+	 * 
+	 * @param stringToCheck
+	 * @return List<String>
+	 */
+	private List<String> findPathCandidates(String stringToCheck) {
+		List<String> potentialPaths = findRegExParts(stringToCheck, TARGET_PATH_REGEX_START);
+
+		// remove docProps path, because docProps is not relevant for
+		// AASXPackageExplorer
+		return removeDocPropsPath(potentialPaths);
+	}
+
+	/**
+	 * Remove every target path that matches with the docProps path, because
+	 * docProps is not relevant for AASXPackageExplorer.
+	 * 
+	 * @param givenPathList
+	 * @return List<String>
+	 */
+	private List<String> removeDocPropsPath(List<String> givenPathList) {
+		for (int i = 0; i < givenPathList.size(); i++) {
+			if (givenPathList.get(i).matches(DOCPROPS_PATH_REGEX)) {
+				givenPathList.remove(i);
+			}
+		}
+
+		return givenPathList;
 	}
 
 	/**
