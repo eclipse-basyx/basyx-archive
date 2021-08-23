@@ -180,7 +180,9 @@ public class AASXFactory {
 		}		
 		writeDataToPart(part, content);
 		root.registerPartAndContentType(part);
-		relateTo.addRelationship(partName, TargetMode.INTERNAL, relType, createUniqueID());
+		// set TargetMode to EXTERNAL to force absolute file paths
+    // this step is necessary for compatibility reasons with AASXPackageExplorer
+		relateTo.addRelationship(partName, TargetMode.EXTERNAL, relType, createUniqueID());
 		return part;
 	}
 	
