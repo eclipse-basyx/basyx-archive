@@ -174,7 +174,7 @@ public class AssetXMLConverter {
 	private static void buildBillOfMaterial(Document document, Element root, IAsset asset) {
 		IReference billOfMaterial = asset.getBillOfMaterial();
 		if (billOfMaterial != null) {
-			Element billOfMaterialRoot = document.createElement(ASSET_IDENTIFICATION_MODEL_REF);
+			Element billOfMaterialRoot = document.createElement(ASSET_BILLOFMATERIAL);
 			billOfMaterialRoot.appendChild(ReferenceXMLConverter.buildReferenceXML(document, billOfMaterial));
 			root.appendChild(billOfMaterialRoot);
 		}
