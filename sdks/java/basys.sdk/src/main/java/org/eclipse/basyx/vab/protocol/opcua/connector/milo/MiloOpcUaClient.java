@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutionException;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -587,12 +588,16 @@ public class MiloOpcUaClient implements IOpcUaClient {
                     if (dv.getStatusCode().isGood()) {
                         return dv.getValue();
                     } else {
-                        throw new OpcUaException("Read failed with status code: " + dv.getStatusCode());
+                        throw new OpcUaException("Read failed with: " + dv.getStatusCode());
                     }
                 })
                 .thenApply(this::unwrapVariant)
                 .exceptionally(e -> {
-                    throw ensureOpcUaException(e);
+                	if (e instanceof CompletionException) {
+                		throw makeOpcUaExceptionFromCause(e);
+                	} else {
+                		throw ensureOpcUaException(e);
+                	}
                 });
     }
 
@@ -635,10 +640,14 @@ public class MiloOpcUaClient implements IOpcUaClient {
                 .thenCompose(client -> client.writeValue(nodeId.getInternalId(), dv))
                 .thenAccept(status -> {
                     if (!status.isGood()) {
-                        throw new OpcUaException("Write failed with status code: " + status);
+                        throw new OpcUaException("Write failed with: " + status);
                     }
                 }).exceptionally(e -> {
-                    throw ensureOpcUaException(e);
+                	if (e instanceof CompletionException) {
+                		throw makeOpcUaExceptionFromCause(e);
+                	} else {
+                		throw ensureOpcUaException(e);
+                	}
                 });
     }
 
@@ -687,14 +696,18 @@ public class MiloOpcUaClient implements IOpcUaClient {
                 .thenCompose(client -> client.call(req))
                 .thenApply(result -> {
                     if (!result.getStatusCode().isGood()) {
-                        throw new OpcUaException("Method invocation failed with status code: "
+                        throw new OpcUaException("Method invocation failed with: "
                                 + result.getStatusCode());
                     }
                     return Arrays.stream(result.getOutputArguments())
                             .map(this::unwrapVariant)
                             .collect(Collectors.toList());
                 }).exceptionally(e -> {
-                    throw ensureOpcUaException(e);
+                	if (e instanceof CompletionException) {
+                		throw makeOpcUaExceptionFromCause(e);
+                	} else {
+                		throw ensureOpcUaException(e);
+                	}
                 });
     }
 
