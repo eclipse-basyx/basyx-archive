@@ -18,10 +18,10 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationExecutionTimeoutException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
 import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
-import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
 /**
  * Helperclass used to keep and invoke operations asynchronously.
@@ -37,27 +37,27 @@ public class AsyncOperationHandler {
 	/**
 	 * Invokes an Operation with an invocation request
 	 */
-	public static void invokeAsync(IModelProvider provider, String operationId, InvocationRequest request,
+	public static void invokeAsync(Operation operation, String operationId, InvocationRequest request,
 			Collection<IOperationVariable> outputArguments) {
 		String requestId = request.getRequestId();
 		Collection<IOperationVariable> inOutArguments = request.getInOutArguments();
 		Object[] parameters = request.unwrapInputParameters();
-		invokeAsync(provider, operationId, requestId, parameters, inOutArguments, outputArguments,
+		invokeAsync(operation, operationId, requestId, parameters, inOutArguments, outputArguments,
 				request.getTimeout());
 	}
 
 	/**
 	 * Invokes an Operation without an invocation request
 	 */
-	public static void invokeAsync(IModelProvider provider, String operationId, String requestId, Object[] inputs,
+	public static void invokeAsync(Operation operation, String operationId, String requestId, Object[] inputs,
 			Collection<IOperationVariable> outputArguments, int timeout) {
-		invokeAsync(provider, operationId, requestId, inputs, new ArrayList<>(), outputArguments, timeout);
+		invokeAsync(operation, operationId, requestId, inputs, new ArrayList<>(), outputArguments, timeout);
 	}
 
 	/**
 	 * Invokes an Operation and returns its requestId
 	 */
-	private static void invokeAsync(IModelProvider provider, String operationId, String requestId, Object[] inputs,
+	private static void invokeAsync(Operation operation, String operationId, String requestId, Object[] inputs,
 			Collection<IOperationVariable> inOutArguments,
 			Collection<IOperationVariable> outputArguments, int timeout) {
 		synchronized (responses) {
@@ -69,7 +69,7 @@ public class AsyncOperationHandler {
 
 			CompletableFuture.supplyAsync(
 					// Run Operation asynchronously
-					() -> provider.invokeOperation("", inputs))
+					() -> operation.invokeSimple(inputs))
 					// Accept either result or throw exception on timeout
 					.acceptEither(setTimeout(timeout, requestId), result -> {
 						// result accepted? => Write execution state if there is an output

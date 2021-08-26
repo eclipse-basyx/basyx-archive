@@ -10,7 +10,6 @@
 package org.eclipse.basyx.testsuite.regression.submodel.metamodel.map.submodelelement.operation;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,15 +52,16 @@ public class TestOperation extends TestOperationSuite {
 	
 	@Test
 	public void testOptionalElements() throws Exception {
-		operation = new Operation(null, null, null, FUNC);
-		assertEquals(0, operation.getInputVariables().size());
-		assertEquals(0, operation.getOutputVariables().size());
-		assertEquals(0, operation.getInOutputVariables().size());
+		simpleOperation = new Operation(null, null, null, SIMPLE_FUNC);
+		assertEquals(0, simpleOperation.getInputVariables().size());
+		assertEquals(0, simpleOperation.getOutputVariables().size());
+		assertEquals(0, simpleOperation.getInOutputVariables().size());
 	}
 	
 	@Test 
 	public void testSetFunctionAsInvokable() throws Exception {
-		Operation operation = new Operation(IN, OUT, INOUT, FUNC);
+		Operation operation = new Operation(IN, OUT, INOUT, SIMPLE_FUNC);
+		operation.setIdShort("function");
 		assertEquals(5, operation.invoke(3, 2));
 		
 		Function<Object[], Object> newFunction = (Function<Object[], Object>) v -> {
@@ -126,22 +126,9 @@ public class TestOperation extends TestOperationSuite {
 
 	}
 
-	@Override
-	@Test
-	public void testInvokeWithSubmodelElements() {
-		Property param1 = new Property("testIn1", 1);
-		Property param2 = new Property("testIn2", 1);
-		try {
-			operation.invoke(param1, param2);
-			// Only unwrapped invokation is supported for local operations
-			fail();
-		} catch (UnsupportedOperationException e) {
-		}
-	}
-
 	@Test
 	public void testSetDataSpecificationReferences() {
-		Operation operation = new Operation(IN, OUT, INOUT, FUNC);
+		Operation operation = new Operation(IN, OUT, INOUT, SIMPLE_FUNC);
 		Collection<IReference> references = Collections.singleton(new Reference(new Key(KeyElements.ASSET, true, KEY_VALUE, IdentifierType.IRI)));
 		operation.setDataSpecificationReferences(references);
 		
@@ -151,18 +138,5 @@ public class TestOperation extends TestOperationSuite {
 		IReference newReference = new ArrayList<>(newReferences).get(0);
 		
 		assertEquals(KEY_VALUE, newReference.getKeys().get(0).getValue());
-	}
-
-	@Override
-	public void testInvokeWithSubmodelElementsException() {
-		try {
-			Property param1 = new Property("testIn1", 1);
-			Property param2 = new Property("testIn2", 1);
-
-			// Only unwrapped invokation is supported for local operations
-			operationException.invoke(param1, param2);
-			fail();
-		} catch (UnsupportedOperationException e) {
-		}
 	}
 }

@@ -17,12 +17,14 @@ import static org.junit.Assert.fail;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 import java.util.function.Function;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IAsyncInvocation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationExecutionErrorException;
@@ -39,15 +41,29 @@ import org.junit.Test;
  *
  */
 public abstract class TestOperationSuite {
-
 	protected static final String IN_VALUE = "inValue";
+	protected static final String IN_IDSHORT1 = "testIn1";
+	protected static final String IN_IDSHORT2 = "testIn2";
 	protected static final String OUT_VALUE = "outValue";
+	protected static final String OUT_IDSHORT = "testOut";
 	protected static final String INOUT_VALUE = "inOutValue";
+	protected static final String INOUT_IDSHORT = "testInOut";
+
 	protected static Collection<OperationVariable> IN;
 	protected static Collection<OperationVariable> OUT;
 	protected static Collection<OperationVariable> INOUT;
 
-	protected static final Function<Object[], Object> FUNC = (Function<Object[], Object>) v -> {
+	protected static final Function<Map<String, SubmodelElement>, SubmodelElement[]> PROPERTY_FUNC = (Function<Map<String, SubmodelElement>, SubmodelElement[]>) inputMap -> {
+		Property p1 = (Property) inputMap.get(IN_IDSHORT1);
+		Property p2 = (Property) inputMap.get(IN_IDSHORT2);
+		int value1 = (int) p1.getValue();
+		int value2 = (int) p2.getValue();
+
+		int resultValue = value2 - value1;
+		return new SubmodelElement[] { new Property(OUT_IDSHORT, resultValue) };
+	};
+
+	protected static final Function<Object[], Object> SIMPLE_FUNC = (Function<Object[], Object>) v -> {
 		return (int) v[0] + (int) v[1];
 	};
 
@@ -55,8 +71,14 @@ public abstract class TestOperationSuite {
 		throw new NullPointerException();
 	};
 
-	protected IOperation operation;
-	protected IOperation operationException;
+	protected static final Function<Map<String, SubmodelElement>, SubmodelElement[]> PROPERTY_EXCEPTION_FUNC = (Function<Map<String, SubmodelElement>, SubmodelElement[]>) inputMap -> {
+		throw new NullPointerException();
+	};
+
+	protected IOperation simpleOperation;
+	protected IOperation propertyOperation;
+	protected IOperation simpleOperationException;
+	protected IOperation propertyOperationException;
 
 	/**
 	 * Converts an Operation into the IOperation to be tested
@@ -69,39 +91,55 @@ public abstract class TestOperationSuite {
 		OUT = createOutputVariables();
 		INOUT = createInOutVariables();
 
-		operation = createAddOperation();
-		operationException = createExceptionOperation();
+		propertyOperation = createPropertyOperation();
+		propertyOperationException = createPropertyExceptionOperation();
+		simpleOperation = createAddOperation();
+		simpleOperationException = createSimpleExceptionOperation();
 	}
 
-	private IOperation createAddOperation() {
-		Operation op = new Operation(IN, OUT, INOUT, FUNC);
-		op.setIdShort("op1");
+	private IOperation createPropertyOperation() {
+		Operation op = new Operation(IN, OUT, INOUT);
+		op.setWrappedInvokable(PROPERTY_FUNC);
+		op.setIdShort("PropertyOperation");
 		return prepareOperation(op);
 	}
 
-	private IOperation createExceptionOperation() {
+	private IOperation createPropertyExceptionOperation() {
+		Operation op = new Operation(IN, OUT, INOUT);
+		op.setWrappedInvokable(PROPERTY_EXCEPTION_FUNC);
+		op.setIdShort("PropertyExceptionOperation");
+		return prepareOperation(op);
+	}
+
+	private IOperation createAddOperation() {
+		Operation op = new Operation(IN, OUT, INOUT, SIMPLE_FUNC);
+		op.setIdShort("SimpleOperation");
+		return prepareOperation(op);
+	}
+
+	private IOperation createSimpleExceptionOperation() {
 		Operation op = new Operation(IN, OUT, INOUT, EXCEPTION_FUNC);
-		op.setIdShort("op2");
+		op.setIdShort("SimpleExceptionOperation");
 		return prepareOperation(op);
 	}
 
 	private Collection<OperationVariable> createInOutVariables() {
-		Property inOutProp = new Property("testId3", INOUT_VALUE);
+		Property inOutProp = new Property(INOUT_IDSHORT, INOUT_VALUE);
 		inOutProp.setModelingKind(ModelingKind.TEMPLATE);
 		return Arrays.asList(new OperationVariable(inOutProp));
 	}
 
 	private Collection<OperationVariable> createOutputVariables() {
-		Property outProp = new Property("testId2", OUT_VALUE);
+		Property outProp = new Property(OUT_IDSHORT, OUT_VALUE);
 		outProp.setModelingKind(ModelingKind.TEMPLATE);
 		return Arrays.asList(new OperationVariable(outProp));
 	}
 
 	private Collection<OperationVariable> createInputVariables() {
-		Property inProp1 = new Property("testIn1", IN_VALUE);
+		Property inProp1 = new Property(IN_IDSHORT1, IN_VALUE);
 		inProp1.setModelingKind(ModelingKind.TEMPLATE);
 
-		Property inProp2 = new Property("testIn2", IN_VALUE);
+		Property inProp2 = new Property(IN_IDSHORT2, IN_VALUE);
 		inProp2.setModelingKind(ModelingKind.TEMPLATE);
 
 		return Arrays.asList(new OperationVariable(inProp1), new OperationVariable(inProp2));
@@ -109,14 +147,50 @@ public abstract class TestOperationSuite {
 
 	@Test
 	public void testInvokeSimple() throws Exception {
-		assertEquals(5, operation.invokeSimple(2, 3));
+		assertEquals(5, simpleOperation.invokeSimple(2, 3));
 	}
 
 	@Test
-	public void testInvokeSimpleException() throws Exception {
+	public void testInvokePropertyOperationWithProperties() throws Exception {
+		Property p1 = new Property(IN_IDSHORT1, 2);
+		Property p2 = new Property(IN_IDSHORT2, 3);
+		SubmodelElement[] directResult = propertyOperation.invoke(p1, p2);
+		Property propertyResult = (Property) directResult[0];
+
+		assertEquals(OUT_IDSHORT, propertyResult.getIdShort());
+		assertEquals(1, propertyResult.getValue());
+	}
+
+	@Test
+	public void testInvokeSimpleOperationWithProperties() throws Exception {
+		Property p1 = new Property(IN_IDSHORT1, 2);
+		Property p2 = new Property(IN_IDSHORT2, 3);
+		SubmodelElement[] directResult = simpleOperation.invoke(p1, p2);
+		Property propertyResult = (Property) directResult[0];
+
+		assertEquals(OUT_IDSHORT, propertyResult.getIdShort());
+		assertEquals(5, propertyResult.getValue());
+	}
+
+	@Test
+	public void testInvokeSimpleWithSubmodelElementsException() {
 		try {
-			// Ensure the operation is invoked directly
-			operationException.invokeSimple(1, 2);
+			Property param1 = new Property(IN_IDSHORT1, 1);
+			Property param2 = new Property(IN_IDSHORT2, 1);
+
+			simpleOperationException.invoke(param1, param2);
+			fail();
+		} catch (Exception e) {
+			assertTrue(e instanceof NullPointerException || e.getCause() instanceof NullPointerException);
+		}
+	}
+
+	@Test
+	public void testInvokePropertyOperationException() throws Exception {
+		try {
+			Property p1 = new Property(IN_IDSHORT1, 2);
+			Property p2 = new Property(IN_IDSHORT2, 3);
+			propertyOperationException.invoke(p1, p2);
 			fail();
 		} catch (Exception e) {
 			// Exceptions from ConnectedOperation are wrapped in ProviderException
@@ -125,20 +199,30 @@ public abstract class TestOperationSuite {
 	}
 
 	@Test
-	public abstract void testInvokeWithSubmodelElements();
+	public void testInvokePropertyOperationSimple() throws Exception {
+		assertEquals(1, propertyOperation.invokeSimple(2, 3));
+	}
+
+	@Test
+	public void testInvokeSimpleException() throws Exception {
+		try {
+			simpleOperationException.invokeSimple(1, 2);
+			fail();
+		} catch (Exception e) {
+			// Exceptions from ConnectedOperation are wrapped in ProviderException
+			assertTrue(e instanceof NullPointerException || e.getCause() instanceof NullPointerException);
+		}
+	}
 
 	@Test
 	public void testInvokeSimpleParametersException() {
 		try {
-			operation.invokeSimple(1);
+			simpleOperation.invokeSimple(1);
 			fail();
 		} catch (Exception e) {
 			assertTrue(e instanceof WrongNumberOfParametersException || e.getCause() instanceof WrongNumberOfParametersException);
 		}
 	}
-
-	@Test
-	public abstract void testInvokeWithSubmodelElementsException();
 
 	@Test
 	public void testInvokeAsync() throws Exception {
@@ -203,7 +287,7 @@ public abstract class TestOperationSuite {
 
 	@Test
 	public void testInputVariables() {
-		Collection<IOperationVariable> inputVariables = operation.getInputVariables();
+		Collection<IOperationVariable> inputVariables = simpleOperation.getInputVariables();
 		assertEquals(2, inputVariables.size());
 		Object value = getValueFromOpVariable(inputVariables);
 		assertEquals(IN_VALUE, value);
@@ -211,7 +295,7 @@ public abstract class TestOperationSuite {
 
 	@Test
 	public void testOutputVariables() {
-		Collection<IOperationVariable> outputVariables = operation.getOutputVariables();
+		Collection<IOperationVariable> outputVariables = simpleOperation.getOutputVariables();
 
 		Object value = getValueFromOpVariable(outputVariables);
 		assertEquals(OUT_VALUE, value);
@@ -220,7 +304,7 @@ public abstract class TestOperationSuite {
 
 	@Test
 	public void testInOutputVariables() {
-		Collection<IOperationVariable> inoutVariables = operation.getInOutputVariables();
+		Collection<IOperationVariable> inoutVariables = simpleOperation.getInOutputVariables();
 		assertEquals(1, inoutVariables.size());
 		Object value = getValueFromOpVariable(inoutVariables);
 		assertEquals(INOUT_VALUE, value);

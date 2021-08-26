@@ -12,7 +12,6 @@ package org.eclipse.basyx.submodel.metamodel.connected.submodelelement.operation
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -23,14 +22,12 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.map.qualifier.Referable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationHelper;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.submodel.restapi.operation.InvocationRequest;
 import org.eclipse.basyx.submodel.restapi.operation.InvocationResponse;
-import org.eclipse.basyx.vab.exception.provider.WrongNumberOfParametersException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 
 /**
@@ -100,38 +97,15 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 		return new InvocationRequest(requestId, new ArrayList<>(), inputArguments, timeout);
 	}
 
-	private SubmodelElement[] createElementWrapper(Object... params) {
-		Collection<IOperationVariable> inputVariables = getInputVariables();
-		if (inputVariables.size() != params.length) {
-			throw new WrongNumberOfParametersException(getIdShort(), inputVariables, params);
-		}
-
-		// Copy parameter values into SubmodelElements according to InputVariables
-		SubmodelElement[] ret = new SubmodelElement[params.length];
-		Iterator<IOperationVariable> iterator = inputVariables.iterator();
-		int i = 0;
-		while (iterator.hasNext()) {
-			IOperationVariable matchedInput = iterator.next();
-			ISubmodelElement inputElement = matchedInput.getValue();
-			SubmodelElement copy = inputElement.getLocalCopy();
-			copy.setValue(params[i]);
-			ret[i] = copy;
-			i++;
-		}
-
-		return ret;
-	}
-
 	@Override
 	public ConnectedAsyncInvocation invokeAsync(Object... params) {
-		SubmodelElement[] smElements = createElementWrapper(params);
-		InvocationRequest request = createInvocationRequest(DEFAULT_ASYNC_TIMEOUT, smElements);
-		return new ConnectedAsyncInvocation(getProxy(), getIdShort(), request);
+		return invokeAsyncWithTimeout(DEFAULT_ASYNC_TIMEOUT, params);
 	}
 
 	@Override
 	public ConnectedAsyncInvocation invokeAsyncWithTimeout(int timeout, Object... params) {
-		SubmodelElement[] smElements = createElementWrapper(params);
+		OperationHelper.checkValidParameterLength(params.length, getIdShort(), getInputVariables());
+		SubmodelElement[] smElements = OperationHelper.wrapParameters(getInputVariables(), params);
 		InvocationRequest request = createInvocationRequest(timeout, smElements);
 		return new ConnectedAsyncInvocation(getProxy(), getIdShort(), request);
 	}
@@ -151,29 +125,6 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 		throw new UnsupportedOperationException("An Operation has no value");
 	}
 
-	@SuppressWarnings("unchecked")
-	private Object unwrapResult(Object result) {
-		if (result instanceof Collection<?>) {
-			Collection<Object> coll = (Collection<Object>) result;
-			if (coll.isEmpty()) {
-				return result;
-			}
-			Object resultWrapper = coll.iterator().next();
-			if (resultWrapper instanceof Map<?, ?>) {
-				Map<String, Object> map = (Map<String, Object>) resultWrapper;
-				if (map.get(Referable.IDSHORT).equals("Response") && map.get(Property.VALUE) != null) {
-					return map.get(Property.VALUE);
-				}
-			}
-		} else if (result instanceof SubmodelElement[]) {
-			SubmodelElement[] arr = (SubmodelElement[]) result;
-			if (arr.length > 0 && arr[0] instanceof Map<?, ?>) {
-				return arr[0].getValue();
-			}
-		}
-		return result;
-	}
-
 	@Override
 	public Operation getLocalCopy() {
 		return Operation.createAsFacade(getElem()).getLocalCopy();
@@ -181,8 +132,9 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 
 	@Override
 	public Object invokeSimple(Object... params) {
-		SubmodelElement[] wrapper = createElementWrapper(params);
+		OperationHelper.checkValidParameterLength(params.length, getIdShort(), getInputVariables());
+		SubmodelElement[] wrapper = OperationHelper.wrapParameters(getInputVariables(), params);
 		SubmodelElement[] result = invoke(wrapper);
-		return unwrapResult(result);
+		return OperationHelper.unwrapResult(result);
 	}
 }

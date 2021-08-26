@@ -25,7 +25,6 @@ import org.eclipse.basyx.submodel.restapi.operation.InvocationRequest;
 import org.eclipse.basyx.submodel.restapi.operation.InvocationResponse;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
 import org.eclipse.basyx.vab.exception.provider.ProviderException;
-import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 
@@ -113,25 +112,14 @@ public class OperationProvider implements IModelProvider {
 		}
 
 		if (isAsync) {
-			return handleAsyncOperationInvokation(path, unwrappedParameters, request, requestId);
+			return handleAsyncOperationInvokation(op, unwrappedParameters, request, requestId);
 		} else {
-			return handleSynchroneousOperationInvokation(path, unwrappedParameters, request);
+			return handleSynchroneousOperationInvokation(op, unwrappedParameters, request);
 		}
 	}
 
-	/**
-	 * Executes an invocation synchronously
-	 * 
-	 * @param path the invocation path
-	 * @param unwrappedParameters the parameters for the invocation
-	 * @param request the invocation request
-	 * @return the result of the operation
-	 * @throws ProviderException
-	 */
-	private Object handleSynchroneousOperationInvokation(String path, Object[] unwrappedParameters, InvocationRequest request) throws ProviderException {
-		// Forward direct operation call to modelprovider
-		path = VABPathTools.concatenatePaths(path, Operation.INVOKABLE);
-		Object directResult = modelProvider.invokeOperation(path, unwrappedParameters);
+	private Object handleSynchroneousOperationInvokation(Operation op, Object[] unwrappedParameters, InvocationRequest request) throws ProviderException {
+		Object directResult = op.invokeSimple(unwrappedParameters);
 		if (request == null) {
 			// Parameters have been passed directly? Directly return the result
 			return directResult;
@@ -142,21 +130,20 @@ public class OperationProvider implements IModelProvider {
 	/**
 	 * Executes an invocation asynchronously
 	 * 
-	 * @param path the invocation path
+	 * @param op the called operation
 	 * @param unwrappedParameters the parameters for the invocation
 	 * @param request the invocation request
 	 * @param requestId the id for the request
 	 * @return the result of the operation
 	 */
-	private Object handleAsyncOperationInvokation(String path, Object[] unwrappedParameters, InvocationRequest request, String requestId) {
+	private Object handleAsyncOperationInvokation(Operation op, Object[] unwrappedParameters, InvocationRequest request, String requestId) {
 		Collection<IOperationVariable> outputVars = copyOutputVariables();
-		IModelProvider provider = new VABElementProxy(path + "/invokable", modelProvider);
 
 		// Only necessary as long as invocations without InvokationRequest is allowed
 		if (request != null) {
-			AsyncOperationHandler.invokeAsync(provider, operationId, request, outputVars);
+			AsyncOperationHandler.invokeAsync(op, operationId, request, outputVars);
 		} else {
-			AsyncOperationHandler.invokeAsync(provider, operationId, requestId, unwrappedParameters, outputVars, 10000);
+			AsyncOperationHandler.invokeAsync(op, operationId, requestId, unwrappedParameters, outputVars, 10000);
 		}
 
 		// Request id has to be returned for caller to be able to retrieve result
@@ -180,7 +167,7 @@ public class OperationProvider implements IModelProvider {
 	private Object createInvocationResponseFromDirectResult(InvocationRequest request, Object directResult) {
 		// Get SubmodelElement output template
 		Collection<IOperationVariable> outputs = copyOutputVariables();
-		if(outputs.size() > 0) {
+		if (!outputs.isEmpty()) {
 			SubmodelElement outputElem = (SubmodelElement) outputs.iterator().next().getValue();
 			// Set result object
 			outputElem.setValue(directResult);
@@ -212,9 +199,7 @@ public class OperationProvider implements IModelProvider {
 		Collection<IOperationVariable> vars = op.getInputVariables();
 		Collection<IOperationVariable> ordered = createOrderedInputVariablesList(request, vars);
 		
-		InvocationRequest orderedRequest = new InvocationRequest(request.getRequestId(), request.getInOutArguments(), ordered, request.getTimeout());
-
-		return orderedRequest;
+		return new InvocationRequest(request.getRequestId(), request.getInOutArguments(), ordered, request.getTimeout());
 	}
 
 	private Collection<IOperationVariable> createOrderedInputVariablesList(InvocationRequest request,

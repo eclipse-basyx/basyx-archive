@@ -119,7 +119,7 @@ public class OperationProviderTest {
 	 */
 	@Test
 	public void testNonWrappedInputWithoutOutput() {
-		opProviderIn.invokeOperation("invoke", 1);
+		opProviderIn.invokeOperation("invoke", 1, 2);
 	}
 	
 	/**
