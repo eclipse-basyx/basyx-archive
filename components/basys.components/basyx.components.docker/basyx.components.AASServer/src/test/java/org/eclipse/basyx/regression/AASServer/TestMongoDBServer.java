@@ -12,9 +12,11 @@ package org.eclipse.basyx.regression.AASServer;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.map.descriptor.ModelUrn;
 import org.eclipse.basyx.components.aas.AASServerComponent;
 import org.eclipse.basyx.components.aas.configuration.AASServerBackend;
@@ -24,9 +26,11 @@ import org.eclipse.basyx.components.aas.mongodb.MongoDBSubmodelAPI;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxMongoDBConfiguration;
 import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
+import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
 import org.eclipse.basyx.submodel.metamodel.map.identifier.Identifier;
+import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -40,8 +44,12 @@ import org.xml.sax.SAXException;
  */
 public class TestMongoDBServer extends AASServerSuite {
 
+	private static final Identifier SM_IDENTIFICATION = new Identifier(IdentifierType.CUSTOM, "MongoDBId");
+	private static final String SM_IDSHORT = "MongoDB";
 	private static AASServerComponent component;
 	private static BaSyxMongoDBConfiguration mongoDBConfig;
+	private static BaSyxContextConfiguration contextConfig;
+	private static BaSyxAASServerConfiguration aasConfig;
 
 	@Override
 	protected String getURL() {
@@ -50,30 +58,66 @@ public class TestMongoDBServer extends AASServerSuite {
 
 	@BeforeClass
 	public static void setUpClass() throws ParserConfigurationException, SAXException, IOException {
-		// just reset the data with this default db configuration
-		new MongoDBAASAggregator(BaSyxContextConfiguration.DEFAULT_CONFIG_PATH).reset();
-
-		// Setup component configuration
-		BaSyxContextConfiguration contextConfig = new BaSyxContextConfiguration();
-		contextConfig.loadFromResource(BaSyxContextConfiguration.DEFAULT_CONFIG_PATH);
-		mongoDBConfig = new BaSyxMongoDBConfiguration();
-		BaSyxAASServerConfiguration aasConfig = new BaSyxAASServerConfiguration(AASServerBackend.MONGODB, "");
-
-		// Start component
+		initConfiguration();
+		resetMongoDBTestData();
 		component = new AASServerComponent(contextConfig, aasConfig, mongoDBConfig);
 		component.startComponent();
 	}
 
+	private static void resetMongoDBTestData() {
+		new MongoDBAASAggregator(mongoDBConfig).reset();
+	}
+
+	private static void initConfiguration() {
+		mongoDBConfig = new BaSyxMongoDBConfiguration();
+		mongoDBConfig.setAASCollection("basyxTestAAS");
+		mongoDBConfig.setSubmodelCollection("basyxTestSM");
+		contextConfig = new BaSyxContextConfiguration();
+		contextConfig.loadFromResource(BaSyxContextConfiguration.DEFAULT_CONFIG_PATH);
+		aasConfig = new BaSyxAASServerConfiguration(AASServerBackend.MONGODB, "");
+	}
+
 	@Test
 	public void testAddSubmodelPersistency() throws Exception {
-		testAddAAS();
+		createAssetAdministrationShell();
+		createSubmodel();
 
-		Submodel sm = new Submodel("MongoDB", new Identifier(IdentifierType.CUSTOM, "MongoDBId"));
-		manager.createSubmodel(new ModelUrn(aasId), sm);
-
-		MongoDBSubmodelAPI api = new MongoDBSubmodelAPI(mongoDBConfig, sm.getIdentification().getId());
+		MongoDBSubmodelAPI api = new MongoDBSubmodelAPI(mongoDBConfig, SM_IDENTIFICATION.getId());
 		ISubmodel persistentSM = api.getSubmodel();
-		assertEquals("MongoDB", persistentSM.getIdShort());
+
+		assertEquals(SM_IDSHORT, persistentSM.getIdShort());
+	}
+
+	@Test
+	public void testAggregatorPersistency() throws Exception {
+		createAssetAdministrationShell();
+		createSubmodel();
+
+		MongoDBAASAggregator aggregator = new MongoDBAASAggregator(mongoDBConfig);
+		ISubmodel persistentSM = getSubmodelFromAggregator(aggregator);
+
+		assertEquals(SM_IDSHORT, persistentSM.getIdShort());
+	}
+
+	@SuppressWarnings("unchecked")
+	private ISubmodel getSubmodelFromAggregator(MongoDBAASAggregator aggregator) {
+		IModelProvider aasProvider = aggregator.getAASProvider(new ModelUrn(aasId));
+		Object smObject = aasProvider.getValue("/aas/submodels/MongoDB/submodel");
+		ISubmodel persistentSM = Submodel.createAsFacade((Map<String, Object>) smObject);
+		return persistentSM;
+	}
+
+	private void createSubmodel() {
+		Submodel sm = new Submodel(SM_IDSHORT, SM_IDENTIFICATION);
+		manager.createSubmodel(new ModelUrn(aasId), sm);
+	}
+
+	private void createAssetAdministrationShell() {
+		AssetAdministrationShell shell = new AssetAdministrationShell();
+		IIdentifier identifier = new ModelUrn(aasId);
+		shell.setIdentification(identifier);
+		shell.setIdShort("aasIdShort");
+		manager.createAAS(shell, getURL());
 	}
 
 	@AfterClass
