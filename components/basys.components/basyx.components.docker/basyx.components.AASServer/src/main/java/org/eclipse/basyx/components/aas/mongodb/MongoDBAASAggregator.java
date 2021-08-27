@@ -218,7 +218,7 @@ public class MongoDBAASAggregator implements IAASAggregator {
 	}
 
 	private void addSubmodelProvidersById(String smId, MultiSubmodelProvider provider) {
-		ISubmodelAPI smApi = new MongoDBSubmodelAPI(smId);
+		ISubmodelAPI smApi = new MongoDBSubmodelAPI(config, smId);
 		SubmodelProvider smProvider = new SubmodelProvider(smApi);
 		provider.addSubmodel(smProvider);
 	}
