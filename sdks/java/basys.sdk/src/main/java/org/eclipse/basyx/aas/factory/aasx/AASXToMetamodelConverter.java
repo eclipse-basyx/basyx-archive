@@ -8,7 +8,6 @@
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
 
-
 package org.eclipse.basyx.aas.factory.aasx;
 
 import java.io.File;
@@ -65,31 +64,22 @@ public class AASXToMetamodelConverter {
 
 	private String aasxPath;
 	private OPCPackage aasxRoot;
+	private InputStream aasxInputStream;
 
-	/**
-	 * Cache for generated Bundles
-	 */
 	private Set<AASBundle> bundles;
 
-	/**
-	 * Logger
-	 */
 	private static Logger logger = LoggerFactory.getLogger(AASXToMetamodelConverter.class);
 
-	/**
-	 * Constructor
-	 */
 	public AASXToMetamodelConverter(String path) {
 		this.aasxPath = path;
 	}
 
-	public AASXToMetamodelConverter(InputStream stream) throws InvalidFormatException, IOException {
-		aasxRoot = OPCPackage.open(stream);
+	public AASXToMetamodelConverter(InputStream stream) {
+		aasxInputStream = stream;
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends AASBundle> Set<T> retrieveAASBundles()
-			throws IOException, ParserConfigurationException, SAXException, InvalidFormatException {
+	public <T extends AASBundle> Set<T> retrieveAASBundles() throws IOException, ParserConfigurationException, SAXException, InvalidFormatException {
 
 		// If the XML was already parsed return cached Bundles
 		if (bundles != null) {
@@ -103,17 +93,27 @@ public class AASXToMetamodelConverter {
 
 		bundles = new AASBundleFactory().create(converter.parseAAS(), converter.parseSubmodels(), converter.parseAssets());
 
+		closeOPCPackage();
+
 		return (Set<T>) bundles;
 	}
 
 	private void loadAASX() throws IOException, InvalidFormatException {
+		if (aasxInputStream == null) {
+			aasxInputStream = getInputStream(aasxPath);
+		}
+
 		if (aasxRoot == null) {
-			aasxRoot = OPCPackage.open(getInputStream(aasxPath));
+			aasxRoot = OPCPackage.open(aasxInputStream);
 		}
 	}
 
+	private void closeOPCPackage() throws IOException {
+		aasxRoot.close();
+	}
+
 	/**
-	 * Return the Content of the xml file in the aasx-package as String
+	 * Return the Content of the XML file in the aasx-package as String
 	 * 
 	 * @param aasxPackage
 	 *            - the root package of the AASX
@@ -222,6 +222,8 @@ public class AASXToMetamodelConverter {
 			// name of the folder
 			unzipFile(filePath, aasxRoot);
 		}
+
+		closeOPCPackage();
 	}
 
 	/**
@@ -296,4 +298,3 @@ public class AASXToMetamodelConverter {
 		return classLoader.getResourceAsStream(relativeResourcePath);
 	}
 }
-
