@@ -18,7 +18,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IAsyncInvocation;
@@ -48,10 +50,13 @@ public abstract class TestOperationSuite {
 	protected static final String OUT_IDSHORT = "testOut";
 	protected static final String INOUT_VALUE = "inOutValue";
 	protected static final String INOUT_IDSHORT = "testInOut";
+	protected static final String SIMPLE_SUPPLIER_RETURN_VALUE = "10";
 
-	protected static Collection<OperationVariable> IN;
+	protected static Collection<OperationVariable> ONE_IN;
+	protected static Collection<OperationVariable> TWO_IN;
 	protected static Collection<OperationVariable> OUT;
 	protected static Collection<OperationVariable> INOUT;
+	protected static int expectedResultForSimpleConsumerTest;
 
 	protected static final Function<Map<String, SubmodelElement>, SubmodelElement[]> PROPERTY_FUNC = (Function<Map<String, SubmodelElement>, SubmodelElement[]>) inputMap -> {
 		Property p1 = (Property) inputMap.get(IN_IDSHORT1);
@@ -75,10 +80,18 @@ public abstract class TestOperationSuite {
 		throw new NullPointerException();
 	};
 
+	protected static final Supplier<Object> SIMPLE_SUPPLIER_FUNC = (Supplier<Object>) () -> SIMPLE_SUPPLIER_RETURN_VALUE;
+
+	protected static final Consumer<Object[]> SIMPLE_CONSUMER_FUNC = (Consumer<Object[]>) (a) -> {
+		expectedResultForSimpleConsumerTest = (Integer) a[0];
+	};
+
 	protected IOperation simpleOperation;
 	protected IOperation propertyOperation;
 	protected IOperation simpleOperationException;
 	protected IOperation propertyOperationException;
+	protected IOperation simpleSupplierOperation;
+	protected IOperation simpleConsumerOperation;
 
 	/**
 	 * Converts an Operation into the IOperation to be tested
@@ -87,7 +100,8 @@ public abstract class TestOperationSuite {
 
 	@Before
 	public void setup() {
-		IN = createInputVariables();
+		ONE_IN = createOneInputVariables();
+		TWO_IN = createTwoInputVariables();
 		OUT = createOutputVariables();
 		INOUT = createInOutVariables();
 
@@ -95,31 +109,49 @@ public abstract class TestOperationSuite {
 		propertyOperationException = createPropertyExceptionOperation();
 		simpleOperation = createAddOperation();
 		simpleOperationException = createSimpleExceptionOperation();
+		simpleSupplierOperation = createSimpleSupplierOperation();
+		simpleConsumerOperation = createSimpleConsumerOperation();
 	}
 
 	private IOperation createPropertyOperation() {
-		Operation op = new Operation(IN, OUT, INOUT);
+		Operation op = new Operation(TWO_IN, OUT, INOUT);
 		op.setWrappedInvokable(PROPERTY_FUNC);
 		op.setIdShort("PropertyOperation");
 		return prepareOperation(op);
 	}
 
 	private IOperation createPropertyExceptionOperation() {
-		Operation op = new Operation(IN, OUT, INOUT);
+		Operation op = new Operation(TWO_IN, OUT, INOUT);
 		op.setWrappedInvokable(PROPERTY_EXCEPTION_FUNC);
 		op.setIdShort("PropertyExceptionOperation");
 		return prepareOperation(op);
 	}
 
 	private IOperation createAddOperation() {
-		Operation op = new Operation(IN, OUT, INOUT, SIMPLE_FUNC);
+		Operation op = new Operation(TWO_IN, OUT, INOUT, SIMPLE_FUNC);
 		op.setIdShort("SimpleOperation");
 		return prepareOperation(op);
 	}
 
 	private IOperation createSimpleExceptionOperation() {
-		Operation op = new Operation(IN, OUT, INOUT, EXCEPTION_FUNC);
+		Operation op = new Operation(TWO_IN, OUT, INOUT, EXCEPTION_FUNC);
 		op.setIdShort("SimpleExceptionOperation");
+		return prepareOperation(op);
+	}
+
+	private IOperation createSimpleSupplierOperation() {
+		Operation op = new Operation("supplier");
+		op.setOutputVariables(OUT);
+		op.setInvokable(SIMPLE_SUPPLIER_FUNC);
+
+		return prepareOperation(op);
+	}
+
+	private IOperation createSimpleConsumerOperation() {
+		Operation op = new Operation("consumer");
+		op.setInputVariables(ONE_IN);
+		op.setInvokable(SIMPLE_CONSUMER_FUNC);
+
 		return prepareOperation(op);
 	}
 
@@ -135,7 +167,14 @@ public abstract class TestOperationSuite {
 		return Arrays.asList(new OperationVariable(outProp));
 	}
 
-	private Collection<OperationVariable> createInputVariables() {
+	private Collection<OperationVariable> createOneInputVariables() {
+		Property inProp1 = new Property(IN_IDSHORT1, IN_VALUE);
+		inProp1.setModelingKind(ModelingKind.TEMPLATE);
+
+		return Arrays.asList(new OperationVariable(inProp1));
+	}
+
+	private Collection<OperationVariable> createTwoInputVariables() {
 		Property inProp1 = new Property(IN_IDSHORT1, IN_VALUE);
 		inProp1.setModelingKind(ModelingKind.TEMPLATE);
 
@@ -286,6 +325,20 @@ public abstract class TestOperationSuite {
 	}
 
 	@Test
+	public void testInvokeSimpleSupplier() {
+		assertEquals(SIMPLE_SUPPLIER_RETURN_VALUE, simpleSupplierOperation.invokeSimple());
+	}
+
+	@Test
+	public void testInvokeSimpleConsumer() {
+		int expected = 5;
+
+		simpleConsumerOperation.invokeSimple(expected);
+
+		assertEquals(expected, expectedResultForSimpleConsumerTest);
+	}
+
+	@Test
 	public void testInputVariables() {
 		Collection<IOperationVariable> inputVariables = simpleOperation.getInputVariables();
 		assertEquals(2, inputVariables.size());
@@ -310,9 +363,6 @@ public abstract class TestOperationSuite {
 		assertEquals(INOUT_VALUE, value);
 	}
 
-	/**
-	 * Gets the Value from the OperationVariable in a collection
-	 */
 	private Object getValueFromOpVariable(Collection<IOperationVariable> vars) {
 		IOperationVariable var = new ArrayList<>(vars).get(0);
 		return var.getValue().getValue();
