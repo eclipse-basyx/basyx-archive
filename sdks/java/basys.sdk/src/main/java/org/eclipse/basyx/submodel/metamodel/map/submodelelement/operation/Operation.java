@@ -192,7 +192,6 @@ public class Operation extends SubmodelElement implements IOperation {
 		return OperationHelper.unwrapResult(wrappedResult);
 	}
 
-
 	@Override
 	public SubmodelElement[] invoke(SubmodelElement... elems) {
 		Map<String, SubmodelElement> seMap = OperationHelper.convertSubmodelElementArrayToMap(elems);
@@ -228,6 +227,28 @@ public class Operation extends SubmodelElement implements IOperation {
 	 */
 	public void setWrappedInvokable(Function<Map<String, SubmodelElement>, SubmodelElement[]> endpoint) {
 		Function<Object[], Object> wrappedInvokable = prepareWrappedFunctionForVAB(endpoint);
+		setInvokable(wrappedInvokable);
+		put(Operation.IS_WRAPPED_INVOKABLE, true);
+	}
+
+	/**
+	 * Sets an invokable that handles a consumer.
+	 * 
+	 * @param consumer
+	 */
+	public void setWrappedInvokable(Consumer<Map<String, SubmodelElement>> consumer) {
+		Consumer<Object[]> wrappedInvokable = prepareWrappedFunctionForVAB(consumer);
+		setInvokable(wrappedInvokable);
+		put(Operation.IS_WRAPPED_INVOKABLE, true);
+	}
+
+	/**
+	 * Sets an invokable that handles a supplier.
+	 * 
+	 * @param supplier
+	 */
+	public void setWrappedInvokable(Supplier<SubmodelElement[]> supplier) {
+		Supplier<Object> wrappedInvokable = prepareWrappedFunctionForVAB(supplier);
 		setInvokable(wrappedInvokable);
 		put(Operation.IS_WRAPPED_INVOKABLE, true);
 	}
@@ -367,5 +388,14 @@ public class Operation extends SubmodelElement implements IOperation {
 	@SuppressWarnings("unchecked")
 	private Function<Object[], Object> prepareWrappedFunctionForVAB(Function<Map<String, SubmodelElement>, SubmodelElement[]> wrappedFunction) {
 		return elemArray -> wrappedFunction.apply((Map<String, SubmodelElement>) elemArray[0]);
+	}
+
+	@SuppressWarnings("unchecked")
+	private Consumer<Object[]> prepareWrappedFunctionForVAB(Consumer<Map<String, SubmodelElement>> consumer) {
+		return elemArray -> consumer.accept((Map<String, SubmodelElement>) elemArray[0]);
+	}
+
+	private Supplier<Object> prepareWrappedFunctionForVAB(Supplier<SubmodelElement[]> supplier) {
+		return () -> supplier.get();
 	}
 }

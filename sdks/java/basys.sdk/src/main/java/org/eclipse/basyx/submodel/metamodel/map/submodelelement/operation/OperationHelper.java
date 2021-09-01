@@ -51,6 +51,9 @@ public class OperationHelper {
 	}
 
 	public static SubmodelElement[] wrapResult(Object unwrappedResult, Collection<IOperationVariable> outputVariables) {
+		if (outputVariables.isEmpty()) {
+			return  new SubmodelElement[] {};
+		}
 		IOperationVariable resultTemplate = outputVariables.iterator().next();
 		SubmodelElement wrappedResult = OperationHelper.wrapSingleParameter(resultTemplate, unwrappedResult);
 		return new SubmodelElement[] { wrappedResult };
@@ -78,7 +81,7 @@ public class OperationHelper {
 
 
 	public static Object unwrapResult(SubmodelElement[] result) {
-		if (result.length > 0) {
+		if (result != null && result.length > 0) {
 			return result[0].getValue();
 		} else {
 			return null;

@@ -39,7 +39,7 @@ import org.junit.Test;
 /**
  * Tests for IOperation
  *
- * @author conradi
+ * @author conradi, fischer
  *
  */
 public abstract class TestOperationSuite {
@@ -50,13 +50,21 @@ public abstract class TestOperationSuite {
 	protected static final String OUT_IDSHORT = "testOut";
 	protected static final String INOUT_VALUE = "inOutValue";
 	protected static final String INOUT_IDSHORT = "testInOut";
-	protected static final String SIMPLE_SUPPLIER_RETURN_VALUE = "10";
+	protected static final String SUPPLIER_RETURN_VALUE = "10";
+	protected static final boolean RUNNABLE_FLAG = true;
 
 	protected static Collection<OperationVariable> ONE_IN;
 	protected static Collection<OperationVariable> TWO_IN;
 	protected static Collection<OperationVariable> OUT;
 	protected static Collection<OperationVariable> INOUT;
 	protected static int expectedResultForSimpleConsumerTest;
+	protected static int expectedResultForSimpleConsumerWithPropertiesTest;
+	protected static int expectedResultForPropertyConsumerTest;
+	protected static int expectedResultForPropertyConsumerWithPropertiesTest;
+
+	protected static boolean expectedResultForSimpleRunnableTest;
+	protected static boolean expectedResultForSimpleRunnableWithPropertiesTest;
+	protected static SubmodelElement[] expectedResultForPropertyRunnableTest;
 
 	protected static final Function<Map<String, SubmodelElement>, SubmodelElement[]> PROPERTY_FUNC = (Function<Map<String, SubmodelElement>, SubmodelElement[]>) inputMap -> {
 		Property p1 = (Property) inputMap.get(IN_IDSHORT1);
@@ -80,10 +88,34 @@ public abstract class TestOperationSuite {
 		throw new NullPointerException();
 	};
 
-	protected static final Supplier<Object> SIMPLE_SUPPLIER_FUNC = (Supplier<Object>) () -> SIMPLE_SUPPLIER_RETURN_VALUE;
+	protected static final Supplier<Object> SIMPLE_SUPPLIER_FUNC = (Supplier<Object>) () -> SUPPLIER_RETURN_VALUE;
 
-	protected static final Consumer<Object[]> SIMPLE_CONSUMER_FUNC = (Consumer<Object[]>) (a) -> {
-		expectedResultForSimpleConsumerTest = (Integer) a[0];
+	protected static final Supplier<SubmodelElement[]> PROPERTY_SUPPLIER_FUNC = (Supplier<SubmodelElement[]>) () -> {
+		return new SubmodelElement[] { new Property(OUT_IDSHORT, SUPPLIER_RETURN_VALUE) };
+	};
+
+	protected static final Consumer<Object[]> SIMPLE_CONSUMER_FUNC = (Consumer<Object[]>) (simpleInput) -> {
+		expectedResultForSimpleConsumerTest = (Integer) simpleInput[0];
+	};
+
+	protected static final Consumer<Object[]> SIMPLE_CONSUMER_WITH_PROPERTIES_FUNC = (Consumer<Object[]>) (simpleInput) -> {
+		expectedResultForSimpleConsumerWithPropertiesTest = (Integer) simpleInput[0];
+	};
+
+	protected static final Consumer<Map<String, SubmodelElement>> PROPERTY_CONSUMER_FUNC = (Consumer<Map<String, SubmodelElement>>) inputMap -> {
+		expectedResultForPropertyConsumerTest = (Integer) inputMap.get(IN_IDSHORT1).getValue();
+	};
+
+	protected static final Consumer<Map<String, SubmodelElement>> PROPERTY_CONSUMER_WITH_PROPERTIES_FUNC = (Consumer<Map<String, SubmodelElement>>) inputMap -> {
+		expectedResultForPropertyConsumerWithPropertiesTest = (Integer) inputMap.get(IN_IDSHORT1).getValue();
+	};
+
+	protected static final Runnable SIMPLE_RUNNABLE_FUNC = () -> {
+		expectedResultForSimpleRunnableTest = RUNNABLE_FLAG;
+	};
+
+	protected static final Runnable SIMPLE_RUNNABLE_WITH_PROPERTIES_FUNC = () -> {
+		expectedResultForSimpleRunnableWithPropertiesTest = RUNNABLE_FLAG;
 	};
 
 	protected IOperation simpleOperation;
@@ -91,7 +123,13 @@ public abstract class TestOperationSuite {
 	protected IOperation simpleOperationException;
 	protected IOperation propertyOperationException;
 	protected IOperation simpleSupplierOperation;
+	protected IOperation propertySupplierOperation;
 	protected IOperation simpleConsumerOperation;
+	protected IOperation simpleConsumerOperationWithProperties;
+	protected IOperation propertyConsumerOperation;
+	protected IOperation propertyConsumerOperationWithProperties;
+	protected IOperation simpleRunnableOperation;
+	protected IOperation simpleRunnableOperationWithProperties;
 
 	/**
 	 * Converts an Operation into the IOperation to be tested
@@ -110,7 +148,13 @@ public abstract class TestOperationSuite {
 		simpleOperation = createAddOperation();
 		simpleOperationException = createSimpleExceptionOperation();
 		simpleSupplierOperation = createSimpleSupplierOperation();
+		propertySupplierOperation = createPropertySupplierOperation();
 		simpleConsumerOperation = createSimpleConsumerOperation();
+		simpleConsumerOperationWithProperties = createSimpleConsumerOperationWithProperties();
+		propertyConsumerOperation = createPropertyConsumerOperation();
+		propertyConsumerOperationWithProperties = createPropertyConsumerOperationWithProperties();
+		simpleRunnableOperation = createSimpleRunnableOperation();
+		simpleRunnableOperationWithProperties = createSimpleRunnableOperationWithProperties();
 	}
 
 	private IOperation createPropertyOperation() {
@@ -140,9 +184,17 @@ public abstract class TestOperationSuite {
 	}
 
 	private IOperation createSimpleSupplierOperation() {
-		Operation op = new Operation("supplier");
+		Operation op = new Operation("SimpleSupplier");
 		op.setOutputVariables(OUT);
 		op.setInvokable(SIMPLE_SUPPLIER_FUNC);
+
+		return prepareOperation(op);
+	}
+
+	private IOperation createPropertySupplierOperation() {
+		Operation op = new Operation("PropertySupplier");
+		op.setOutputVariables(OUT);
+		op.setWrappedInvokable(PROPERTY_SUPPLIER_FUNC);
 
 		return prepareOperation(op);
 	}
@@ -151,6 +203,44 @@ public abstract class TestOperationSuite {
 		Operation op = new Operation("consumer");
 		op.setInputVariables(ONE_IN);
 		op.setInvokable(SIMPLE_CONSUMER_FUNC);
+
+		return prepareOperation(op);
+	}
+
+	private IOperation createSimpleConsumerOperationWithProperties() {
+		Operation op = new Operation("SimpleConsumerWithProperties");
+		op.setInputVariables(ONE_IN);
+		op.setInvokable(SIMPLE_CONSUMER_WITH_PROPERTIES_FUNC);
+
+		return prepareOperation(op);
+	}
+
+	private IOperation createPropertyConsumerOperation() {
+		Operation op = new Operation("PropertyConsumer");
+		op.setInputVariables(ONE_IN);
+		op.setWrappedInvokable(PROPERTY_CONSUMER_FUNC);
+
+		return prepareOperation(op);
+	}
+
+	private IOperation createPropertyConsumerOperationWithProperties() {
+		Operation op = new Operation("PropertyConsumerWithProperties");
+		op.setInputVariables(ONE_IN);
+		op.setWrappedInvokable(PROPERTY_CONSUMER_WITH_PROPERTIES_FUNC);
+
+		return prepareOperation(op);
+	}
+
+	private IOperation createSimpleRunnableOperation() {
+		Operation op = new Operation("SimpleRunnable");
+		op.setInvokable(SIMPLE_RUNNABLE_FUNC);
+
+		return prepareOperation(op);
+	}
+
+	private IOperation createSimpleRunnableOperationWithProperties() {
+		Operation op = new Operation("SimpleRunnableWithProperties");
+		op.setInvokable(SIMPLE_RUNNABLE_WITH_PROPERTIES_FUNC);
 
 		return prepareOperation(op);
 	}
@@ -185,19 +275,8 @@ public abstract class TestOperationSuite {
 	}
 
 	@Test
-	public void testInvokeSimple() throws Exception {
+	public void testInvokeSimpleOperation() throws Exception {
 		assertEquals(5, simpleOperation.invokeSimple(2, 3));
-	}
-
-	@Test
-	public void testInvokePropertyOperationWithProperties() throws Exception {
-		Property p1 = new Property(IN_IDSHORT1, 2);
-		Property p2 = new Property(IN_IDSHORT2, 3);
-		SubmodelElement[] directResult = propertyOperation.invoke(p1, p2);
-		Property propertyResult = (Property) directResult[0];
-
-		assertEquals(OUT_IDSHORT, propertyResult.getIdShort());
-		assertEquals(1, propertyResult.getValue());
 	}
 
 	@Test
@@ -212,7 +291,34 @@ public abstract class TestOperationSuite {
 	}
 
 	@Test
-	public void testInvokeSimpleWithSubmodelElementsException() {
+	public void testInvokePropertyOperation() throws Exception {
+		assertEquals(1, propertyOperation.invokeSimple(2, 3));
+	}
+
+	@Test
+	public void testInvokePropertyOperationWithProperties() {
+		Property p1 = new Property(IN_IDSHORT1, 2);
+		Property p2 = new Property(IN_IDSHORT2, 3);
+		SubmodelElement[] directResult = propertyOperation.invoke(p1, p2);
+		Property propertyResult = (Property) directResult[0];
+
+		assertEquals(OUT_IDSHORT, propertyResult.getIdShort());
+		assertEquals(1, propertyResult.getValue());
+	}
+
+	@Test
+	public void testInvokeSimpleOperationException() {
+		try {
+			simpleOperationException.invokeSimple(1, 2);
+			fail();
+		} catch (Exception e) {
+			// Exceptions from ConnectedOperation are wrapped in ProviderException
+			assertTrue(e instanceof NullPointerException || e.getCause() instanceof NullPointerException);
+		}
+	}
+
+	@Test
+	public void testInvokeSimpleOperationExceptionWithProperties() {
 		try {
 			Property param1 = new Property(IN_IDSHORT1, 1);
 			Property param2 = new Property(IN_IDSHORT2, 1);
@@ -225,7 +331,7 @@ public abstract class TestOperationSuite {
 	}
 
 	@Test
-	public void testInvokePropertyOperationException() throws Exception {
+	public void testInvokePropertyOperationExceptionWithProperties() {
 		try {
 			Property p1 = new Property(IN_IDSHORT1, 2);
 			Property p2 = new Property(IN_IDSHORT2, 3);
@@ -238,23 +344,7 @@ public abstract class TestOperationSuite {
 	}
 
 	@Test
-	public void testInvokePropertyOperationSimple() throws Exception {
-		assertEquals(1, propertyOperation.invokeSimple(2, 3));
-	}
-
-	@Test
-	public void testInvokeSimpleException() throws Exception {
-		try {
-			simpleOperationException.invokeSimple(1, 2);
-			fail();
-		} catch (Exception e) {
-			// Exceptions from ConnectedOperation are wrapped in ProviderException
-			assertTrue(e instanceof NullPointerException || e.getCause() instanceof NullPointerException);
-		}
-	}
-
-	@Test
-	public void testInvokeSimpleParametersException() {
+	public void testInvokeSimpleOperationParameterException() {
 		try {
 			simpleOperation.invokeSimple(1);
 			fail();
@@ -313,7 +403,7 @@ public abstract class TestOperationSuite {
 	}
 
 	@Test(expected = OperationExecutionErrorException.class)
-	public void testInvokeExceptionAsync() throws Exception {
+	public void testInvokeAsyncException() throws Exception {
 		AsyncOperationHelper helper = new AsyncOperationHelper();
 		IOperation operationException = prepareOperation(helper.getAsyncExceptionOperation());
 		IAsyncInvocation invocation = operationException.invokeAsync();
@@ -326,7 +416,30 @@ public abstract class TestOperationSuite {
 
 	@Test
 	public void testInvokeSimpleSupplier() {
-		assertEquals(SIMPLE_SUPPLIER_RETURN_VALUE, simpleSupplierOperation.invokeSimple());
+		assertEquals(SUPPLIER_RETURN_VALUE, simpleSupplierOperation.invokeSimple());
+	}
+
+	@Test
+	public void testInvokeSimpleSupplierWithProperties() {
+		Property propertyResult = (Property) simpleSupplierOperation.invoke()[0];
+
+		assertEquals(OUT_IDSHORT, propertyResult.getIdShort());
+		assertEquals(SUPPLIER_RETURN_VALUE, propertyResult.getValue());
+	}
+
+	@Test
+	public void testInvokePropertySupplier() {
+		String operationResult = (String) propertySupplierOperation.invokeSimple();
+
+		assertEquals(SUPPLIER_RETURN_VALUE, operationResult);
+	}
+
+	@Test
+	public void testInvokePropertySupplierWithProperties() {
+		Property propertyResult = (Property) propertySupplierOperation.invoke()[0];
+
+		assertEquals(OUT_IDSHORT, propertyResult.getIdShort());
+		assertEquals(SUPPLIER_RETURN_VALUE, propertyResult.getValue());
 	}
 
 	@Test
@@ -336,6 +449,49 @@ public abstract class TestOperationSuite {
 		simpleConsumerOperation.invokeSimple(expected);
 
 		assertEquals(expected, expectedResultForSimpleConsumerTest);
+	}
+
+	@Test
+	public void testInvokeSimpleConsumerWithProperties() {
+		int expected = 15;
+		Property p1 = new Property(IN_IDSHORT1, expected);
+
+		simpleConsumerOperationWithProperties.invoke(p1);
+
+		assertEquals(expected, expectedResultForSimpleConsumerWithPropertiesTest);
+	}
+
+	@Test
+	public void testInvokePropertyConsumer() {
+		int expected = 23;
+
+		propertyConsumerOperation.invokeSimple(expected);
+
+		assertEquals(expected, expectedResultForPropertyConsumerTest);
+	}
+
+	@Test
+	public void testInvokePropertyConsumerWithProperties() {
+		int expected = 2;
+		Property p1 = new Property(IN_IDSHORT1, expected);
+
+		propertyConsumerOperationWithProperties.invoke(p1);
+
+		assertEquals(expected, expectedResultForPropertyConsumerWithPropertiesTest);
+	}
+
+	@Test
+	public void testInvokeSimpleRunnable() {
+		simpleRunnableOperation.invokeSimple();
+
+		assertEquals(RUNNABLE_FLAG, expectedResultForSimpleRunnableTest);
+	}
+
+	@Test
+	public void testInvokeSimpleRunnableWithProperties() {
+		simpleRunnableOperationWithProperties.invoke();
+
+		assertEquals(RUNNABLE_FLAG, expectedResultForSimpleRunnableWithPropertiesTest);
 	}
 
 	@Test
@@ -369,4 +525,3 @@ public abstract class TestOperationSuite {
 	}
 
 }
-
