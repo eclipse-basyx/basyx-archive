@@ -10,9 +10,13 @@
 package org.eclipse.basyx.submodel.restapi;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
@@ -31,7 +35,7 @@ import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 /**
  * Handles operations according to AAS meta model.
  *
- * @author schnicke
+ * @author schnicke, espen, fischer
  *
  */
 public class OperationProvider implements IModelProvider {
@@ -90,7 +94,7 @@ public class OperationProvider implements IModelProvider {
 	public Object invokeOperation(String path, Object... parameters) throws ProviderException {
 		boolean isAsync = isAsyncInvokePath(path);
 		path = VABPathTools.stripInvokeFromPath(path);
-		
+
 		// Invoke /invokable instead of an Operation property if existent
 		Object childElement = modelProvider.getValue(path);
 		if (!Operation.isOperation(childElement)) {
@@ -99,91 +103,92 @@ public class OperationProvider implements IModelProvider {
 
 		Operation op = Operation.createAsFacade((Map<String, Object>) childElement);
 
-		// TODO: Only allow wrapped parameters with InvokationRequests
-		Object[] unwrappedParameters;
 		InvocationRequest request = getInvocationRequest(parameters, op);
-		String requestId;
-		if (request != null) {
-			unwrappedParameters = request.unwrapInputParameters();
-			requestId = request.getRequestId();
-		} else {// => not necessary, if it is only allowed to use InvocationRequests
-			unwrappedParameters = unwrapDirectParameters(parameters);
-			requestId = UUID.randomUUID().toString();
-		}
 
-		if (isAsync) {
-			return handleAsyncOperationInvokation(op, unwrappedParameters, request, requestId);
+		if (request != null && isAsync) {
+			return handleAsyncRequestInvokation(op, request);
+		} else if (request != null) {
+			return handleSyncRequestInvokation(op, request);
+		} else if (isAsync) {// => not necessary, if it is only allowed to use InvocationRequests
+			return handleAsyncParameterInvokation(op, parameters);
 		} else {
-			return handleSynchroneousOperationInvokation(op, unwrappedParameters, request);
+			return handleSyncParameterInvokation(op, parameters);
 		}
 	}
 
-	private Object handleSynchroneousOperationInvokation(Operation op, Object[] unwrappedParameters, InvocationRequest request) throws ProviderException {
-		Object directResult = op.invokeSimple(unwrappedParameters);
-		if (request == null) {
-			// Parameters have been passed directly? Directly return the result
-			return directResult;
-		}
-		return createInvocationResponseFromDirectResult(request, directResult);
+	private CallbackResponse handleAsyncRequestInvokation(Operation operation, InvocationRequest request) {
+		Collection<IOperationVariable> outputVars = copyOutputVariables(operation);
+
+		AsyncOperationHandler.invokeAsync(operation, operationId, request, outputVars);
+
+		// Request id has to be returned for caller to be able to retrieve result
+		// => Use callback response and leave url empty
+		return new CallbackResponse(request.getRequestId(), "");
 	}
 
-	/**
-	 * Executes an invocation asynchronously
-	 * 
-	 * @param op the called operation
-	 * @param unwrappedParameters the parameters for the invocation
-	 * @param request the invocation request
-	 * @param requestId the id for the request
-	 * @return the result of the operation
-	 */
-	private Object handleAsyncOperationInvokation(Operation op, Object[] unwrappedParameters, InvocationRequest request, String requestId) {
-		Collection<IOperationVariable> outputVars = copyOutputVariables();
+	private InvocationResponse handleSyncRequestInvokation(Operation operation, InvocationRequest request) {
+		SubmodelElement[] inputVariables = getSumbodelElementsFromInvocationRequest(request);
+		SubmodelElement[] submodelElementsResult = operation.invoke(inputVariables);
 
-		// Only necessary as long as invocations without InvokationRequest is allowed
-		if (request != null) {
-			AsyncOperationHandler.invokeAsync(op, operationId, request, outputVars);
-		} else {
-			AsyncOperationHandler.invokeAsync(op, operationId, requestId, unwrappedParameters, outputVars, 10000);
-		}
+		return createInvocationResponseFromSubmodelElementsResult(request, submodelElementsResult);
+	}
 
+	private SubmodelElement[] getSumbodelElementsFromInvocationRequest(InvocationRequest request) {
+		Collection<IOperationVariable> inputVariables = request.getInputArguments();
+
+		Stream<IOperationVariable> inputVariablesStream = StreamSupport.stream(inputVariables.spliterator(), false);
+		Stream<SubmodelElement> submodelElementStream = inputVariablesStream.map(inputVar -> (SubmodelElement) inputVar.getValue());
+
+		return submodelElementStream.toArray(SubmodelElement[]::new);
+	}
+
+	private CallbackResponse handleAsyncParameterInvokation(Operation operation, Object[] parameters) {
+		Object[] unwrappedParameters = unwrapDirectParameters(parameters);
+		Collection<IOperationVariable> outputVars = copyOutputVariables(operation);
+
+		String requestId = UUID.randomUUID().toString();
+
+		AsyncOperationHandler.invokeAsync(operation, operationId, requestId, unwrappedParameters, outputVars, 10000);
 		// Request id has to be returned for caller to be able to retrieve result
 		// => Use callback response and leave url empty
 		return new CallbackResponse(requestId, "");
 	}
 
-	/**
-	 * Determines if an invocation path is an async invocation
-	 * 
-	 * @param path the invocation path
-	 * @return the result
-	 */
+	private Object handleSyncParameterInvokation(Operation operation, Object[] parameters) {
+		Object[] unwrappedParameters = unwrapDirectParameters(parameters);
+
+		Object directResult = operation.invokeSimple(unwrappedParameters);
+
+		return directResult;
+	}
+
 	private boolean isAsyncInvokePath(String path) {
 		return path.endsWith(ASYNC);
 	}
 
-	/**
-	 * Directly creates an InvocationResponse from an operation result
-	 */
-	private Object createInvocationResponseFromDirectResult(InvocationRequest request, Object directResult) {
-		// Get SubmodelElement output template
-		Collection<IOperationVariable> outputs = copyOutputVariables();
-		if (!outputs.isEmpty()) {
-			SubmodelElement outputElem = (SubmodelElement) outputs.iterator().next().getValue();
-			// Set result object
-			outputElem.setValue(directResult);
-		}
+	private InvocationResponse createInvocationResponseFromSubmodelElementsResult(InvocationRequest request, SubmodelElement[] submodelElementsResult) {
+		Collection<IOperationVariable> outputs;
+		if (submodelElementsResult == null) {
+			outputs = new ArrayList<>();
+		} else {
+			Stream<SubmodelElement> submodelElementsStream = Arrays.stream(submodelElementsResult);
+			Stream<OperationVariable> operationVariableStream = submodelElementsStream.map(submodelElement -> new OperationVariable(submodelElement));
 
-		// Create and return InvokationResponse
+			outputs = operationVariableStream.collect(Collectors.toList());
+		}
 		return new InvocationResponse(request.getRequestId(), new ArrayList<>(), outputs, ExecutionState.COMPLETED);
 	}
 
 	/**
-	 * Extracts an invocation request from a generic parameter array
-	 * Matches parameters to order of Operation inputs by id
-	 * Throws MalformedArgumentException if a required parameter is missing
+	 * Extracts an invocation request from a generic parameter array Matches
+	 * parameters to order of Operation inputs by id Throws
+	 * MalformedArgumentException if a required parameter is missing
 	 * 
-	 * @param parameters the input parameters
-	 * @param op the Operation providing the inputVariables to be matched to the actual input
+	 * @param parameters
+	 *            the input parameters
+	 * @param op
+	 *            the Operation providing the inputVariables to be matched to the
+	 *            actual input
 	 * @return the build InvocationRequest
 	 */
 	@SuppressWarnings("unchecked")
@@ -198,12 +203,11 @@ public class OperationProvider implements IModelProvider {
 		// Sort parameters in request by InputVariables of operation
 		Collection<IOperationVariable> vars = op.getInputVariables();
 		Collection<IOperationVariable> ordered = createOrderedInputVariablesList(request, vars);
-		
+
 		return new InvocationRequest(request.getRequestId(), request.getInOutArguments(), ordered, request.getTimeout());
 	}
 
-	private Collection<IOperationVariable> createOrderedInputVariablesList(InvocationRequest request,
-			Collection<IOperationVariable> vars) {
+	private Collection<IOperationVariable> createOrderedInputVariablesList(InvocationRequest request, Collection<IOperationVariable> vars) {
 		Collection<IOperationVariable> ordered = new ArrayList<>();
 
 		for (IOperationVariable var : vars) {
@@ -225,21 +229,13 @@ public class OperationProvider implements IModelProvider {
 	}
 
 	private boolean isInvokationRequest(Object[] parameters) {
-		if(parameters.length != 1) {
+		if (parameters.length != 1) {
 			return false;
 		}
 		return InvocationRequest.isInvocationRequest(parameters[0]);
 	}
 
-	/**
-	 * Gets the (first) output parameter from the underlying object
-	 * 
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	private Collection<IOperationVariable> copyOutputVariables() {
-		Map<String, Object> operationMap = (Map<String, Object>) getValue("");
-		Operation op = Operation.createAsFacade(operationMap);
+	private Collection<IOperationVariable> copyOutputVariables(Operation op) {
 		Collection<IOperationVariable> outputs = op.getOutputVariables();
 		Collection<IOperationVariable> outCopy = new ArrayList<>();
 		outputs.stream().forEach(o -> outCopy.add(new OperationVariable(o.getValue().getLocalCopy())));
@@ -248,7 +244,7 @@ public class OperationProvider implements IModelProvider {
 
 	@SuppressWarnings("unchecked")
 	private String getIdShort(Object operation) {
-		if(Operation.isOperation(operation)) {
+		if (Operation.isOperation(operation)) {
 			return Operation.createAsFacade((Map<String, Object>) operation).getIdShort();
 		} else {
 			// Should never happen as SubmodelElementProvider.getElementProvider
