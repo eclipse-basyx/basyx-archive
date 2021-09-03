@@ -263,7 +263,7 @@ public class MongoDBAASAggregator implements IAASAggregator {
 
 	@Override
 	public void deleteAAS(IIdentifier aasId) {
-		Query hasId = query(where(IDPATH).is(aasId));
+		Query hasId = query(where(IDPATH).is(aasId.getId()));
 		mongoOps.remove(hasId, aasCollection);
 		aasProviderMap.remove(aasId.getId());
 	}
