@@ -20,7 +20,6 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOpera
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueType;
-import org.eclipse.basyx.vab.exception.provider.WrongNumberOfParametersException;
 
 public class OperationHelper {
 	public static Property createPropertyTemplate(ValueType type) {
@@ -30,16 +29,10 @@ public class OperationHelper {
 		return prop;
 	}
 
-	public static void checkValidParameterLength(int actualParameterLength, String idShort, Collection<IOperationVariable> inputVariables) {
-		if (actualParameterLength != inputVariables.size()) {
-			throw new WrongNumberOfParametersException(idShort, inputVariables, actualParameterLength);
-		}
-	}
-
 	public static SubmodelElement[] wrapParameters(Collection<IOperationVariable> inputVariables, Object... unwrappedParameters) {
 		IOperationVariable[] inputVarArray = inputVariables.toArray(new IOperationVariable[inputVariables.size()]);
 		SubmodelElement[] wrappedParameters = new SubmodelElement[inputVariables.size()];
-		for ( int i = 0; i < wrappedParameters.length; i++ ) {
+		for (int i = 0; i < wrappedParameters.length; i++) {
 			wrappedParameters[i] = wrapSingleParameter(inputVarArray[i], unwrappedParameters[i]);
 		}
 		return wrappedParameters;
@@ -52,7 +45,7 @@ public class OperationHelper {
 
 	public static SubmodelElement[] wrapResult(Object unwrappedResult, Collection<IOperationVariable> outputVariables) {
 		if (outputVariables.isEmpty()) {
-			return  new SubmodelElement[] {};
+			return new SubmodelElement[] {};
 		}
 		IOperationVariable resultTemplate = outputVariables.iterator().next();
 		SubmodelElement wrappedResult = OperationHelper.wrapSingleParameter(resultTemplate, unwrappedResult);
@@ -67,9 +60,7 @@ public class OperationHelper {
 	}
 
 	public static Object[] unwrapInputParameters(Map<String, SubmodelElement> wrappedParamMap, Collection<IOperationVariable> inputVariables) {
-		return StreamSupport.stream(inputVariables.spliterator(), false)
-				.map(inputVar -> unwrapInputParameter(wrappedParamMap, inputVar))
-				.toArray();
+		return StreamSupport.stream(inputVariables.spliterator(), false).map(inputVar -> unwrapInputParameter(wrappedParamMap, inputVar)).toArray();
 	}
 
 	public static Object unwrapInputParameter(Map<String, SubmodelElement> wrappedParamMap, IOperationVariable parameter) {
@@ -78,7 +69,6 @@ public class OperationHelper {
 		SubmodelElement passedParameterElement = wrappedParamMap.get(parameterName);
 		return passedParameterElement.getValue();
 	}
-
 
 	public static Object unwrapResult(SubmodelElement[] result) {
 		if (result != null && result.length > 0) {

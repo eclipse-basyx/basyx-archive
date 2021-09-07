@@ -24,6 +24,7 @@ import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOpera
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationCheckHelper;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationHelper;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.submodel.restapi.operation.InvocationRequest;
@@ -104,7 +105,7 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 
 	@Override
 	public ConnectedAsyncInvocation invokeAsyncWithTimeout(int timeout, Object... params) {
-		OperationHelper.checkValidParameterLength(params.length, getIdShort(), getInputVariables());
+		OperationCheckHelper.checkValidParameterLength(params.length, getIdShort(), getInputVariables());
 		SubmodelElement[] smElements = OperationHelper.wrapParameters(getInputVariables(), params);
 		InvocationRequest request = createInvocationRequest(timeout, smElements);
 		return new ConnectedAsyncInvocation(getProxy(), getIdShort(), request);
@@ -132,7 +133,8 @@ public class ConnectedOperation extends ConnectedSubmodelElement implements IOpe
 
 	@Override
 	public Object invokeSimple(Object... params) {
-		OperationHelper.checkValidParameterLength(params.length, getIdShort(), getInputVariables());
+		OperationCheckHelper.checkValidParameterLength(params.length, getIdShort(), getInputVariables());
+		OperationCheckHelper.checkSubmodelElementExpectedTypes(params, getInputVariables());
 		SubmodelElement[] wrapper = OperationHelper.wrapParameters(getInputVariables(), params);
 		SubmodelElement[] result = invoke(wrapper);
 		return OperationHelper.unwrapResult(result);
