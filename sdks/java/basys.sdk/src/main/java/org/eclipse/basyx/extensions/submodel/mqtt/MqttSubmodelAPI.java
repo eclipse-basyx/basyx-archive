@@ -19,7 +19,9 @@ import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPI;
 import org.eclipse.basyx.submodel.restapi.observing.ObservableSubmodelAPI;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttClientPersistence;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
 
 /**
  * Implementation variant for the SubmodelAPI that triggers MQTT events for
@@ -51,8 +53,16 @@ public class MqttSubmodelAPI implements ISubmodelAPI {
 	 * @throws MqttException
 	 */
 	public MqttSubmodelAPI(ISubmodelAPI observedAPI, String serverEndpoint, String clientId) throws MqttException {
+		this(observedAPI, serverEndpoint, clientId, new MqttDefaultFilePersistence());
+	}
+
+	/**
+	 * Constructor for adding this MQTT extension on top of another SubmodelAPI with
+	 * a custom persistence strategy
+	 */
+	public MqttSubmodelAPI(ISubmodelAPI observedAPI, String brokerEndpoint, String clientId, MqttClientPersistence persistence) throws MqttException {
 		this.observedAPI = new ObservableSubmodelAPI(observedAPI);
-		observer = new MqttSubmodelAPIObserver(this.observedAPI, serverEndpoint, clientId);
+		observer = new MqttSubmodelAPIObserver(this.observedAPI, brokerEndpoint, clientId, persistence);
 	}
 
 	/**
@@ -63,8 +73,15 @@ public class MqttSubmodelAPI implements ISubmodelAPI {
 	 */
 	public MqttSubmodelAPI(ISubmodelAPI observedAPI, String serverEndpoint, String clientId, String user, char[] pw)
 			throws MqttException {
+		this(observedAPI, serverEndpoint, clientId, user, pw, new MqttDefaultFilePersistence());
+	}
+
+	/**
+	 * Constructor for adding this MQTT extension on top of another SubmodelAPI.
+	 */
+	public MqttSubmodelAPI(ISubmodelAPI observedAPI, String serverEndpoint, String clientId, String user, char[] pw, MqttClientPersistence persistence) throws MqttException {
 		this.observedAPI = new ObservableSubmodelAPI(observedAPI);
-		observer = new MqttSubmodelAPIObserver(this.observedAPI, serverEndpoint, clientId, user, pw);
+		observer = new MqttSubmodelAPIObserver(this.observedAPI, serverEndpoint, clientId, user, pw, persistence);
 	}
 
 	/**

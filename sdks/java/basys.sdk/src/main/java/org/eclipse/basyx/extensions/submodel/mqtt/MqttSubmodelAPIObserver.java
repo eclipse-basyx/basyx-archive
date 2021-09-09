@@ -21,7 +21,9 @@ import org.eclipse.basyx.submodel.restapi.observing.ISubmodelAPIObserver;
 import org.eclipse.basyx.submodel.restapi.observing.ObservableSubmodelAPI;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttClientPersistence;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,8 +57,16 @@ public class MqttSubmodelAPIObserver extends MqttEventService implements ISubmod
 	 * @throws MqttException
 	 */
 	public MqttSubmodelAPIObserver(ObservableSubmodelAPI observedAPI, String serverEndpoint, String clientId) throws MqttException {
-		super(serverEndpoint, clientId);
-		logger.info("Create new MQTT submodel for endpoint " + serverEndpoint);
+		this(observedAPI, serverEndpoint, clientId, new MqttDefaultFilePersistence());
+	}
+
+	/**
+	 * Constructor for adding this MQTT extension on top of another SubmodelAPI with
+	 * a custom persistence strategy
+	 */
+	public MqttSubmodelAPIObserver(ObservableSubmodelAPI observedAPI, String brokerEndpoint, String clientId, MqttClientPersistence persistence) throws MqttException {
+		super(brokerEndpoint, clientId, persistence);
+		logger.info("Create new MQTT submodel for endpoint " + brokerEndpoint);
 		this.observedAPI = observedAPI;
 		observedAPI.addObserver(this);
 		sendMqttMessage(TOPIC_CREATESUBMODEL, observedAPI.getSubmodel().getIdentification().getId());
@@ -70,6 +80,14 @@ public class MqttSubmodelAPIObserver extends MqttEventService implements ISubmod
 	 */
 	public MqttSubmodelAPIObserver(ObservableSubmodelAPI observedAPI, String serverEndpoint, String clientId, String user, char[] pw)
 			throws MqttException {
+		this(observedAPI, serverEndpoint, clientId, user, pw, new MqttDefaultFilePersistence());
+	}
+
+	/**
+	 * Constructor for adding this MQTT extension on top of another SubmodelAPI with
+	 * credentials and persistency strategy
+	 */
+	public MqttSubmodelAPIObserver(ObservableSubmodelAPI observedAPI, String serverEndpoint, String clientId, String user, char[] pw, MqttClientPersistence persistence) throws MqttException {
 		super(serverEndpoint, clientId, user, pw);
 		logger.info("Create new MQTT submodel for endpoint " + serverEndpoint);
 		this.observedAPI = observedAPI;
@@ -90,7 +108,7 @@ public class MqttSubmodelAPIObserver extends MqttEventService implements ISubmod
 		observedAPI.addObserver(this);
 		sendMqttMessage(TOPIC_CREATESUBMODEL, observedAPI.getSubmodel().getIdentification().getId());
 	}
-	
+
 	/**
 	 * Adds a submodel element to the filter whitelist. Can also be a path for nested submodel elements.
 	 * 
