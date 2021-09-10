@@ -13,12 +13,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.stream.Collectors;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
@@ -123,6 +124,19 @@ public class TestSubmodelElementCollection {
 		elementCollection.setAllowDuplicates(false);
 		assertTrue(!elementCollection.isAllowDuplicates());
 	} 
+	
+	@Test
+	public void testKeepsOrderWhenOrdered() {
+	  SubmodelElementCollection sec1 = new SubmodelElementCollection("sec1");
+	  sec1.setOrdered(true);
+	  sec1.addSubmodelElement(new Property("id1", "blub1"));
+	  sec1.addSubmodelElement(new Property("id2", "blub2"));
+	  sec1.addSubmodelElement(new Property("id3", "blub3"));
+	  sec1.addSubmodelElement(new Property("id4", "blub4"));
+	  
+	  List<String> idShortsInOrder = sec1.getValue().stream().map(e -> e.getIdShort()).collect(Collectors.toList());
+	  assertEquals(Arrays.asList("id1","id2","id3","id4"), idShortsInOrder);
+	}
 	
 	@Test
 	public void testSetElements() {

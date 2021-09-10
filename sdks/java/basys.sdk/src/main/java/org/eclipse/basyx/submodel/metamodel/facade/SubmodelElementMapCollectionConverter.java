@@ -11,10 +11,10 @@ package org.eclipse.basyx.submodel.metamodel.facade;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.facade.submodelelement.SubmodelElementFacadeFactory;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
@@ -137,7 +137,7 @@ public class SubmodelElementMapCollectionConverter {
 	 */
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object> convertCollectionToIDMap(Object smElements) {
-		Map<String, Object> smElementsMap = new HashMap<>();
+		Map<String, Object> smElementsMap = new LinkedHashMap<>();
 		
 		if(smElements == null) {
 			// if null was given, return an empty Map
