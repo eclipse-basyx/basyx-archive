@@ -135,8 +135,7 @@ option(UA_ENABLE_MICRO_EMB_DEV_PROFILE "Builds CTT Compliant Micro Embedded Devi
 option(BUILD_SHARED_LIBS "Enable building of shared libraries (dll/so)" OFF)
 
 # Namespace Zero
-#set(UA_NAMESPACE_ZERO "REDUCED" CACHE STRING "Completeness of the generated namespace zero (minimal/reduced/full)")
-set(UA_NAMESPACE_ZERO "FULL" CACHE STRING "Completeness of the generated namespace zero (minimal/reduced/full)")
+set(UA_NAMESPACE_ZERO "REDUCED" CACHE STRING "Completeness of the generated namespace zero (minimal/reduced/full)")
 SET_PROPERTY(CACHE UA_NAMESPACE_ZERO PROPERTY STRINGS "MINIMAL" "REDUCED" "FULL")
 if(UA_NAMESPACE_ZERO STREQUAL "MINIMAL")
     set(UA_GENERATED_NAMESPACE_ZERO OFF)
@@ -453,9 +452,12 @@ if(NOT UA_COMPILE_AS_CXX AND (CMAKE_COMPILER_IS_GNUCC OR "x${CMAKE_C_COMPILER_ID
         endif()
     endif()
 
-    if(UA_ENABLE_HARDENING AND ((CMAKE_BUILD_TYPE STREQUAL "Release") OR (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")))
-        check_cc_flag("-D_FORTIFY_SOURCE=2") # run-time buffer overflow detection (needs at least -O1)
+    if (NOT MINGW)
+        if(UA_ENABLE_HARDENING AND ((CMAKE_BUILD_TYPE STREQUAL "Release") OR (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")))
+            check_cc_flag("-D_FORTIFY_SOURCE=2") # run-time buffer overflow detection (needs at least -O1)
+        endif()
     endif()
+
 
     # Strip release builds
     if(CMAKE_BUILD_TYPE STREQUAL "MinSizeRel" OR CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -1295,4 +1297,3 @@ set_target_properties(open62541-generator-statuscode PROPERTIES FOLDER "open6254
 set_target_properties(open62541-generator-transport PROPERTIES FOLDER "open62541/generators")
 set_target_properties(open62541-generator-types PROPERTIES FOLDER "open62541/generators")
 
-add_library(lib::open62541 ALIAS open62541)

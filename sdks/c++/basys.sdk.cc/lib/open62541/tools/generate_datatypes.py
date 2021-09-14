@@ -585,7 +585,7 @@ def iter_types(v):
 ################
 
 printh('''/* Generated from ''' + inname + ''' with script ''' + sys.argv[0] + '''
- * on host ''' + platform.uname()[1] + ''' by user ''' + ''' user ''' + \
+ * on host ''' + platform.uname()[1] + ''' by user ''' + getpass.getuser() + \
        ''' at ''' + time.strftime("%Y-%m-%d %I:%M:%S") + ''' */
 
 #ifndef ''' + outname.upper() + '''_GENERATED_H_
@@ -633,7 +633,7 @@ _UA_END_DECLS
 ##################
 
 printf('''/* Generated from ''' + inname + ''' with script ''' + sys.argv[0] + '''
- * on host ''' + platform.uname()[1] + ''' by user ''' + ''' user ''' + \
+ * on host ''' + platform.uname()[1] + ''' by user ''' + getpass.getuser() + \
        ''' at ''' + time.strftime("%Y-%m-%d %I:%M:%S") + ''' */
 
 #ifndef ''' + outname.upper() + '''_GENERATED_HANDLING_H_
@@ -668,7 +668,7 @@ _UA_END_DECLS
 ###########################
 
 printc('''/* Generated from ''' + inname + ''' with script ''' + sys.argv[0] + '''
- * on host ''' + platform.uname()[1] + ''' by user ''' + ''' user ''' + \
+ * on host ''' + platform.uname()[1] + ''' by user ''' + getpass.getuser() + \
        ''' at ''' + time.strftime("%Y-%m-%d %I:%M:%S") + ''' */
 
 #include "''' + outname + '''_generated.h"''')
@@ -689,7 +689,7 @@ printc("};\n")
 ##################
 
 printe('''/* Generated from ''' + inname + ''' with script ''' + sys.argv[0] + '''
- * on host ''' + platform.uname()[1] + ''' by user ''' + ''' user ''' + \
+ * on host ''' + platform.uname()[1] + ''' by user ''' + getpass.getuser() + \
        ''' at ''' + time.strftime("%Y-%m-%d %I:%M:%S") + ''' */
 
 #ifdef UA_ENABLE_AMALGAMATION

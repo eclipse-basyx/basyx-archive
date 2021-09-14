@@ -131,7 +131,10 @@ if(${BASYX_BUILD_TESTS})
 endif()
 
 if(${BASYX_MODULE_OPCUA})
+	set(BASYX_OPCUA_LIB_COMMIT "982f07963af7a0676ef30ea10a96acdd60e4d3f9")
+	set(BASYX_OPCUA_LIB_VERSION "v1.0.6")
 	add_subdirectory(lib/open62541)
+	add_library(lib::open62541 ALIAS open62541)
 endif()
 
 ###############################################
