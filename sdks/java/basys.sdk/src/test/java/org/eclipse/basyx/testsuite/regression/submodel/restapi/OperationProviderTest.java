@@ -22,7 +22,9 @@ import java.util.stream.Collectors;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.haskind.ModelingKind;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
+import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifier;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.Property;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.DelegatedInvocationHelper;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.submodel.restapi.OperationProvider;
@@ -30,7 +32,11 @@ import org.eclipse.basyx.submodel.restapi.operation.CallbackResponse;
 import org.eclipse.basyx.submodel.restapi.operation.InvocationRequest;
 import org.eclipse.basyx.submodel.restapi.operation.InvocationResponse;
 import org.eclipse.basyx.vab.exception.provider.MalformedRequestException;
+import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
+import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
+import org.eclipse.basyx.vab.protocol.http.server.BaSyxHTTPServer;
+import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -41,9 +47,14 @@ import org.junit.Test;
  *
  */
 public class OperationProviderTest {
+	private static final String SERVER = "localhost";
+	private static final int PORT = 4000;
+	private static final String CONTEXT_PATH = "operation";
 
 	private static final String OPID_IN = "opIn";
 	private static final String OPID_OUT = "opOut";
+	
+	private static final String API_INVOKE_URL = "http://" + SERVER + ":" + PORT + "/" + CONTEXT_PATH + "/" + OPID_OUT + "/invoke";
 	
 	private static Integer requestId = 0;
 	
@@ -232,6 +243,27 @@ public class OperationProviderTest {
 			fail();
 		} catch(MalformedRequestException e) {
 		}
+	}
+	
+	@Test
+	public void testInvocationDelegation() {
+		// Start an http server with an operation
+		BaSyxContext context = new BaSyxContext("/" + CONTEXT_PATH, "", SERVER, PORT);
+		context.addServletMapping("/" + OPID_OUT + "/*", new VABHTTPInterface<IModelProvider>(opProviderOut));
+		BaSyxHTTPServer server = new BaSyxHTTPServer(context);
+		server.start();
+		
+		Operation delegatedOperation = createOperation("delegatedOperation", null, null, null);
+		
+		// Create a delegated qualifier and add to the operation
+		Qualifier qualifier = new Qualifier(DelegatedInvocationHelper.DELEGATION_TYPE, API_INVOKE_URL, "string", null);
+		delegatedOperation.setQualifiers(Arrays.asList(qualifier));
+		
+		OperationProvider delegatedOpProvider = new OperationProvider(new VABLambdaProvider(delegatedOperation));
+		
+		assertEquals(4, delegatedOpProvider.invokeOperation("invoke", 10, 6));
+		
+		server.shutdown();
 	}
 	
 	@SuppressWarnings("unchecked")

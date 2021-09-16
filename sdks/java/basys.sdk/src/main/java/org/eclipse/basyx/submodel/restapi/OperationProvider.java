@@ -20,6 +20,7 @@ import java.util.stream.StreamSupport;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.DelegatedInvocationHelper;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.submodel.restapi.operation.AsyncOperationHandler;
@@ -100,19 +101,22 @@ public class OperationProvider implements IModelProvider {
 		if (!Operation.isOperation(childElement)) {
 			throw new MalformedRequestException("Only operations can be invoked.");
 		}
-
 		Operation op = Operation.createAsFacade((Map<String, Object>) childElement);
-
-		InvocationRequest request = getInvocationRequest(parameters, op);
-
-		if (request != null && isAsync) {
-			return handleAsyncRequestInvokation(op, request);
-		} else if (request != null) {
-			return handleSyncRequestInvokation(op, request);
-		} else if (isAsync) {// => not necessary, if it is only allowed to use InvocationRequests
-			return handleAsyncParameterInvokation(op, parameters);
+		
+		if (DelegatedInvocationHelper.isDelegatingOperation(op)) {
+			return DelegatedInvocationHelper.invokeDelegatedOperation(op, parameters);
 		} else {
-			return handleSyncParameterInvokation(op, parameters);
+			InvocationRequest request = getInvocationRequest(parameters, op);
+			
+			if (request != null && isAsync) {
+				return handleAsyncRequestInvokation(op, request);
+			} else if (request != null) {
+				return handleSyncRequestInvokation(op, request);
+			} else if (isAsync) {// => not necessary, if it is only allowed to use InvocationRequests
+				return handleAsyncParameterInvokation(op, parameters);
+			} else {
+				return handleSyncParameterInvokation(op, parameters);
+			}	
 		}
 	}
 
