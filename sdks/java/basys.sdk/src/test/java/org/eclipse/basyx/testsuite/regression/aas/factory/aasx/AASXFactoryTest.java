@@ -10,6 +10,7 @@
 package org.eclipse.basyx.testsuite.regression.aas.factory.aasx;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -50,6 +51,7 @@ public class AASXFactoryTest {
 
 	private static final String XML_PATH = "aasx/xml/content.xml";
 	private static final String ORIGIN_PATH = "aasx/aasx-origin";
+	private static final String EXTERNAL_FILE_URL = "http://localhost:8080/image.png";
 	
 	
 	private AssetAdministrationShell aas;
@@ -73,7 +75,7 @@ public class AASXFactoryTest {
 		sm1 = new Submodel("sm1", new ModelUrn("SM1_ID"));
 		sm2 = new Submodel("sm2", new ModelUrn("SM2_ID"));
 		
-		File file1 = new File("http://localhost:8080/image.png", "image/png");
+        File file1 = new File(EXTERNAL_FILE_URL, "image/png");
 		file1.setIdShort("file1");
 		File file2 = new File("aasx/Document/docu.pdf", "application/pdf");
 		file2.setIdShort("file2");
@@ -98,16 +100,12 @@ public class AASXFactoryTest {
 		assetList.add(asset);
 		
 		
-		byte[] content1 = {0,1,2,3,4};
-		InMemoryFile file = new InMemoryFile(content1, "/image.png");
+		byte[] content1 = {5,6,7,8,9};
+		InMemoryFile file = new InMemoryFile(content1, "/aasx/Document/docu.pdf");
 		fileList.add(file);
 		
-		byte[] content2 = {5,6,7,8,9};
-		file = new InMemoryFile(content2, "/aasx/Document/docu.pdf");
-		fileList.add(file);
-		
-		byte[] content3 = {10,11,12,13,14};
-		file = new InMemoryFile(content3, "aasx/Document/docu2.pdf");
+		byte[] content2 = {10,11,12,13,14};
+		file = new InMemoryFile(content2, "aasx/Document/docu2.pdf");
 		fileList.add(file);
 	}
 	
@@ -158,6 +156,7 @@ public class AASXFactoryTest {
 			assertTrue(filePaths.contains(VABPathTools.stripSlashes(file.getPath())));
 		}
 		
+		assertFalse(filePaths.contains(VABPathTools.stripSlashes(EXTERNAL_FILE_URL)));	
 	}
 	
 }
