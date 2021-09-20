@@ -178,7 +178,8 @@ public class Operation extends SubmodelElement implements IOperation {
 
 	@Override
 	public Object invokeSimple(Object... simpleParams) {
-		OperationHelper.checkValidParameterLength(simpleParams.length, getIdShort(), getInputVariables());
+		OperationCheckHelper.checkValidParameterLength(simpleParams.length, getIdShort(), getInputVariables());
+		OperationCheckHelper.checkSubmodelElementExpectedTypes(simpleParams, getInputVariables());
 		if (isWrappedInvokable()) {
 			return invokeWrappedInvokableWithSimpleParameters(simpleParams);
 		} else {
@@ -188,14 +189,17 @@ public class Operation extends SubmodelElement implements IOperation {
 
 	private Object invokeWrappedInvokableWithSimpleParameters(Object... simpleParams) {
 		Map<String, SubmodelElement> wrappedParamMap = OperationHelper.wrapSimpleInputParametersInMap(simpleParams, getInputVariables());
+		OperationCheckHelper.checkSubmodelElementAsParameter(wrappedParamMap, getInputVariables());
 		SubmodelElement[] wrappedResult = directlyInvokeWrappedInvokable(wrappedParamMap);
 		return OperationHelper.unwrapResult(wrappedResult);
 	}
 
 	@Override
 	public SubmodelElement[] invoke(SubmodelElement... elems) {
+		OperationCheckHelper.checkValidParameterLength(elems.length, getIdShort(), getInputVariables());
+		OperationCheckHelper.checkSubmodelElementAsParameter(elems, getInputVariables());
 		Map<String, SubmodelElement> seMap = OperationHelper.convertSubmodelElementArrayToMap(elems);
-		return invokeWrapped(seMap);
+		return invokeWrappedUnchecked(seMap);
 	}
 
 	@Override
@@ -365,8 +369,7 @@ public class Operation extends SubmodelElement implements IOperation {
 		return new VABLambdaProvider(this).invokeOperation(INVOKABLE, simpleParams);
 	}
 
-	private SubmodelElement[] invokeWrapped(Map<String, SubmodelElement> wrappedParamMap) {
-		OperationHelper.checkValidParameterLength(wrappedParamMap.size(), getIdShort(), getInputVariables());
+	private SubmodelElement[] invokeWrappedUnchecked(Map<String, SubmodelElement> wrappedParamMap) {
 		if (isWrappedInvokable()) {
 			return directlyInvokeWrappedInvokable(wrappedParamMap);
 		} else {
