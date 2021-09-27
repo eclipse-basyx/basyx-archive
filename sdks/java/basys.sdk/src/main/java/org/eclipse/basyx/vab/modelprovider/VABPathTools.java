@@ -381,11 +381,21 @@ public class VABPathTools {
 	 * @return path without last element "invoke" or unchanged path
 	 */
 	public static String stripInvokeFromPath(String path) {
-		
+		return stripFromPath(path, Operation.INVOKE);
+	}
+	
+	/**
+	 * Strips the last path element if it is elementToStrip
+	 * 
+	 * @param path
+	 * @param elementToStrip
+	 * @return path without last element "invoke" or unchanged path
+	 */
+	public static String stripFromPath(String path, String elementToStrip) {
 		if(path == null)
 			return null;
 		
-		if(getLastElement(path).startsWith(Operation.INVOKE)) {
+		if(getLastElement(path).startsWith(elementToStrip)) {
 			return getParentPath(path);
 		}
 		

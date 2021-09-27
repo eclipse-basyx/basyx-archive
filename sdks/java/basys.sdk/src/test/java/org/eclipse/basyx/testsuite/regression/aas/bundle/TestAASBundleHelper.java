@@ -62,7 +62,7 @@ public class TestAASBundleHelper {
 	@Before
 	public void init() {
 		provider = new AASAggregatorProvider(new AASAggregator());
-		aggregator = new AASAggregatorProxy(new VABElementProxy("/shells", provider));
+		aggregator = new AASAggregatorProxy(new VABElementProxy("", provider));
 		bundles = new ArrayList<>();		
 	}
 	
@@ -130,7 +130,7 @@ public class TestAASBundleHelper {
 	public void testIntegrationOfNonexistingAASAndSMWithRegistry() {
 		IAASRegistry registry = new InMemoryRegistry();
 		provider = new AASAggregatorProvider(new AASAggregator(registry));
-		aggregator = new AASAggregatorProxy(new VABElementProxy("/shells", provider));
+		aggregator = new AASAggregatorProxy(new VABElementProxy("", provider));
 
 		AASBundle bundle = getTestBundle();
 		bundles.add(bundle);

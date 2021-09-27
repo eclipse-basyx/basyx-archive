@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
+import org.eclipse.basyx.aas.aggregator.AASAggregatorAPIHelper;
 import org.eclipse.basyx.aas.aggregator.restapi.AASAggregatorProvider;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.aas.metamodel.connected.ConnectedAssetAdministrationShell;
@@ -53,19 +54,19 @@ public class AASAggregatorProxy implements IAASAggregator {
 	}
 
 	/**
-	 * Adds the "/shells" suffix if it does not exist
+	 * Removes the "/shells" suffix if it exists
 	 * 
 	 * @param url
 	 * @return
 	 */
 	private static String harmonizeURL(String url) {
-		return VABPathTools.harmonizePathWithSuffix(url, AASAggregatorProvider.PREFIX);
+		return VABPathTools.stripFromPath(url, AASAggregatorProvider.PREFIX);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<IAssetAdministrationShell> getAASList() {
-		Collection<Map<String, Object>> collection = (Collection<Map<String, Object>>) provider.getValue("");
+		Collection<Map<String, Object>> collection = (Collection<Map<String, Object>>) provider.getValue(AASAggregatorAPIHelper.getAggregatorPath());
 		logger.debug("Getting all AAS");
 		return collection.stream().map(m -> AssetAdministrationShell.createAsFacade(m)).map(aas -> getConnectedAAS(aas.getIdentification(), aas)).collect(Collectors.toList());
 	}
@@ -91,36 +92,31 @@ public class AASAggregatorProxy implements IAASAggregator {
 
 
 	private VABElementProxy getAASProxy(IIdentifier aasId) {
-		String path = VABPathTools.concatenatePaths(getEncodedIdentifier(aasId), "aas");
+		String path = AASAggregatorAPIHelper.getAASAccessPath(aasId);
 		VABElementProxy proxy = new VABElementProxy(path, provider);
 		return proxy;
 	}
 
 	@Override
 	public void createAAS(AssetAdministrationShell aas) {
-		provider.setValue(getEncodedIdentifier(aas.getIdentification()), aas);
+		provider.setValue(AASAggregatorAPIHelper.getAASEntryPath(aas.getIdentification()), aas);
 		logger.info("AAS with Id " + aas.getIdentification().getId() + " created");
 	}
 
 	@Override
 	public void updateAAS(AssetAdministrationShell aas) {
-		provider.setValue(getEncodedIdentifier(aas.getIdentification()), aas);
+		provider.setValue(AASAggregatorAPIHelper.getAASEntryPath(aas.getIdentification()), aas);
 		logger.info("AAS with Id " + aas.getIdentification().getId() + " updated");
 	}
 
 	@Override
 	public void deleteAAS(IIdentifier aasId) {
-		provider.deleteValue(getEncodedIdentifier(aasId));
+		provider.deleteValue(AASAggregatorAPIHelper.getAASEntryPath(aasId));
 		logger.info("AAS with Id " + aasId.getId() + " deleted");
 	}
 
 	@Override
 	public IModelProvider getAASProvider(IIdentifier aasId) {
-		return new VABElementProxy(getEncodedIdentifier(aasId), provider);
+		return new VABElementProxy(AASAggregatorAPIHelper.getAASEntryPath(aasId), provider);
 	}
-
-	private String getEncodedIdentifier(IIdentifier aasId) {
-		return VABPathTools.encodePathElement(aasId.getId());
-	}
-
 }

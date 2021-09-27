@@ -38,7 +38,7 @@ public class TestAASAggregatorProxy extends AASAggregatorSuite {
 
 	@Override
 	protected IAASAggregator getAggregator() {
-		return new AASAggregatorProxy(new VABElementProxy("/shells", new AASAggregatorProvider(new AASAggregator())));
+		return new AASAggregatorProxy(new VABElementProxy("", new AASAggregatorProvider(new AASAggregator())));
 	}
 
 	/**
