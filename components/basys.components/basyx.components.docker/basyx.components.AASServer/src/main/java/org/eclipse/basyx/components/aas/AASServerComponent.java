@@ -42,11 +42,13 @@ import org.eclipse.basyx.components.aas.configuration.AASServerBackend;
 import org.eclipse.basyx.components.aas.configuration.BaSyxAASServerConfiguration;
 import org.eclipse.basyx.components.aas.mongodb.MongoDBAASAggregator;
 import org.eclipse.basyx.components.aas.mqtt.MqttSubmodelAPIFactory;
+import org.eclipse.basyx.components.aas.servlet.AASAggregatorAASXUploadServlet;
 import org.eclipse.basyx.components.aas.servlet.AASAggregatorServlet;
 import org.eclipse.basyx.components.configuration.BaSyxConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxMongoDBConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxMqttConfiguration;
+import org.eclipse.basyx.extensions.aas.aggregator.aasxupload.AASAggregatorAASXUpload;
 import org.eclipse.basyx.submodel.metamodel.api.ISubmodel;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.basyx.submodel.restapi.api.ISubmodelAPIFactory;
@@ -54,6 +56,7 @@ import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxHTTPServer;
+import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -81,6 +84,9 @@ public class AASServerComponent implements IComponent {
 
 	// Initial AASBundle
 	protected Collection<AASBundle> aasBundles;
+	
+	// Watcher for AAS Aggregator functionality
+	private boolean isAASXUploadEnabled = false;
 
 	/**
 	 * Constructs an empty AAS server using the passed context
@@ -125,6 +131,13 @@ public class AASServerComponent implements IComponent {
 	public void disableMQTT() {
 		this.mqttConfig = null;
 	}
+	
+	/**
+	 * Enables AASX upload functionality
+	 */
+	public void enableAASXUpload() {
+		this.isAASXUploadEnabled = true;
+	}
 
 	/**
 	 * Sets a registry service for registering AAS that are created during startup
@@ -143,7 +156,7 @@ public class AASServerComponent implements IComponent {
 		logger.info("Create the server...");
 		// Load the aggregator servlet
 		createRegistryFromUrl();
-		AASAggregatorServlet aggregatorServlet = loadAggregatorServlet();
+		VABHTTPInterface<?> aggregatorServlet = loadAggregatorServlet();
 
 		// Init HTTP context and add an XMLAASServlet according to the configuration
 		BaSyxContext context = contextConfig.createBaSyxContext();
@@ -222,7 +235,7 @@ public class AASServerComponent implements IComponent {
 		this.aasBundles = packageManager.retrieveAASBundles();
 	}
 
-	private AASAggregatorServlet loadAggregatorServlet() {
+	private VABHTTPInterface<?> loadAggregatorServlet() {
 		// Load the initial AAS bundles from given source
 		loadAASFromSource(aasConfig.getAASSource());
 
@@ -235,7 +248,12 @@ public class AASServerComponent implements IComponent {
 		}
 
 		// Return the servlet for the resulting aggregator
-		return new AASAggregatorServlet(aggregator);
+		if (isAASXUploadEnabled) {
+			return new AASAggregatorAASXUploadServlet(new AASAggregatorAASXUpload(aggregator));	
+		} else {
+			return new AASAggregatorServlet(aggregator);
+		}
+		
 	}
 
 	private void loadAASFromSource(String aasSource) {

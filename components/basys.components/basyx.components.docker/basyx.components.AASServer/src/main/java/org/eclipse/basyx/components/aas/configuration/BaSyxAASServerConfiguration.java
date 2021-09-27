@@ -36,6 +36,7 @@ public class BaSyxAASServerConfiguration extends BaSyxConfiguration {
 	public static final String DEFAULT_SOURCE = "";
 	public static final String DEFAULT_REGISTRY = "";
 	public static final String DEFAULT_EVENTS = AASEventBackend.NONE.toString();
+	public static final String DEFAULT_AASX_UPLOAD = AASXUploadBackend.DISABLED.toString();
 
 	// Configuration keys
 	public static final String REGISTRY = "registry.path";
@@ -44,6 +45,7 @@ public class BaSyxAASServerConfiguration extends BaSyxConfiguration {
 	public static final String BACKEND = "aas.backend";
 	public static final String SOURCE = "aas.source";
 	public static final String EVENTS = "aas.events";
+	public static final String AASX_UPLOAD = "aas.aasxUpload";
 
 	// The default path for the context properties file
 	public static final String DEFAULT_CONFIG_PATH = "aas.properties";
@@ -59,6 +61,7 @@ public class BaSyxAASServerConfiguration extends BaSyxConfiguration {
 		defaultProps.put(HOSTPATH, DEFAULT_HOSTPATH);
 		defaultProps.put(SUBMODELS, DEFAULT_SUBMODELS);
 		defaultProps.put(EVENTS, DEFAULT_EVENTS);
+		defaultProps.put(AASX_UPLOAD, DEFAULT_AASX_UPLOAD);
 		return defaultProps;
 	}
 
@@ -124,7 +127,7 @@ public class BaSyxAASServerConfiguration extends BaSyxConfiguration {
 	}
 
 	public void loadFromEnvironmentVariables() {
-		String[] properties = { REGISTRY, BACKEND, SOURCE, EVENTS, HOSTPATH };
+		String[] properties = { REGISTRY, BACKEND, SOURCE, EVENTS, HOSTPATH, AASX_UPLOAD };
 		loadFromEnvironmentVariables(ENV_PREFIX, properties);
 	}
 
@@ -147,6 +150,14 @@ public class BaSyxAASServerConfiguration extends BaSyxConfiguration {
 
 	public void setAASEvents(AASEventBackend events) {
 		setProperty(EVENTS, events.toString());
+	}
+	
+	public AASXUploadBackend getAASXUpload() {
+		return AASXUploadBackend.fromString(getProperty(AASX_UPLOAD));
+	}
+
+	public void setAASXUpload(AASXUploadBackend aasxUpload) {
+		setProperty(AASX_UPLOAD, aasxUpload.toString());
 	}
 
 	public String getAASSource() {

@@ -14,6 +14,7 @@ import java.net.URISyntaxException;
 
 import org.eclipse.basyx.components.aas.AASServerComponent;
 import org.eclipse.basyx.components.aas.configuration.AASEventBackend;
+import org.eclipse.basyx.components.aas.configuration.AASXUploadBackend;
 import org.eclipse.basyx.components.aas.configuration.BaSyxAASServerConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
 import org.eclipse.basyx.components.configuration.BaSyxMqttConfiguration;
@@ -56,6 +57,11 @@ public class AASServerExecutable {
 			BaSyxMqttConfiguration mqttConfig = new BaSyxMqttConfiguration();
 			mqttConfig.loadFromDefaultSource();
 			component.enableMQTT(mqttConfig);
+		}
+		
+		// if enabled, load AASX uploader functionality
+		if (aasConfig.getAASXUpload().equals(AASXUploadBackend.ENABLED)) {
+			component.enableAASXUpload();
 		}
 
 		component.startComponent();
