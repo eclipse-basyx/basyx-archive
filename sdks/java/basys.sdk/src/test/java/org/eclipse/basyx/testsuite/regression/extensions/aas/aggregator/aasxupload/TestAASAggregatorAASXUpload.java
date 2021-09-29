@@ -11,6 +11,7 @@
 
 package org.eclipse.basyx.testsuite.regression.extensions.aas.aggregator.aasxupload;
 
+import org.eclipse.basyx.aas.aggregator.AASAggregator;
 import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
 import org.eclipse.basyx.extensions.aas.aggregator.aasxupload.AASAggregatorAASXUpload;
 
@@ -22,6 +23,6 @@ import org.eclipse.basyx.extensions.aas.aggregator.aasxupload.AASAggregatorAASXU
 public class TestAASAggregatorAASXUpload extends TestAASAggregatorAASXUploadSuite{
 	@Override
 	protected IAASAggregator getAggregator() {
-		return new AASAggregatorAASXUpload();
+		return new AASAggregatorAASXUpload(new AASAggregator());
 	}
 }

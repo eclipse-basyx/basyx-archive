@@ -17,6 +17,7 @@ import java.nio.file.Paths;
 import java.util.Collection;
 
 import org.apache.http.client.ClientProtocolException;
+import org.eclipse.basyx.aas.aggregator.AASAggregator;
 import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
 import org.eclipse.basyx.aas.metamodel.api.IAssetAdministrationShell;
 import org.eclipse.basyx.extensions.aas.aggregator.aasxupload.AASAggregatorAASXUpload;
@@ -41,7 +42,7 @@ public class TestAASAggregatorProxyWithAASXProvider extends TestAASAggregatorPro
 	private static final int PORT = 4000;
 	private static final String CONTEXT_PATH = "aggregator";
 	private static final String API_URL = "http://" + SERVER + ":" + PORT + "/" + CONTEXT_PATH + "/shells";
-	private AASAggregatorAASXUploadProvider provider = new AASAggregatorAASXUploadProvider(new AASAggregatorAASXUpload());
+	private AASAggregatorAASXUploadProvider provider = new AASAggregatorAASXUploadProvider(new AASAggregatorAASXUpload(new AASAggregator()));
 	
 	@Rule
 	public AASHTTPServerResource res = new AASHTTPServerResource(
