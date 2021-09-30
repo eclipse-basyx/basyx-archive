@@ -108,7 +108,7 @@ public class ValueTypeHelper {
 				objectType = ValueType.YearMonthDuration;
 			} else if (c == QName.class) {
 				objectType = ValueType.QName;
-			} else if (c == XMLGregorianCalendar.class) {
+			} else if (obj instanceof XMLGregorianCalendar) {
 				objectType = ValueType.DateTime;
 			} else {
 				throw new RuntimeException("Cannot map object " + obj + " to any PropertyValueTypeDef");
@@ -219,7 +219,7 @@ public class ValueTypeHelper {
 	public static Object prepareForSerialization(Object value) {
 		if(value != null) {
 			Class<?> c = value.getClass();
-			if (c == Duration.class || c == Period.class || c == QName.class || c == XMLGregorianCalendar.class) {
+			if (c == Duration.class || c == Period.class || c == QName.class || value instanceof XMLGregorianCalendar) {
 				return value.toString();
 			}
 		}
