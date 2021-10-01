@@ -17,6 +17,7 @@ import org.eclipse.basyx.aas.aggregator.api.IAASAggregator;
 import org.eclipse.basyx.aas.metamodel.map.AssetAdministrationShell;
 import org.eclipse.basyx.components.aas.mongodb.MongoDBAASAggregator;
 import org.eclipse.basyx.components.configuration.BaSyxContextConfiguration;
+import org.eclipse.basyx.components.configuration.BaSyxMongoDBConfiguration;
 import org.eclipse.basyx.testsuite.regression.aas.aggregator.AASAggregatorSuite;
 import org.junit.Test;
 import org.springframework.data.mongodb.core.MongoTemplate;
