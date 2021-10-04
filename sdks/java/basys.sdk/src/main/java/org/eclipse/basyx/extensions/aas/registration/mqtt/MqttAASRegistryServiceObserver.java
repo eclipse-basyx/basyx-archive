@@ -13,6 +13,7 @@ import org.eclipse.basyx.aas.registration.observing.IAASRegistryServiceObserver;
 import org.eclipse.basyx.extensions.shared.mqtt.MqttEventService;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IIdentifier;
 import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttClientPersistence;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,21 @@ public class MqttAASRegistryServiceObserver extends MqttEventService implements 
 	 */
 	public MqttAASRegistryServiceObserver(String serverEndpoint, String clientId) throws MqttException {
 		super(serverEndpoint, clientId);
+		logger.info("Create new MQTT AAS Registry Service Observer for endpoint " + serverEndpoint);
+	}
+
+	/**
+	 * Constructor for adding this MQTT extension as an AAS Registry Observer with a
+	 * custom mqtt client persistence
+	 * 
+	 * @param serverEndpoint endpoint of mqtt broker
+	 * @param clientId unique client identifier
+	 * @param clientId unique client identifier
+	 * @param mqttPersistence custom mqtt persistence strategy
+	 * @throws MqttException
+	 */
+	public MqttAASRegistryServiceObserver(String serverEndpoint, String clientId, MqttClientPersistence mqttPersistence) throws MqttException {
+		super(serverEndpoint, clientId, mqttPersistence);
 		logger.info("Create new MQTT AAS Registry Service Observer for endpoint " + serverEndpoint);
 	}
 
