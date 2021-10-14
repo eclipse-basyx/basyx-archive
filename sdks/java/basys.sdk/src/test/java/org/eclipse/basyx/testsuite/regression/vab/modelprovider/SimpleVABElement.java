@@ -94,7 +94,6 @@ public class SimpleVABElement extends HashMap<String, Object> {
 		return structure;
 	}
 
-	@SuppressWarnings("unchecked")
 	private Map<String, Object> createFunctions() {
 		Map<String, Object> functions = new HashMap<>();
 		functions.put("supplier", (Supplier<Object>) () -> {

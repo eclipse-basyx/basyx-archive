@@ -39,7 +39,6 @@ import org.eclipse.basyx.vab.exception.provider.ResourceNotFoundException;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.api.IModelProvider;
-import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -47,7 +46,7 @@ import org.junit.Test;
  * Tests ConnectedAssetAdministrationShellManager class
  * 
  * @author schnicke
- *
+ * 
  */
 public class TestConnectedAssetAdministrationShellManager {
 	ConnectedAssetAdministrationShellManager manager;
