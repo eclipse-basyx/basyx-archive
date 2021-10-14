@@ -151,7 +151,9 @@ public class AASXFactory {
 	private static String createUniqueID() {
 		// only letters or underscore as start of id allowed
 		// https://www.w3.org/TR/1999/REC-xml-names-19990114/#ns-qualnames
-		return "id_" + UUID.randomUUID().toString();
+		//
+		// old AASX Package Explorer versions expect a leading R
+		return "Rid_" + UUID.randomUUID().toString();
 	}
 	
 	/**
