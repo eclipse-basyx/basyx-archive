@@ -1,1 +1,1 @@
-docker build -t basyx/node-red:0.1.0-SNAPSHOT .
+docker build -t eclipsebasyx/node-red:1.1.0-SNAPSHOT .
