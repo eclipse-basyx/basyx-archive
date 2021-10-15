@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-docker build -t basyx/node-red:0.1.0-SNAPSHOT .
+docker build -t eclipsebasyx/examples-dataflow-node-red:1.0.1 .
