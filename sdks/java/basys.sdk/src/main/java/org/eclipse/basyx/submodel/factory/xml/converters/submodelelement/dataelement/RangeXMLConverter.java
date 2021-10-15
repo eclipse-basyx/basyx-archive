@@ -14,14 +14,13 @@ import java.util.Map;
 import org.eclipse.basyx.submodel.factory.xml.XMLHelper;
 import org.eclipse.basyx.submodel.factory.xml.converters.submodelelement.SubmodelElementXMLConverter;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IRange;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.property.valuetype.ValueTypeHelper;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.range.Range;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
  * Parses &lt;aas:range&gt; and builds the Range object from it <br>
- * Builds &lt;aas:range&gt; form a given Range object
+ * Builds &lt;aas:range&gt; from a given Range object
  * 
  * @author conradi
  *
@@ -43,7 +42,7 @@ public class RangeXMLConverter extends SubmodelElementXMLConverter {
 		String valueType = XMLHelper.getString(xmlObject.get(VALUE_TYPE));
 		String min = XMLHelper.getString(xmlObject.get(MIN));
 		String max = XMLHelper.getString(xmlObject.get(MAX));
-		Range range = new Range(ValueTypeHelper.fromName(valueType), min, max);
+		Range range = new Range(XMLHelper.convertAASXValueTypeToLocal(valueType), min, max);
 		populateSubmodelElement(xmlObject, range);
 		return range;
 	}

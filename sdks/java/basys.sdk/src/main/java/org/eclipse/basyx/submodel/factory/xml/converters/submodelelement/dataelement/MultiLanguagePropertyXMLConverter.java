@@ -43,8 +43,8 @@ public class MultiLanguagePropertyXMLConverter extends SubmodelElementXMLConvert
 	public static MultiLanguageProperty parseMultiLanguageProperty(Map<String, Object> xmlObject) {
 		Map<String, Object> xmlValueId = (Map<String, Object>) xmlObject.get(VALUE_ID);
 		Reference valueId = ReferenceXMLConverter.parseReference(xmlValueId);
-		Map<String, Object> xmlLangStrings = (Map<String, Object>) xmlObject.get(VALUE);
-		LangStrings langStrings = LangStringsXMLConverter.parseLangStrings(xmlLangStrings);
+		Object xmlLangStrings = xmlObject.get(VALUE);
+		LangStrings langStrings = LangStringsXMLConverter.parseLangStrings(xmlLangStrings, LangStringsXMLConverter.LANG_STRING);
 		MultiLanguageProperty mLProperty = new MultiLanguageProperty(valueId, langStrings);
 		populateSubmodelElement(xmlObject, mLProperty);
 		return mLProperty;

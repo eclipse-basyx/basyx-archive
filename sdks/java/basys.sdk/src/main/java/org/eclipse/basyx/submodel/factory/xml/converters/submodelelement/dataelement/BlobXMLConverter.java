@@ -20,7 +20,7 @@ import org.w3c.dom.Element;
 
 /**
  * Parses &lt;aas:blob&gt; and builds the Blob object from it <br>
- * Builds &lt;aas:blob&gt; form a given Blob object
+ * Builds &lt;aas:blob&gt; from a given Blob object
  * 
  * @author conradi
  *

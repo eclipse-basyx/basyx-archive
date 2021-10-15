@@ -7,7 +7,7 @@
  * 
  * SPDX-License-Identifier: EPL-2.0
  ******************************************************************************/
-package org.eclipse.basyx.testsuite.regression.vab.protocol.https;
+package org.eclipse.basyx.vab.protocol.https;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;

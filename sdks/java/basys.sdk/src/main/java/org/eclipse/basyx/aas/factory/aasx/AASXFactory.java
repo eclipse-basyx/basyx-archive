@@ -15,6 +15,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -85,7 +86,7 @@ public class AASXFactory {
 	public static void buildAASX(Collection<IAssetAdministrationShell> aasList, Collection<IAsset> assetList, 
 			Collection<IConceptDescription> conceptDescriptionList, Collection<ISubmodel> submodelList, Collection<InMemoryFile> files, OutputStream os) throws IOException, TransformerException, ParserConfigurationException {
 		
-		prepareFilePaths(submodelList);
+		prepareFilePaths(submodelList, files);
 		
 		OPCPackage rootPackage = OPCPackage.create(os);
 		
@@ -148,7 +149,11 @@ public class AASXFactory {
 	 * @return UUID
 	 */
 	private static String createUniqueID() {
-		return UUID.randomUUID().toString();
+		// only letters or underscore as start of id allowed
+		// https://www.w3.org/TR/1999/REC-xml-names-19990114/#ns-qualnames
+		//
+		// old AASX Package Explorer versions expect a leading R
+		return "Rid_" + UUID.randomUUID().toString();
 	}
 	
 	/**
@@ -178,7 +183,9 @@ public class AASXFactory {
 		}		
 		writeDataToPart(part, content);
 		root.registerPartAndContentType(part);
-		relateTo.addRelationship(partName, TargetMode.INTERNAL, relType, createUniqueID());
+		// set TargetMode to EXTERNAL to force absolute file paths
+    // this step is necessary for compatibility reasons with AASXPackageExplorer
+		relateTo.addRelationship(partName, TargetMode.EXTERNAL, relType, createUniqueID());
 		return part;
 	}
 	
@@ -232,13 +239,26 @@ public class AASXFactory {
 	}
 	
 	/**
-	 * Replaces the path in all File Elements with the result of preparePath
+	 * Find files which has a valid in memory file path
+	 * @param elements
+	 * @param inMemoryFiles
+	 * @return
+	 */
+	private static Collection<File> findInMemoryFileElements(Collection<ISubmodelElement> elements, Collection<InMemoryFile> inMemoryFiles) {
+		Collection<File> files = findFileElements(elements);
+		return files.stream().filter(f -> 
+			isInMemoryFile(inMemoryFiles, f.getValue()))
+				.collect(Collectors.toList());
+	}
+	
+	/**
+	 * Replaces the path in File Elements which has an in memory file with the result of preparePath
 	 * 
 	 * @param submodels the Submodels
 	 */
-	private static void prepareFilePaths(Collection<ISubmodel> submodels) {
+	private static void prepareFilePaths(Collection<ISubmodel> submodels, Collection<InMemoryFile> inMemoryFiles) {
 		submodels.stream()
-			.forEach(sm -> findFileElements(sm.getSubmodelElements().values()).stream().forEach(f -> f.setValue(preparePath(f.getValue()))));
+			.forEach(sm -> findInMemoryFileElements(sm.getSubmodelElements().values(), inMemoryFiles).stream().forEach(f -> f.setValue(preparePath(f.getValue()))));
 	}
 	
 	/**
@@ -269,5 +289,21 @@ public class AASXFactory {
 			}
 		}
 		throw new ResourceNotFoundException("The wanted file '" + path + "' was not found in the given files.");
+	}
+	
+	/**
+	 * Finds an InMemoryFile by its path
+	 * 
+	 * @param files the InMemoryFiles
+	 * @param path the path of the wanted file
+	 * @return the InMemoryFile if it was found; else null
+	 */
+	private static boolean isInMemoryFile(Collection<InMemoryFile> files, String path) {
+		for(InMemoryFile file: files) {
+			if(VABPathTools.stripSlashes(file.getPath()).equals(VABPathTools.stripSlashes(path))) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

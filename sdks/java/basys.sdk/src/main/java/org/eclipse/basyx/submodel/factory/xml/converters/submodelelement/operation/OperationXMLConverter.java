@@ -27,7 +27,7 @@ import org.w3c.dom.Element;
 
 /**
  * Parses &lt;aas:operation&gt; and builds the Operation object from it <br>
- * Builds &lt;aas:operation&gt; form a given Operation object
+ * Builds &lt;aas:operation&gt; from a given Operation object
  * 
  * @author conradi
  *
@@ -49,26 +49,23 @@ public class OperationXMLConverter extends SubmodelElementXMLConverter {
 	 */
 	@SuppressWarnings("unchecked")
 	public static Operation parseOperation(Map<String, Object> xmlObject) {
+		List<OperationVariable> inList = new ArrayList<>();
+		List<OperationVariable> outList = new ArrayList<>();
+		List<OperationVariable> inoutList = new ArrayList<>();
 		
 		Map<String, Object> inObj = (Map<String, Object>) xmlObject.get(INPUT_VARIABLE);
-		List<Map<String, Object>> xmlOpVars = XMLHelper.getList(inObj.get(OPERATION_VARIABLE));
-		List<OperationVariable> inList = new ArrayList<>();
-		for(Map<String, Object> map : xmlOpVars) {
-			inList.add(parseOperationVariable(map));
+		if (inObj != null) {
+			inList = getOperationVariables(inObj);
 		}
 		
 		Map<String, Object> outObj = (Map<String, Object>) xmlObject.get(OUTPUT_VARIABLE);
-		xmlOpVars = XMLHelper.getList(outObj.get(OPERATION_VARIABLE));
-		List<OperationVariable> outList = new ArrayList<>();
-		for(Map<String, Object> map : xmlOpVars) {
-			outList.add(parseOperationVariable(map));
+		if (outObj != null) {
+			outList = getOperationVariables(outObj);
 		}
 		
 		Map<String, Object> inoutObj = (Map<String, Object>) xmlObject.get(INOUTPUT_VARIABLE);
-		xmlOpVars = XMLHelper.getList(inoutObj.get(OPERATION_VARIABLE));
-		List<OperationVariable> inoutList = new ArrayList<>();
-		for(Map<String, Object> map : xmlOpVars) {
-			inoutList.add(parseOperationVariable(map));
+		if (inoutObj != null) {
+			inoutList = getOperationVariables(inoutObj);	
 		}
 	
 		Operation operation = new Operation(inList, outList, inoutList, null);
@@ -155,5 +152,30 @@ public class OperationXMLConverter extends SubmodelElementXMLConverter {
 		}
 
 		return operationVariableRoot;
+	}
+	
+	/**
+	 * Gets Operation Variables In/Out/InOut from variable map
+	 * @param varObj map containing variables
+	 * @return List of OperationVariable
+	 */
+	private static List<OperationVariable> getOperationVariables(Map<String, Object> varObj) {
+		List<OperationVariable> variableList = new ArrayList<>();
+		Object operationVarObj = varObj.get(OPERATION_VARIABLE);
+		
+		//TODO: Remove after non-existing aas:operationVariable problem fixed in AAS Package Explorer 
+		if (operationVarObj == null) {
+			if (varObj.get(VALUE) != null) {
+				operationVarObj = varObj;
+			}
+		}
+		
+		List<Map<String, Object>> xmlOpVars = XMLHelper.getList(operationVarObj);
+		
+		for(Map<String, Object> map : xmlOpVars) {
+			variableList.add(parseOperationVariable(map));
+		}
+		
+		return variableList;
 	}
 }

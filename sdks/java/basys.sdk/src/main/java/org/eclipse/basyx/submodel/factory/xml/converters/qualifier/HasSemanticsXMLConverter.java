@@ -47,7 +47,7 @@ public class HasSemanticsXMLConverter {
 	
 	
 	/**
-	 * Populates a given XML map with the data form a given IHasSemantics object<br>
+	 * Populates a given XML map with the data from a given IHasSemantics object<br>
 	 * Creates the &lt;aas:semanticId&gt; tag in the given root
 	 * 
 	 * @param document the XML document

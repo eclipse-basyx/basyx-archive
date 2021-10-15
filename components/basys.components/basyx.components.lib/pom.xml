@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.eclipse.basyx</groupId>
 		<artifactId>basyx.components</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1</version>
     </parent>
 	
 	<artifactId>basyx.components.lib</artifactId>
@@ -35,13 +35,13 @@
 		<dependency>
   			<groupId>org.camunda.bpm</groupId>
   			<artifactId>camunda-engine</artifactId>
-  			<version>7.12.0</version>
+  			<version>7.15.0</version>
 		</dependency>
 		
 		<dependency>
       		<groupId>org.camunda.bpm.model</groupId>
       		<artifactId>camunda-bpmn-model</artifactId>
-      		<version>7.12.0</version>
+      		<version>7.15.0</version>
     	</dependency>
 		<!-- Handles resources & files -->
 		<dependency>

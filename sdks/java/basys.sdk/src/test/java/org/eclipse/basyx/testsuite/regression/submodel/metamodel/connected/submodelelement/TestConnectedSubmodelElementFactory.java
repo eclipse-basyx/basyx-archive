@@ -18,6 +18,7 @@ import java.util.Map;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.ISubmodelElement;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.dataelement.IProperty;
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperation;
+import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedCapability;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.ConnectedSubmodelElementFactory;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.dataelement.ConnectedBlob;
@@ -30,6 +31,7 @@ import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.event.Conn
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.operation.ConnectedOperation;
 import org.eclipse.basyx.submodel.metamodel.connected.submodelelement.relationship.ConnectedRelationshipElement;
 import org.eclipse.basyx.submodel.metamodel.map.Submodel;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.Capability;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElementCollection;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.Blob;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.File;
@@ -40,8 +42,8 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.dataelement.rang
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.event.BasicEvent;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.relationship.RelationshipElement;
-import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.submodel.restapi.MultiSubmodelElementProvider;
+import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.support.TypeDestroyingProvider;
@@ -64,6 +66,7 @@ public class TestConnectedSubmodelElementFactory {
 	private static final String RANGE_ID = "RangeId";
 	private static final String REFELEMENT_ID = "RefElementId";
 	private static final String BASICEVENT_ID = "BasicEventId";
+	private static final String CAPABILITY_ID = "CapabilityId";
 	private static final String OPERATION_ID = "OperationId";
 	private static final String RELELEMENT_ID = "RelElementId";
 	private static final String SMELEMCOLLECTION_ID = "SmElemCollectionId";	
@@ -87,7 +90,8 @@ public class TestConnectedSubmodelElementFactory {
 		
 		values.put(Submodel.SUBMODELELEMENT, submodelElements);
 		
-		proxy = new VABElementProxy("", new SubmodelProvider(new TypeDestroyingProvider(new VABLambdaProvider(values))));
+		proxy = new VABElementProxy("/" + SubmodelProvider.SUBMODEL,
+				new SubmodelProvider(new TypeDestroyingProvider(new VABLambdaProvider(values))));
 	}
 	
 	/**
@@ -148,7 +152,10 @@ public class TestConnectedSubmodelElementFactory {
 		BasicEvent basicEvent = new BasicEvent();
 		basicEvent.setIdShort(BASICEVENT_ID);
 		ret.put(BASICEVENT_ID, basicEvent);
-		
+
+		Capability capability = new Capability();
+		capability.setIdShort(CAPABILITY_ID);
+		ret.put(CAPABILITY_ID, capability);
 		
 		RelationshipElement relElement = new RelationshipElement();
 		relElement.setIdShort(RELELEMENT_ID);
@@ -196,7 +203,7 @@ public class TestConnectedSubmodelElementFactory {
 				ConnectedSubmodelElementFactory.getConnectedSubmodelElements(
 						proxy, Submodel.SUBMODELELEMENT, Submodel.SUBMODELELEMENT);
 		
-		assertEquals(10, submodelElements.size());
+		assertEquals(11, submodelElements.size());
 		assertTrue(submodelElements.get(PROPERTY_ID) instanceof ConnectedProperty);
 		assertTrue(submodelElements.get(BLOB_ID) instanceof ConnectedBlob);
 		assertTrue(submodelElements.get(FILE_ID) instanceof ConnectedFile);
@@ -205,6 +212,7 @@ public class TestConnectedSubmodelElementFactory {
 		assertTrue(submodelElements.get(REFELEMENT_ID) instanceof ConnectedReferenceElement);
 		assertTrue(submodelElements.get(OPERATION_ID) instanceof ConnectedOperation);
 		assertTrue(submodelElements.get(BASICEVENT_ID) instanceof ConnectedBasicEvent);
+		assertTrue(submodelElements.get(CAPABILITY_ID) instanceof ConnectedCapability);
 		assertTrue(submodelElements.get(RELELEMENT_ID) instanceof ConnectedRelationshipElement);
 		assertTrue(submodelElements.get(SMELEMCOLLECTION_ID) instanceof ConnectedSubmodelElementCollection);
 	}

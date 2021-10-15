@@ -75,11 +75,11 @@ public class DataSpecificationIEC61360XMLConverter {
 		
 		// PreferredName - LangStrings
 		LangStrings preferredName = LangStringsXMLConverter
-				.parseLangStrings((Map<String, Object>) contentObj.get(IEC61360_PREFERREDNAME), IEC61360_LANGSTRING);
+				.parseLangStrings(contentObj.get(IEC61360_PREFERREDNAME), IEC61360_LANGSTRING);
 		spec.setPreferredName(preferredName);
 		// ShortName - LangStrings
 		LangStrings shortName = LangStringsXMLConverter
-				.parseLangStrings((Map<String, Object>) contentObj.get(IEC61360_SHORTNAME), IEC61360_LANGSTRING);
+				.parseLangStrings(contentObj.get(IEC61360_SHORTNAME), IEC61360_LANGSTRING);
 		spec.setShortName(shortName);
 		// Unit - String
 		spec.setUnit(XMLHelper.getString(contentObj.get(IEC61360_UNIT)));
@@ -94,7 +94,7 @@ public class DataSpecificationIEC61360XMLConverter {
 		spec.setDataType(DataTypeIEC61360.fromString(XMLHelper.getString(contentObj.get(IEC61360_DATATYPE))));
 		// Definition - LangStrings
 		LangStrings definition = LangStringsXMLConverter
-				.parseLangStrings((Map<String, Object>) contentObj.get(IEC61360_DEFINITION), IEC61360_LANGSTRING);
+				.parseLangStrings(contentObj.get(IEC61360_DEFINITION), IEC61360_LANGSTRING);
 		spec.setDefinition(definition);
 		// ValueFormat - String
 		spec.setValueFormat(XMLHelper.getString(contentObj.get(IEC61360_VALUEFORMAT)));

@@ -22,7 +22,7 @@ import org.w3c.dom.Element;
 
 /**
  * Parses &lt;aas:basicEvent&gt; and builds the BasicEvent object from it <br>
- * Builds &lt;aas:basicEvent&gt; form a given BasicEvent object
+ * Builds &lt;aas:basicEvent&gt; from a given BasicEvent object
  * 
  * @author conradi
  *

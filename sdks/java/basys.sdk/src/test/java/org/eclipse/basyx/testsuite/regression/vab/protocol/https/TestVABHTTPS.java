@@ -32,6 +32,8 @@ import org.eclipse.basyx.vab.modelprovider.VABPathTools;
 import org.eclipse.basyx.vab.modelprovider.map.VABMapProvider;
 import org.eclipse.basyx.vab.protocol.http.server.BaSyxContext;
 import org.eclipse.basyx.vab.protocol.http.server.VABHTTPInterface;
+import org.eclipse.basyx.vab.protocol.https.HTTPSConnectorProvider;
+import org.eclipse.basyx.vab.protocol.https.JerseyHttpsClientFactory;
 import org.junit.Rule;
 import org.junit.Test;
 

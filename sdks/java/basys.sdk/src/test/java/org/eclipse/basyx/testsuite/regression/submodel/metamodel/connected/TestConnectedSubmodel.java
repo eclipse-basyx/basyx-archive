@@ -30,7 +30,7 @@ import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operat
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.submodel.restapi.SubmodelProvider;
 import org.eclipse.basyx.testsuite.regression.submodel.metamodel.TestSubmodelSuite;
-import org.eclipse.basyx.testsuite.regression.vab.manager.VABConnectionManagerStub;
+import org.eclipse.basyx.vab.modelprovider.VABElementProxy;
 import org.eclipse.basyx.vab.modelprovider.lambda.VABLambdaProvider;
 import org.eclipse.basyx.vab.support.TypeDestroyer;
 import org.eclipse.basyx.vab.support.TypeDestroyingProvider;
@@ -77,7 +77,7 @@ public class TestConnectedSubmodel extends TestSubmodelSuite {
 		SubmodelProvider provider = new SubmodelProvider(new TypeDestroyingProvider(new VABLambdaProvider(reference)));
 
 		// Create the ConnectedSubmodel based on the manager
-		submodel = new ConnectedSubmodel(new VABConnectionManagerStub(provider).connectToVABElement(""));
+		submodel = new ConnectedSubmodel(new VABElementProxy("/" + SubmodelProvider.SUBMODEL, provider));
 	}
 
 	/**
@@ -119,7 +119,8 @@ public class TestConnectedSubmodel extends TestSubmodelSuite {
 		SubmodelProvider provider = new SubmodelProvider(new TypeDestroyingProvider(new VABLambdaProvider(reference)));
 
 		// Create the ConnectedSubmodel based on the manager
-		ConnectedSubmodel cSM = new ConnectedSubmodel(new VABConnectionManagerStub(provider).connectToVABElement(""));
+		VABElementProxy smProxy = new VABElementProxy("/" + SubmodelProvider.SUBMODEL, provider);
+		ConnectedSubmodel cSM = new ConnectedSubmodel(smProxy);
 
 		Object expected = TypeDestroyer.destroyType(reference);
 		Object actual = cSM.getLocalCopy();

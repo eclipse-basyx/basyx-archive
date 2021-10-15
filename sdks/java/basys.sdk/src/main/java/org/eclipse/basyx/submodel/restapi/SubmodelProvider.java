@@ -93,9 +93,11 @@ public class SubmodelProvider implements IModelProvider {
 		path = VABPathTools.stripSlashes(path);
 		String submodelWithSlash = SUBMODEL + "/";
 		if (path.startsWith(submodelWithSlash)) {
-			path = path.replaceFirst("submodel/", "");
+			path = path.replaceFirst(submodelWithSlash, "");
 		} else if (path.equals(SUBMODEL)) {
 			path = "";
+		} else {
+			throw new MalformedRequestException("The request " + path + " is not allowed for this endpoint. /" + SUBMODEL + " is missing");
 		}
 		path = VABPathTools.stripSlashes(path);
 		return path;
@@ -127,7 +129,7 @@ public class SubmodelProvider implements IModelProvider {
 				path = removeSMElementPrefix(path);
 
                 if (endsWithValue(splitted)) { // Request for the value of an property
-                    String idShortPath = path.replaceFirst(Pattern.quote("/value"), "");
+                    String idShortPath = removeValueSuffix(path);
                     return submodelAPI.getSubmodelElementValue(idShortPath);
                 } else if (isInvocationListPath(splitted)) {
                     List<String> idShorts = getIdShorts(splitted);
@@ -163,6 +165,20 @@ public class SubmodelProvider implements IModelProvider {
 		return splitted[splitted.length - 1].equals(Property.VALUE);
 	}
 
+	/**
+     * Removes a trailing <code>/value</code> from the path if it exists.
+     *
+     * @param path The original path, which might or might not end on {@value Property.VALUE}.
+     * @return The new path
+     */
+    private String removeValueSuffix(String path) {
+        String suffix = "/" + Property.VALUE;
+        if (path.endsWith(suffix)) {
+            path = path.substring(0, path.length() - suffix.length());
+        }
+
+        return path;
+    }
 
 	private boolean isInvocationListPath(String[] splitted) {
 		return splitted.length > 2 && splitted[splitted.length - 2].equals(OperationProvider.INVOCATION_LIST);
@@ -173,11 +189,11 @@ public class SubmodelProvider implements IModelProvider {
 	public void setValue(String path, Object newValue) throws ProviderException {
 		path = removeSubmodelPrefix(path);
 		if (path.isEmpty()) {
-			throw new MalformedRequestException("Set on \"submodel\" not supported");
+			throw new MalformedRequestException("Set on \"" + SUBMODEL + "\" not supported");
 		} else {
 			String[] splitted = VABPathTools.splitPath(path);
 			path = removeSMElementPrefix(path);
-			String idshortPath = path.replaceFirst(Pattern.quote("/value"), "");
+			String idshortPath = removeValueSuffix(path);
 			if (endsWithValue(splitted)) {
 				submodelAPI.updateSubmodelElement(idshortPath, newValue);
 			} else {
@@ -215,7 +231,7 @@ public class SubmodelProvider implements IModelProvider {
 				throw new MalformedRequestException("Path " + path + " not supported for delete");
 			}
 		} else {
-			throw new MalformedRequestException("Path \"submodel\" not supported for delete");
+			throw new MalformedRequestException("Path \"" + SUBMODEL + "\" not supported for delete");
 		}
 	}
 
@@ -244,7 +260,7 @@ public class SubmodelProvider implements IModelProvider {
 					return submodelAPI.invokeOperation(path, parameters);
 				}
 			} else {
-				throw new MalformedRequestException("Given path '" + path + "' does not end in /invoke");
+				throw new MalformedRequestException("Given path '" + path + "' does not end in /" + Operation.INVOKE);
 			}
 		}
 	}

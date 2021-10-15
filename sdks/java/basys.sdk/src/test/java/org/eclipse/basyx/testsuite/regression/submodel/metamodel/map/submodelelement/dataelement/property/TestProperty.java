@@ -16,10 +16,16 @@ import static org.junit.Assert.fail;
 import java.math.BigInteger;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.Month;
 import java.time.Period;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Collections;
-
+import java.util.GregorianCalendar;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import org.eclipse.basyx.submodel.metamodel.api.identifier.IdentifierType;
 import org.eclipse.basyx.submodel.metamodel.api.reference.IReference;
 import org.eclipse.basyx.submodel.metamodel.api.reference.enums.KeyElements;
@@ -79,7 +85,7 @@ public class TestProperty {
 	} 
 	
 	@Test
-	public void testSet(){
+	public void testSet() throws DatatypeConfigurationException{
 		Property booleanProp = new Property();
 		Boolean isSomething = true;
 		booleanProp.setValue(isSomething);
@@ -111,6 +117,13 @@ public class TestProperty {
 		bigNumberProp.setValue(bignumber);
 		assertEquals(bignumber, bigNumberProp.getValue());
 		assertEquals(ValueType.PositiveInteger, bigNumberProp.getValueType());
+		
+		Property dateProp = new Property();
+		GregorianCalendar dateValue = GregorianCalendar.from(ZonedDateTime.of(birthday, LocalTime.MIDNIGHT, ZoneId.of("UTC")));
+		XMLGregorianCalendar xmlDateValue = DatatypeFactory.newInstance().newXMLGregorianCalendar(dateValue);
+		dateProp.setValue(xmlDateValue);
+		assertEquals("1960-01-01T00:00:00.000Z", dateProp.get(Property.VALUE));
+		assertEquals(xmlDateValue, dateProp.getValue());
 	}
 
 	@Test

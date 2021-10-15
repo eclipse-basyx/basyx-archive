@@ -61,6 +61,7 @@ public class Qualifier extends Constraint implements IQualifier {
 		put(VALUE, ValueTypeHelper.prepareForSerialization(value));
 		put(VALUEID, valueId);
 		put(VALUETYPE, valueType);
+		putAll(new ModelType(MODELTYPE));
 	}
 
 	/**

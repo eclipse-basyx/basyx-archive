@@ -95,6 +95,9 @@ import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
  */
 public class MultiSubmodelProvider implements IModelProvider {
 
+	public static final String AAS = "aas";
+	public static final String SUBMODELS_PREFIX = VABPathTools.concatenatePaths(AAS, AssetAdministrationShell.SUBMODELS);
+
 	/**
 	 * Store aas providers
 	 */
@@ -220,7 +223,7 @@ public class MultiSubmodelProvider implements IModelProvider {
 
 	@SuppressWarnings("unchecked")
 	public void addSubmodel(SubmodelProvider modelContentProvider) {
-		Submodel sm = Submodel.createAsFacade((Map<String, Object>) modelContentProvider.getValue("/"));
+		Submodel sm = Submodel.createAsFacade((Map<String, Object>) modelContentProvider.getValue("/submodel"));
 		addSubmodel(sm, modelContentProvider);
 	}
 
@@ -258,7 +261,7 @@ public class MultiSubmodelProvider implements IModelProvider {
 		VABPathTools.checkPathForNull(path);
 		path = VABPathTools.stripSlashes(path);
 		String[] pathElements = VABPathTools.splitPath(path);
-		if (pathElements.length > 0 && pathElements[0].equals("aas")) {
+		if (pathElements.length > 0 && pathElements[0].equals(AAS)) {
 			if (pathElements.length == 1) {
 				return aas_provider.getValue("");
 			}
@@ -272,16 +275,16 @@ public class MultiSubmodelProvider implements IModelProvider {
 						// Get a model provider for the submodel in the registry
 						provider = getModelProvider(pathElements[2]);
 					}
-					
+
 					// - Retrieve submodel or property value
-					return provider.getValue(VABPathTools.buildPath(pathElements, 4));
+					return provider.getValue(VABPathTools.buildPath(pathElements, 3));
 				}
 			} else {
 				// Handle access to AAS
 				return aas_provider.getValue(VABPathTools.buildPath(pathElements, 1));
 			}
 		} else {
-			return new MalformedRequestException("The request " + path + " is not allowed for this endpoint");
+			throw new MalformedRequestException("The request " + path + " is not allowed for this endpoint");
 		}
 	}
 
@@ -297,7 +300,7 @@ public class MultiSubmodelProvider implements IModelProvider {
 		// Make a list and return all local submodels
 		Collection<Submodel> submodels = new HashSet<>();
 		for (IModelProvider submodel : submodel_providers.values()) {
-			submodels.add(Submodel.createAsFacade((Map<String, Object>) submodel.getValue("")));
+			submodels.add(Submodel.createAsFacade((Map<String, Object>) submodel.getValue("/submodel")));
 		}
 
 		// Check for remote submodels
@@ -350,15 +353,12 @@ public class MultiSubmodelProvider implements IModelProvider {
 	public void setValue(String path, Object newValue) throws ProviderException {
  		VABPathTools.checkPathForNull(path);
 		path = VABPathTools.stripSlashes(path);
-		// Split path
 		String[] pathElements = VABPathTools.splitPath(path);
 		String propertyPath = VABPathTools.buildPath(pathElements, 3);
-		// - Ignore first 2 elements, as it is "/aas/submodels" --> 'aas','submodels'
-		
-		if (path.equals("aas")) {
+		if (path.equals(AAS)) {
 			createAssetAdministrationShell(newValue);
-		} else if (!path.startsWith("aas/submodels")) {
-			throw new MalformedRequestException("Access to MultiSubmodelProvider always has to start with \"aas/submodels\", was " + path);
+		} else if (!path.startsWith(SUBMODELS_PREFIX)) {
+			throw new MalformedRequestException("Access to MultiSubmodelProvider always has to start with \"" + SUBMODELS_PREFIX + "\", was " + path);
 		} else if (propertyPath.isEmpty()) {
 			createSubmodel(newValue);
 		} else {
@@ -393,9 +393,12 @@ public class MultiSubmodelProvider implements IModelProvider {
 	public void deleteValue(String path) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 		path = VABPathTools.stripSlashes(path);
+		if (!path.startsWith(SUBMODELS_PREFIX)) {
+			throw new MalformedRequestException("Access to MultiSubmodelProvider always has to start with \"" + SUBMODELS_PREFIX + "\", was " + path);
+		}
+		
 		String[] pathElements = VABPathTools.splitPath(path);
 		String propertyPath = VABPathTools.buildPath(pathElements, 3);
-		// - Ignore first 2 elements, as it is "/aas/submodels" --> 'aas','submodels'
 		if (pathElements.length == 3) {
 			// Delete Submodel from registered AAS
 			String smIdShort = pathElements[2];
@@ -405,8 +408,8 @@ public class MultiSubmodelProvider implements IModelProvider {
 
 			// Delete submodel reference from aas
 			// TODO: This is a hack until the API is further clarified
-			Submodel sm = Submodel.createAsFacade((Map<String, Object>) submodel_providers.get(smIdShort).getValue("/"));
-			aas_provider.deleteValue("aas/submodels/" + sm.getIdentification().getId());
+			Submodel sm = Submodel.createAsFacade((Map<String, Object>) submodel_providers.get(smIdShort).getValue("/" + SubmodelProvider.SUBMODEL));
+			aas_provider.deleteValue(SUBMODELS_PREFIX + "/" + sm.getIdentification().getId());
 
 			// Remove submodel provider
 			submodel_providers.remove(smIdShort);
@@ -432,10 +435,13 @@ public class MultiSubmodelProvider implements IModelProvider {
 	public Object invokeOperation(String path, Object... parameter) throws ProviderException {
 		VABPathTools.checkPathForNull(path);
 		path = VABPathTools.stripSlashes(path);
+		if (!path.startsWith(SUBMODELS_PREFIX)) {
+			throw new MalformedRequestException("Access to MultiSubmodelProvider always has to start with \"" + SUBMODELS_PREFIX + "\", was " + path);
+		}
+
 		String[] pathElements = VABPathTools.splitPath(path);
 		String operationPath = VABPathTools.buildPath(pathElements, 3);
-		// - Ignore first 2 elements, as it is "/aas/submodels" --> 'aas','submodels'
-		// - Invoke provider and return result
+
 		IModelProvider provider;
 		if (isSubmodelLocal(pathElements[2])) {
 			provider = submodel_providers.get(pathElements[2]);
