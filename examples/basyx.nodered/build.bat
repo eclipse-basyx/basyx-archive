@@ -1,1 +1,1 @@
-docker build -t eclipsebasyx/node-red:1.1.0-SNAPSHOT .
+docker build -t eclipsebasyx/examples-dataflow-node-red:1.1.0-SNAPSHOT .
