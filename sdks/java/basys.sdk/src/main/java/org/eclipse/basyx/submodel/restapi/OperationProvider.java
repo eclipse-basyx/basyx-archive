@@ -20,11 +20,11 @@ import java.util.stream.StreamSupport;
 
 import org.eclipse.basyx.submodel.metamodel.api.submodelelement.operation.IOperationVariable;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.SubmodelElement;
-import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.DelegatedInvocationHelper;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.OperationVariable;
 import org.eclipse.basyx.submodel.restapi.operation.AsyncOperationHandler;
 import org.eclipse.basyx.submodel.restapi.operation.CallbackResponse;
+import org.eclipse.basyx.submodel.restapi.operation.DelegatedInvocationHelper;
 import org.eclipse.basyx.submodel.restapi.operation.ExecutionState;
 import org.eclipse.basyx.submodel.restapi.operation.InvocationRequest;
 import org.eclipse.basyx.submodel.restapi.operation.InvocationResponse;
