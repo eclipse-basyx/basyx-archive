@@ -9,13 +9,14 @@
 * SPDX-License-Identifier: EPL-2.0
 ******************************************************************************/
 
-package org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation;
+package org.eclipse.basyx.submodel.restapi.operation;
 
 import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.basyx.submodel.metamodel.api.qualifier.qualifiable.IConstraint;
 import org.eclipse.basyx.submodel.metamodel.map.qualifier.qualifiable.Qualifier;
+import org.eclipse.basyx.submodel.metamodel.map.submodelelement.operation.Operation;
 import org.eclipse.basyx.vab.protocol.http.connector.HTTPConnectorFactory;
 
 /**
@@ -37,12 +38,12 @@ public class DelegatedInvocationHelper {
 	
 	/**
 	 * Invokes delegated operation using delegated URL
-	 * @param operaiton
+	 * @param operation
 	 * @param parameters
 	 * @return
 	 */
-	public static Object invokeDelegatedOperation(Operation operaiton, Object... parameters) {
-		String delegatedUrl = getDelegatedURL(operaiton);	
+	public static Object invokeDelegatedOperation(Operation operation, Object... parameters) {
+		String delegatedUrl = getDelegatedURL(operation);	
 		return new HTTPConnectorFactory()
 				.getConnector(delegatedUrl)
 				.invokeOperation("", parameters);
@@ -73,10 +74,14 @@ public class DelegatedInvocationHelper {
 		Collection<IConstraint> constraints = operation.getQualifiers();
 		for (IConstraint constraint : constraints) {
 			Qualifier qualifier = Qualifier.createAsFacade((Map<String, Object>)constraint);
-			if (qualifier.getType() != null && qualifier.getType().equalsIgnoreCase(DELEGATION_TYPE)) {
+			if (isDelegationQualifier(qualifier)) {
 				return qualifier;
 			}
 		}
 		return null;
+	}
+
+	private static boolean isDelegationQualifier(Qualifier qualifier) {
+		return qualifier.getType() != null && qualifier.getType().equalsIgnoreCase(DELEGATION_TYPE);
 	}
 }
