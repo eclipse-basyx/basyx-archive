@@ -75,7 +75,7 @@ public class AASXToMetamodelConverter {
 	}
 
 	public AASXToMetamodelConverter(InputStream stream) {
-		aasxInputStream = stream;
+		this.aasxInputStream = stream;
 	}
 
 	@SuppressWarnings("unchecked")
